@@ -1,10 +1,10 @@
 import { html, render } from 'lit-html';
-import { compact, first } from 'remeda';
+import { compact, first, values } from 'remeda';
 import type { RawEditorOptions } from 'tinymce';
 import type { PartialDeep } from 'type-fest';
 import { createMessage, rollModeToVisibility } from './chat/create-message';
 import { onChatMessageRender } from './chat/message-hooks';
-import { combatSocketHandler } from './combat/combat-tracker';
+import { combatSocketHandler, tokenIsInCombat } from './combat/combat-tracker';
 import { CombatView } from './combat/components/combat-view/combat-view';
 import { CustomRollApp } from './combat/components/custom-roll-app/custom-roll-app';
 import { EPOverlay } from './components/ep-overlay/ep-overlay';
@@ -49,6 +49,7 @@ import { rollSuccessTest } from './success-test/success-test';
 import { notEmpty } from './utility/helpers';
 import { localImage } from './utility/images';
 import { GMPanel } from './gm-panel/gm-panel';
+import { readyCanvas } from './foundry/canvas';
 
 
 export let gameSettings: ReturnType<typeof registerEPSettings>;
@@ -63,8 +64,20 @@ window.addEventListener('mouseup', setLastPosition, { capture: true });
 window.addEventListener('click', setLastPosition, { capture: true });
 window.addEventListener('drop', setLastPosition, { capture: true });
 
+
+
 Hooks.once('init', () => {
   gameSettings = registerEPSettings();
+
+  gameSettings.combatState.subscribe(() => {
+    const toggleCombatButton = document.querySelector("#token-hud button[data-action='combat']:not(:focus-within)");
+    if (toggleCombatButton instanceof HTMLElement) {
+      const token = (readyCanvas()?.tokens.hud.object) as Token | undefined;
+      const isInCombat = token ? tokenIsInCombat(token) : false;
+      toggleCombatButton.classList.toggle('active', isInCombat);
+    }
+  })
+
 
   //@ts-expect-error
   foundry.documents.BaseItem.DEFAULT_ICON = localImage(
@@ -129,12 +142,14 @@ Hooks.once('ready', async () => {
           button?: boolean;
           active?: boolean;
           onClick?: (args?: unknown) => void;
+          onChange?: (args?: unknown) => void;
         }[];
       } | null;
-      if (control && notEmpty(control.tools)) {
+      const tools = control ? values(control.tools) : [];
+      if (control && notEmpty(tools)) {
         openMenu({
           header: { heading: game.i18n.localize(control.title) },
-          content: control.tools.map((tool) => ({
+          content: tools.map((tool) => ({
             label: game.i18n.localize(tool.title),
             icon: html`<i class=${tool.icon}></i>`,
             activated: ui.controls.activeTool === tool.name || !!tool.active,
@@ -142,19 +157,25 @@ Hooks.once('ready', async () => {
               if (tool.toggle) {
                 tool.active = !tool.active;
                 if (tool.onClick instanceof Function) tool.onClick(tool.active);
-                ui.controls.render();
               }
 
               // Handle Buttons
               else if (tool.button) {
                 if (tool.onClick instanceof Function) tool.onClick();
-                ui.controls.render();
+                else if (tool['onChange'] instanceof Function) {
+                  tool.onChange()
+                }
               }
 
               // Handle Tools
               else {
                 ui.controls.initialize({ tool: tool.name } as any);
               }
+
+              queueMicrotask(() => {
+                ui.controls.render();
+
+              })
             },
           })),
           position: ev,
@@ -180,6 +201,9 @@ Hooks.once('ready', async () => {
     // SlWindow.container = overlay;
     const windowContainer = document.createElement('div');
     windowContainer.className = 'ep-window-container';
+    windowContainer.addEventListener("dragstart", ev => {
+      ev.stopPropagation()
+    })
     SlWindow.container = windowContainer
     document.body.append(windowContainer);
 
@@ -189,57 +213,21 @@ Hooks.once('ready', async () => {
     overlay.append(tooltip);
     document.body.classList.add('ready');
     Hooks.call('ep-ready', true);
-    // const sceneView = document.createElement('scene-view');
-    // document
-    //   .getElementById('ui-left')
-    //   ?.insertBefore(sceneView, document.getElementById('controls'));
+
 
     const extraInfo = document.createElement('div');
     extraInfo.className = 'ep-extra-info';
     extraInfo.append(document.createElement('scene-view'));
     extraInfo.append(document.createElement('world-time-controls'));
 
-    document
-      .getElementById('ui-top')
-      ?.insertBefore(extraInfo, document.getElementById('loading'));
-
-    function toggleChatPointers({ type }: MouseEvent) {
-      document.getElementById('chat-log')!.style.pointerEvents =
-        type === 'mouseenter' ? 'initial' : '';
-    }
-
-    const rightUI = document.getElementById('ui-right');
-    rightUI?.addEventListener('mouseenter', toggleChatPointers);
-    rightUI?.addEventListener('mouseleave', toggleChatPointers);
-
-    if (game.user.isGM) {
-      const leftUI = document.getElementById("ui-left");
-      const gmFrag = new DocumentFragment();
-      render(html` <mwc-icon-button
-      id="ep-gm-panel"
-        data-ep-tooltip=${`GM Panel`}
-        @mouseover=${tooltip.fromData}
-        @click=${(ev: Event & { currentTarget: HTMLElement }) =>
-          openWindow({
-            key: GMPanel,
-            content: html`<gm-panel></gm-panel>`,
-            name: `GM Panel`,
-            adjacentEl: ev.currentTarget,
-          }, { resizable: ResizeOption.Both })}
-      >
-        <img class="noborder" src="icons/svg/dice-target.svg" />
-      </mwc-icon-button>`, gmFrag)
-      leftUI?.append(gmFrag);
-    }
-
-    const frag = new DocumentFragment();
+    const extraChatControlsFrag = new DocumentFragment();
 
     render(
       html`
-        <mwc-icon-button
+        <div class="ep-extra-chat-controls">
+          <mwc-icon-button
           data-ep-tooltip=${`${localize('custom')} ${localize('roll')}`}
           @mouseover=${tooltip.fromData}
-          style="flex: 0; margin-right: 0.5rem; --mdc-icon-button-size: 1.5rem"
           @click=${(ev: Event & { currentTarget: HTMLElement }) =>
           openWindow({
             key: CustomRollApp,
@@ -252,7 +240,6 @@ Hooks.once('ready', async () => {
         </mwc-icon-button>
         <sl-popover
           placement=${Placement.Left}
-          style="flex: 0; margin-right: 0.5rem;"
           focusSelector="input"
           .renderOnDemand=${(popover: Popover) => {
           return html`<sl-popover-section>
@@ -295,20 +282,41 @@ Hooks.once('ready', async () => {
             @contextmenu=${() => {
           new Roll('1d100 - 1').toMessage();
         }}
-            style="--mdc-icon-button-size: 1.5rem;"
           >
-            <span style="font-weight: bold; font-size: 1rem">%</span>
+            <span style="font-size:var(--mdc-icon-size);font-weight:bold;">%</span>
           </mwc-icon-button>
         </sl-popover>
+      </div>
       `,
-      frag,
+      extraChatControlsFrag,
     );
-    const chatControls = document.getElementById('chat-controls');
-    if (!chatControls) {
-      Hooks.once('renderChatLog', (log: unknown, [el]: JQuery) => {
-        el?.querySelector('#chat-controls')?.prepend(frag);
-      });
-    } else chatControls.prepend(frag);
+
+    extraInfo.append(extraChatControlsFrag);
+
+    document
+      .getElementById('ui-top')
+      ?.insertBefore(extraInfo, document.getElementById('loading'));
+
+
+    if (game.user.isGM) {
+      const gmFrag = new DocumentFragment();
+      render(html` <mwc-icon-button
+      id="ep-gm-panel"
+        data-ep-tooltip=${`GM Panel`}
+        @mouseover=${tooltip.fromData}
+        @click=${(ev: Event & { currentTarget: HTMLElement }) =>
+          openWindow({
+            key: GMPanel,
+            content: html`<gm-panel></gm-panel>`,
+            name: `GM Panel`,
+            adjacentEl: ev.currentTarget,
+          }, { resizable: ResizeOption.Both })}
+      >
+        <img  class="noborder" src="icons/svg/dice-target.svg" />
+      </mwc-icon-button>`, gmFrag)
+      extraInfo?.prepend(gmFrag);
+    }
+
   }, 150);
 
   const compendiumSearchButton = () => {
@@ -359,7 +367,7 @@ Hooks.once('ready', async () => {
     app: CompendiumDirectory,
     hook: 'on',
     event: 'render',
-    callback: (dir, [el]) => {
+    callback: (dir, el) => {
       el?.querySelector('.directory-footer')?.append(compendiumSearchButton());
     },
   });
@@ -377,70 +385,6 @@ Hooks.once('ready', async () => {
     },
   });
 
-  // applicationHook({
-  //   app: HeadsUpDisplay,
-  //   hook: "on",
-  //   event: "render",
-  //   callback: (_, [el]) => {
-  //     const tokenQuickView = new TokenQuickView();
-  //     el.append(tokenQuickView);
-  //     activeCanvas()?.tokens.placeables.forEach((t) => t.drawBars());
-  //   },
-  // });
-
-  // mutateEntityHook({
-  //   entity: ActorEP,
-  //   hook: 'on',
-  //   event: MutateEvent.Update,
-  //   callback: (actor) => {
-  //     if (actor.isToken) {
-  //       actor.token?.object?.drawEffects();
-  //     } else {
-  //       actor
-  //         .getActiveTokens(true, false)
-  //         .forEach((t) => (t as Token).drawEffects());
-  //     }
-
-  //     if (!actor.token && !actor.compendium) {
-  //       const sidebarListItem = document.querySelector(
-  //         `.sidebar-tab.directory .directory-item.actor[data-document-id="${actor.id}"]`,
-  //       );
-  //       if (sidebarListItem instanceof HTMLElement) {
-  //         applyFullActorItemInfo(actor, sidebarListItem);
-  //       }
-  //     }
-  //   },
-  // });
-
-  // mutateEntityHook({
-  //   entity: ItemEP,
-  //   hook: 'on',
-  //   event: MutateEvent.PreCreate,
-  //   callback: (item, data) => {
-  //     if (data && typeof data === 'object' && 'img' in data) {
-  //       const { img } = data as { img?: string };
-  //       console.log(img);
-  //       if (img === 'icons/svg/item-bag.svg' || img === CONST.DEFAULT_TOKEN) {
-  //         (data as { img?: string }).img = foundry.data.ItemData.DEFAULT_ICON;
-  //         console.log(data);
-  //       }
-  //     }
-  //   },
-  // });
-
-  // document.getElementById("board")?.addEventListener("drop", () => {
-  //   const { element } = dragSource();
-  //   if (element instanceof HotbarCell) element.requestDeletion();
-  // });
-
-  applicationHook({
-    app: ChatPopout,
-    hook: 'on',
-    event: 'render',
-    callback: (popout) => {
-      requestAnimationFrame(() => popout.setPosition());
-    },
-  });
 
   mutatePlaceableHook({
     entity: Token,
@@ -521,33 +465,34 @@ applicationHook({
   app: Compendium,
   hook: 'on',
   event: 'render',
-  callback: async (compendium, [el]) => {
+  callback: async (compendium, el) => {
     if (compendium.collection.documentName === 'Item') {
       await compendium.collection.getDocuments();
       for (const listItem of (el?.querySelectorAll('li.directory-item.item') ??
-        []) as HTMLLIElement[]) {
+        []) as Iterable<HTMLLIElement>) {
         if (listItem.offsetParent) {
           const doc: ItemEP = await compendium.collection.getDocument(
-            listItem.getAttribute('data-document-id'),
+            listItem.getAttribute('data-entry-id'),
           );
 
+
           listItem
-            .querySelector('.document-name')
+            .querySelector('.entry-name')
             ?.setAttribute('data-type', doc.proxy.fullType);
         }
       }
     } else if (compendium.collection.documentName === 'Actor') {
       await compendium.collection.getDocuments();
       for (const listItem of (el?.querySelectorAll('li.directory-item.actor') ??
-        []) as HTMLLIElement[]) {
+        []) as Iterable<HTMLLIElement>) {
         if (listItem.offsetParent) {
           const doc: ActorEP = await compendium.collection.getDocument(
-            listItem.getAttribute('data-document-id'),
+            listItem.getAttribute('data-entry-id'),
           );
 
           const type = localize(doc.type);
           listItem
-            .querySelector('.document-name')
+            .querySelector('.entry-name')
             ?.setAttribute(
               'data-type',
               isSleeve(doc.proxy)
@@ -560,32 +505,37 @@ applicationHook({
   },
 });
 
-for (const app of [ActorDirectory, ItemDirectory]) {
-  applicationHook({
-    app,
-    hook: 'on',
-    event: 'render',
-    callback: (_, [list]) =>
-      list?.querySelectorAll<HTMLLIElement>('.document').forEach((listItem) => {
-        const { documentId } = listItem.dataset;
-        listItem.tabIndex = 0;
-        const doc =
-          documentId &&
-          game[app === ActorDirectory ? 'actors' : 'items'].get(documentId);
-        if (!doc) return;
+if (true) {
+  for (const app of [ActorDirectory, ItemDirectory]) {
+    applicationHook({
+      app,
+      hook: 'on',
+      event: 'render',
+      callback: (_, list) => {
+        return list?.querySelectorAll<HTMLLIElement>('.document').forEach((listItem) => {
+          const { entryId } = listItem.dataset;
+          const doc = entryId &&
+            game[app === ActorDirectory ? 'actors' : 'items'].get(entryId);
+          if (!doc)
+            return;
 
-        if (isItem(doc)) {
-          applyFullItemInfo(doc, listItem);
-        } else {
-          applyFullActorItemInfo(doc, listItem);
-        }
-      }),
-  });
+          if (isItem(doc)) {
+            applyFullItemInfo(doc, listItem);
+          } else {
+            applyFullActorItemInfo(doc, listItem);
+          }
+        });
+      },
+    });
+  }
 }
 
 function applyFullActorItemInfo(actor: ActorEP, listItem: HTMLElement) {
   const nameElement =
-    listItem.querySelector<HTMLHeadingElement>('h4.document-name')!;
+    listItem.querySelector<HTMLHeadingElement>('.entry-name');
+  if (!nameElement) {
+    return;
+  }
   if (actor.type !== ActorType.Character && isSleeve(actor.proxy)) {
     nameElement.dataset['type'] = formattedSleeveInfo(actor.proxy)
       .concat(localize(actor.type))
@@ -599,8 +549,11 @@ function applyFullActorItemInfo(actor: ActorEP, listItem: HTMLElement) {
 
 function applyFullItemInfo(item: ItemEP, listItem: HTMLElement) {
   const nameElement =
-    listItem.querySelector<HTMLHeadingElement>('h4.document-name')!;
-  nameElement.querySelector('a')!.textContent = item.proxy.fullName;
+    listItem.querySelector<HTMLHeadingElement>('.entry-name');
+  if (!nameElement) {
+    return;
+  }
+  nameElement.textContent = item.proxy.fullName;
   nameElement.dataset['type'] = item.proxy.fullType;
   listItem.title = `${item.name}
         ${nameElement.dataset['type']}`;

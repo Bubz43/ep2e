@@ -139,7 +139,7 @@ type PlaceableLayer<
   L extends PlaceablesLayer,
   T extends PlaceableObject,
   F = LayerInfo<T>,
-> = Omit<L, keyof F> & F;
+  > = Omit<L, keyof F> & F;
 
 export type CanvasLayers = {
   background: PlaceableLayer<BackgroundLayer, Tile>;
@@ -206,10 +206,32 @@ declare global {
 
   const foundry: {
     documents: typeof import('common/documents');
-    utils: typeof import('common/utils/module');
+    utils: typeof import('common/utils/module') & {
+      fromUuidSync: (...args: Parameters<typeof fromUuid>) => { toDragData(): unknown } | undefined | null;
+    };
     abstract: typeof import('common/abstract/module');
     data: typeof import('common/data/module');
     packages: typeof import('common/packages');
+    canvas: {
+      Canvas: typeof Canvas
+    },
+
+
+    applications: {
+      hud: {
+        TokenHUD: typeof TokenHUD
+      }
+      api: {
+        ApplicationV2: {
+          _maxZ: number;
+        }
+      }
+      ux: {
+        TextEditor: {
+          implementation: typeof TextEditor
+        }
+      }
+    }
   };
 
   const CONST: typeof import('common/constants');
@@ -254,7 +276,7 @@ declare global {
     document: unknown;
   }
 
-  interface PrototypeTokenData extends TokenData {}
+  interface PrototypeTokenData extends TokenData { }
 
   interface TokenDocument extends TokenData {
     parent?: SceneEP;
@@ -300,6 +322,15 @@ declare global {
       system: string;
       packageType: string;
     };
+    index: {
+      size: number;
+      find(cb: (value: { _id: string; name: unknown }) => boolean | undefined): {
+        _id: string;
+      };
+    };
+    getUuid(id: string): string | null;
+
+
   }
 
   interface ActorData {
@@ -536,7 +567,7 @@ declare global {
 
   interface Folder {
     ancestors?: Folder[];
-    children?: {folder: Folder}[]
+    children?: { folder: Folder }[]
     displayed: boolean;
     data: {
       color: string;

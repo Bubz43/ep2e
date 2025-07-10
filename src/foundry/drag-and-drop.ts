@@ -56,13 +56,13 @@ const dropChecker =
     type: T,
     finalCheck: (obj: UnknownValues<D> & { type: T }) => boolean,
   ) =>
-  (droppedData: unknown): droppedData is D => {
-    return !!(
-      isJsonObject(droppedData) &&
-      droppedData['type'] === type &&
-      finalCheck(droppedData as JsonObject & { type: T })
-    );
-  };
+    (droppedData: unknown): droppedData is D => {
+      return !!(
+        isJsonObject(droppedData) &&
+        droppedData['type'] === type &&
+        finalCheck(droppedData as JsonObject & { type: T })
+      );
+    };
 
 export const dragSource = () => source as Readonly<typeof source>;
 
@@ -96,7 +96,7 @@ export const onlySetDragSource = (ev: DragEvent, drop: Drop) => {
   if (
     el instanceof HTMLElement &&
     el.textContent &&
-    !el.matches('.directory-item.actor')
+    !el.matches('.directory-item')
   ) {
     ev.dataTransfer?.setDragImage(setDragImage(el), 20, 20);
   }
@@ -156,9 +156,9 @@ export type SceneDrop = SimpleDrop<DropType.Scene>;
 
 export type ItemDrop =
   | KnownDrop<{
-      type: DropType.Item;
-      data: ItemEntity;
-    }>
+    type: DropType.Item;
+    data: ItemEntity;
+  }>
   | SimpleDrop<DropType.Item>;
 
 type EffectDrop = KnownDrop<{ type: DropType.Effect; effect: Effect }>;

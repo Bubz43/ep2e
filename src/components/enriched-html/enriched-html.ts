@@ -8,40 +8,81 @@ const findMatch = (ev: Event) => {
     if (!(eventTarget instanceof HTMLAnchorElement)) return;
     ev.stopPropagation();
 
-    if (eventTarget.matches('.content-link') && ev.type !== 'mouseover') {
-      return entityLinkHandler($(eventTarget), ev.type);
-    } else if (eventTarget.matches('.inline-roll') && ev.type !== 'mousedown') {
-      return inlineRollHandler($(eventTarget), ev.type);
+    if (ev.type === "click") {
+      const dataLinkElement = eventTarget.closest("a[data-link]");
+      if ((dataLinkElement) instanceof HTMLElement) {
+        ev.preventDefault();
+        fromUuid(dataLinkElement.dataset["uuid"])
+          .then((doc) => doc?._onClickDocumentLink(ev));
+      } else if (eventTarget.matches("a.inline-roll")) {
+
+        if (eventTarget.classList.contains('inline-result')) {
+          showRollTooltip(eventTarget)
+        } else {
+          eventTarget.addEventListener("click", foundry.applications.ux.TextEditor.implementation._onClickInlineRoll, { once: true })
+          eventTarget.dispatchEvent(new Event("click", {
+            bubbles: false
+          }))
+        }
+
+      }
+    } else if (ev instanceof DragEvent && ev.type === "dragstart") {
+      onDragStart(ev, eventTarget)
     }
+
   }
 };
 
-const entityLinkHandler = (anchor: JQuery, eventType: string) => {
-  if (eventType === 'click')
-    anchor.one('click', TextEditor._onClickContentLink).trigger('click');
-  else if (eventType === 'mousedown') {
-    anchor
-      .one('dragstart', TextEditor._onDragContentLink)
-      .one('mouseup', () =>
-        anchor.off('dragstart', TextEditor._onDragContentLink),
+async function showRollTooltip(anchor: HTMLElement) {
+  const roll = Roll.fromJSON(unescape(anchor.dataset['roll']!)) as Roll
+  const tooltipContent = (await roll.getTooltip()) as string;
+  tooltip.attach({
+    el: anchor,
+    content: html`${unsafeHTML(tooltipContent)}`,
+    position: 'left-start',
+  });
+}
+
+function onDragStart(event: DragEvent, dataLinkElement: HTMLElement) {
+  let dragData: unknown = null;
+
+  const pack = game.packs.get(dataLinkElement.dataset["pack"] ?? "");
+
+  if (pack) {
+    let {
+      id,
+      lookup,
+      uuid,
+      type = pack.documentName,
+    } = dataLinkElement.dataset;
+
+    // If lookup is provided and pack index is available, try to find the entry
+    if (lookup && pack.index.size) {
+      const entry = pack.index.find(
+        (i) => i._id === lookup || i.name === lookup,
       );
-  }
-};
+      if (entry) {
+        id = entry._id;
+      }
+    }
 
-const inlineRollHandler = async (anchor: JQuery, eventType: string) => {
-  const [el] = anchor;
-  if (!el) return;
-  if (anchor.hasClass('inline-result')) {
-    const roll = Roll.fromJSON(unescape(el.dataset['roll']!)) as Roll;
-    const tooltipContent = (await roll.getTooltip()) as string;
-    tooltip.attach({
-      el,
-      content: html`${unsafeHTML(tooltipContent)}`,
-      position: 'left-start',
-    });
-  } else if (eventType !== 'mouseover')
-    anchor.one('click', TextEditor._onClickInlineRoll).trigger('click');
-};
+    uuid ||= id ? (pack.getUuid(id) ?? undefined) : undefined;
+    if (!uuid) {
+      return;
+    }
+
+    dragData = {
+      type: type || pack.documentName,
+      uuid,
+    };
+  } else {
+    dragData = foundry.utils.fromUuidSync(dataLinkElement.dataset["uuid"])
+      ?.toDragData();
+  }
+
+  event.dataTransfer?.setData("text/plain", JSON.stringify(dragData));
+}
+
 
 @customElement('enriched-html')
 export class EnrichedHTML extends LitElement {
@@ -56,21 +97,19 @@ export class EnrichedHTML extends LitElement {
   enrichedContent: string = "";
 
   async performUpdate() {
-   this.enrichedContent = await TextEditor.enrichHTML(this.content);
-   return super.performUpdate()
+    this.enrichedContent = await foundry.applications.ux.TextEditor.implementation.enrichHTML(this.content);
+    return super.performUpdate()
   }
 
   connectedCallback() {
     this.addEventListener('click', findMatch, { capture: true });
-    this.addEventListener('mousedown', findMatch);
-    this.addEventListener('mouseover', findMatch);
+    this.addEventListener('dragstart', findMatch);
     super.connectedCallback();
   }
 
   disconnectedCallback() {
     this.removeEventListener('click', findMatch, { capture: true });
-    this.removeEventListener('mousedown', findMatch);
-    this.removeEventListener('mouseover', findMatch);
+    this.removeEventListener('dragstart', findMatch);
 
     super.disconnectedCallback();
   }
@@ -84,8 +123,8 @@ export class EnrichedHTML extends LitElement {
       />
       <link rel="stylesheet" href="css/mce.css" media="all" />
       ${unsafeHTML(
-        this.enrichedContent
-      )}
+      this.enrichedContent
+    )}
     `;
   }
 }

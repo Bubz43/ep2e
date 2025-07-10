@@ -15,7 +15,6 @@ import '@material/mwc-list/mwc-radio-list-item';
 import '@material/mwc-menu';
 import '@material/mwc-radio';
 import '@material/mwc-slider';
-import '@material/mwc-snackbar';
 import '@material/mwc-switch';
 import '@material/mwc-tab-bar';
 import { LitVirtualizer } from 'lit-virtualizer';

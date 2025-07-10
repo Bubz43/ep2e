@@ -33,7 +33,6 @@
     "@material/mwc-radio": "^0.22.1",
     "@material/mwc-ripple": "^0.22.1",
     "@material/mwc-slider": "^0.22.1",
-    "@material/mwc-snackbar": "^0.22.1",
     "@material/mwc-switch": "^0.22.1",
     "@material/mwc-tab": "^0.22.1",
     "@material/mwc-tab-bar": "^0.22.1",

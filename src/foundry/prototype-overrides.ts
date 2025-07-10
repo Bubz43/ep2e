@@ -103,20 +103,23 @@ export const overridePrototypes = () => {
     this.renderFlags.set({ refreshEffects: true });
   };
 
-  const { getData: getTokenData, _getStatusEffectChoices } = TokenHUD.prototype;
+  const { TokenHUD } = foundry.applications.hud;
 
-  TokenHUD.prototype.getData = function (options: unknown) {
-    const data = getTokenData.call(this, options) as {
+  // @ts-expect-error
+  const { getData: getTokenData, _getStatusEffectChoices, _prepareContext } = TokenHUD.prototype;
+
+  // @ts-expect-error
+  TokenHUD.prototype._prepareContext = async function (options: unknown) {
+    const context = (await _prepareContext.call(this, options)) as {
       canToggleCombat: boolean;
       combatClass: 'active' | '';
-    };
-    data.canToggleCombat = gmIsConnected();
-    data.combatClass =
+    }
+    context.canToggleCombat = gmIsConnected();
+    context.combatClass =
       this.object && tokenIsInCombat(this.object) ? 'active' : '';
-    return data;
-  };
 
-  const { _onClickControl } = TokenHUD.prototype;
+    return context;
+  };
 
   Object.defineProperty(TokenDocument.prototype, 'inCombat', {
     get(this: TokenDocument): boolean {
@@ -124,60 +127,55 @@ export const overridePrototypes = () => {
     },
   });
 
-  TokenHUD.prototype._onClickControl = function (event: Event) {
-    const button = event.currentTarget;
-    if (
-      button instanceof HTMLElement &&
-      button.dataset['action'] === 'combat'
-    ) {
-      event.preventDefault();
-      if (!this.object?.scene) {
-        return;
-      }
-      const token = this.object;
-      const addToCombat = !tokenIsInCombat(token);
-      button.classList.toggle('active', addToCombat);
-      const tokens = new Set(
-        (readyCanvas()?.tokens.controlled ?? [])
-          .concat(token ?? [])
-          .filter((token) => {
-            const inCombat = tokenIsInCombat(token);
-            return inCombat !== addToCombat;
-          }),
-      );
 
-      if (addToCombat) {
-        updateCombatState({
-          type: CombatActionType.AddParticipants,
-          payload: [...tokens].flatMap((token) => {
-            const { scene } = token;
-            if (!scene) return [];
-            return {
-              name: token.name,
-              hidden: !!token.document.hidden,
-              entityIdentifiers: {
-                type: TrackedCombatEntity.Token,
-                tokenId: token.id,
-                sceneId: scene.id,
-              },
-            };
-          }),
-        });
-      } else {
-        updateCombatState({
-          type: CombatActionType.RemoveParticipantsByToken,
-          payload: [...tokens].flatMap((token) => {
-            const { scene } = token;
-            if (!scene) return [];
-            return {
+  // @ts-expect-error
+  TokenHUD.DEFAULT_OPTIONS.actions.combat = function (event: Event) {
+    const button = (event.currentTarget as HTMLElement).querySelector("button[data-action='combat']");
+    event.preventDefault();
+    if (!this.object?.scene || !(button instanceof HTMLElement)) {
+      return;
+    }
+    const token = this.object;
+    const addToCombat = !tokenIsInCombat(token);
+    button.classList.toggle('active', addToCombat);
+    const tokens = new Set(
+      (readyCanvas()?.tokens.controlled ?? [])
+        .concat(token ?? [])
+        .filter((token) => {
+          const inCombat = tokenIsInCombat(token);
+          return inCombat !== addToCombat;
+        }),
+    );
+
+    if (addToCombat) {
+      updateCombatState({
+        type: CombatActionType.AddParticipants,
+        payload: [...tokens].flatMap((token) => {
+          const { scene } = token;
+          if (!scene) return [];
+          return {
+            name: token.name,
+            hidden: !!token.document.hidden,
+            entityIdentifiers: {
+              type: TrackedCombatEntity.Token,
               tokenId: token.id,
               sceneId: scene.id,
-            };
-          }),
-        });
-      }
+            },
+          };
+        }),
+      });
     } else {
-      _onClickControl.call(this, event);
+      updateCombatState({
+        type: CombatActionType.RemoveParticipantsByToken,
+        payload: [...tokens].flatMap((token) => {
+          const { scene } = token;
+          if (!scene) return [];
+          return {
+            tokenId: token.id,
+            sceneId: scene.id,
+          };
+        }),
+      });
     }
   };
 
@@ -213,6 +211,7 @@ export const overridePrototypes = () => {
 
     return choices;
   };
+
 
 
   const { defaultOptions: journalSheetOptions } = JournalSheet;
@@ -253,139 +252,63 @@ export const overridePrototypes = () => {
   //   }
   // };
 
+  // const { _replaceHTML } = CombatTracker.prototype;
+  // CombatTracker.prototype._replaceHTML = function (
+  //   ...args: Parameters<typeof _replaceHTML>
+  // ) {
+  //   if (!this.popOut) {
+  //     _replaceHTML.apply(this, args);
+  //   }
+  // };
+
   const { _replaceHTML } = CombatTracker.prototype;
+  //@ts-expect-error
+  CombatTracker.prototype._renderHTML = () => { };
   CombatTracker.prototype._replaceHTML = function (
     ...args: Parameters<typeof _replaceHTML>
   ) {
-    if (!this.popOut) {
-      _replaceHTML.apply(this, args);
-    }
-  };
-
-  CombatTracker.prototype._renderInner = async function () {
-    const existing = this.element?.[0]?.querySelector('combat-view');
-    if (existing) {
-      return $(existing);
-    }
-    const frag = new DocumentFragment();
-    render(
-      html`<combat-view
-        class="sidebar-tab tab"
-        data-tab="combat"
+    const element = args[1] as HTMLElement;
+    // @ts-expect-error
+    const options = args[2] as { isFirstRender: boolean }
+    if (options.isFirstRender) {
+      render(
+        html`<combat-view
       ></combat-view>`,
-      frag,
-    );
-    return $(frag);
-  };
-
-  CombatTracker.prototype._contextMenu = function (jqueryEl: JQuery) {
-    jqueryEl[0]?.addEventListener('contextmenu', (ev) => {
-      const item = findMatchingElement(ev, '.directory-item');
-      if (!item) return;
-      const targetEl = $(item);
-      const entryOptions = this._getEntryContextOptions();
-      Hooks.call(
-        `get${this.constructor.name}EntryContext`,
-        this.element,
-        entryOptions,
+        element,
       );
-      const convertedOptions = convertMenuOptions(entryOptions, targetEl);
-      const heading = item.textContent?.trim();
-      openMenu({
-        content: convertedOptions,
-        position: ev,
-        header: heading ? { heading } : null,
-      });
-    });
+    }
+    // _replaceHTML.apply(this, args);
   };
 
-  // SidebarDirectory.prototype._contextMenu = function (jqueryEl: JQuery) {
-  //   jqueryEl[0]?.addEventListener('contextmenu', (ev) => {
-  //     const entityLi = findMatchingElement(
-  //       ev,
-  //       '.document, .folder .folder-header',
-  //     );
-  //     if (!entityLi) return;
-  //     const jqueryLi = $(entityLi);
-
-  //     if (entityLi.matches('.document')) {
-  //       const entryOptions = this._getEntryContextOptions();
-  //       Hooks.call(
-  //         `get${this.constructor.name}EntryContext`,
-  //         jqueryEl,
-  //         entryOptions,
-  //       );
-  //       const convertedOptions = convertMenuOptions(entryOptions, jqueryLi);
-  //       const heading = entityLi.querySelector('.document-name')?.textContent;
-  //       openMenu({
-  //         content: convertedOptions,
-  //         position: ev,
-  //         header: heading ? { heading } : null,
-  //       });
-  //     } else if (entityLi.matches('.folder .folder-header')) {
-  //       const folderOptions = this._getFolderContextOptions();
-  //       Hooks.call(
-  //         `get${this.constructor.name}FolderContext`,
-  //         jqueryEl,
-  //         folderOptions,
-  //       );
-
-  //       const convertedOptions = convertMenuOptions(folderOptions, jqueryLi);
-
-  //       const heading = entityLi.textContent?.trim();
-  //       openMenu({
-  //         content: convertedOptions,
-  //         position: ev,
-  //         header: heading ? { heading } : null,
-  //       });
-  //     }
-  //   });
+  // CombatTracker.prototype._renderInner = async function () {
+  //   const existing = this.element?.[0]?.querySelector('combat-view');
+  //   if (existing) {
+  //     return $(existing);
+  //   }
+  //   const frag = new DocumentFragment();
+  //   render(
+  //     html`<combat-view
+  //       class="sidebar-tab tab"
+  //       data-tab="combat"
+  //     ></combat-view>`,
+  //     frag,
+  //   );
+  //   return $(frag);
   // };
 
-  PlayerList.prototype.activateListeners = function (jqueryEl: JQuery) {
-    jqueryEl.find('h3').click(this._onToggleOfflinePlayers.bind(this));
-
-    const listener = (ev: MouseEvent) => {
-      const item = findMatchingElement(ev, '.player');
-      if (!item) return;
-      const targetEl = $(item);
-
-      const contextOptions = this._getUserContextOptions();
-      Hooks.call(`getUserContextOptions`, this.element, contextOptions);
-      const convertedOptions = convertMenuOptions(contextOptions, targetEl);
-      const heading = item.textContent?.trim();
-      openMenu({
-        content: convertedOptions,
-        position: ev,
-        header: heading ? { heading } : null,
-      });
-    };
-
-    jqueryEl[0]?.addEventListener('contextmenu', listener);
-    jqueryEl[0]?.addEventListener('click', listener);
-  };
-
-  SceneNavigation.prototype.activateListeners = function (jqueryEl: JQuery) {
-    const scenes = jqueryEl.find('.scene');
-    scenes.on('click', this._onClickScene.bind(this));
-    jqueryEl.find('#nav-toggle').on('click', this._onToggleNav.bind(this));
-
-    jqueryEl[0]?.addEventListener('contextmenu', navMenuListener);
-  };
-
-  // CompendiumDirectory.prototype._contextMenu = function (jqueryEl: JQuery) {
+  // CombatTracker.prototype._contextMenu = function (jqueryEl: JQuery) {
   //   jqueryEl[0]?.addEventListener('contextmenu', (ev) => {
-  //     const item = findMatchingElement(ev, '.compendium-pack');
+  //     const item = findMatchingElement(ev, '.directory-item');
   //     if (!item) return;
+  //     const targetEl = $(item);
   //     const entryOptions = this._getEntryContextOptions();
   //     Hooks.call(
   //       `get${this.constructor.name}EntryContext`,
   //       this.element,
   //       entryOptions,
   //     );
-  //     const targetEl = $(item);
   //     const convertedOptions = convertMenuOptions(entryOptions, targetEl);
-  //     const heading = item.querySelector('h4')?.textContent;
+  //     const heading = item.textContent?.trim();
   //     openMenu({
   //       content: convertedOptions,
   //       position: ev,
@@ -394,21 +317,7 @@ export const overridePrototypes = () => {
   //   });
   // };
 
-  ChatLog.prototype._contextMenu = function (jqueryEl: JQuery) {
-    jqueryEl[0]?.addEventListener('contextmenu', (ev) => {
-      const item = findMatchingElement(ev, '.message');
-      if (!item) return;
-      const entryOptions = this._getEntryContextOptions();
-      Hooks.call(
-        `get${this.constructor.name}EntryContext`,
-        this.element,
-        entryOptions,
-      );
-      const targetEl = $(item);
-      const convertedOptions = convertMenuOptions(entryOptions, targetEl);
-      openMenu({ content: convertedOptions, position: ev });
-    });
-  };
+
 
   ChatMessage._getSpeakerFromUser = function ({
     scene,
@@ -444,11 +353,11 @@ export const overridePrototypes = () => {
     };
   };
 
-  const { close } = ChatPopout.prototype;
-  ChatPopout.prototype.close = async function () {
-    delete this.message.apps[this.appId];
-    close.call(this, []);
-  };
+  // const { close } = ChatPopout.prototype;
+  // ChatPopout.prototype.close = async function () {
+  //   delete this.message.apps[this.appId];
+  //   close.call(this, []);
+  // };
 
   tinymce.FocusManager.isEditorUIElement = function (elm: Element) {
     const className = elm.className?.toString() ?? '';
@@ -465,6 +374,7 @@ export const overridePrototypes = () => {
     } catch (error) {
       console.log(error);
     }
+
     if (isKnownDrop(data)) {
       onlySetDragSource(ev, data);
     }

@@ -234,6 +234,7 @@ export class Popover extends mix(LitElement).with(ListenerSubscription) {
   }
 
   private async show() {
+    this.floater.togglePopover?.(true)
     await this.appendTemplateContent();
     await this.positionFloater();
     this.addListenerSubs(
@@ -275,7 +276,7 @@ export class Popover extends mix(LitElement).with(ListenerSubscription) {
     }
 
     this.focusElement();
-    if (this.noAnimation) this.emitOpenEvent;
+    if (this.noAnimation) this.emitOpenEvent();
     else {
       this.floater.addEventListener(
         'animationend',
@@ -308,6 +309,7 @@ export class Popover extends mix(LitElement).with(ListenerSubscription) {
       { duration: noAnimation ? 0 : 100, easing: 'ease-in-out' },
     );
     closingAnimation.onfinish = () => {
+      floater.togglePopover?.(false);
       floater.style.display = '';
       if (this.tempContainer) {
         this.tempContainer.remove();
@@ -368,9 +370,9 @@ export class Popover extends mix(LitElement).with(ListenerSubscription) {
         this.positioningBase = this.getPositioningBase(ev);
         this.delay
           ? (this.delayTimeout = setTimeout(
-              () => (this.open = true),
-              this.delay,
-            ))
+            () => (this.open = true),
+            this.delay,
+          ))
           : (this.open = true);
         // this.open = true;
         if (
@@ -582,7 +584,7 @@ export class Popover extends mix(LitElement).with(ListenerSubscription) {
         @contextmenu=${this.toggle}
         name="base"
       ></slot>
-      <div class="floater ${classMap(floaterClasses)}">
+      <div class="floater ${classMap(floaterClasses)}" popover="manual">
         <div>
           <slot class="floating-content"></slot>
         </div>
@@ -595,4 +597,9 @@ declare global {
   interface HTMLElementTagNameMap {
     'sl-popover': Popover;
   }
+
+  interface HTMLElement {
+    togglePopover?: (open: boolean) => void;
+  }
 }
+
