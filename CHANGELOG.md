@@ -1,6 +1,11 @@
 # Changelog
 
+## [1.3.1] - 2025-07-26
+
+- Fix prototype token config window opening
+
 ## [1.3.0] - 2025-07-10
+
 - Update for Foundry v13 compatibility
 - Move all added ui buttons to top-center of the screen
 
