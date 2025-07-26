@@ -134,25 +134,25 @@ export class ActorEPSheet implements EntitySheet {
       }),
 
       compendium &&
-        SlWindow.headerButton({
-          onClick: async () => {
-            await this.close();
-            this.actor.collection?.importFromCompendium(
-              compendium,
-              this.actor.id,
-              {},
-              { renderSheet: true },
-            );
-          },
-          content: html`<i class="fas fa-download"></i>`,
-          disabled: !userCan('ACTOR_CREATE'),
-        }),
+      SlWindow.headerButton({
+        onClick: async () => {
+          await this.close();
+          this.actor.collection?.importFromCompendium(
+            compendium,
+            this.actor.id,
+            {},
+            { renderSheet: true },
+          );
+        },
+        content: html`<i class="fas fa-download"></i>`,
+        disabled: !userCan('ACTOR_CREATE'),
+      }),
       proxy.type === ActorType.Character &&
-        SlWindow.headerButton({
-          onClick: this.openSettingsMenu,
-          content: html`<mwc-icon>settings</mwc-icon>`,
-          disabled: !this.actor.editable,
-        }),
+      SlWindow.headerButton({
+        onClick: this.openSettingsMenu,
+        content: html`<mwc-icon>settings</mwc-icon>`,
+        disabled: !this.actor.editable,
+      }),
     ]);
   }
 
@@ -180,11 +180,13 @@ export class ActorEPSheet implements EntitySheet {
       const { top, left } = ev.currentTarget.getBoundingClientRect();
       const renderOptions = { top, left };
       if (this._token) this._token.sheet.render(true, renderOptions);
-      else
-        new CONFIG.Token.prototypeSheetClass(
-          this.actor.prototypeToken,
-          renderOptions,
-        ).render(true, renderOptions);
+      else {
+        new CONFIG.Token.prototypeSheetClass({
+          prototype: this.actor.prototypeToken,
+          position: renderOptions
+        }, {}).render({ force: true }, {});
+      }
+
     }
   };
 
@@ -198,9 +200,8 @@ export class ActorEPSheet implements EntitySheet {
         content: html` ${this.windowHeaderButtons} ${this.content} `,
         name:
           actorName !== tokenName
-            ? `${actorName} ${
-                tokenName ? `- ${localize('token')}: ${tokenName}` : ''
-              }`
+            ? `${actorName} ${tokenName ? `- ${localize('token')}: ${tokenName}` : ''
+            }`
             : actorName,
         img: this._token?.texture.src || this.actor.img,
         forceFocus: force,
