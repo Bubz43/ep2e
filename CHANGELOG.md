@@ -1,5 +1,9 @@
 # Changelog
 
+## [1.3.2] - 2025-09-02
+
+- Fix white on white within EP window rich text editors
+
 ## [1.3.1] - 2025-07-26
 
 - Fix prototype token config window opening
