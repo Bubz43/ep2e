@@ -1,0 +1,57 @@
+{
+  "name": "Narcissistic Personality Disorder",
+  "permission": {
+    "default": 0,
+    "qJl17WpEHiovQQBC": 3
+  },
+  "type": "trait",
+  "system": {
+    "description": "<p>You believe yourself to be the single most important person in the universe. Nothing else takes precedence and everything must be done according to your whim. Failure to comply with your dictates will incite rage and physical assault.</p>",
+    "reference": "Eclipse Phase Second Edition p. 225",
+    "restrictions": "",
+    "triggers": "Criticism, insults, praise, the unknown",
+    "source": "ego",
+    "state": {
+      "level": 0,
+      "triggered": false
+    },
+    "levels": [
+      {
+        "cost": 2,
+        "effects": [
+          {
+            "type": "misc",
+            "unique": "",
+            "description": "You demand attention. You may be provoked to violence if insulted or if others fail to comply with your demands (WIL Check). Narcissistic NPCs are immune to Persuade Tests.",
+            "id": "74fhieu1fg"
+          },
+          {
+            "type": "successTest",
+            "tags": [
+              {
+                "type": "skill",
+                "skillType": "persuade"
+              }
+            ],
+            "modifier": -30,
+            "toOpponent": false,
+            "requirement": "",
+            "id": "qs5srpix94"
+          }
+        ],
+        "id": "_defaultLevel"
+      }
+    ],
+    "subtype": "",
+    "traitType": "positive"
+  },
+  "flags": {
+    "core": {
+      "sourceId": "Item.Ri4FOaqxsl3hYaBh"
+    }
+  },
+  "img": "icons/svg/mystery-man.svg",
+  "effects": [],
+  "_id": "ZsQ97zoDekasiJIK",
+  "_key": "!items!ZsQ97zoDekasiJIK"
+}

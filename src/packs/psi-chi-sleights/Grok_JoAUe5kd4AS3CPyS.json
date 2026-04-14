@@ -1,0 +1,54 @@
+{
+  "name": "Grok",
+  "permission": {
+    "default": 0,
+    "qJl17WpEHiovQQBC": 3
+  },
+  "type": "sleight",
+  "system": {
+    "description": "<p>You intuitively understand how to use an unfamiliar object, vehicle, or device, no matter how alien, advanced, or bizarre. You may make a COG Check to determine how to activate or use it, simply by looking at and handling it. This sleight does not provide any understanding of the principles or technologies involved &mdash; you simply grasp how to make it work. This sleight is only effective with unfamiliar devices, it provides no bonus when using devices with which you are familiar.</p>",
+    "reference": "Eclipse Phase Second Edition p. 281",
+    "duration": "actionTurns",
+    "infectionMod": 1,
+    "sleightType": "chi",
+    "action": "complex",
+    "timeframe": 0,
+    "effectsToSelf": [
+      {
+        "type": "misc",
+        "unique": "",
+        "description": "May use COG Check to understand how to use unfamiliar object/device.",
+        "id": "hga7ig4iu2"
+      }
+    ],
+    "effectsToTarget": [],
+    "scaleEffectsOnSuperior": false,
+    "attack": {
+      "useMentalArmor": false,
+      "attackTraits": [],
+      "damageFormula": "",
+      "damageType": "mental",
+      "notes": ""
+    },
+    "heal": {
+      "formula": "",
+      "healthType": "mental"
+    },
+    "mentalArmor": {
+      "apply": false,
+      "divisor": 3,
+      "formula": "1d6"
+    },
+    "status": {
+      "sustaining": false,
+      "pushDuration": 0,
+      "pushed": false,
+      "pushStartTime": 0,
+      "sustainingOn": []
+    }
+  },
+  "flags": {},
+  "effects": [],
+  "_id": "JoAUe5kd4AS3CPyS",
+  "_key": "!items!JoAUe5kd4AS3CPyS"
+}

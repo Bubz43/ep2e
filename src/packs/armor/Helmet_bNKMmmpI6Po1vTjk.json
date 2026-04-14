@@ -1,0 +1,50 @@
+{
+  "name": "Helmet",
+  "permission": {
+    "default": 0,
+    "qJl17WpEHiovQQBC": 3
+  },
+  "type": "armor",
+  "system": {
+    "description": "<p>Helmets come in various open and closed styles, all protecting the head. If targeted with a called shot, helmets have AV 4/10. Helmets are already included with body armor, combat armor, and all suits (use that armor's full AV against called head shots).</p>",
+    "reference": "Eclipse Phase Second Edition p. 215",
+    "complexity": "minor",
+    "restricted": false,
+    "quality": "average",
+    "blueprint": {
+      "blueprintType": "",
+      "cracked": false,
+      "used": false
+    },
+    "state": {
+      "disabled": false,
+      "equipped": false,
+      "activated": false
+    },
+    "activeArmor": {
+      "energy": 4,
+      "kinetic": 10,
+      "concealable": false,
+      "layerable": false
+    },
+    "armorValues": {
+      "energy": 2,
+      "kinetic": 2,
+      "concealable": false,
+      "layerable": true
+    },
+    "attackTraits": [],
+    "effects": [],
+    "hasActiveState": true,
+    "fragile": false,
+    "singleUse": false,
+    "twoHanded": false,
+    "notes": "AV 4/10 vs headshots",
+    "wareType": ""
+  },
+  "flags": {},
+  "img": "icons/svg/mystery-man.svg",
+  "effects": [],
+  "_id": "bNKMmmpI6Po1vTjk",
+  "_key": "!items!bNKMmmpI6Po1vTjk"
+}

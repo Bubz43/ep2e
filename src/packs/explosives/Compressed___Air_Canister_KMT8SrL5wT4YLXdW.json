@@ -1,0 +1,57 @@
+{
+  "name": "Compressed - Air Canister",
+  "permission": {
+    "default": 0,
+    "qJl17WpEHiovQQBC": 3
+  },
+  "type": "explosive",
+  "system": {
+    "description": "<p>A standard single-use compressed-air canister meant to be used in a Wasp Knife</p>",
+    "reference": "Eclipse Phase Second Edition p. 205",
+    "complexity": "minor",
+    "restricted": false,
+    "quality": "average",
+    "blueprint": {
+      "blueprintType": "",
+      "cracked": false,
+      "used": false
+    },
+    "quantity": 5,
+    "state": {
+      "stashed": false
+    },
+    "areaEffect": "",
+    "explosiveType": "generic",
+    "useSubstance": "dermal",
+    "areaEffectRadius": 10,
+    "size": "mini",
+    "sticky": true,
+    "unitsPerComplexity": 5,
+    "dosesPerUnit": 1,
+    "hasSecondaryMode": false,
+    "primaryAttack": {
+      "armorUsed": "",
+      "attackTraits": [],
+      "armorPiercing": false,
+      "damageFormula": "2d10",
+      "duration": 0,
+      "attackTraitNotes": "",
+      "label": "",
+      "notes": ""
+    },
+    "secondaryAttack": {
+      "armorUsed": "",
+      "attackTraits": [],
+      "armorPiercing": false,
+      "damageFormula": "",
+      "duration": 0,
+      "attackTraitNotes": "",
+      "label": "",
+      "notes": ""
+    }
+  },
+  "flags": {},
+  "effects": [],
+  "_id": "KMT8SrL5wT4YLXdW",
+  "_key": "!items!KMT8SrL5wT4YLXdW"
+}

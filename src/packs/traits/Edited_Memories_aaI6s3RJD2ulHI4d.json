@@ -1,0 +1,40 @@
+{
+  "_id": "aaI6s3RJD2ulHI4d",
+  "name": "Edited Memories",
+  "permission": {
+    "default": 0,
+    "qHi89sFcK4gHlOPd": 3
+  },
+  "type": "trait",
+  "system": {
+    "description": "<p>At some point in your past, certain memories were strategically removed or otherwise lost to you. This may have been done to intentionally forget an unpleasant or shameful experience or to make a break with the past. Or you may have suffered lack due to an unexpected death (with no recent backup) or had the memories erased against your will. Whatever the case, the memories should be important and significant, not mundane. Either evidence of what happened or NPCs who know the full story should exist. GMs can use this as a tool to haunt you with ghosts and mysteries from your past.</p>",
+    "reference": "Eclipse Phase Second Edition p. 77",
+    "restrictions": "",
+    "triggers": "",
+    "source": "ego",
+    "state": {
+      "level": 0,
+      "triggered": false
+    },
+    "levels": [
+      {
+        "cost": 1,
+        "effects": [
+          {
+            "type": "misc",
+            "unique": "",
+            "description": "Missing important memories",
+            "id": "6mrwpjgybc"
+          }
+        ],
+        "id": "k8opl0ouru"
+      }
+    ],
+    "subtype": "",
+    "traitType": "negative"
+  },
+  "flags": {},
+  "img": "icons/svg/mystery-man.svg",
+  "effects": [],
+  "_key": "!items!aaI6s3RJD2ulHI4d"
+}

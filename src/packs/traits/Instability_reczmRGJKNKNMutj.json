@@ -1,0 +1,82 @@
+{
+  "_id": "reczmRGJKNKNMutj",
+  "name": "Instability",
+  "permission": {
+    "default": 0,
+    "qHi89sFcK4gHlOPd": 3
+  },
+  "type": "trait",
+  "system": {
+    "description": "<p>Your mental foundation has serious cracks. Reduce your Lucidity by 5 per level. This also affects derived stats based on Lucidity; reduce both your Trauma Threshold by 1 and your Insanity Rating by 10 per level.</p>",
+    "reference": "Eclipse Phase Second Edition p. 78",
+    "restrictions": "",
+    "triggers": "",
+    "source": "ego",
+    "state": {
+      "level": 0,
+      "triggered": false
+    },
+    "levels": [
+      {
+        "cost": 2,
+        "effects": [
+          {
+            "type": "health",
+            "health": "mental",
+            "stat": "durability",
+            "modifier": -5,
+            "id": "yqj662hpid"
+          },
+          {
+            "type": "health",
+            "health": "mental",
+            "stat": "woundThreshold",
+            "modifier": -1,
+            "id": "0femvb5gx4"
+          },
+          {
+            "type": "health",
+            "health": "mental",
+            "stat": "deathRating",
+            "modifier": -10,
+            "id": "gnebp1talq"
+          }
+        ],
+        "id": "ytuvzoak3h"
+      },
+      {
+        "cost": 4,
+        "effects": [
+          {
+            "type": "health",
+            "health": "mental",
+            "stat": "durability",
+            "modifier": -10,
+            "id": "yqj662hpid"
+          },
+          {
+            "type": "health",
+            "health": "mental",
+            "stat": "woundThreshold",
+            "modifier": -2,
+            "id": "0femvb5gx4"
+          },
+          {
+            "type": "health",
+            "health": "mental",
+            "stat": "deathRating",
+            "modifier": -20,
+            "id": "gnebp1talq"
+          }
+        ],
+        "id": "1bu9f42393"
+      }
+    ],
+    "subtype": "",
+    "traitType": "negative"
+  },
+  "flags": {},
+  "img": "icons/svg/mystery-man.svg",
+  "effects": [],
+  "_key": "!items!reczmRGJKNKNMutj"
+}

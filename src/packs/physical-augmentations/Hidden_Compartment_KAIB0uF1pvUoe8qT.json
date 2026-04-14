@@ -1,0 +1,95 @@
+{
+  "name": "Hidden Compartment",
+  "permission": {
+    "default": 0,
+    "qJl17WpEHiovQQBC": 3
+  },
+  "type": "physicalTech",
+  "system": {
+    "description": "<p>The shell has a concealed aperture for a shielded interior compartment, ideal for storing valuables or smuggling contraband. On small morphs, micro items can be hidden. On medium morphs, very small objects. On large morphs, small items. Concealed gear acquires a +30 modifier to Infiltrate Tests against both manual and sensor scans. The cybernetic version of this mod only applies to cyberlimbs. You may have multiple compartments.</p>",
+    "reference": "Eclipse Phase Second Edition p. 325",
+    "complexity": "minor",
+    "restricted": false,
+    "quality": "average",
+    "concealable": false,
+    "fragile": false,
+    "singleUse": false,
+    "twoHanded": false,
+    "blueprint": {
+      "blueprintType": "",
+      "cracked": false,
+      "used": false
+    },
+    "state": {
+      "disabled": false,
+      "equipped": false,
+      "fabStartTime": 0,
+      "activated": false,
+      "embeddedEgos": [],
+      "onboardAliDeleted": false
+    },
+    "activatedEffects": [],
+    "deviceType": "",
+    "category": "Physical Augments",
+    "fabricator": "",
+    "activationAction": "automatic",
+    "passiveEffects": [
+      {
+        "type": "misc",
+        "unique": "",
+        "description": "Concealed, shielded compartment.",
+        "id": "r12kwadkd1"
+      },
+      {
+        "type": "successTest",
+        "tags": [
+          {
+            "type": "skill",
+            "skillType": "infiltrate"
+          }
+        ],
+        "modifier": 30,
+        "toOpponent": false,
+        "requirement": "hiding items",
+        "id": "3eyhdpl1t1"
+      }
+    ],
+    "activation": "none",
+    "resistEffectsCheck": "",
+    "usedEffectsDuration": 3000,
+    "onboardALI": false,
+    "firewallRating": 30,
+    "fabPrintDuration": 0,
+    "firewallHealth": {
+      "baseDurability": 30,
+      "rebootEndTime": -1,
+      "crashWounds": 0,
+      "damage": 0,
+      "log": [],
+      "wounds": 0
+    },
+    "meshHealth": {
+      "baseDurability": 20,
+      "damage": 0,
+      "wounds": 0,
+      "aidedHealTickStartTime": 0,
+      "ownHealTickStartTime": 0,
+      "damageRepair": {
+        "amount": "1d10",
+        "interval": 86400000
+      },
+      "woundRepair": {
+        "amount": 1,
+        "interval": 86400000
+      },
+      "log": [],
+      "rebootEndTime": -1,
+      "crashWounds": 0
+    },
+    "wareType": "cyberware"
+  },
+  "flags": {},
+  "effects": [],
+  "_id": "KAIB0uF1pvUoe8qT",
+  "_key": "!items!KAIB0uF1pvUoe8qT"
+}

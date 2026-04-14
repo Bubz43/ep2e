@@ -1,0 +1,40 @@
+{
+  "_id": "Vw8lpQ294NbGCut4",
+  "name": "No Backup Insurance",
+  "permission": {
+    "default": 0,
+    "qHi89sFcK4gHlOPd": 3
+  },
+  "type": "trait",
+  "system": {
+    "description": "<p>You are either poor, bioconservative, or like to live dangerously. You do not have any sort of backup insurance or similar arrangement. If you die, your stack's retrieval and your ego's re-instantiation is entirely dependent upon the circumstances and GM. You may be brought back with significantly lower MP or be permanently dead.</p>",
+    "reference": "Eclipse Phase Second Edition p. 79",
+    "restrictions": "",
+    "triggers": "",
+    "source": "ego",
+    "state": {
+      "level": 0,
+      "triggered": false
+    },
+    "levels": [
+      {
+        "cost": 2,
+        "effects": [
+          {
+            "type": "misc",
+            "unique": "",
+            "description": "You're lacking any backup insurance or similar arrangement",
+            "id": "clkv95deuq"
+          }
+        ],
+        "id": "xin6j2esxf"
+      }
+    ],
+    "subtype": "",
+    "traitType": "negative"
+  },
+  "flags": {},
+  "img": "icons/svg/mystery-man.svg",
+  "effects": [],
+  "_key": "!items!Vw8lpQ294NbGCut4"
+}

@@ -1,0 +1,58 @@
+{
+  "name": "Depression",
+  "permission": {
+    "default": 0,
+    "qJl17WpEHiovQQBC": 3
+  },
+  "type": "trait",
+  "system": {
+    "description": "<p>Clinical depression is characterized by intense feelings of hopelessness and worthlessness. You feel as though nothing you do matters and no one cares anyway. You find it difficult to be motivated; even simple acts such as eating and bathing seem monumental.</p>",
+    "reference": "Eclipse Phase Second Edition p. 225",
+    "restrictions": "",
+    "triggers": "Alienation, grief, helplessness, life transitions, violence",
+    "source": "ego",
+    "state": {
+      "level": 0,
+      "triggered": false
+    },
+    "levels": [
+      {
+        "cost": 2,
+        "effects": [
+          {
+            "type": "successTest",
+            "tags": [
+              {
+                "type": "action",
+                "action": "task",
+                "subtype": ""
+              }
+            ],
+            "modifier": -30,
+            "toOpponent": false,
+            "requirement": "",
+            "id": "ooom67mugp"
+          },
+          {
+            "type": "misc",
+            "unique": "",
+            "description": "Make a WIL Check to take any sort of action",
+            "id": "2ehteua1jp"
+          }
+        ],
+        "id": "_defaultLevel"
+      }
+    ],
+    "subtype": "",
+    "traitType": "positive"
+  },
+  "flags": {
+    "core": {
+      "sourceId": "Item.Ri4FOaqxsl3hYaBh"
+    }
+  },
+  "img": "icons/svg/mystery-man.svg",
+  "effects": [],
+  "_id": "JeEbUnocwrSmBRbv",
+  "_key": "!items!JeEbUnocwrSmBRbv"
+}

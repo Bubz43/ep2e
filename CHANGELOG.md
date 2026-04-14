@@ -1,5 +1,10 @@
 # Changelog
 
+## [1.3.3] - 2026-04-14
+
+- Convert compendium packs from NeDB to LevelDB format required by Foundry V13
+- Add `npm run pack` / `npm run unpack` scripts for compendium development workflow
+
 ## [1.3.2] - 2025-09-02
 
 - Fix white on white within EP window rich text editors

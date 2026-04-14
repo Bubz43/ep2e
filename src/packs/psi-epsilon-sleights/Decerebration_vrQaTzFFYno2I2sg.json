@@ -1,0 +1,54 @@
+{
+  "name": "Decerebration",
+  "permission": {
+    "default": 0,
+    "qJl17WpEHiovQQBC": 3
+  },
+  "type": "sleight",
+  "system": {
+    "description": "<p>This sleight suppresses signals passing through your brain stem. This cuts off cerebral functions and motor activity and triggers decerebrate rigidity, where your body tenses and your limbs extend out to their maximum reach. You are physically immobilized and unable to take mental/mesh actions for the duration. This sleight only affects biomorphs and other biological creatures.</p>",
+    "reference": "Eclipse Phase Second Edition p. 387",
+    "duration": "sustained",
+    "infectionMod": 1,
+    "sleightType": "epsilon",
+    "action": "complex",
+    "timeframe": 0,
+    "effectsToSelf": [],
+    "effectsToTarget": [
+      {
+        "type": "misc",
+        "unique": "",
+        "description": "Target immobilized, unable to act. Only affects biological creatures",
+        "id": "vk7pzs7h7i"
+      }
+    ],
+    "scaleEffectsOnSuperior": false,
+    "attack": {
+      "useMentalArmor": false,
+      "attackTraits": [],
+      "damageFormula": "",
+      "damageType": "mental",
+      "notes": ""
+    },
+    "heal": {
+      "formula": "",
+      "healthType": "mental"
+    },
+    "mentalArmor": {
+      "apply": false,
+      "divisor": 3,
+      "formula": "1d6"
+    },
+    "status": {
+      "sustaining": false,
+      "pushDuration": 0,
+      "pushed": false,
+      "pushStartTime": 0,
+      "sustainingOn": []
+    }
+  },
+  "flags": {},
+  "effects": [],
+  "_id": "vrQaTzFFYno2I2sg",
+  "_key": "!items!vrQaTzFFYno2I2sg"
+}

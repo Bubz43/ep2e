@@ -1,0 +1,91 @@
+{
+  "name": "Endocrine Control",
+  "permission": {
+    "default": 0,
+    "qJl17WpEHiovQQBC": 3
+  },
+  "type": "software",
+  "system": {
+    "description": "<p>This modifies the morph&rsquo;s endocrine system (or the software sim of it), giving you a measure of control over your hormones. You can influence your appetite, thirst and remain awake for 48 hours without penalty. You also have fine control over your emotional states, and can &ldquo;gland&rdquo; happiness, sadness, aggression, arousal, trust, suspicion, and so on. Increase your Moxie pool by 2.</p>",
+    "reference": "Eclipse Phase Second Edition p. 321",
+    "complexity": "major",
+    "restricted": false,
+    "quality": "average",
+    "softwareType": "meshware",
+    "activatedEffects": [],
+    "effects": [
+      {
+        "type": "misc",
+        "unique": "",
+        "description": "Control over hormones and emotions",
+        "id": "3z7c3rbj3v"
+      },
+      {
+        "type": "pool",
+        "pool": "moxie",
+        "modifier": 2,
+        "usabilityModification": "",
+        "id": "l9it3m1uqb"
+      }
+    ],
+    "category": "Social Augments",
+    "serviceDuration": -1,
+    "skills": [],
+    "activation": "",
+    "meshAttacks": 0,
+    "meshHealth": {
+      "baseDurability": 10,
+      "damage": 0,
+      "log": [],
+      "wounds": 0,
+      "rebootEndTime": -1,
+      "crashWounds": 0
+    },
+    "state": {
+      "activated": false,
+      "equipped": false,
+      "serviceStartTime": 0,
+      "paused": false
+    },
+    "primaryAttack": {
+      "armorPiercing": false,
+      "attackTraits": [],
+      "damageFormula": "",
+      "damageType": "mesh",
+      "useMeshArmor": true,
+      "notes": "",
+      "aptitudeCheckInfo": {
+        "armorAsModifier": "",
+        "check": "",
+        "checkModifier": 0,
+        "checkFailure": [],
+        "checkSuccess": [],
+        "criticalCheckFailure": []
+      },
+      "label": "",
+      "reduceAVbyDV": false
+    },
+    "secondaryAttack": {
+      "armorPiercing": false,
+      "attackTraits": [],
+      "damageFormula": "",
+      "damageType": "mesh",
+      "useMeshArmor": true,
+      "notes": "",
+      "aptitudeCheckInfo": {
+        "armorAsModifier": "",
+        "check": "",
+        "checkModifier": 0,
+        "checkFailure": [],
+        "checkSuccess": [],
+        "criticalCheckFailure": []
+      },
+      "label": "",
+      "reduceAVbyDV": false
+    }
+  },
+  "flags": {},
+  "effects": [],
+  "_id": "Sd0hK9j6Oqtx2xod",
+  "_key": "!items!Sd0hK9j6Oqtx2xod"
+}

@@ -1,0 +1,26 @@
+{
+  "name": "Morph Storage",
+  "permission": {
+    "default": 0,
+    "qJl17WpEHiovQQBC": 3
+  },
+  "type": "physicalService",
+  "system": {
+    "description": "<p>Store an unused morph for 1 week.</p>\n<p>&nbsp;</p>\n<p>Your biomorph is kept on ice for a week or your synthmorph securely stored, without being rented out to others.</p>",
+    "reference": "Eclipse Phase Second Edition p. 315",
+    "complexity": "minor",
+    "restricted": false,
+    "quality": "average",
+    "serviceDuration": 604800000,
+    "reputations": [],
+    "serviceType": "generic",
+    "state": {
+      "serviceStartTime": 0,
+      "equipped": false
+    }
+  },
+  "flags": {},
+  "effects": [],
+  "_id": "Wzj0vdPpBxOjMMJl",
+  "_key": "!items!Wzj0vdPpBxOjMMJl"
+}

@@ -1,0 +1,43 @@
+{
+  "name": "Proximity",
+  "permission": {
+    "default": 0,
+    "qJl17WpEHiovQQBC": 3
+  },
+  "type": "firearmAmmo",
+  "system": {
+    "description": "<p>This reactive bullet uses nanosensors to determine if it is going to miss a smartlink-tagged target and explodes in their vicinity. If the attack misses without a superior or critical failure, the target still suffers DV 1d10.</p>",
+    "reference": "Eclipse Phase Second Edition p. 211",
+    "complexity": "moderate",
+    "restricted": true,
+    "quality": "average",
+    "blueprint": {
+      "blueprintType": "",
+      "cracked": false,
+      "used": false
+    },
+    "quantity": 100,
+    "state": {
+      "stashed": false
+    },
+    "ammoClass": "heavyPistol",
+    "carryPayload": false,
+    "roundsPerComplexity": 100,
+    "modes": [
+      {
+        "name": "",
+        "armorPiercing": false,
+        "attackTraits": [],
+        "damageFormula": "1d6",
+        "steady": false,
+        "damageModifierType": "formula",
+        "notes": "",
+        "id": "_defaultID"
+      }
+    ]
+  },
+  "flags": {},
+  "effects": [],
+  "_id": "0zYMc2tvB3K2MvwM",
+  "_key": "!items!0zYMc2tvB3K2MvwM"
+}

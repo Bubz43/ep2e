@@ -1,0 +1,54 @@
+{
+  "name": "Block Skill",
+  "permission": {
+    "default": 0,
+    "qJl17WpEHiovQQBC": 3
+  },
+  "type": "sleight",
+  "system": {
+    "description": "<p>You install a temporary block in the target&rsquo;s brain, preventing them from using one specified skill (they may not even default) for WIL &divide; 5 minutes.</p>",
+    "reference": "Eclipse Phase Second Edition p. 282",
+    "duration": "minutes",
+    "infectionMod": 6,
+    "sleightType": "gamma",
+    "action": "complex",
+    "timeframe": 0,
+    "effectsToSelf": [],
+    "effectsToTarget": [
+      {
+        "type": "misc",
+        "unique": "",
+        "description": "The target may not use a specified skill.",
+        "id": "brrmmwwkfi"
+      }
+    ],
+    "scaleEffectsOnSuperior": false,
+    "attack": {
+      "useMentalArmor": false,
+      "attackTraits": [],
+      "damageFormula": "",
+      "damageType": "mental",
+      "notes": ""
+    },
+    "heal": {
+      "formula": "",
+      "healthType": "mental"
+    },
+    "mentalArmor": {
+      "apply": false,
+      "divisor": 3,
+      "formula": "1d6"
+    },
+    "status": {
+      "sustaining": false,
+      "pushDuration": 0,
+      "pushed": false,
+      "pushStartTime": 0,
+      "sustainingOn": []
+    }
+  },
+  "flags": {},
+  "effects": [],
+  "_id": "rBkPEaTTnZs4crQV",
+  "_key": "!items!rBkPEaTTnZs4crQV"
+}

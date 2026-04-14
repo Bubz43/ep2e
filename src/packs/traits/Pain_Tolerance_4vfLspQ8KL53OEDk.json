@@ -1,0 +1,54 @@
+{
+  "_id": "4vfLspQ8KL53OEDk",
+  "name": "Pain Tolerance",
+  "permission": {
+    "default": 0,
+    "qHi89sFcK4gHlOPd": 3
+  },
+  "type": "trait",
+  "system": {
+    "description": "<p>You have a high threshold for pain, enabling you to shrug off the effects of pain on your abilities and concentration. You ignore the -10 modifier for 1 wound per level. This trait is compatible with other pain-resistant effects, but a maximum of 3 wound effects may be ignored.</p>",
+    "reference": "Eclipse Phase Second Edition p. 74",
+    "restrictions": "",
+    "triggers": "",
+    "source": "morph",
+    "state": {
+      "level": 0,
+      "triggered": false
+    },
+    "levels": [
+      {
+        "cost": 2,
+        "effects": [
+          {
+            "type": "health",
+            "health": "physical",
+            "stat": "woundsIgnored",
+            "modifier": 1,
+            "id": "mho5vvr3od"
+          }
+        ],
+        "id": "tvzsgehy6l"
+      },
+      {
+        "cost": 4,
+        "effects": [
+          {
+            "type": "health",
+            "health": "physical",
+            "stat": "woundsIgnored",
+            "modifier": 2,
+            "id": "mho5vvr3od"
+          }
+        ],
+        "id": "7wgcnn2d3z"
+      }
+    ],
+    "subtype": "",
+    "traitType": "positive"
+  },
+  "flags": {},
+  "img": "icons/svg/mystery-man.svg",
+  "effects": [],
+  "_key": "!items!4vfLspQ8KL53OEDk"
+}

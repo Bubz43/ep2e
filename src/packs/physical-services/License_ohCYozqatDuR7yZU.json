@@ -1,0 +1,26 @@
+{
+  "name": "License",
+  "permission": {
+    "default": 0,
+    "qJl17WpEHiovQQBC": 3
+  },
+  "type": "physicalService",
+  "system": {
+    "description": "<p>License to perform a restricted activity</p>\n<p>&nbsp;</p>\n<p>You acquire a license to carry a weapon or perform some other restricted activity. Requires an ID/background check.</p>",
+    "reference": "Eclipse Phase Second Edition p. 315",
+    "complexity": "moderate",
+    "restricted": true,
+    "quality": "average",
+    "serviceDuration": -1,
+    "reputations": [],
+    "serviceType": "generic",
+    "state": {
+      "serviceStartTime": 0,
+      "equipped": false
+    }
+  },
+  "flags": {},
+  "effects": [],
+  "_id": "ohCYozqatDuR7yZU",
+  "_key": "!items!ohCYozqatDuR7yZU"
+}

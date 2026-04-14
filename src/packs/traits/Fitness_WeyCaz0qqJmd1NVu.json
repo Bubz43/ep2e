@@ -1,0 +1,85 @@
+{
+  "_id": "WeyCaz0qqJmd1NVu",
+  "name": "Fitness",
+  "permission": {
+    "default": 0,
+    "qHi89sFcK4gHlOPd": 3
+  },
+  "type": "trait",
+  "system": {
+    "description": "<p>Either your morph is in top shape or you excel at pushing it to its limits. You receive +5 per level to SOM Checks.</p>",
+    "reference": "Eclipse Phase Second Edition p. 74",
+    "restrictions": "",
+    "triggers": "",
+    "source": "morph",
+    "state": {
+      "level": 0,
+      "triggered": false
+    },
+    "levels": [
+      {
+        "cost": 1,
+        "effects": [
+          {
+            "type": "successTest",
+            "tags": [
+              {
+                "type": "aptitudeCheck",
+                "aptitude": "som"
+              }
+            ],
+            "modifier": 5,
+            "toOpponent": false,
+            "requirement": "",
+            "id": "ml7vcs05as"
+          }
+        ],
+        "id": "0jwk1tqn5l"
+      },
+      {
+        "cost": 2,
+        "effects": [
+          {
+            "type": "successTest",
+            "tags": [
+              {
+                "type": "aptitudeCheck",
+                "aptitude": "som"
+              }
+            ],
+            "modifier": 10,
+            "toOpponent": false,
+            "requirement": "",
+            "id": "zvgbunlk0h"
+          }
+        ],
+        "id": "aeru7atwly"
+      },
+      {
+        "cost": 3,
+        "effects": [
+          {
+            "type": "successTest",
+            "tags": [
+              {
+                "type": "aptitudeCheck",
+                "aptitude": "som"
+              }
+            ],
+            "modifier": 15,
+            "toOpponent": false,
+            "requirement": "",
+            "id": "ohll8htc0a"
+          }
+        ],
+        "id": "w78u4tja1j"
+      }
+    ],
+    "subtype": "",
+    "traitType": "positive"
+  },
+  "flags": {},
+  "img": "icons/svg/mystery-man.svg",
+  "effects": [],
+  "_key": "!items!WeyCaz0qqJmd1NVu"
+}

@@ -1,0 +1,18 @@
+{
+  "_id": "sRS4aFJ8IdQOb0IV",
+  "name": "Smartlink",
+  "permission": {
+    "default": 0,
+    "qHi89sFcK4gHlOPd": 3
+  },
+  "folder": "",
+  "flags": {
+    "core": {
+      "sourceId": "JournalEntry.pUHyQSFHfwBu8BNE"
+    }
+  },
+  "content": "<p>Smartlinks are automatically included in most weapons. It connects the weapon to your mesh inserts, placing a targeting bracket in your field of vision and providing range and targeting information (negating the -10 modifier for not using a smartlink or laser sight). Smartlinks also incorporate a microcamera that allows the user to see what the weapon is pointed at, fire around corners, etc. Smartlinks also allow certain other types of weapon system control, such as changing smart ammo ▶211 or programming seeker trigger conditions ▶213).</p>",
+  "pages": [],
+  "categories": [],
+  "_key": "!journal!sRS4aFJ8IdQOb0IV"
+}

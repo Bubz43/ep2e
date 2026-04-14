@@ -1,0 +1,51 @@
+{
+  "name": "Body Dysmorphia",
+  "permission": {
+    "default": 0,
+    "qJl17WpEHiovQQBC": 3
+  },
+  "type": "trait",
+  "system": {
+    "description": "<p>You believe that you are irrevocably ugly or defective, making you unable to interact with others or function normally for fear of ridicule and humiliation. You are secretive and reluctant to seek help because you are afraid others will think you vain. A similar disorder, gender dysphoria, occurs when your sexual biology conflcts with your internal gender identity. Due to resleeving, both disorders are fairly common. Some asyncs have a similar species dysmorphia disorder, where they become convinced they are aliens trapped in transhuman forms; they often seek out exotic morphs and modifiations.</p>",
+    "reference": "Eclipse Phase Second Edition p. 224",
+    "restrictions": "",
+    "triggers": "Alienation, helplessness, resleeving",
+    "source": "ego",
+    "state": {
+      "level": 0,
+      "triggered": false
+    },
+    "levels": [
+      {
+        "cost": 2,
+        "effects": [
+          {
+            "type": "successTest",
+            "tags": [
+              {
+                "type": "special",
+                "test": "resleevingStress"
+              }
+            ],
+            "modifier": -30,
+            "toOpponent": false,
+            "requirement": "",
+            "id": "4f5spsz9l5"
+          }
+        ],
+        "id": "_defaultLevel"
+      }
+    ],
+    "subtype": "",
+    "traitType": "positive"
+  },
+  "flags": {
+    "core": {
+      "sourceId": "Item.CB9xcF5SFGZuXpo8"
+    }
+  },
+  "img": "icons/svg/mystery-man.svg",
+  "effects": [],
+  "_id": "5bYY1HUbtkd4qCA1",
+  "_key": "!items!5bYY1HUbtkd4qCA1"
+}

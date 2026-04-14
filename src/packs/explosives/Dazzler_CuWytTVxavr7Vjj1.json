@@ -1,0 +1,59 @@
+{
+  "name": "Dazzler",
+  "permission": {
+    "default": 0,
+    "qJl17WpEHiovQQBC": 3
+  },
+  "type": "explosive",
+  "system": {
+    "description": "<p>Dazzlers are spinning laser devices, designed to blind targets and defeat surveillance. Anyone within line of sight in the radius of effect (50 meters) who is not equipped with anti-glare mods must succeed in a REF Check or be blinded ▶226 for 1 action turn, +1 per superior failure. A critical failure results in permanent blindness (until repaired/healed). Any visual light/infrared cameras are overloaded for the dazzler&rsquo;s duration. Unless set to a timed deactivation, dazzlers continue to blind for 1 hour or until wirelessly turned off or physically destroyed (DUR 10, AV 5/10).</p>",
+    "reference": "Eclipse Phase Second Edition p. 212",
+    "complexity": "moderate",
+    "restricted": true,
+    "quality": "average",
+    "blueprint": {
+      "blueprintType": "",
+      "cracked": false,
+      "used": false
+    },
+    "quantity": 5,
+    "state": {
+      "stashed": false
+    },
+    "areaEffect": "uniform",
+    "explosiveType": "grenade",
+    "useSubstance": "",
+    "areaEffectRadius": 50,
+    "size": "mini",
+    "sticky": true,
+    "unitsPerComplexity": 5,
+    "dosesPerUnit": 1,
+    "hasSecondaryMode": false,
+    "primaryAttack": {
+      "armorUsed": "",
+      "attackTraits": [
+        "blinding"
+      ],
+      "armorPiercing": false,
+      "damageFormula": "",
+      "duration": 0,
+      "attackTraitNotes": "",
+      "label": "",
+      "notes": ""
+    },
+    "secondaryAttack": {
+      "armorUsed": "",
+      "attackTraits": [],
+      "armorPiercing": false,
+      "damageFormula": "",
+      "duration": 0,
+      "attackTraitNotes": "",
+      "label": "",
+      "notes": ""
+    }
+  },
+  "flags": {},
+  "effects": [],
+  "_id": "CuWytTVxavr7Vjj1",
+  "_key": "!items!CuWytTVxavr7Vjj1"
+}

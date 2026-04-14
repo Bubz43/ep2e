@@ -1,0 +1,59 @@
+{
+  "name": "Buzzer WIP",
+  "permission": {
+    "default": 0,
+    "qJl17WpEHiovQQBC": 3
+  },
+  "type": "sprayWeapon",
+  "system": {
+    "description": "<p>Buzzers are used to deploy a particular type of nanoswarm, either at a target or over an area. They carry a limited number of swarms, but contain a specialized hive ▶342 that can construct new swarms.</p>",
+    "reference": "Eclipse Phase Second Edition p. 209",
+    "complexity": "minor",
+    "restricted": false,
+    "quality": "average",
+    "concealable": false,
+    "fragile": false,
+    "singleUse": false,
+    "twoHanded": true,
+    "blueprint": {
+      "blueprintType": "",
+      "cracked": false,
+      "used": false
+    },
+    "state": {
+      "disabled": false,
+      "equipped": false,
+      "braced": false,
+      "interface": false
+    },
+    "accessories": [
+      "safetySystem",
+      "smartlink"
+    ],
+    "ammo": {
+      "max": 3,
+      "value": 15
+    },
+    "dosesPerShot": 1,
+    "fixed": false,
+    "long": true,
+    "range": 15,
+    "payloadUse": "firePayload",
+    "primaryAttack": {
+      "armorPiercing": false,
+      "armorUsed": "",
+      "attackTraits": [],
+      "damageFormula": "",
+      "firingModes": [
+        "singleShot"
+      ],
+      "superiorSuccessDot": "",
+      "notes": ""
+    },
+    "wareType": ""
+  },
+  "flags": {},
+  "effects": [],
+  "_id": "c8ruRr6w3Ln4kfuR",
+  "_key": "!items!c8ruRr6w3Ln4kfuR"
+}

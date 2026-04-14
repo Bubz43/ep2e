@@ -1,0 +1,26 @@
+{
+  "name": "Fake Ego ID",
+  "permission": {
+    "default": 0,
+    "qJl17WpEHiovQQBC": 3
+  },
+  "type": "physicalService",
+  "system": {
+    "description": "<p>Forged ID.</p>\n<p>&nbsp;</p>\n<p>This forged ID will pass in most inner system and Jovian Republic habitats, and sometimes others. It gives you a rep score in one network with that ID at 10.</p>",
+    "reference": "Eclipse Phase Second Edition p. 315",
+    "complexity": "major",
+    "restricted": true,
+    "quality": "average",
+    "serviceDuration": -1,
+    "reputations": [],
+    "serviceType": "fakeEgoId",
+    "state": {
+      "serviceStartTime": 0,
+      "equipped": false
+    }
+  },
+  "flags": {},
+  "effects": [],
+  "_id": "y2T2YYgiWa78u3dA",
+  "_key": "!items!y2T2YYgiWa78u3dA"
+}

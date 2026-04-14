@@ -1,0 +1,108 @@
+{
+  "name": "Randomizer",
+  "permission": {
+    "default": 0,
+    "qJl17WpEHiovQQBC": 3
+  },
+  "type": "substance",
+  "system": {
+    "description": "<p>This app randomly triggers, intensifies, and suppresses neurotransmitter functions, with the effect of creating sudden and random mood swings. You may go from depressed to exuberant to pensive in a matter of minutes. Though the emotional roller coaster is draining to some, others find it thrilling or like the challenge of adapting to it. At any given time, you have a 50% chance of receiving a +10 modifier to social skill tests and a 50% chance of a -10 modifier.</p>",
+    "reference": "Eclipse Phase Second Edition p. 333",
+    "complexity": "minor",
+    "restricted": false,
+    "quality": "average",
+    "blueprint": {
+      "blueprintType": "",
+      "cracked": false,
+      "used": false
+    },
+    "quantity": 5,
+    "state": {
+      "stashed": false
+    },
+    "addiction": "mental",
+    "addictionMod": 0,
+    "hasSeverity": false,
+    "application": [
+      "dermal",
+      "inhalation",
+      "injection",
+      "oral"
+    ],
+    "base": {
+      "damage": {
+        "damageFormula": "",
+        "perTurn": false,
+        "armorPiercing": false,
+        "attackTraits": [],
+        "reduceAVbyDV": false,
+        "armorUsed": [],
+        "damageType": "physical"
+      },
+      "duration": 28800000,
+      "effects": [
+        {
+          "type": "misc",
+          "unique": "",
+          "description": "Randomizes emotions",
+          "id": "zuf397lhxc"
+        },
+        {
+          "type": "successTest",
+          "tags": [
+            {
+              "type": "skillCategory",
+              "category": "social"
+            }
+          ],
+          "modifier": 10,
+          "toOpponent": false,
+          "requirement": "the dice decides",
+          "id": "z44722p27g"
+        },
+        {
+          "type": "successTest",
+          "tags": [
+            {
+              "type": "skillCategory",
+              "category": "social"
+            }
+          ],
+          "modifier": -10,
+          "toOpponent": false,
+          "requirement": "the dice decides",
+          "id": "wflp0f3q03"
+        }
+      ],
+      "wearOffStress": "",
+      "notes": ""
+    },
+    "category": "Narcoalgorithm",
+    "classification": "electronic",
+    "consumeOnUse": true,
+    "substanceType": "drug",
+    "quantityPerCost": 5,
+    "severity": {
+      "check": "som",
+      "checkMod": 0,
+      "conditions": [],
+      "wearOffStress": "",
+      "damage": {
+        "damageFormula": "",
+        "perTurn": false,
+        "armorPiercing": false,
+        "attackTraits": [],
+        "reduceAVbyDV": false,
+        "armorUsed": [],
+        "damageType": "physical"
+      },
+      "duration": 3000,
+      "effects": [],
+      "notes": ""
+    }
+  },
+  "flags": {},
+  "effects": [],
+  "_id": "hHsXs2BJZwfAKyGZ",
+  "_key": "!items!hHsXs2BJZwfAKyGZ"
+}

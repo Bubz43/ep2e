@@ -1,0 +1,61 @@
+{
+  "name": "Tactical Multipurpose (TMP)",
+  "permission": {
+    "default": 0,
+    "qJl17WpEHiovQQBC": 3
+  },
+  "type": "explosive",
+  "system": {
+    "description": "<p>TMP devices can be set to detonate in either fragmentation or high-explosive mode. Fragmentation explosives spread a cloud of lethal flechettes over the area of effect. High-explosive seekers/grenades create a destructive shock and heat wave.</p>",
+    "reference": "Eclipse Phase Second Edition p. 212",
+    "complexity": "moderate",
+    "restricted": true,
+    "quality": "average",
+    "blueprint": {
+      "blueprintType": "",
+      "cracked": false,
+      "used": false
+    },
+    "quantity": 5,
+    "state": {
+      "stashed": false
+    },
+    "areaEffect": "centered",
+    "explosiveType": "grenade",
+    "useSubstance": "",
+    "areaEffectRadius": 10,
+    "size": "micro",
+    "sticky": true,
+    "unitsPerComplexity": 5,
+    "dosesPerUnit": 1,
+    "hasSecondaryMode": true,
+    "primaryAttack": {
+      "armorUsed": "kinetic",
+      "attackTraits": [
+        "knockdown"
+      ],
+      "armorPiercing": false,
+      "damageFormula": "3d10 + 6",
+      "duration": 0,
+      "attackTraitNotes": "5 meter radius",
+      "label": "Frag",
+      "notes": ""
+    },
+    "secondaryAttack": {
+      "armorUsed": "energy",
+      "attackTraits": [
+        "knockdown"
+      ],
+      "armorPiercing": false,
+      "damageFormula": "3d10 + 10",
+      "duration": 0,
+      "attackTraitNotes": "10 meter radius",
+      "label": "High-Explosive",
+      "notes": ""
+    }
+  },
+  "flags": {},
+  "effects": [],
+  "_id": "rfmEXxN5O4D1bVKh",
+  "_key": "!items!rfmEXxN5O4D1bVKh"
+}

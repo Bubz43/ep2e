@@ -1,0 +1,40 @@
+{
+  "_id": "jGzKaUpuVzMr8PbP",
+  "name": "Inherent Flaws",
+  "permission": {
+    "default": 0,
+    "qHi89sFcK4gHlOPd": 3
+  },
+  "type": "trait",
+  "system": {
+    "description": "<p>This trait is only available for synthmorphs. This particular morph has some unfixable flaws and inevitably breaks down. Any time a critical failure is rolled, there is a 10% chance the morph also acquires a wound.</p>",
+    "reference": "Eclipse Phase Second Edition p. 78",
+    "restrictions": "",
+    "triggers": "",
+    "source": "morph",
+    "state": {
+      "level": 0,
+      "triggered": false
+    },
+    "levels": [
+      {
+        "cost": 2,
+        "effects": [
+          {
+            "type": "misc",
+            "unique": "",
+            "description": "Any time you critically fail a roll, there's a 10% chance you acquire a wound",
+            "id": "cum5gy6imu"
+          }
+        ],
+        "id": "ovqaodfv7g"
+      }
+    ],
+    "subtype": "",
+    "traitType": "negative"
+  },
+  "flags": {},
+  "img": "icons/svg/mystery-man.svg",
+  "effects": [],
+  "_key": "!items!jGzKaUpuVzMr8PbP"
+}

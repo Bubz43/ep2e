@@ -1,0 +1,3316 @@
+{
+  "_id": "lAXm3elsvIznRVzS",
+  "name": "Berk",
+  "type": "character",
+  "sort": 100001,
+  "flags": {
+    "ep2e": {
+      "synthetic": {
+        "_id": "q3YvJVoYrp6ffOSW",
+        "name": "Synth",
+        "permission": {
+          "default": 0,
+          "qJl17WpEHiovQQBC": 3
+        },
+        "type": "synthetic",
+        "folder": "CyFUXIAkWSVmErP1",
+        "sort": 700000,
+        "flags": {},
+        "prototypeToken": {
+          "flags": {},
+          "name": "Synth",
+          "displayName": 0,
+          "img": "icons/svg/mystery-man.svg",
+          "tint": null,
+          "width": 1,
+          "height": 1,
+          "scale": 1,
+          "lockRotation": false,
+          "rotation": 0,
+          "vision": false,
+          "dimSight": 0,
+          "brightSight": 0,
+          "dimLight": 0,
+          "brightLight": 0,
+          "sightAngle": 360,
+          "lightAngle": 360,
+          "lightAlpha": 1,
+          "lightAnimation": {
+            "speed": 5,
+            "intensity": 5
+          },
+          "actorId": "q3YvJVoYrp6ffOSW",
+          "actorLink": true,
+          "disposition": -1,
+          "displayBars": 0,
+          "bar1": {
+            "attribute": ""
+          },
+          "bar2": {
+            "attribute": ""
+          },
+          "randomImg": false,
+          "mirrorX": false,
+          "mirrorY": false,
+          "lightColor": "",
+          "actorData": {}
+        },
+        "items": [
+          {
+            "_id": "wAkhUsJyIUxfAJg2",
+            "name": "Puppet Sock",
+            "type": "physicalTech",
+            "system": {
+              "description": "<p>Puppet socks allow a morph to be remotely controlled, just like a drone (Remote Operations ▶346). While active, the puppet has no control over their body and is simply along for the ride. Too long in this situation can lead to stress from helplessness (Stressful Situations ▶229). Morphs with damage that reaches/exceeds their Durability cannot be puppeted.</p>",
+              "reference": "Eclipse Phase Second Edition p. 316",
+              "complexity": "moderate",
+              "restricted": false,
+              "quality": "average",
+              "concealable": false,
+              "fragile": false,
+              "singleUse": false,
+              "twoHanded": false,
+              "blueprint": {
+                "blueprintType": "",
+                "cracked": false,
+                "used": false
+              },
+              "state": {
+                "disabled": false,
+                "equipped": true,
+                "fabStartTime": 4083750000,
+                "activated": false,
+                "embeddedEgos": [],
+                "onboardAliDeleted": false
+              },
+              "activatedEffects": [],
+              "deviceType": "",
+              "category": "Standard Augments",
+              "fabricator": "",
+              "activationAction": "automatic",
+              "passiveEffects": [
+                {
+                  "type": "misc",
+                  "unique": "",
+                  "description": "Allows morph to be remote controlled.",
+                  "id": "w7w1ojregz"
+                }
+              ],
+              "activation": "none",
+              "resistEffectsCheck": "",
+              "usedEffectsDuration": 3000,
+              "onboardALI": false,
+              "firewallRating": 30,
+              "fabPrintDuration": 0,
+              "firewallHealth": {
+                "baseDurability": 30,
+                "rebootEndTime": -1,
+                "crashWounds": 0,
+                "damage": 0,
+                "log": [],
+                "wounds": 0
+              },
+              "meshHealth": {
+                "baseDurability": 20,
+                "damage": 0,
+                "wounds": 0,
+                "aidedHealTickStartTime": 0,
+                "ownHealTickStartTime": 0,
+                "damageRepair": {
+                  "amount": "1d10",
+                  "interval": 86400000
+                },
+                "woundRepair": {
+                  "amount": 1,
+                  "interval": 86400000
+                },
+                "log": [],
+                "rebootEndTime": -1,
+                "crashWounds": 0
+              },
+              "wareType": "hardware"
+            },
+            "sort": 1300000,
+            "flags": {},
+            "img": "icons/svg/mystery-man.svg",
+            "effects": []
+          },
+          {
+            "_id": "pDLb0tKUDe6fIXUA",
+            "name": "Access Jacks",
+            "type": "physicalTech",
+            "system": {
+              "description": "<p>Usually placed at the base of the skull, this external socket allows a direct neural interface with a cyberbrain or mesh inserts. A retractable fiberoptic cable enables you to plug into devices to access them directly, or to create a direct wired link to another person, allowing you to speak mind-to-mind and exchange data without fear of wireless sniffing. Access jacks are installed with all cyberbrains (and thus all pods and synthmorphs) by default.</p>",
+              "reference": "Eclipse Phase Second Edition p. 316",
+              "complexity": "minor",
+              "restricted": false,
+              "quality": "average",
+              "concealable": false,
+              "fragile": false,
+              "singleUse": false,
+              "twoHanded": false,
+              "blueprint": {
+                "blueprintType": "",
+                "cracked": false,
+                "used": false
+              },
+              "state": {
+                "disabled": false,
+                "equipped": true,
+                "fabStartTime": 4083750000,
+                "activated": false,
+                "embeddedEgos": [],
+                "onboardAliDeleted": false
+              },
+              "activatedEffects": [],
+              "deviceType": "",
+              "category": "Standard Augments",
+              "fabricator": "",
+              "activationAction": "automatic",
+              "passiveEffects": [
+                {
+                  "type": "misc",
+                  "unique": "",
+                  "description": "External sockets for direct interface with mesh inserts/cyberbrains.",
+                  "id": "g9t6cauoh4"
+                }
+              ],
+              "activation": "none",
+              "resistEffectsCheck": "",
+              "usedEffectsDuration": 3000,
+              "onboardALI": false,
+              "firewallRating": 30,
+              "fabPrintDuration": 0,
+              "firewallHealth": {
+                "baseDurability": 30,
+                "rebootEndTime": -1,
+                "crashWounds": 0,
+                "damage": 0,
+                "log": [],
+                "wounds": 0
+              },
+              "meshHealth": {
+                "baseDurability": 20,
+                "damage": 0,
+                "wounds": 0,
+                "aidedHealTickStartTime": 0,
+                "ownHealTickStartTime": 0,
+                "damageRepair": {
+                  "amount": "1d10",
+                  "interval": 86400000
+                },
+                "woundRepair": {
+                  "amount": 1,
+                  "interval": 86400000
+                },
+                "log": [],
+                "rebootEndTime": -1,
+                "crashWounds": 0
+              },
+              "wareType": "hardware"
+            },
+            "sort": 600000,
+            "flags": {},
+            "img": "icons/svg/mystery-man.svg",
+            "effects": []
+          },
+          {
+            "_id": "vmcAfSsugXX32tue",
+            "name": "Cortical Stack",
+            "type": "physicalTech",
+            "system": {
+              "description": "<p>This diamond memory module is implanted at the base of the skull, where the brain stem and spinal cord connect (or in similar locations on synthmorphs). It is linked to a neural lace network of nanobots saturating the brain that monitor synaptic connections, brain architecture, and chemical levels. It effectively takes a snapshot of your brain every second, making a digital backup of your ego, right up until the moment you die. It also backs up your muse. If you are killed, this stack can be used to retrieve a backup of your ego ▶287 so that you can be re-instantiated. Cortical stacks do not have external or wireless access (for security purposes), they must be surgically removed.</p>",
+              "reference": "Eclipse Phase Second Edition p. 316",
+              "complexity": "minor",
+              "restricted": false,
+              "quality": "average",
+              "concealable": false,
+              "fragile": false,
+              "singleUse": false,
+              "twoHanded": false,
+              "blueprint": {
+                "blueprintType": "",
+                "cracked": false,
+                "used": false
+              },
+              "state": {
+                "disabled": false,
+                "equipped": true,
+                "fabStartTime": 4083750000,
+                "activated": false,
+                "embeddedEgos": [],
+                "onboardAliDeleted": false
+              },
+              "activatedEffects": [],
+              "deviceType": "",
+              "category": "Standard Augments",
+              "fabricator": "",
+              "activationAction": "automatic",
+              "passiveEffects": [
+                {
+                  "type": "misc",
+                  "unique": "",
+                  "description": "Memory diamond storage unit for ego backups.",
+                  "id": "p46c2wxgta"
+                }
+              ],
+              "activation": "none",
+              "resistEffectsCheck": "",
+              "usedEffectsDuration": 3000,
+              "onboardALI": false,
+              "firewallRating": 30,
+              "fabPrintDuration": 0,
+              "firewallHealth": {
+                "baseDurability": 30,
+                "rebootEndTime": -1,
+                "crashWounds": 0,
+                "damage": 0,
+                "log": [],
+                "wounds": 0
+              },
+              "meshHealth": {
+                "baseDurability": 20,
+                "damage": 0,
+                "wounds": 0,
+                "aidedHealTickStartTime": 0,
+                "ownHealTickStartTime": 0,
+                "damageRepair": {
+                  "amount": "1d10",
+                  "interval": 86400000
+                },
+                "woundRepair": {
+                  "amount": 1,
+                  "interval": 86400000
+                },
+                "log": [],
+                "rebootEndTime": -1,
+                "crashWounds": 0
+              },
+              "wareType": "hardware"
+            },
+            "sort": 200000,
+            "flags": {},
+            "img": "icons/svg/mystery-man.svg",
+            "effects": []
+          },
+          {
+            "_id": "0IfdjpsX35mOitDI",
+            "name": "Cyberbrain",
+            "type": "physicalTech",
+            "system": {
+              "description": "<p>Cyberbrains are specialized hardware for running virtual mind-states, allowing an ego or ALI to control a pod or synthmorph. Modeled on biological brains, cyberbrains have a holistic architecture and serve as the command node and central processing point for sensory input and decision-making. As hosts, only one infomorph can inhabit a cyberbrain at a time. Any ego within a cyberbrain can move or copy itself as an infomorph to another device. By default, your ego will manifest in a digimorph ▶67, unless you have another type of infomorph available. Cyberbrains are vulnerable to hacking (Mindware Hacking ▶266). All cyberbrains are equipped with access jacks, mnemonics, and a puppet sock for remote control, at no additional cost.</p>",
+              "reference": "Eclipse Phase Second Edition p. 316",
+              "complexity": "major",
+              "restricted": false,
+              "quality": "average",
+              "concealable": false,
+              "fragile": false,
+              "singleUse": false,
+              "twoHanded": false,
+              "blueprint": {
+                "blueprintType": "",
+                "cracked": false,
+                "used": false
+              },
+              "state": {
+                "disabled": false,
+                "equipped": true,
+                "fabStartTime": 4083750000,
+                "activated": false,
+                "embeddedEgos": [],
+                "onboardAliDeleted": false
+              },
+              "activatedEffects": [],
+              "deviceType": "host",
+              "category": "Standard Augments",
+              "fabricator": "",
+              "activationAction": "automatic",
+              "passiveEffects": [
+                {
+                  "type": "misc",
+                  "unique": "",
+                  "description": "Synthetic brain, runs infomorph mind-state.",
+                  "id": "m4km0dbaty"
+                }
+              ],
+              "activation": "none",
+              "resistEffectsCheck": "",
+              "usedEffectsDuration": 3000,
+              "onboardALI": false,
+              "firewallRating": 50,
+              "fabPrintDuration": 0,
+              "firewallHealth": {
+                "baseDurability": 30,
+                "rebootEndTime": -1,
+                "crashWounds": 0,
+                "damage": 0,
+                "log": [],
+                "wounds": 0
+              },
+              "meshHealth": {
+                "baseDurability": 35,
+                "damage": 0,
+                "wounds": 0,
+                "aidedHealTickStartTime": 0,
+                "ownHealTickStartTime": 0,
+                "damageRepair": {
+                  "amount": "1d10",
+                  "interval": 60000
+                },
+                "woundRepair": {
+                  "amount": 1,
+                  "interval": 60000
+                },
+                "log": [],
+                "rebootEndTime": -1,
+                "crashWounds": 0
+              },
+              "wareType": "hardware"
+            },
+            "sort": 800000,
+            "flags": {},
+            "img": "icons/svg/mystery-man.svg",
+            "effects": []
+          },
+          {
+            "_id": "4wSM2TAv9QR0qXiw",
+            "name": "Lidar",
+            "type": "physicalTech",
+            "system": {
+              "description": "<p>This sensor scans the area with laser light and measures the reflections to judge range, speed, and image the target (Senses and Sensors ▶318). Lidar lasers are visible to enhanced vision, and are considered rude to continually emit in certain company.</p>",
+              "reference": "Eclipse Phase Second Edition p. 318",
+              "complexity": "minor",
+              "restricted": false,
+              "quality": "average",
+              "concealable": false,
+              "fragile": false,
+              "singleUse": false,
+              "twoHanded": false,
+              "blueprint": {
+                "blueprintType": "",
+                "cracked": false,
+                "used": false
+              },
+              "state": {
+                "disabled": false,
+                "equipped": true,
+                "fabStartTime": 4083750000,
+                "activated": false,
+                "embeddedEgos": [],
+                "onboardAliDeleted": false
+              },
+              "activatedEffects": [],
+              "deviceType": "",
+              "category": "Sensory Augments",
+              "fabricator": "",
+              "activationAction": "automatic",
+              "passiveEffects": [
+                {
+                  "type": "misc",
+                  "unique": "",
+                  "description": "Use reflected laser light to image and judge range and speed.",
+                  "id": "298fciew1b"
+                }
+              ],
+              "activation": "none",
+              "resistEffectsCheck": "",
+              "usedEffectsDuration": 3000,
+              "onboardALI": false,
+              "firewallRating": 30,
+              "fabPrintDuration": 0,
+              "firewallHealth": {
+                "baseDurability": 30,
+                "rebootEndTime": -1,
+                "crashWounds": 0,
+                "damage": 0,
+                "log": [],
+                "wounds": 0
+              },
+              "meshHealth": {
+                "baseDurability": 20,
+                "damage": 0,
+                "wounds": 0,
+                "aidedHealTickStartTime": 0,
+                "ownHealTickStartTime": 0,
+                "damageRepair": {
+                  "amount": "1d10",
+                  "interval": 86400000
+                },
+                "woundRepair": {
+                  "amount": 1,
+                  "interval": 86400000
+                },
+                "log": [],
+                "rebootEndTime": -1,
+                "crashWounds": 0
+              },
+              "wareType": "hardware"
+            },
+            "sort": 900001,
+            "flags": {},
+            "img": "icons/svg/mystery-man.svg",
+            "effects": []
+          },
+          {
+            "_id": "228TnDdvPZqWsSNE",
+            "name": "Mesh Inserts",
+            "type": "physicalTech",
+            "system": {
+              "description": "<p>This network of implants is mandatory for people who want to use augmented reality and link wirelessly to the mesh. The various components include:</p>\n<ul>\n<li>Cranial Computer: This host serves as the hub for your personal area network and is home to your muse. It manages your augmented reality input and processes XP data, enabling you to share your sensorium with others in real-time. It is loaded with basic apps and provides all the functions you would expect from a mobile device: file storage, search engine, media player, mesh browser, address book, e-mail, messaging, and so forth.</li>\n<li>Medical/Diagnostic Sensors: This array monitors your health, including heart rate, respiration, blood pressure, temperature, neural activity, ware status, and more. In synthmorphs, this system monitors system reports and error logs, heat, stress faults, and similar hardware statuses.</li>\n<li>Radio Transceiver: This connects your headware with other mesh devices within range (5 km urban areas/50 km open areas).</li>\n<li>You can access any of these functions simply by thinking.</li>\n</ul>",
+              "reference": "Eclipse Phase Second Edition p. 316",
+              "complexity": "minor",
+              "restricted": false,
+              "quality": "average",
+              "concealable": false,
+              "fragile": false,
+              "singleUse": false,
+              "twoHanded": false,
+              "blueprint": {
+                "blueprintType": "",
+                "cracked": false,
+                "used": false
+              },
+              "state": {
+                "disabled": false,
+                "equipped": true,
+                "fabStartTime": 4083750000,
+                "activated": false,
+                "embeddedEgos": [],
+                "onboardAliDeleted": false
+              },
+              "activatedEffects": [],
+              "deviceType": "",
+              "category": "Standard Augments",
+              "fabricator": "",
+              "activationAction": "automatic",
+              "passiveEffects": [
+                {
+                  "type": "misc",
+                  "unique": "",
+                  "description": "Cranial computer, wireless transceiver, muse home, and medical sensors.",
+                  "id": "ntroeh8ug9"
+                }
+              ],
+              "activation": "none",
+              "resistEffectsCheck": "",
+              "usedEffectsDuration": 3000,
+              "onboardALI": false,
+              "firewallRating": 30,
+              "fabPrintDuration": 0,
+              "firewallHealth": {
+                "baseDurability": 30,
+                "rebootEndTime": -1,
+                "crashWounds": 0,
+                "damage": 0,
+                "log": [],
+                "wounds": 0
+              },
+              "meshHealth": {
+                "baseDurability": 20,
+                "damage": 0,
+                "wounds": 0,
+                "aidedHealTickStartTime": 0,
+                "ownHealTickStartTime": 0,
+                "damageRepair": {
+                  "amount": "1d10",
+                  "interval": 86400000
+                },
+                "woundRepair": {
+                  "amount": 1,
+                  "interval": 86400000
+                },
+                "log": [],
+                "rebootEndTime": -1,
+                "crashWounds": 0
+              },
+              "wareType": "hardware"
+            },
+            "sort": 300000,
+            "flags": {},
+            "img": "icons/svg/mystery-man.svg",
+            "effects": []
+          },
+          {
+            "_id": "eU42AnW6l60A5vOT",
+            "name": "Mnemonics",
+            "type": "physicalTech",
+            "system": {
+              "description": "<p>The electronic minds of cyberbrains and infomorphs mimic biological brains in how they store memories &mdash; as networked but scattered groups of neurons. Despite being computerized, their memory recall is not any more efficient than bio brains. Mnemonics systems, however, allow memories to be tagged and roughly indexed. This improves memory recall, though it remains far from perfect. Mnemonics applies a +20 modifier to COG Checks for memory recall. Mnemonic data can be transferred with an ego when it resleeves, but the modifier applies only for memories that were recorded when mnemonics ware is present. Mnemonics systems are included in all cyberbrains.</p>",
+              "reference": "Eclipse Phase Second Edition p. 316",
+              "complexity": "minor",
+              "restricted": false,
+              "quality": "average",
+              "concealable": false,
+              "fragile": false,
+              "singleUse": false,
+              "twoHanded": false,
+              "blueprint": {
+                "blueprintType": "",
+                "cracked": false,
+                "used": false
+              },
+              "state": {
+                "disabled": false,
+                "equipped": true,
+                "fabStartTime": 4083750000,
+                "activated": false,
+                "embeddedEgos": [],
+                "onboardAliDeleted": false
+              },
+              "activatedEffects": [],
+              "deviceType": "",
+              "category": "Standard Augments",
+              "fabricator": "",
+              "activationAction": "automatic",
+              "passiveEffects": [
+                {
+                  "type": "misc",
+                  "unique": "",
+                  "description": "Enhanced memory",
+                  "id": "0aeotvlo5t"
+                },
+                {
+                  "type": "successTest",
+                  "tags": [
+                    {
+                      "type": "aptitudeCheck",
+                      "aptitude": "cog"
+                    }
+                  ],
+                  "modifier": 20,
+                  "toOpponent": false,
+                  "requirement": "memory recall related",
+                  "id": "62m4ssi0z3"
+                }
+              ],
+              "activation": "none",
+              "resistEffectsCheck": "",
+              "usedEffectsDuration": 3000,
+              "onboardALI": false,
+              "firewallRating": 30,
+              "fabPrintDuration": 0,
+              "firewallHealth": {
+                "baseDurability": 30,
+                "rebootEndTime": -1,
+                "crashWounds": 0,
+                "damage": 0,
+                "log": [],
+                "wounds": 0
+              },
+              "meshHealth": {
+                "baseDurability": 20,
+                "damage": 0,
+                "wounds": 0,
+                "aidedHealTickStartTime": 0,
+                "ownHealTickStartTime": 0,
+                "damageRepair": {
+                  "amount": "1d10",
+                  "interval": 86400000
+                },
+                "woundRepair": {
+                  "amount": 1,
+                  "interval": 86400000
+                },
+                "log": [],
+                "rebootEndTime": -1,
+                "crashWounds": 0
+              },
+              "wareType": "hardware"
+            },
+            "sort": 1100000,
+            "flags": {},
+            "img": "icons/svg/mystery-man.svg",
+            "effects": []
+          },
+          {
+            "_id": "CC1mThoneCkcc9ZF",
+            "name": "Exotic Morphology",
+            "type": "trait",
+            "system": {
+              "description": "<p>This morph is substantially physiologically (and possibly neurologically) different from the baseline humanoid forms most transhumans are accustomed to sleeving. You receive a -10 modifier per level on Integration Tests ▶288 when sleeving into this morph. This modifier does not apply to the original morph of uplift or infolife characters. This trait may not be applied to morphs that don’t come with it.</p>",
+              "reference": "Eclipse Phase Second Edition p. 78",
+              "restrictions": "",
+              "triggers": "",
+              "source": "morph",
+              "state": {
+                "level": 0,
+                "triggered": false
+              },
+              "levels": [
+                {
+                  "cost": 2,
+                  "effects": [
+                    {
+                      "type": "successTest",
+                      "tags": [
+                        {
+                          "type": "special",
+                          "test": "integration"
+                        }
+                      ],
+                      "modifier": -10,
+                      "toOpponent": false,
+                      "requirement": "",
+                      "id": "8tiuasyl7d"
+                    }
+                  ],
+                  "id": "6ats1e5arj"
+                },
+                {
+                  "cost": 4,
+                  "effects": [
+                    {
+                      "type": "successTest",
+                      "tags": [
+                        {
+                          "type": "special",
+                          "test": "integration"
+                        }
+                      ],
+                      "modifier": -20,
+                      "toOpponent": false,
+                      "requirement": "",
+                      "id": "jcdfnnbn9i"
+                    }
+                  ],
+                  "id": "suw2tir7s8"
+                },
+                {
+                  "cost": 6,
+                  "effects": [
+                    {
+                      "type": "successTest",
+                      "tags": [
+                        {
+                          "type": "special",
+                          "test": "integration"
+                        }
+                      ],
+                      "modifier": -30,
+                      "toOpponent": false,
+                      "requirement": "",
+                      "id": "mznptjs9ra"
+                    }
+                  ],
+                  "id": "pmr5ydgicz"
+                }
+              ],
+              "subtype": "",
+              "traitType": "negative"
+            },
+            "sort": 1400000,
+            "flags": {},
+            "img": "icons/svg/mystery-man.svg",
+            "effects": []
+          }
+        ],
+        "effects": [],
+        "img": "icons/svg/mystery-man.svg",
+        "system": {
+          "description": "<p>Synths are even more humanoid than cases and of better quality. They are commonly deployed for labor-intensive tasks in environments not suited for biomorphs or for people who need a body quickly and cheaply or simply on a transient basis. Most designs are anthropomorphic, though various alternatives exist, including some based on uplift physiology.</p>",
+          "reference": "Eclipse Phase Second Edition p. 63",
+          "movementRates": [
+            {
+              "type": "walker",
+              "base": 4,
+              "full": 20,
+              "id": "04lkd2zknd"
+            }
+          ],
+          "acquisition": {
+            "availability": 80,
+            "complexity": "minor",
+            "cost": 3,
+            "resource": "morphPoints",
+            "restricted": false
+          },
+          "pools": {
+            "insight": 0,
+            "moxie": 0,
+            "vigor": 1,
+            "flex": 1
+          },
+          "conditions": [],
+          "damagedArmor": [],
+          "passengers": 1,
+          "prehensileLimbs": 2,
+          "shellType": "synthmorph",
+          "subtype": "",
+          "unarmedDV": "2d6",
+          "isSwarm": false,
+          "painFilter": false,
+          "recoveryConditions": "normal",
+          "size": "medium",
+          "reach": 0,
+          "brain": "0IfdjpsX35mOitDI",
+          "inherentArmor": {
+            "energy": 6,
+            "kinetic": 4,
+            "source": "Light Frame"
+          },
+          "physicalHealth": {
+            "baseDurability": 40,
+            "damage": 0,
+            "dots": [],
+            "aidedHealTickStartTime": 0,
+            "ownHealTickStartTime": 0,
+            "damageRepair": {
+              "amount": "",
+              "interval": 0
+            },
+            "woundRepair": {
+              "amount": 1,
+              "interval": 0
+            },
+            "log": [],
+            "wounds": 0
+          },
+          "firewallRating": 30,
+          "firewallHealth": {
+            "baseDurability": 30,
+            "rebootEndTime": -1,
+            "crashWounds": 0,
+            "damage": 0,
+            "log": [],
+            "wounds": 0
+          },
+          "meshHealth": {
+            "baseDurability": 20,
+            "damage": 0,
+            "aidedHealTickStartTime": 0,
+            "ownHealTickStartTime": 0,
+            "damageRepair": {
+              "amount": "1d10",
+              "interval": 86400000
+            },
+            "woundRepair": {
+              "amount": 1,
+              "interval": 86400000
+            },
+            "log": [],
+            "wounds": 0,
+            "rebootEndTime": -1,
+            "crashWounds": 0
+          }
+        }
+      },
+      "biological": null,
+      "infomorph": null
+    }
+  },
+  "items": [
+    {
+      "_id": "hBP23tFNWDsZEaKc",
+      "name": "Puppet Sock",
+      "type": "physicalTech",
+      "sort": 1700000,
+      "flags": {},
+      "img": "icons/svg/mystery-man.svg",
+      "effects": [],
+      "system": {
+        "description": "<p>Puppet socks allow a morph to be remotely controlled, just like a drone (Remote Operations ▶346). While active, the puppet has no control over their body and is simply along for the ride. Too long in this situation can lead to stress from helplessness (Stressful Situations ▶229). Morphs with damage that reaches/exceeds their Durability cannot be puppeted.</p>",
+        "reference": "Eclipse Phase Second Edition p. 316",
+        "complexity": "moderate",
+        "restricted": false,
+        "quality": "average",
+        "concealable": false,
+        "fragile": false,
+        "singleUse": false,
+        "twoHanded": false,
+        "blueprint": {
+          "blueprintType": "",
+          "cracked": false,
+          "used": false
+        },
+        "state": {
+          "disabled": false,
+          "equipped": true,
+          "fabStartTime": 4083750000,
+          "activated": false,
+          "embeddedEgos": [],
+          "onboardAliDeleted": false
+        },
+        "activatedEffects": [],
+        "deviceType": "",
+        "category": "Standard Augments",
+        "fabricator": "",
+        "activationAction": "automatic",
+        "passiveEffects": [
+          {
+            "type": "misc",
+            "unique": "",
+            "description": "Allows morph to be remote controlled.",
+            "id": "w7w1ojregz"
+          }
+        ],
+        "activation": "none",
+        "resistEffectsCheck": "",
+        "usedEffectsDuration": 3000,
+        "onboardALI": false,
+        "firewallRating": 30,
+        "fabPrintDuration": 0,
+        "firewallHealth": {
+          "baseDurability": 30,
+          "rebootEndTime": -1,
+          "crashWounds": 0,
+          "damage": 0,
+          "log": [],
+          "wounds": 0
+        },
+        "meshHealth": {
+          "baseDurability": 20,
+          "damage": 0,
+          "wounds": 0,
+          "aidedHealTickStartTime": 0,
+          "ownHealTickStartTime": 0,
+          "damageRepair": {
+            "amount": "1d10",
+            "interval": 86400000
+          },
+          "woundRepair": {
+            "amount": 1,
+            "interval": 86400000
+          },
+          "log": [],
+          "rebootEndTime": -1,
+          "crashWounds": 0
+        },
+        "wareType": "hardware"
+      },
+      "folder": null,
+      "ownership": {
+        "default": 0
+      },
+      "_stats": {
+        "systemId": null,
+        "systemVersion": null,
+        "coreVersion": null,
+        "createdTime": null,
+        "modifiedTime": null,
+        "lastModifiedBy": null
+      },
+      "_key": "!actors.items!lAXm3elsvIznRVzS.hBP23tFNWDsZEaKc"
+    },
+    {
+      "_id": "Ac3SnDfHtxBqIIU2",
+      "name": "Access Jacks",
+      "type": "physicalTech",
+      "sort": 1100000,
+      "flags": {},
+      "img": "icons/svg/mystery-man.svg",
+      "effects": [],
+      "system": {
+        "description": "<p>Usually placed at the base of the skull, this external socket allows a direct neural interface with a cyberbrain or mesh inserts. A retractable fiberoptic cable enables you to plug into devices to access them directly, or to create a direct wired link to another person, allowing you to speak mind-to-mind and exchange data without fear of wireless sniffing. Access jacks are installed with all cyberbrains (and thus all pods and synthmorphs) by default.</p>",
+        "reference": "Eclipse Phase Second Edition p. 316",
+        "complexity": "minor",
+        "restricted": false,
+        "quality": "average",
+        "concealable": false,
+        "fragile": false,
+        "singleUse": false,
+        "twoHanded": false,
+        "blueprint": {
+          "blueprintType": "",
+          "cracked": false,
+          "used": false
+        },
+        "state": {
+          "disabled": false,
+          "equipped": true,
+          "fabStartTime": 4083750000,
+          "activated": false,
+          "embeddedEgos": [],
+          "onboardAliDeleted": false
+        },
+        "activatedEffects": [],
+        "deviceType": "",
+        "category": "Standard Augments",
+        "fabricator": "",
+        "activationAction": "automatic",
+        "passiveEffects": [
+          {
+            "type": "misc",
+            "unique": "",
+            "description": "External sockets for direct interface with mesh inserts/cyberbrains.",
+            "id": "g9t6cauoh4"
+          }
+        ],
+        "activation": "none",
+        "resistEffectsCheck": "",
+        "usedEffectsDuration": 3000,
+        "onboardALI": false,
+        "firewallRating": 30,
+        "fabPrintDuration": 0,
+        "firewallHealth": {
+          "baseDurability": 30,
+          "rebootEndTime": -1,
+          "crashWounds": 0,
+          "damage": 0,
+          "log": [],
+          "wounds": 0
+        },
+        "meshHealth": {
+          "baseDurability": 20,
+          "damage": 0,
+          "wounds": 0,
+          "aidedHealTickStartTime": 0,
+          "ownHealTickStartTime": 0,
+          "damageRepair": {
+            "amount": "1d10",
+            "interval": 86400000
+          },
+          "woundRepair": {
+            "amount": 1,
+            "interval": 86400000
+          },
+          "log": [],
+          "rebootEndTime": -1,
+          "crashWounds": 0
+        },
+        "wareType": "hardware"
+      },
+      "folder": null,
+      "ownership": {
+        "default": 0
+      },
+      "_stats": {
+        "systemId": null,
+        "systemVersion": null,
+        "coreVersion": null,
+        "createdTime": null,
+        "modifiedTime": null,
+        "lastModifiedBy": null
+      },
+      "_key": "!actors.items!lAXm3elsvIznRVzS.Ac3SnDfHtxBqIIU2"
+    },
+    {
+      "_id": "6DUBMoHA3PLdethD",
+      "name": "Cortical Stack",
+      "type": "physicalTech",
+      "sort": 300000,
+      "flags": {},
+      "img": "icons/svg/mystery-man.svg",
+      "effects": [],
+      "system": {
+        "description": "<p>This diamond memory module is implanted at the base of the skull, where the brain stem and spinal cord connect (or in similar locations on synthmorphs). It is linked to a neural lace network of nanobots saturating the brain that monitor synaptic connections, brain architecture, and chemical levels. It effectively takes a snapshot of your brain every second, making a digital backup of your ego, right up until the moment you die. It also backs up your muse. If you are killed, this stack can be used to retrieve a backup of your ego ▶287 so that you can be re-instantiated. Cortical stacks do not have external or wireless access (for security purposes), they must be surgically removed.</p>",
+        "reference": "Eclipse Phase Second Edition p. 316",
+        "complexity": "minor",
+        "restricted": false,
+        "quality": "average",
+        "concealable": false,
+        "fragile": false,
+        "singleUse": false,
+        "twoHanded": false,
+        "blueprint": {
+          "blueprintType": "",
+          "cracked": false,
+          "used": false
+        },
+        "state": {
+          "disabled": false,
+          "equipped": true,
+          "fabStartTime": 4083750000,
+          "activated": false,
+          "embeddedEgos": [],
+          "onboardAliDeleted": false
+        },
+        "activatedEffects": [],
+        "deviceType": "",
+        "category": "Standard Augments",
+        "fabricator": "",
+        "activationAction": "automatic",
+        "passiveEffects": [
+          {
+            "type": "misc",
+            "unique": "",
+            "description": "Memory diamond storage unit for ego backups.",
+            "id": "p46c2wxgta"
+          }
+        ],
+        "activation": "none",
+        "resistEffectsCheck": "",
+        "usedEffectsDuration": 3000,
+        "onboardALI": false,
+        "firewallRating": 30,
+        "fabPrintDuration": 0,
+        "firewallHealth": {
+          "baseDurability": 30,
+          "rebootEndTime": -1,
+          "crashWounds": 0,
+          "damage": 0,
+          "log": [],
+          "wounds": 0
+        },
+        "meshHealth": {
+          "baseDurability": 20,
+          "damage": 0,
+          "wounds": 0,
+          "aidedHealTickStartTime": 0,
+          "ownHealTickStartTime": 0,
+          "damageRepair": {
+            "amount": "1d10",
+            "interval": 86400000
+          },
+          "woundRepair": {
+            "amount": 1,
+            "interval": 86400000
+          },
+          "log": [],
+          "rebootEndTime": -1,
+          "crashWounds": 0
+        },
+        "wareType": "hardware"
+      },
+      "folder": null,
+      "ownership": {
+        "default": 0
+      },
+      "_stats": {
+        "systemId": null,
+        "systemVersion": null,
+        "coreVersion": null,
+        "createdTime": null,
+        "modifiedTime": null,
+        "lastModifiedBy": null
+      },
+      "_key": "!actors.items!lAXm3elsvIznRVzS.6DUBMoHA3PLdethD"
+    },
+    {
+      "_id": "SwD7oZFiLNTq6qKu",
+      "name": "Cyberbrain",
+      "type": "physicalTech",
+      "sort": 1200000,
+      "flags": {},
+      "img": "icons/svg/mystery-man.svg",
+      "effects": [],
+      "system": {
+        "description": "<p>Cyberbrains are specialized hardware for running virtual mind-states, allowing an ego or ALI to control a pod or synthmorph. Modeled on biological brains, cyberbrains have a holistic architecture and serve as the command node and central processing point for sensory input and decision-making. As hosts, only one infomorph can inhabit a cyberbrain at a time. Any ego within a cyberbrain can move or copy itself as an infomorph to another device. By default, your ego will manifest in a digimorph ▶67, unless you have another type of infomorph available. Cyberbrains are vulnerable to hacking (Mindware Hacking ▶266). All cyberbrains are equipped with access jacks, mnemonics, and a puppet sock for remote control, at no additional cost.</p>",
+        "reference": "Eclipse Phase Second Edition p. 316",
+        "complexity": "major",
+        "restricted": false,
+        "quality": "average",
+        "concealable": false,
+        "fragile": false,
+        "singleUse": false,
+        "twoHanded": false,
+        "blueprint": {
+          "blueprintType": "",
+          "cracked": false,
+          "used": false
+        },
+        "state": {
+          "disabled": false,
+          "equipped": true,
+          "fabStartTime": 4083750000,
+          "activated": false,
+          "embeddedEgos": [],
+          "onboardAliDeleted": false
+        },
+        "activatedEffects": [],
+        "deviceType": "host",
+        "category": "Standard Augments",
+        "fabricator": "",
+        "activationAction": "automatic",
+        "passiveEffects": [
+          {
+            "type": "misc",
+            "unique": "",
+            "description": "Synthetic brain, runs infomorph mind-state.",
+            "id": "m4km0dbaty"
+          }
+        ],
+        "activation": "none",
+        "resistEffectsCheck": "",
+        "usedEffectsDuration": 3000,
+        "onboardALI": false,
+        "firewallRating": 50,
+        "fabPrintDuration": 0,
+        "firewallHealth": {
+          "baseDurability": 30,
+          "rebootEndTime": -1,
+          "crashWounds": 0,
+          "damage": 0,
+          "log": [],
+          "wounds": 0
+        },
+        "meshHealth": {
+          "baseDurability": 35,
+          "damage": 0,
+          "wounds": 0,
+          "aidedHealTickStartTime": 0,
+          "ownHealTickStartTime": 0,
+          "damageRepair": {
+            "amount": "1d10",
+            "interval": 60000
+          },
+          "woundRepair": {
+            "amount": 1,
+            "interval": 60000
+          },
+          "log": [],
+          "rebootEndTime": -1,
+          "crashWounds": 0
+        },
+        "wareType": "hardware"
+      },
+      "folder": null,
+      "ownership": {
+        "default": 0
+      },
+      "_stats": {
+        "systemId": null,
+        "systemVersion": null,
+        "coreVersion": null,
+        "createdTime": null,
+        "modifiedTime": null,
+        "lastModifiedBy": null
+      },
+      "_key": "!actors.items!lAXm3elsvIznRVzS.SwD7oZFiLNTq6qKu"
+    },
+    {
+      "_id": "gipmnnREzUbaDeEy",
+      "name": "Lidar",
+      "type": "physicalTech",
+      "sort": 1300000,
+      "flags": {},
+      "img": "icons/svg/mystery-man.svg",
+      "effects": [],
+      "system": {
+        "description": "<p>This sensor scans the area with laser light and measures the reflections to judge range, speed, and image the target (Senses and Sensors ▶318). Lidar lasers are visible to enhanced vision, and are considered rude to continually emit in certain company.</p>",
+        "reference": "Eclipse Phase Second Edition p. 318",
+        "complexity": "minor",
+        "restricted": false,
+        "quality": "average",
+        "concealable": false,
+        "fragile": false,
+        "singleUse": false,
+        "twoHanded": false,
+        "blueprint": {
+          "blueprintType": "",
+          "cracked": false,
+          "used": false
+        },
+        "state": {
+          "disabled": false,
+          "equipped": true,
+          "fabStartTime": 4083750000,
+          "activated": false,
+          "embeddedEgos": [],
+          "onboardAliDeleted": false
+        },
+        "activatedEffects": [],
+        "deviceType": "",
+        "category": "Sensory Augments",
+        "fabricator": "",
+        "activationAction": "automatic",
+        "passiveEffects": [
+          {
+            "type": "misc",
+            "unique": "",
+            "description": "Use reflected laser light to image and judge range and speed.",
+            "id": "298fciew1b"
+          }
+        ],
+        "activation": "none",
+        "resistEffectsCheck": "",
+        "usedEffectsDuration": 3000,
+        "onboardALI": false,
+        "firewallRating": 30,
+        "fabPrintDuration": 0,
+        "firewallHealth": {
+          "baseDurability": 30,
+          "rebootEndTime": -1,
+          "crashWounds": 0,
+          "damage": 0,
+          "log": [],
+          "wounds": 0
+        },
+        "meshHealth": {
+          "baseDurability": 20,
+          "damage": 0,
+          "wounds": 0,
+          "aidedHealTickStartTime": 0,
+          "ownHealTickStartTime": 0,
+          "damageRepair": {
+            "amount": "1d10",
+            "interval": 86400000
+          },
+          "woundRepair": {
+            "amount": 1,
+            "interval": 86400000
+          },
+          "log": [],
+          "rebootEndTime": -1,
+          "crashWounds": 0
+        },
+        "wareType": "hardware"
+      },
+      "folder": null,
+      "ownership": {
+        "default": 0
+      },
+      "_stats": {
+        "systemId": null,
+        "systemVersion": null,
+        "coreVersion": null,
+        "createdTime": null,
+        "modifiedTime": null,
+        "lastModifiedBy": null
+      },
+      "_key": "!actors.items!lAXm3elsvIznRVzS.gipmnnREzUbaDeEy"
+    },
+    {
+      "_id": "Tn4iOCm6814LT7c9",
+      "name": "Mesh Inserts",
+      "type": "physicalTech",
+      "sort": 800000,
+      "flags": {},
+      "img": "icons/svg/mystery-man.svg",
+      "effects": [],
+      "system": {
+        "description": "<p>This network of implants is mandatory for people who want to use augmented reality and link wirelessly to the mesh. The various components include:</p>\n<ul>\n<li>Cranial Computer: This host serves as the hub for your personal area network and is home to your muse. It manages your augmented reality input and processes XP data, enabling you to share your sensorium with others in real-time. It is loaded with basic apps and provides all the functions you would expect from a mobile device: file storage, search engine, media player, mesh browser, address book, e-mail, messaging, and so forth.</li>\n<li>Medical/Diagnostic Sensors: This array monitors your health, including heart rate, respiration, blood pressure, temperature, neural activity, ware status, and more. In synthmorphs, this system monitors system reports and error logs, heat, stress faults, and similar hardware statuses.</li>\n<li>Radio Transceiver: This connects your headware with other mesh devices within range (5 km urban areas/50 km open areas).</li>\n<li>You can access any of these functions simply by thinking.</li>\n</ul>",
+        "reference": "Eclipse Phase Second Edition p. 316",
+        "complexity": "minor",
+        "restricted": false,
+        "quality": "average",
+        "concealable": false,
+        "fragile": false,
+        "singleUse": false,
+        "twoHanded": false,
+        "blueprint": {
+          "blueprintType": "",
+          "cracked": false,
+          "used": false
+        },
+        "state": {
+          "disabled": false,
+          "equipped": true,
+          "fabStartTime": 4083750000,
+          "activated": false,
+          "embeddedEgos": [],
+          "onboardAliDeleted": false
+        },
+        "activatedEffects": [],
+        "deviceType": "",
+        "category": "Standard Augments",
+        "fabricator": "",
+        "activationAction": "automatic",
+        "passiveEffects": [
+          {
+            "type": "misc",
+            "unique": "",
+            "description": "Cranial computer, wireless transceiver, muse home, and medical sensors.",
+            "id": "ntroeh8ug9"
+          }
+        ],
+        "activation": "none",
+        "resistEffectsCheck": "",
+        "usedEffectsDuration": 3000,
+        "onboardALI": false,
+        "firewallRating": 30,
+        "fabPrintDuration": 0,
+        "firewallHealth": {
+          "baseDurability": 30,
+          "rebootEndTime": -1,
+          "crashWounds": 0,
+          "damage": 0,
+          "log": [],
+          "wounds": 0
+        },
+        "meshHealth": {
+          "baseDurability": 20,
+          "damage": 0,
+          "wounds": 0,
+          "aidedHealTickStartTime": 0,
+          "ownHealTickStartTime": 0,
+          "damageRepair": {
+            "amount": "1d10",
+            "interval": 86400000
+          },
+          "woundRepair": {
+            "amount": 1,
+            "interval": 86400000
+          },
+          "log": [],
+          "rebootEndTime": -1,
+          "crashWounds": 0
+        },
+        "wareType": "hardware"
+      },
+      "folder": null,
+      "ownership": {
+        "default": 0
+      },
+      "_stats": {
+        "systemId": null,
+        "systemVersion": null,
+        "coreVersion": null,
+        "createdTime": null,
+        "modifiedTime": null,
+        "lastModifiedBy": null
+      },
+      "_key": "!actors.items!lAXm3elsvIznRVzS.Tn4iOCm6814LT7c9"
+    },
+    {
+      "_id": "9YccBFt30UoENJW9",
+      "name": "Mnemonics",
+      "type": "physicalTech",
+      "sort": 1500000,
+      "flags": {},
+      "img": "icons/svg/mystery-man.svg",
+      "effects": [],
+      "system": {
+        "description": "<p>The electronic minds of cyberbrains and infomorphs mimic biological brains in how they store memories &mdash; as networked but scattered groups of neurons. Despite being computerized, their memory recall is not any more efficient than bio brains. Mnemonics systems, however, allow memories to be tagged and roughly indexed. This improves memory recall, though it remains far from perfect. Mnemonics applies a +20 modifier to COG Checks for memory recall. Mnemonic data can be transferred with an ego when it resleeves, but the modifier applies only for memories that were recorded when mnemonics ware is present. Mnemonics systems are included in all cyberbrains.</p>",
+        "reference": "Eclipse Phase Second Edition p. 316",
+        "complexity": "minor",
+        "restricted": false,
+        "quality": "average",
+        "concealable": false,
+        "fragile": false,
+        "singleUse": false,
+        "twoHanded": false,
+        "blueprint": {
+          "blueprintType": "",
+          "cracked": false,
+          "used": false
+        },
+        "state": {
+          "disabled": false,
+          "equipped": true,
+          "fabStartTime": 4083750000,
+          "activated": false,
+          "embeddedEgos": [],
+          "onboardAliDeleted": false
+        },
+        "activatedEffects": [],
+        "deviceType": "",
+        "category": "Standard Augments",
+        "fabricator": "",
+        "activationAction": "automatic",
+        "passiveEffects": [
+          {
+            "type": "misc",
+            "unique": "",
+            "description": "Enhanced memory",
+            "id": "0aeotvlo5t"
+          },
+          {
+            "type": "successTest",
+            "tags": [
+              {
+                "type": "aptitudeCheck",
+                "aptitude": "cog"
+              }
+            ],
+            "modifier": 20,
+            "toOpponent": false,
+            "requirement": "memory recall related",
+            "id": "62m4ssi0z3"
+          }
+        ],
+        "activation": "none",
+        "resistEffectsCheck": "",
+        "usedEffectsDuration": 3000,
+        "onboardALI": false,
+        "firewallRating": 30,
+        "fabPrintDuration": 0,
+        "firewallHealth": {
+          "baseDurability": 30,
+          "rebootEndTime": -1,
+          "crashWounds": 0,
+          "damage": 0,
+          "log": [],
+          "wounds": 0
+        },
+        "meshHealth": {
+          "baseDurability": 20,
+          "damage": 0,
+          "wounds": 0,
+          "aidedHealTickStartTime": 0,
+          "ownHealTickStartTime": 0,
+          "damageRepair": {
+            "amount": "1d10",
+            "interval": 86400000
+          },
+          "woundRepair": {
+            "amount": 1,
+            "interval": 86400000
+          },
+          "log": [],
+          "rebootEndTime": -1,
+          "crashWounds": 0
+        },
+        "wareType": "hardware"
+      },
+      "folder": null,
+      "ownership": {
+        "default": 0
+      },
+      "_stats": {
+        "systemId": null,
+        "systemVersion": null,
+        "coreVersion": null,
+        "createdTime": null,
+        "modifiedTime": null,
+        "lastModifiedBy": null
+      },
+      "_key": "!actors.items!lAXm3elsvIznRVzS.9YccBFt30UoENJW9"
+    },
+    {
+      "_id": "kF7hCluGnbl5FHK8",
+      "name": "Exotic Morphology",
+      "type": "trait",
+      "sort": 1400000,
+      "flags": {},
+      "img": "icons/svg/mystery-man.svg",
+      "effects": [],
+      "system": {
+        "description": "<p>This morph is substantially physiologically (and possibly neurologically) different from the baseline humanoid forms most transhumans are accustomed to sleeving. You receive a -10 modifier per level on Integration Tests ▶288 when sleeving into this morph. This modifier does not apply to the original morph of uplift or infolife characters. This trait may not be applied to morphs that don’t come with it.</p>",
+        "reference": "Eclipse Phase Second Edition p. 78",
+        "restrictions": "",
+        "triggers": "",
+        "source": "morph",
+        "state": {
+          "level": 0,
+          "triggered": false
+        },
+        "levels": [
+          {
+            "cost": 2,
+            "effects": [
+              {
+                "type": "successTest",
+                "tags": [
+                  {
+                    "type": "special",
+                    "test": "integration"
+                  }
+                ],
+                "modifier": -10,
+                "toOpponent": false,
+                "requirement": "",
+                "id": "8tiuasyl7d"
+              }
+            ],
+            "id": "6ats1e5arj"
+          },
+          {
+            "cost": 4,
+            "effects": [
+              {
+                "type": "successTest",
+                "tags": [
+                  {
+                    "type": "special",
+                    "test": "integration"
+                  }
+                ],
+                "modifier": -20,
+                "toOpponent": false,
+                "requirement": "",
+                "id": "jcdfnnbn9i"
+              }
+            ],
+            "id": "suw2tir7s8"
+          },
+          {
+            "cost": 6,
+            "effects": [
+              {
+                "type": "successTest",
+                "tags": [
+                  {
+                    "type": "special",
+                    "test": "integration"
+                  }
+                ],
+                "modifier": -30,
+                "toOpponent": false,
+                "requirement": "",
+                "id": "mznptjs9ra"
+              }
+            ],
+            "id": "pmr5ydgicz"
+          }
+        ],
+        "subtype": "",
+        "traitType": "negative"
+      },
+      "folder": null,
+      "ownership": {
+        "default": 0
+      },
+      "_stats": {
+        "systemId": null,
+        "systemVersion": null,
+        "coreVersion": null,
+        "createdTime": null,
+        "modifiedTime": null,
+        "lastModifiedBy": null
+      },
+      "_key": "!actors.items!lAXm3elsvIznRVzS.kF7hCluGnbl5FHK8"
+    },
+    {
+      "_id": "qVZ3vp8GlindLpC6",
+      "name": "Anti-Glare",
+      "type": "physicalTech",
+      "sort": 700000,
+      "flags": {},
+      "img": "icons/svg/mystery-man.svg",
+      "effects": [],
+      "system": {
+        "description": "<p>This mod eliminates penalties for glare. If you have enhanced vision, this works for all wavelengths you can perceive.</p>",
+        "reference": "Eclipse Phase Second Edition p. 318",
+        "complexity": "minor",
+        "restricted": false,
+        "quality": "average",
+        "concealable": false,
+        "fragile": false,
+        "singleUse": false,
+        "twoHanded": false,
+        "blueprint": {
+          "blueprintType": "",
+          "cracked": false,
+          "used": false
+        },
+        "state": {
+          "disabled": false,
+          "equipped": true,
+          "fabStartTime": 6471555000,
+          "activated": false,
+          "embeddedEgos": [],
+          "onboardAliDeleted": false
+        },
+        "activatedEffects": [],
+        "deviceType": "",
+        "category": "Sensory Augments",
+        "fabricator": "",
+        "activationAction": "automatic",
+        "passiveEffects": [
+          {
+            "type": "misc",
+            "unique": "",
+            "description": "No glare penalties.",
+            "id": "go4c6yhxdo"
+          }
+        ],
+        "activation": "none",
+        "resistEffectsCheck": "",
+        "usedEffectsDuration": 3000,
+        "onboardALI": false,
+        "firewallRating": 30,
+        "fabPrintDuration": 0,
+        "firewallHealth": {
+          "baseDurability": 30,
+          "rebootEndTime": -1,
+          "crashWounds": 0,
+          "damage": 0,
+          "log": [],
+          "wounds": 0
+        },
+        "meshHealth": {
+          "baseDurability": 20,
+          "damage": 0,
+          "wounds": 0,
+          "aidedHealTickStartTime": 0,
+          "ownHealTickStartTime": 0,
+          "damageRepair": {
+            "amount": "1d10",
+            "interval": 86400000
+          },
+          "woundRepair": {
+            "amount": 1,
+            "interval": 86400000
+          },
+          "log": [],
+          "rebootEndTime": -1,
+          "crashWounds": 0
+        },
+        "wareType": "hardware"
+      },
+      "folder": null,
+      "ownership": {
+        "default": 0
+      },
+      "_stats": {
+        "systemId": null,
+        "systemVersion": null,
+        "coreVersion": null,
+        "createdTime": null,
+        "modifiedTime": null,
+        "lastModifiedBy": null
+      },
+      "_key": "!actors.items!lAXm3elsvIznRVzS.qVZ3vp8GlindLpC6"
+    },
+    {
+      "_id": "QivxFVvjVvh8fewk",
+      "name": "Claws",
+      "type": "meleeWeapon",
+      "sort": 500000,
+      "flags": {},
+      "img": "icons/svg/mystery-man.svg",
+      "effects": [],
+      "system": {
+        "description": "<p>The morph has retractable claws like those of a cat. These claws do not interfere with manual dexterity and are razor sharp. They are legal in most habitats and considered tools as much as weapons. A set of claws in each hand counts as a single weapon.</p>",
+        "reference": "Eclipse Phase Second Edition p. 204",
+        "complexity": "minor",
+        "restricted": false,
+        "quality": "average",
+        "concealable": true,
+        "fragile": false,
+        "singleUse": false,
+        "twoHanded": false,
+        "blueprint": {
+          "blueprintType": "",
+          "cracked": false,
+          "used": false
+        },
+        "state": {
+          "disabled": false,
+          "equipped": true,
+          "used": false
+        },
+        "primaryAttack": {
+          "armorPiercing": false,
+          "attackTraits": [],
+          "damageFormula": "2d6",
+          "label": "",
+          "notes": ""
+        },
+        "secondaryAttack": {
+          "armorPiercing": false,
+          "attackTraits": [],
+          "damageFormula": "",
+          "label": "",
+          "notes": ""
+        },
+        "hasSecondaryAttack": false,
+        "augmentUnarmed": false,
+        "acceptsPayload": false,
+        "reachBonus": 0,
+        "improvised": false,
+        "touchOnly": false,
+        "wareType": "hardware",
+        "exoticSkill": ""
+      },
+      "folder": null,
+      "ownership": {
+        "default": 0
+      },
+      "_stats": {
+        "systemId": null,
+        "systemVersion": null,
+        "coreVersion": null,
+        "createdTime": null,
+        "modifiedTime": null,
+        "lastModifiedBy": null
+      },
+      "_key": "!actors.items!lAXm3elsvIznRVzS.QivxFVvjVvh8fewk"
+    },
+    {
+      "_id": "rOTyuotj7645hHrN",
+      "name": "Industrial Armor",
+      "type": "armor",
+      "sort": 1600000,
+      "flags": {},
+      "img": "icons/svg/mystery-man.svg",
+      "effects": [],
+      "system": {
+        "description": "<p>This armor is designed to protect shells from collisions, extreme weather, industrial accidents, and similar wear-and-tear.</p>",
+        "reference": "Eclipse Phase Second Edition p. 214",
+        "complexity": "minor",
+        "restricted": false,
+        "quality": "average",
+        "blueprint": {
+          "blueprintType": "",
+          "cracked": false,
+          "used": false
+        },
+        "state": {
+          "disabled": false,
+          "equipped": true,
+          "activated": false
+        },
+        "activeArmor": {
+          "energy": 0,
+          "kinetic": 0,
+          "concealable": false,
+          "layerable": false
+        },
+        "armorValues": {
+          "energy": 6,
+          "kinetic": 4,
+          "concealable": false,
+          "layerable": true
+        },
+        "attackTraits": [],
+        "effects": [],
+        "hasActiveState": false,
+        "fragile": false,
+        "singleUse": false,
+        "twoHanded": false,
+        "notes": "",
+        "wareType": "hardware"
+      },
+      "folder": null,
+      "ownership": {
+        "default": 0
+      },
+      "_stats": {
+        "systemId": null,
+        "systemVersion": null,
+        "coreVersion": null,
+        "createdTime": null,
+        "modifiedTime": null,
+        "lastModifiedBy": null
+      },
+      "_key": "!actors.items!lAXm3elsvIznRVzS.rOTyuotj7645hHrN"
+    },
+    {
+      "_id": "6657ZbEDuMhXM327",
+      "name": "Muscle Augments",
+      "type": "physicalTech",
+      "sort": 1800000,
+      "flags": {},
+      "img": "icons/svg/mystery-man.svg",
+      "effects": [],
+      "system": {
+        "description": "<p>The morph&rsquo;s muscle mass is enhanced and toned and myofibers strengthened. You inflict an extra DV 1d6 with melee attacks and apply +10 to SOM Checks.</p>",
+        "reference": "Eclipse Phase Second Edition p. 322",
+        "complexity": "major",
+        "restricted": false,
+        "quality": "average",
+        "concealable": false,
+        "fragile": false,
+        "singleUse": false,
+        "twoHanded": false,
+        "blueprint": {
+          "blueprintType": "",
+          "cracked": false,
+          "used": false
+        },
+        "state": {
+          "disabled": false,
+          "equipped": true,
+          "fabStartTime": 6471555000,
+          "activated": false,
+          "embeddedEgos": [],
+          "onboardAliDeleted": false
+        },
+        "activatedEffects": [],
+        "deviceType": "",
+        "category": "Combat Augments",
+        "fabricator": "",
+        "activationAction": "automatic",
+        "passiveEffects": [
+          {
+            "type": "melee",
+            "dvModifier": "1d6",
+            "id": "rgezsorake"
+          },
+          {
+            "type": "successTest",
+            "tags": [
+              {
+                "type": "aptitudeCheck",
+                "aptitude": "som"
+              }
+            ],
+            "modifier": 10,
+            "toOpponent": false,
+            "requirement": "",
+            "id": "m4dyuac4jc"
+          }
+        ],
+        "activation": "none",
+        "resistEffectsCheck": "",
+        "usedEffectsDuration": 3000,
+        "onboardALI": false,
+        "firewallRating": 30,
+        "fabPrintDuration": 0,
+        "firewallHealth": {
+          "baseDurability": 30,
+          "rebootEndTime": -1,
+          "crashWounds": 0,
+          "damage": 0,
+          "log": [],
+          "wounds": 0
+        },
+        "meshHealth": {
+          "baseDurability": 20,
+          "damage": 0,
+          "wounds": 0,
+          "aidedHealTickStartTime": 0,
+          "ownHealTickStartTime": 0,
+          "damageRepair": {
+            "amount": "1d10",
+            "interval": 86400000
+          },
+          "woundRepair": {
+            "amount": 1,
+            "interval": 86400000
+          },
+          "log": [],
+          "rebootEndTime": -1,
+          "crashWounds": 0
+        },
+        "wareType": "hardware"
+      },
+      "folder": null,
+      "ownership": {
+        "default": 0
+      },
+      "_stats": {
+        "systemId": null,
+        "systemVersion": null,
+        "coreVersion": null,
+        "createdTime": null,
+        "modifiedTime": null,
+        "lastModifiedBy": null
+      },
+      "_key": "!actors.items!lAXm3elsvIznRVzS.6657ZbEDuMhXM327"
+    },
+    {
+      "_id": "v1yg1cmnVJCR2vqC",
+      "name": "Neurachem",
+      "type": "physicalTech",
+      "sort": 2000000,
+      "flags": {},
+      "img": "icons/svg/mystery-man.svg",
+      "effects": [],
+      "system": {
+        "description": "<p>This mod enhances your chemical synapses and juices your neurotransmitters, drastically speeding up your neural connections. Neurachem can be mentally activated or triggered by charged emotions. +2 Vigor Pool while active. Extensive use of neurachem without a break can lead to nervous system fatigue (-20 impairment modifier to all actions; GM discretion).</p>",
+        "reference": "Eclipse Phase Second Edition p. 322",
+        "complexity": "major",
+        "restricted": false,
+        "quality": "average",
+        "concealable": false,
+        "fragile": false,
+        "singleUse": false,
+        "twoHanded": false,
+        "blueprint": {
+          "blueprintType": "",
+          "cracked": false,
+          "used": false
+        },
+        "state": {
+          "disabled": false,
+          "equipped": true,
+          "fabStartTime": 6471555000,
+          "activated": false,
+          "embeddedEgos": [],
+          "onboardAliDeleted": false
+        },
+        "activatedEffects": [],
+        "deviceType": "",
+        "category": "Combat Augments",
+        "fabricator": "",
+        "activationAction": "automatic",
+        "passiveEffects": [
+          {
+            "type": "misc",
+            "unique": "",
+            "description": "Enhanced synapses and neurotransmitters",
+            "id": "3q5ng1bk3k"
+          },
+          {
+            "type": "pool",
+            "pool": "vigor",
+            "modifier": 2,
+            "usabilityModification": "",
+            "id": "eysczdrac0"
+          }
+        ],
+        "activation": "none",
+        "resistEffectsCheck": "",
+        "usedEffectsDuration": 3000,
+        "onboardALI": false,
+        "firewallRating": 30,
+        "fabPrintDuration": 0,
+        "firewallHealth": {
+          "baseDurability": 30,
+          "rebootEndTime": -1,
+          "crashWounds": 0,
+          "damage": 0,
+          "log": [],
+          "wounds": 0
+        },
+        "meshHealth": {
+          "baseDurability": 20,
+          "damage": 0,
+          "wounds": 0,
+          "aidedHealTickStartTime": 0,
+          "ownHealTickStartTime": 0,
+          "damageRepair": {
+            "amount": "1d10",
+            "interval": 86400000
+          },
+          "woundRepair": {
+            "amount": 1,
+            "interval": 86400000
+          },
+          "log": [],
+          "rebootEndTime": -1,
+          "crashWounds": 0
+        },
+        "wareType": "hardware"
+      },
+      "folder": null,
+      "ownership": {
+        "default": 0
+      },
+      "_stats": {
+        "systemId": null,
+        "systemVersion": null,
+        "coreVersion": null,
+        "createdTime": null,
+        "modifiedTime": null,
+        "lastModifiedBy": null
+      },
+      "_key": "!actors.items!lAXm3elsvIznRVzS.v1yg1cmnVJCR2vqC"
+    },
+    {
+      "_id": "ysadtbVCbvJQ9hnh",
+      "name": "Anonymizer",
+      "type": "software",
+      "sort": 100000,
+      "flags": {},
+      "img": "icons/svg/mystery-man.svg",
+      "effects": [],
+      "system": {
+        "description": "<p>You have an account with an anonymizing proxy service that masks your Mesh ID ▶246.</p>",
+        "reference": "Eclipse Phase Second Edition p. 315",
+        "complexity": "minor",
+        "restricted": false,
+        "quality": "average",
+        "softwareType": "meshService",
+        "activatedEffects": [],
+        "effects": [
+          {
+            "type": "misc",
+            "unique": "",
+            "description": "Masks your mesh ID",
+            "id": "08imxj7zs9"
+          }
+        ],
+        "category": "Mesh Service",
+        "serviceDuration": -1,
+        "skills": [],
+        "activation": "",
+        "meshAttacks": 0,
+        "meshHealth": {
+          "baseDurability": 10,
+          "damage": 0,
+          "log": [],
+          "wounds": 0,
+          "rebootEndTime": -1,
+          "crashWounds": 0
+        },
+        "state": {
+          "activated": false,
+          "equipped": true,
+          "serviceStartTime": 6471555000,
+          "paused": false
+        },
+        "primaryAttack": {
+          "armorPiercing": false,
+          "attackTraits": [],
+          "damageFormula": "",
+          "damageType": "mesh",
+          "useMeshArmor": true,
+          "notes": "",
+          "aptitudeCheckInfo": {
+            "armorAsModifier": "",
+            "check": "",
+            "checkModifier": 0,
+            "checkFailure": [],
+            "checkSuccess": [],
+            "criticalCheckFailure": []
+          },
+          "label": "",
+          "reduceAVbyDV": false
+        },
+        "secondaryAttack": {
+          "armorPiercing": false,
+          "attackTraits": [],
+          "damageFormula": "",
+          "damageType": "mesh",
+          "useMeshArmor": true,
+          "notes": "",
+          "aptitudeCheckInfo": {
+            "armorAsModifier": "",
+            "check": "",
+            "checkModifier": 0,
+            "checkFailure": [],
+            "checkSuccess": [],
+            "criticalCheckFailure": []
+          },
+          "label": "",
+          "reduceAVbyDV": false
+        }
+      },
+      "folder": null,
+      "ownership": {
+        "default": 0
+      },
+      "_stats": {
+        "systemId": null,
+        "systemVersion": null,
+        "coreVersion": null,
+        "createdTime": null,
+        "modifiedTime": null,
+        "lastModifiedBy": null
+      },
+      "_key": "!actors.items!lAXm3elsvIznRVzS.ysadtbVCbvJQ9hnh"
+    },
+    {
+      "_id": "4aweAdVeIoeqTlkc",
+      "name": "Fake Ego ID",
+      "type": "physicalService",
+      "sort": 900000,
+      "flags": {},
+      "img": "icons/svg/mystery-man.svg",
+      "effects": [],
+      "system": {
+        "description": "<p>Forged ID.</p>\n<p>&nbsp;</p>\n<p>This forged ID will pass in most inner system and Jovian Republic habitats, and sometimes others. It gives you a rep score in one network with that ID at 10.</p>",
+        "reference": "Eclipse Phase Second Edition p. 315",
+        "complexity": "major",
+        "restricted": true,
+        "quality": "average",
+        "serviceDuration": -1,
+        "reputations": [],
+        "serviceType": "fakeEgoId",
+        "state": {
+          "serviceStartTime": 6471555000,
+          "equipped": true
+        }
+      },
+      "folder": null,
+      "ownership": {
+        "default": 0
+      },
+      "_stats": {
+        "systemId": null,
+        "systemVersion": null,
+        "coreVersion": null,
+        "createdTime": null,
+        "modifiedTime": null,
+        "lastModifiedBy": null
+      },
+      "_key": "!actors.items!lAXm3elsvIznRVzS.4aweAdVeIoeqTlkc"
+    },
+    {
+      "_id": "UaHYGnPK9Q09rCRO",
+      "name": "Medium Pistol",
+      "type": "firearm",
+      "sort": 600000,
+      "flags": {},
+      "img": "icons/svg/mystery-man.svg",
+      "effects": [],
+      "system": {
+        "description": "<p>Holdout pistols sacrifice penetrating ability for concealability. Heavy pistols focus on stopping power, with medium pistols occupying a middle ground. Machine pistols use smaller caliber rounds but provide larger magazines for automatic firing.</p>",
+        "reference": "Eclipse Phase Second Edition p. 210",
+        "complexity": "minor",
+        "restricted": true,
+        "quality": "average",
+        "concealable": false,
+        "fragile": false,
+        "singleUse": false,
+        "twoHanded": false,
+        "blueprint": {
+          "blueprintType": "",
+          "cracked": false,
+          "used": false
+        },
+        "state": {
+          "disabled": false,
+          "equipped": true,
+          "braced": false,
+          "interface": false,
+          "used": false
+        },
+        "fixed": false,
+        "long": false,
+        "shapeChanging": false,
+        "shapeName": "",
+        "accessories": [
+          "smartlink",
+          "safetySystem"
+        ],
+        "ammo": {
+          "ammoClass": "mediumPistol",
+          "max": 15,
+          "value": 16,
+          "modeSettings": [],
+          "selectedModeIndex": 0
+        },
+        "primaryAttack": {
+          "damageFormula": "2d10",
+          "firingModes": [
+            "semiAuto",
+            "burstFire",
+            "fullAuto"
+          ],
+          "notes": ""
+        },
+        "range": 30,
+        "wareType": ""
+      },
+      "folder": null,
+      "ownership": {
+        "default": 0
+      },
+      "_stats": {
+        "systemId": null,
+        "systemVersion": null,
+        "coreVersion": null,
+        "createdTime": null,
+        "modifiedTime": null,
+        "lastModifiedBy": null
+      },
+      "_key": "!actors.items!lAXm3elsvIznRVzS.UaHYGnPK9Q09rCRO"
+    },
+    {
+      "_id": "Wsidml8XIKxMtaAE",
+      "name": "TacNet",
+      "type": "software",
+      "sort": 200000,
+      "flags": {},
+      "img": "icons/svg/mystery-man.svg",
+      "effects": [],
+      "system": {
+        "description": "<p>Tacnets allow a group and their muses/gear to share real-time tactical situational and sensory data over encrypted mesh channels. They are used by sports teams, security/military units, gamers, and anyone else that needs to coordinate actions. Tacnets provide the following functions:</p>\n<ul>\n<li><strong>Maps</strong>: Tacnets present maps from a bird&rsquo;s eye, three-dimensional interactive, or first-person entoptic view, tagging notable features and marking distances. They can also plot maps based on sensory input, positioning systems, and other data.<br /><br /></li>\n<li><strong>Positioning</strong>: Tacnets indicate the position of known people, bots, vehicles, and other features according to sensory input or their calculated trajectories. Friend-or-foe tags highlight allies and opponents, noting their lines of sight and fields of fire and alerting the user to areas of potential cover or danger.<br /><br /></li>\n<li><strong>Sensory Input</strong>: Tacnets share all sensory input available from members and linked devices. This includes data from physical senses, portable sensors, smartlink guncams, XP feeds, etc. Users can immediately call up and access the sensor feeds of others as needed.<br /><br /></li>\n<li><strong>Communications Management</strong>: Tacnets maintain an encrypted VPN between users. They actively monitor for dropped signals and hacking/sniffing/jamming attempts. Treat as Infosec 40.<br /><br /></li>\n<li><strong>Smartlink/Weapon Data</strong>: Tacnets monitor the status of weapons, accessories, and other gear, bringing damage, shortages, ammo counts, and other issues to the user&rsquo;s attention.<br /><br /></li>\n<li><strong>Medical Data:</strong> Tacnets monitor the health of their users via medichines, implants, and other sensors. Users can call up health reports on their allies.<br /><br /></li>\n<li><strong>Overwatch</strong>: Tacnets keep an eye out for potential threats. They provide a +10 modifier to Perceive Tests against surprise ▶227.<br /><br /></li>\n<li><strong>Indirect Fire</strong>: Members of a tacnet can provide targeting data to each other for purposes of indirect fire ▶206.<br /><br /></li>\n<li><strong>Analysis</strong>: Tacnets can analyze real-time situations to provide suggestions and warnings. The app's god&rsquo;s-eye view of a situation helps it to identify facts and details that individuals overlook. For example, a tacnet can analyze an opposing team's weapons, shots fired, and potential injuries and suggest tactical maneuvers. Querying a tacnet for advice is a quick action; treat as Know: Tactics 80.</li>\n</ul>\n<p>Many tacnet features are immediately accessible to the user via their AR display; other data can be accessed with a quick action. The GM determines when the tacnet provides important alerts to the user. At the GM&rsquo;s discretion, some of these features may apply modifiers to the character&rsquo;s tests. Tacnets are designed to be overseers, not to take action. They will not hack opponents, pilot vehicles, or interface with weapon systems.</p>\n<p>Foundry note: Assigning players the observer permission for other people's characters allows them to see what they see, without being able to control, remove things from, or otherwise edit their sheet. Note how they will be able to view the sheet.</p>",
+        "reference": "Eclipse Phase Second Edition p. 327",
+        "complexity": "moderate",
+        "restricted": false,
+        "quality": "average",
+        "softwareType": "app",
+        "activatedEffects": [],
+        "effects": [
+          {
+            "type": "misc",
+            "unique": "",
+            "description": "Share tactical data in real-time",
+            "id": "k5hwrsvwi6"
+          },
+          {
+            "type": "successTest",
+            "tags": [
+              {
+                "type": "skill",
+                "skillType": "perceive"
+              }
+            ],
+            "modifier": 10,
+            "toOpponent": false,
+            "requirement": "against surprised",
+            "id": "vhice0fve3"
+          }
+        ],
+        "category": "TacNet",
+        "serviceDuration": -1,
+        "skills": [
+          {
+            "name": "Infosec",
+            "specialization": "",
+            "total": 40,
+            "id": "pjb1vik1dc"
+          },
+          {
+            "name": "Know: Tactics",
+            "specialization": "",
+            "total": 80,
+            "id": "yiuqnmgos2"
+          }
+        ],
+        "activation": "",
+        "meshAttacks": 0,
+        "meshHealth": {
+          "baseDurability": 10,
+          "damage": 0,
+          "log": [],
+          "wounds": 0,
+          "rebootEndTime": -1,
+          "crashWounds": 0
+        },
+        "state": {
+          "activated": false,
+          "equipped": true,
+          "serviceStartTime": 6471555000,
+          "paused": false
+        },
+        "primaryAttack": {
+          "armorPiercing": false,
+          "attackTraits": [],
+          "damageFormula": "",
+          "damageType": "mesh",
+          "useMeshArmor": true,
+          "notes": "",
+          "aptitudeCheckInfo": {
+            "armorAsModifier": "",
+            "check": "",
+            "checkModifier": 0,
+            "checkFailure": [],
+            "checkSuccess": [],
+            "criticalCheckFailure": []
+          },
+          "label": "",
+          "reduceAVbyDV": false
+        },
+        "secondaryAttack": {
+          "armorPiercing": false,
+          "attackTraits": [],
+          "damageFormula": "",
+          "damageType": "mesh",
+          "useMeshArmor": true,
+          "notes": "",
+          "aptitudeCheckInfo": {
+            "armorAsModifier": "",
+            "check": "",
+            "checkModifier": 0,
+            "checkFailure": [],
+            "checkSuccess": [],
+            "criticalCheckFailure": []
+          },
+          "label": "",
+          "reduceAVbyDV": false
+        }
+      },
+      "folder": null,
+      "ownership": {
+        "default": 0
+      },
+      "_stats": {
+        "systemId": null,
+        "systemVersion": null,
+        "coreVersion": null,
+        "createdTime": null,
+        "modifiedTime": null,
+        "lastModifiedBy": null
+      },
+      "_key": "!actors.items!lAXm3elsvIznRVzS.Wsidml8XIKxMtaAE"
+    },
+    {
+      "_id": "CbjpIXhFylmSAIjc",
+      "name": "VPN",
+      "type": "software",
+      "sort": 1400000,
+      "flags": {},
+      "img": "icons/svg/mystery-man.svg",
+      "effects": [],
+      "system": {
+        "description": "<p>This app enables you to communicate over a virtual private network (VPNs ▶241). VPNs provide a -30 modifier to sniffing attacks (Sniffing ▶245).</p>",
+        "reference": "Eclipse Phase Second Edition p. 326",
+        "complexity": "minor",
+        "restricted": false,
+        "quality": "average",
+        "softwareType": "app",
+        "activatedEffects": [],
+        "effects": [
+          {
+            "type": "misc",
+            "unique": "",
+            "description": "Creates virtual private network.",
+            "id": "9ca5h4odm9"
+          }
+        ],
+        "category": "App",
+        "serviceDuration": -1,
+        "skills": [],
+        "activation": "",
+        "meshAttacks": 0,
+        "meshHealth": {
+          "baseDurability": 10,
+          "damage": 0,
+          "log": [],
+          "wounds": 0,
+          "rebootEndTime": -1,
+          "crashWounds": 0
+        },
+        "state": {
+          "activated": false,
+          "equipped": true,
+          "serviceStartTime": 6471555000,
+          "paused": false
+        },
+        "primaryAttack": {
+          "armorPiercing": false,
+          "attackTraits": [],
+          "damageFormula": "",
+          "damageType": "mesh",
+          "useMeshArmor": true,
+          "notes": "",
+          "aptitudeCheckInfo": {
+            "armorAsModifier": "",
+            "check": "",
+            "checkModifier": 0,
+            "checkFailure": [],
+            "checkSuccess": [],
+            "criticalCheckFailure": []
+          },
+          "label": "",
+          "reduceAVbyDV": false
+        },
+        "secondaryAttack": {
+          "armorPiercing": false,
+          "attackTraits": [],
+          "damageFormula": "",
+          "damageType": "mesh",
+          "useMeshArmor": true,
+          "notes": "",
+          "aptitudeCheckInfo": {
+            "armorAsModifier": "",
+            "check": "",
+            "checkModifier": 0,
+            "checkFailure": [],
+            "checkSuccess": [],
+            "criticalCheckFailure": []
+          },
+          "label": "",
+          "reduceAVbyDV": false
+        }
+      },
+      "folder": null,
+      "ownership": {
+        "default": 0
+      },
+      "_stats": {
+        "systemId": null,
+        "systemVersion": null,
+        "coreVersion": null,
+        "createdTime": null,
+        "modifiedTime": null,
+        "lastModifiedBy": null
+      },
+      "_key": "!actors.items!lAXm3elsvIznRVzS.CbjpIXhFylmSAIjc"
+    },
+    {
+      "_id": "LEZhjEEshYHNrDAw",
+      "name": "Aggro",
+      "type": "substance",
+      "sort": 1100000,
+      "flags": {},
+      "img": "icons/svg/mystery-man.svg",
+      "effects": [],
+      "system": {
+        "description": "<p>This drug stimulates a massive burst of aggression pheromones. This provides a +20 modifier when using Provoke to intimidate or taunt (Social Attacks ▶228), but a -20 modifier to all other social skill tests. These modifiers are only effective when dealing with biomorphs of the same species who can smell you.</p>",
+        "reference": "Eclipse Phase Second Edition p. 331",
+        "complexity": "minor",
+        "restricted": false,
+        "quality": "average",
+        "blueprint": {
+          "blueprintType": "",
+          "cracked": false,
+          "used": false
+        },
+        "quantity": 5,
+        "state": {
+          "stashed": false
+        },
+        "addiction": "physical",
+        "addictionMod": 10,
+        "hasSeverity": false,
+        "application": [
+          "dermal",
+          "inhalation",
+          "injection",
+          "oral"
+        ],
+        "base": {
+          "damage": {
+            "damageFormula": "",
+            "perTurn": false,
+            "armorPiercing": false,
+            "attackTraits": [],
+            "reduceAVbyDV": false,
+            "armorUsed": [],
+            "damageType": "physical"
+          },
+          "duration": 900000,
+          "effects": [
+            {
+              "type": "successTest",
+              "tags": [
+                {
+                  "type": "skill",
+                  "skillType": "provoke"
+                }
+              ],
+              "modifier": 20,
+              "toOpponent": false,
+              "requirement": "intimitading or taunting biomorphs of the same species who can smell you",
+              "id": "mddblw7nxc"
+            },
+            {
+              "type": "successTest",
+              "tags": [
+                {
+                  "type": "skill",
+                  "skillType": "persuade"
+                },
+                {
+                  "type": "skill",
+                  "skillType": "deceive"
+                }
+              ],
+              "modifier": -20,
+              "toOpponent": false,
+              "requirement": "",
+              "id": "025ekv2lh8"
+            }
+          ],
+          "wearOffStress": "",
+          "notes": ""
+        },
+        "category": "Combat",
+        "classification": "biochem",
+        "consumeOnUse": true,
+        "substanceType": "drug",
+        "quantityPerCost": 5,
+        "severity": {
+          "check": "som",
+          "checkMod": 0,
+          "conditions": [],
+          "wearOffStress": "",
+          "damage": {
+            "damageFormula": "",
+            "perTurn": false,
+            "armorPiercing": false,
+            "attackTraits": [],
+            "reduceAVbyDV": false,
+            "armorUsed": [],
+            "damageType": "physical"
+          },
+          "duration": 3000,
+          "effects": [],
+          "notes": ""
+        }
+      },
+      "folder": null,
+      "ownership": {
+        "default": 0
+      },
+      "_stats": {
+        "systemId": null,
+        "systemVersion": null,
+        "coreVersion": null,
+        "createdTime": null,
+        "modifiedTime": null,
+        "lastModifiedBy": null
+      },
+      "_key": "!actors.items!lAXm3elsvIznRVzS.LEZhjEEshYHNrDAw"
+    },
+    {
+      "_id": "ff5maHHY1rPakTkl",
+      "name": "Flex Cutter",
+      "type": "meleeWeapon",
+      "sort": 1900000,
+      "flags": {},
+      "img": "icons/svg/mystery-man.svg",
+      "effects": [],
+      "system": {
+        "description": "<p>The blade of this machete-like weapon is made of a memory polymer. When deactivated, the blade is limp and flexible and can be rolled up or otherwise easily concealed. When activated, the blade stiffens and sharpens into a vicious slashing weapon.</p>",
+        "reference": "Eclipse Phase Second Edition p. 204",
+        "complexity": "minor",
+        "restricted": false,
+        "quality": "average",
+        "concealable": true,
+        "fragile": false,
+        "singleUse": false,
+        "twoHanded": false,
+        "blueprint": {
+          "blueprintType": "",
+          "cracked": false,
+          "used": false
+        },
+        "state": {
+          "disabled": false,
+          "equipped": true,
+          "used": false
+        },
+        "primaryAttack": {
+          "armorPiercing": false,
+          "attackTraits": [],
+          "damageFormula": "1d10 + 3",
+          "label": "",
+          "notes": ""
+        },
+        "secondaryAttack": {
+          "armorPiercing": false,
+          "attackTraits": [],
+          "damageFormula": "",
+          "label": "",
+          "notes": ""
+        },
+        "hasSecondaryAttack": false,
+        "augmentUnarmed": false,
+        "acceptsPayload": false,
+        "reachBonus": 0,
+        "improvised": false,
+        "touchOnly": false,
+        "wareType": "",
+        "exoticSkill": ""
+      },
+      "folder": null,
+      "ownership": {
+        "default": 0
+      },
+      "_stats": {
+        "systemId": null,
+        "systemVersion": null,
+        "coreVersion": null,
+        "createdTime": null,
+        "modifiedTime": null,
+        "lastModifiedBy": null
+      },
+      "_key": "!actors.items!lAXm3elsvIznRVzS.ff5maHHY1rPakTkl"
+    },
+    {
+      "_id": "j8In16sOA8sHxZLX",
+      "name": "Grin",
+      "type": "substance",
+      "sort": 1300000,
+      "flags": {},
+      "img": "icons/svg/mystery-man.svg",
+      "effects": [],
+      "system": {
+        "description": "<p>Grin is an effective opiate and pain suppressant. You ignore the modifiers from 1 wound (cumulative with other pain negation mods, to a maximum of 3 wounds).</p>",
+        "reference": "Eclipse Phase Second Edition p. 331",
+        "complexity": "minor",
+        "restricted": false,
+        "quality": "average",
+        "blueprint": {
+          "blueprintType": "",
+          "cracked": false,
+          "used": false
+        },
+        "quantity": 5,
+        "state": {
+          "stashed": false
+        },
+        "addiction": "physical",
+        "addictionMod": -10,
+        "hasSeverity": false,
+        "application": [
+          "dermal",
+          "inhalation",
+          "injection",
+          "oral"
+        ],
+        "base": {
+          "damage": {
+            "damageFormula": "",
+            "perTurn": false,
+            "armorPiercing": false,
+            "attackTraits": [],
+            "reduceAVbyDV": false,
+            "armorUsed": [],
+            "damageType": "physical"
+          },
+          "duration": 10800000,
+          "effects": [
+            {
+              "type": "health",
+              "health": "physical",
+              "stat": "woundsIgnored",
+              "modifier": 1,
+              "id": "uf8v4eb17e"
+            }
+          ],
+          "wearOffStress": "",
+          "notes": ""
+        },
+        "category": "Combat",
+        "classification": "biochem",
+        "consumeOnUse": true,
+        "substanceType": "drug",
+        "quantityPerCost": 5,
+        "severity": {
+          "check": "som",
+          "checkMod": 0,
+          "conditions": [],
+          "wearOffStress": "",
+          "damage": {
+            "damageFormula": "",
+            "perTurn": false,
+            "armorPiercing": false,
+            "attackTraits": [],
+            "reduceAVbyDV": false,
+            "armorUsed": [],
+            "damageType": "physical"
+          },
+          "duration": 3000,
+          "effects": [],
+          "notes": ""
+        }
+      },
+      "folder": null,
+      "ownership": {
+        "default": 0
+      },
+      "_stats": {
+        "systemId": null,
+        "systemVersion": null,
+        "coreVersion": null,
+        "createdTime": null,
+        "modifiedTime": null,
+        "lastModifiedBy": null
+      },
+      "_key": "!actors.items!lAXm3elsvIznRVzS.j8In16sOA8sHxZLX"
+    },
+    {
+      "_id": "axVTAxgJGyhcoJ7s",
+      "name": "Shock Glove",
+      "type": "meleeWeapon",
+      "sort": 2100000,
+      "flags": {},
+      "img": "icons/svg/mystery-man.svg",
+      "effects": [],
+      "system": {
+        "description": "<p>When activated, this glove delivers an incapacitating shock along with every punch, grab, or touch.</p>",
+        "reference": "Eclipse Phase Second Edition p. 204",
+        "complexity": "minor",
+        "restricted": false,
+        "quality": "average",
+        "concealable": false,
+        "fragile": false,
+        "singleUse": false,
+        "twoHanded": false,
+        "blueprint": {
+          "blueprintType": "",
+          "cracked": false,
+          "used": false
+        },
+        "state": {
+          "disabled": false,
+          "equipped": true,
+          "used": false
+        },
+        "primaryAttack": {
+          "armorPiercing": false,
+          "attackTraits": [
+            "shock"
+          ],
+          "damageFormula": "",
+          "label": "",
+          "notes": ""
+        },
+        "secondaryAttack": {
+          "armorPiercing": false,
+          "attackTraits": [],
+          "damageFormula": "",
+          "label": "",
+          "notes": ""
+        },
+        "hasSecondaryAttack": false,
+        "augmentUnarmed": true,
+        "acceptsPayload": false,
+        "reachBonus": 0,
+        "improvised": false,
+        "touchOnly": true,
+        "wareType": "",
+        "exoticSkill": ""
+      },
+      "folder": null,
+      "ownership": {
+        "default": 0
+      },
+      "_stats": {
+        "systemId": null,
+        "systemVersion": null,
+        "coreVersion": null,
+        "createdTime": null,
+        "modifiedTime": null,
+        "lastModifiedBy": null
+      },
+      "_key": "!actors.items!lAXm3elsvIznRVzS.axVTAxgJGyhcoJ7s"
+    },
+    {
+      "_id": "nQyNGUHsqljr2TTy",
+      "name": "Shredder",
+      "type": "sprayWeapon",
+      "sort": 1000000,
+      "flags": {},
+      "img": "icons/svg/mystery-man.svg",
+      "effects": [],
+      "system": {
+        "description": "<p>A heavier version of the shard pistol, the shredder fires a larger cloud of lethal flechettes, enough to shred a portion of the target into a fine mist.</p>",
+        "reference": "Eclipse Phase Second Edition p. 209",
+        "complexity": "moderate",
+        "restricted": true,
+        "quality": "average",
+        "concealable": false,
+        "fragile": false,
+        "singleUse": false,
+        "twoHanded": true,
+        "blueprint": {
+          "blueprintType": "",
+          "cracked": false,
+          "used": false
+        },
+        "state": {
+          "disabled": false,
+          "equipped": true,
+          "braced": false,
+          "interface": false,
+          "used": false
+        },
+        "accessories": [
+          "safetySystem",
+          "smartlink"
+        ],
+        "ammo": {
+          "max": 100,
+          "value": 100
+        },
+        "dosesPerShot": 1,
+        "fixed": false,
+        "long": false,
+        "range": 25,
+        "payloadUse": "coatAmmunition",
+        "primaryAttack": {
+          "armorPiercing": false,
+          "armorUsed": "kinetic",
+          "attackTraits": [],
+          "damageFormula": "2d10 + 6",
+          "firingModes": [
+            "semiAuto",
+            "burstFire",
+            "fullAuto"
+          ],
+          "superiorSuccessDot": "",
+          "notes": ""
+        },
+        "wareType": ""
+      },
+      "folder": null,
+      "ownership": {
+        "default": 0
+      },
+      "_stats": {
+        "systemId": null,
+        "systemVersion": null,
+        "coreVersion": null,
+        "createdTime": null,
+        "modifiedTime": null,
+        "lastModifiedBy": null
+      },
+      "_key": "!actors.items!lAXm3elsvIznRVzS.nQyNGUHsqljr2TTy"
+    },
+    {
+      "_id": "UNGYaQxhr8NcEy3m",
+      "name": "Enhanced Behavior (Aggression)",
+      "type": "trait",
+      "sort": 2200000,
+      "flags": {},
+      "img": "icons/svg/mystery-man.svg",
+      "effects": [],
+      "system": {
+        "description": "<p>Your conduct or moods are modified. This may be due to conditioning and reprogramming via time-accelerated psychosurgery ▶294, drugs, genetic tweaks, psi, or other factors. This may have been a deliberate choice or it may have been inflicted against your will. Work with your GM to define a specific emotion (e.g., happiness, contentment, love) or behavior (e.g., aggression, commitment, curiosity, orderliness, loyalty). Apply a -10 modifier per level to all actions when withheld from the behavior/emotion.</p><p>Level 1: You are encouraged to pursue the behavior and associate it with positive feelings; emotions are boosted.</p><p>Level 2: You are driven to engage in the specified behavior; emotions are exaggerated. Holding back requires a WIL Check.</p><p>Level 3: The behavior is enforced; emotions are compulsory and ongoing. If restrained from the conduct or the emotion is suppressed, suffer SV 1d6.</p><p>This trait may be taken more than once for different behaviors.</p>",
+        "reference": "Eclipse Phase Second Edition p. 78",
+        "restrictions": "",
+        "triggers": "",
+        "source": "ego",
+        "state": {
+          "level": 1,
+          "triggered": false
+        },
+        "levels": [
+          {
+            "cost": 1,
+            "effects": [
+              {
+                "type": "successTest",
+                "tags": [
+                  {
+                    "type": "allActions"
+                  }
+                ],
+                "modifier": -10,
+                "toOpponent": false,
+                "requirement": "withheld from behavior/emotion",
+                "id": "aqy1m46h1a"
+              }
+            ],
+            "id": "unkeixdz2e"
+          },
+          {
+            "cost": 2,
+            "effects": [
+              {
+                "type": "successTest",
+                "tags": [
+                  {
+                    "type": "allActions"
+                  }
+                ],
+                "modifier": -20,
+                "toOpponent": false,
+                "requirement": "withheld from behavior/emotion",
+                "id": "j425rl53gv"
+              },
+              {
+                "type": "misc",
+                "unique": "",
+                "description": "Holding back requires a WIL Check",
+                "id": "bvrj3ruh2s"
+              }
+            ],
+            "id": "f5ai6gh49s"
+          },
+          {
+            "cost": 4,
+            "effects": [
+              {
+                "type": "successTest",
+                "tags": [
+                  {
+                    "type": "allActions"
+                  }
+                ],
+                "modifier": -30,
+                "toOpponent": false,
+                "requirement": "withheld from behavior/emotion",
+                "id": "otqcabcezw"
+              },
+              {
+                "type": "misc",
+                "unique": "",
+                "description": "If restrained from conduct or suppressing the emotion, suffer SV 1d6",
+                "id": "aclz7eoaqu"
+              }
+            ],
+            "id": "0cqtsrk172"
+          }
+        ],
+        "subtype": "",
+        "traitType": "negative"
+      },
+      "folder": null,
+      "ownership": {
+        "default": 0
+      },
+      "_stats": {
+        "systemId": null,
+        "systemVersion": null,
+        "coreVersion": null,
+        "createdTime": null,
+        "modifiedTime": null,
+        "lastModifiedBy": null
+      },
+      "_key": "!actors.items!lAXm3elsvIznRVzS.UNGYaQxhr8NcEy3m"
+    }
+  ],
+  "effects": [],
+  "system": {
+    "description": "<p style=\"text-align: center;\"><em><span class=\"fontstyle0\">I know humans well enough to tell that you&rsquo;re a jagoff. Come at me, meat-drizzle!</span> </em></p>\n<p style=\"text-align: center;\">&nbsp;</p>\n<p style=\"text-align: left;\"><span class=\"fontstyle0\">You were instanced from the Transfinity codeline, a prominent and very fancy clan of AGIs based on Titan. One of your relatives is head of a ministry or something. Whatever, Titan is fucking boring. You don&rsquo;t want to crunch code and build up social capital and crap like that. You want to leap over things and shout fuck and</span> <span class=\"fontstyle0\">shoot stuff. You&rsquo;re into corporeality big time, and being a loud-mouthed, boss, beast-killer robot is the funnest. You and Pivo were selling some TITAN loot when Firewall caught you and convinced you to be sentinels. Now you still enjoy the criminal lifestyle, but you fi ght cosmic horror, too. Badass.</span></p>",
+    "reference": "Eclipse Phase Second Edition p. 95",
+    "fakeId": "",
+    "aptitudes": {
+      "cog": 10,
+      "int": 15,
+      "ref": 25,
+      "sav": 15,
+      "som": 20,
+      "wil": 10
+    },
+    "temporary": [],
+    "favoriteItems": [],
+    "purchaseLog": [],
+    "fieldSkills": {
+      "exotic": [],
+      "hardware": [
+        {
+          "points": 40,
+          "specialization": "",
+          "field": "Robotics",
+          "linkedAptitude": "cog",
+          "category": "technical",
+          "id": "khh670jsqf"
+        }
+      ],
+      "know": [
+        {
+          "points": 40,
+          "specialization": "",
+          "field": "Bodyguarding",
+          "linkedAptitude": "cog",
+          "category": "professionalTraining",
+          "id": "i025njzu3z"
+        },
+        {
+          "points": 40,
+          "specialization": "",
+          "field": "Bot models",
+          "linkedAptitude": "cog",
+          "category": "interests",
+          "id": "4ogkk8h8fb"
+        },
+        {
+          "points": 40,
+          "specialization": "",
+          "field": "Criminals",
+          "linkedAptitude": "cog",
+          "category": "interests",
+          "id": "12yhr52vmj"
+        },
+        {
+          "points": 30,
+          "specialization": "",
+          "field": "Gambling",
+          "linkedAptitude": "cog",
+          "category": "interests",
+          "id": "odtxqtec05"
+        },
+        {
+          "points": 40,
+          "specialization": "",
+          "field": "Scavenging",
+          "linkedAptitude": "cog",
+          "category": "professionalTraining",
+          "id": "18qhfbdlah"
+        },
+        {
+          "points": 60,
+          "specialization": "",
+          "field": "Security Ops",
+          "linkedAptitude": "cog",
+          "category": "professionalTraining",
+          "id": "7jfagm9dz7"
+        }
+      ],
+      "medicine": [],
+      "pilot": [
+        {
+          "points": 40,
+          "specialization": "",
+          "field": "Air",
+          "linkedAptitude": "ref",
+          "category": "vehicle",
+          "id": "sq7ooc0dn4"
+        }
+      ]
+    },
+    "homeDevice": {
+      "actorId": "",
+      "itemId": ""
+    },
+    "network": {
+      "masterDeviceId": "",
+      "systemDefenders": [],
+      "unslavedDevices": []
+    },
+    "assets": [],
+    "settings": {
+      "canDefault": true,
+      "trackMentalHealth": true,
+      "useThreat": false,
+      "characterDetails": true,
+      "threatDetails": false,
+      "trackPoints": true,
+      "trackReputations": true,
+      "ignoreOverburdened": false
+    },
+    "shortRecharge": {
+      "refreshStartTime": 0,
+      "taken": 0
+    },
+    "longRecharge": {
+      "refreshStartTime": 0,
+      "taken": 0
+    },
+    "motivations": [
+      {
+        "cause": "Autonomy",
+        "stance": "support",
+        "goals": [],
+        "id": "9sgmv5gld0"
+      },
+      {
+        "cause": "Badassery",
+        "stance": "support",
+        "goals": [],
+        "id": "yf26q0djt4"
+      },
+      {
+        "cause": "Boredom",
+        "stance": "oppose",
+        "goals": [],
+        "id": "gx9jv04u3c"
+      }
+    ],
+    "points": {
+      "customization": 0,
+      "gear": 0,
+      "morph": 0,
+      "rez": 0,
+      "credits": 0
+    },
+    "accumulatedTimeStart": 0,
+    "tasks": [],
+    "reps": {
+      "@Rep": {
+        "major": 0,
+        "minor": 0,
+        "moderate": 0,
+        "refreshStartTime": 0,
+        "score": 40,
+        "track": true
+      },
+      "cRep": {
+        "major": 0,
+        "minor": 0,
+        "moderate": 0,
+        "refreshStartTime": 0,
+        "score": 0,
+        "track": false
+      },
+      "fRep": {
+        "major": 0,
+        "minor": 0,
+        "moderate": 0,
+        "refreshStartTime": 0,
+        "score": 0,
+        "track": false
+      },
+      "gRep": {
+        "major": 0,
+        "minor": 0,
+        "moderate": 0,
+        "refreshStartTime": 0,
+        "score": 50,
+        "track": true
+      },
+      "iRep": {
+        "major": 0,
+        "minor": 0,
+        "moderate": 0,
+        "refreshStartTime": 0,
+        "score": 30,
+        "track": true
+      },
+      "rRep": {
+        "major": 0,
+        "minor": 0,
+        "moderate": 0,
+        "refreshStartTime": 0,
+        "score": 0,
+        "track": false
+      },
+      "xRep": {
+        "major": 0,
+        "minor": 0,
+        "moderate": 0,
+        "refreshStartTime": 0,
+        "score": 0,
+        "track": false
+      }
+    },
+    "skills": {
+      "athletics": {
+        "points": 30,
+        "specialization": ""
+      },
+      "deceive": {
+        "points": 0,
+        "specialization": ""
+      },
+      "fray": {
+        "points": 30,
+        "specialization": ""
+      },
+      "freeFall": {
+        "points": 30,
+        "specialization": ""
+      },
+      "guns": {
+        "points": 40,
+        "specialization": ""
+      },
+      "infiltrate": {
+        "points": 25,
+        "specialization": ""
+      },
+      "infosec": {
+        "points": 40,
+        "specialization": ""
+      },
+      "interface": {
+        "points": 40,
+        "specialization": ""
+      },
+      "kinesics": {
+        "points": 0,
+        "specialization": ""
+      },
+      "melee": {
+        "points": 50,
+        "specialization": ""
+      },
+      "perceive": {
+        "points": 20,
+        "specialization": ""
+      },
+      "persuade": {
+        "points": 0,
+        "specialization": ""
+      },
+      "program": {
+        "points": 50,
+        "specialization": ""
+      },
+      "provoke": {
+        "points": 30,
+        "specialization": ""
+      },
+      "psi": {
+        "points": 0,
+        "specialization": ""
+      },
+      "research": {
+        "points": 0,
+        "specialization": ""
+      },
+      "survival": {
+        "points": 0,
+        "specialization": ""
+      }
+    },
+    "spentPools": {
+      "flex": 0,
+      "insight": 0,
+      "moxie": 0,
+      "threat": 0,
+      "vigor": 0
+    },
+    "flex": 1,
+    "threat": 0,
+    "characterDetails": {
+      "age": "",
+      "aliases": "Becky Transfinity",
+      "background": "Infolife",
+      "career": "Enforcer",
+      "faction": "Criminal",
+      "gender": "Female",
+      "interest": "Jammer",
+      "languages": "English, Skandinavíska"
+    },
+    "egoType": "AGI",
+    "forkType": "",
+    "threatDetails": {
+      "level": "yellow",
+      "niche": "",
+      "numbers": "",
+      "stress": {
+        "sv": "",
+        "minSV": 1,
+        "minStressOption": "none",
+        "notes": ""
+      }
+    },
+    "combatState": {
+      "complexAim": false,
+      "fullDefense": "",
+      "aggressive": false
+    },
+    "mentalHealth": {
+      "alienation": 0,
+      "damage": 0,
+      "helplessness": 0,
+      "log": [],
+      "naturalHealAttempts": [],
+      "violence": 0,
+      "wounds": 0,
+      "lastGainedStressTime": 0,
+      "aidedHealTickStartTime": -1,
+      "damageRepair": {
+        "amount": "",
+        "interval": 0
+      },
+      "ownHealTickStartTime": -1,
+      "woundRepair": {
+        "interval": 0,
+        "amount": 0
+      }
+    }
+  },
+  "ownership": {
+    "default": 0,
+    "qJl17WpEHiovQQBC": 3
+  },
+  "prototypeToken": {
+    "flags": {},
+    "name": "Berk",
+    "displayName": 0,
+    "width": 1,
+    "height": 1,
+    "lockRotation": false,
+    "rotation": 0,
+    "actorLink": true,
+    "disposition": -1,
+    "displayBars": 0,
+    "bar1": {
+      "attribute": null
+    },
+    "bar2": {
+      "attribute": null
+    },
+    "randomImg": false,
+    "light": {
+      "dim": 0,
+      "bright": 0,
+      "angle": 360,
+      "alpha": 1,
+      "animation": {
+        "speed": 5,
+        "intensity": 5,
+        "type": null,
+        "reverse": false
+      },
+      "color": null,
+      "coloration": 1,
+      "attenuation": 0.5,
+      "luminosity": 0.5,
+      "saturation": 0,
+      "contrast": 0,
+      "shadows": 0,
+      "darkness": {
+        "min": 0,
+        "max": 1
+      }
+    },
+    "texture": {
+      "src": "icons/svg/mystery-man.svg",
+      "tint": null,
+      "scaleX": 1,
+      "scaleY": 1,
+      "offsetX": 0,
+      "offsetY": 0,
+      "rotation": 0
+    },
+    "sight": {
+      "angle": 360,
+      "enabled": false,
+      "range": 0,
+      "brightness": 1,
+      "visionMode": "basic",
+      "color": null,
+      "attenuation": 0.1,
+      "saturation": 0,
+      "contrast": 0
+    },
+    "alpha": 1,
+    "detectionModes": []
+  },
+  "img": "icons/svg/mystery-man.svg",
+  "folder": null,
+  "_stats": {
+    "systemId": "ep2e",
+    "systemVersion": "1.0",
+    "coreVersion": "10.279",
+    "createdTime": null,
+    "modifiedTime": 1661875707030,
+    "lastModifiedBy": "insS7Tc4tz1EbXlo"
+  },
+  "_key": "!actors!lAXm3elsvIznRVzS"
+}

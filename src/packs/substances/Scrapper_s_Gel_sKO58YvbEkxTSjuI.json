@@ -1,0 +1,77 @@
+{
+  "name": "Scrapper's Gel",
+  "permission": {
+    "default": 0,
+    "qJl17WpEHiovQQBC": 3
+  },
+  "type": "substance",
+  "system": {
+    "description": "<p>This goo turns into a potent acid when given an electrical charge. It comes in a gel-like state and may be smeared like jelly under most environmental conditions, even in space. In acid form, scrapper&rsquo;s gel inflicts DV 2d10 + 5 [16] per action turn to anything it touches for 3 turns, unless the material has been treated against acid. Armor is also melted, reduce the AV by damage taken. Treat damage as cumulative for determining wounds.</p>",
+    "reference": "Eclipse Phase Second Edition p. 331",
+    "complexity": "minor",
+    "restricted": false,
+    "quality": "average",
+    "blueprint": {
+      "blueprintType": "",
+      "cracked": false,
+      "used": false
+    },
+    "quantity": 5,
+    "state": {
+      "stashed": false
+    },
+    "addiction": "",
+    "addictionMod": 0,
+    "hasSeverity": false,
+    "application": [
+      "dermal",
+      "inhalation",
+      "injection",
+      "oral"
+    ],
+    "base": {
+      "damage": {
+        "damageFormula": "2d10 + 5",
+        "perTurn": true,
+        "armorPiercing": false,
+        "attackTraits": [],
+        "reduceAVbyDV": true,
+        "armorUsed": [
+          "energy"
+        ],
+        "damageType": "physical"
+      },
+      "duration": 9000,
+      "effects": [],
+      "wearOffStress": "",
+      "notes": ""
+    },
+    "category": "",
+    "classification": "biochem",
+    "consumeOnUse": true,
+    "substanceType": "chemical",
+    "quantityPerCost": 5,
+    "severity": {
+      "check": "som",
+      "checkMod": 0,
+      "conditions": [],
+      "wearOffStress": "",
+      "damage": {
+        "damageFormula": "",
+        "perTurn": false,
+        "armorPiercing": false,
+        "attackTraits": [],
+        "reduceAVbyDV": false,
+        "armorUsed": [],
+        "damageType": "physical"
+      },
+      "duration": 3000,
+      "effects": [],
+      "notes": ""
+    }
+  },
+  "flags": {},
+  "effects": [],
+  "_id": "sKO58YvbEkxTSjuI",
+  "_key": "!items!sKO58YvbEkxTSjuI"
+}

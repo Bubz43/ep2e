@@ -1,0 +1,94 @@
+{
+  "_id": "21u1txyoRP3Jmi3B",
+  "name": "Enhanced Behavior",
+  "permission": {
+    "default": 0,
+    "qHi89sFcK4gHlOPd": 3
+  },
+  "type": "trait",
+  "system": {
+    "description": "<p>Your conduct or moods are modified. This may be due to conditioning and reprogramming via time-accelerated psychosurgery ▶294, drugs, genetic tweaks, psi, or other factors. This may have been a deliberate choice or it may have been inflicted against your will. Work with your GM to define a specific emotion (e.g., happiness, contentment, love) or behavior (e.g., aggression, commitment, curiosity, orderliness, loyalty). Apply a -10 modifier per level to all actions when withheld from the behavior/emotion.</p><p>Level 1: You are encouraged to pursue the behavior and associate it with positive feelings; emotions are boosted.</p><p>Level 2: You are driven to engage in the specified behavior; emotions are exaggerated. Holding back requires a WIL Check.</p><p>Level 3: The behavior is enforced; emotions are compulsory and ongoing. If restrained from the conduct or the emotion is suppressed, suffer SV 1d6.</p><p>This trait may be taken more than once for different behaviors.</p>",
+    "reference": "Eclipse Phase Second Edition p. 78",
+    "restrictions": "",
+    "triggers": "",
+    "source": "ego",
+    "state": {
+      "level": 0,
+      "triggered": false
+    },
+    "levels": [
+      {
+        "cost": 1,
+        "effects": [
+          {
+            "type": "successTest",
+            "tags": [
+              {
+                "type": "allActions"
+              }
+            ],
+            "modifier": -10,
+            "toOpponent": false,
+            "requirement": "withheld from behavior/emotion",
+            "id": "aqy1m46h1a"
+          }
+        ],
+        "id": "unkeixdz2e"
+      },
+      {
+        "cost": 2,
+        "effects": [
+          {
+            "type": "successTest",
+            "tags": [
+              {
+                "type": "allActions"
+              }
+            ],
+            "modifier": -20,
+            "toOpponent": false,
+            "requirement": "withheld from behavior/emotion",
+            "id": "j425rl53gv"
+          },
+          {
+            "type": "misc",
+            "unique": "",
+            "description": "Holding back requires a WIL Check",
+            "id": "bvrj3ruh2s"
+          }
+        ],
+        "id": "f5ai6gh49s"
+      },
+      {
+        "cost": 4,
+        "effects": [
+          {
+            "type": "successTest",
+            "tags": [
+              {
+                "type": "allActions"
+              }
+            ],
+            "modifier": -30,
+            "toOpponent": false,
+            "requirement": "withheld from behavior/emotion",
+            "id": "otqcabcezw"
+          },
+          {
+            "type": "misc",
+            "unique": "",
+            "description": "If restrained from conduct or suppressing the emotion, suffer SV 1d6",
+            "id": "aclz7eoaqu"
+          }
+        ],
+        "id": "0cqtsrk172"
+      }
+    ],
+    "subtype": "",
+    "traitType": "negative"
+  },
+  "flags": {},
+  "img": "icons/svg/mystery-man.svg",
+  "effects": [],
+  "_key": "!items!21u1txyoRP3Jmi3B"
+}

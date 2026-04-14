@@ -1,0 +1,54 @@
+{
+  "name": "Invigorate",
+  "permission": {
+    "default": 0,
+    "qJl17WpEHiovQQBC": 3
+  },
+  "type": "sleight",
+  "system": {
+    "description": "<p>You trigger a rush of neurochemical energy in the target. They may expend their next complex action collecting themselves; this counts as a short recharge action ▶35, without needing to expend the full 10 minutes. Note that this sleight does not provide an extra recharge, it simply shortens the time frame.</p>",
+    "reference": "Eclipse Phase Second Edition p. 285",
+    "duration": "instant",
+    "infectionMod": 4,
+    "sleightType": "gamma",
+    "action": "complex",
+    "timeframe": 0,
+    "effectsToSelf": [],
+    "effectsToTarget": [
+      {
+        "type": "misc",
+        "unique": "",
+        "description": "The target can expend their next complex action as a short recharge.",
+        "id": "i1zt5dzie7"
+      }
+    ],
+    "scaleEffectsOnSuperior": false,
+    "attack": {
+      "useMentalArmor": false,
+      "attackTraits": [],
+      "damageFormula": "",
+      "damageType": "mental",
+      "notes": ""
+    },
+    "heal": {
+      "formula": "",
+      "healthType": "mental"
+    },
+    "mentalArmor": {
+      "apply": false,
+      "divisor": 3,
+      "formula": "1d6"
+    },
+    "status": {
+      "sustaining": false,
+      "pushDuration": 0,
+      "pushed": false,
+      "pushStartTime": 0,
+      "sustainingOn": []
+    }
+  },
+  "flags": {},
+  "effects": [],
+  "_id": "wzkQSk6zpI6YJdO5",
+  "_key": "!items!wzkQSk6zpI6YJdO5"
+}

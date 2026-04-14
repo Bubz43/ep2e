@@ -1,0 +1,43 @@
+{
+  "name": "RAP",
+  "permission": {
+    "default": 0,
+    "qJl17WpEHiovQQBC": 3
+  },
+  "type": "firearmAmmo",
+  "system": {
+    "description": "<p>Reactive Armor-Piercing is a tungsten-carbide armor-piercing round with a reactive casing that superheats and explodes upon impact.</p>",
+    "reference": "Eclipse Phase Second Edition p. 211",
+    "complexity": "moderate",
+    "restricted": true,
+    "quality": "average",
+    "blueprint": {
+      "blueprintType": "",
+      "cracked": false,
+      "used": false
+    },
+    "quantity": 100,
+    "state": {
+      "stashed": false
+    },
+    "ammoClass": "machinePistol",
+    "carryPayload": false,
+    "roundsPerComplexity": 100,
+    "modes": [
+      {
+        "name": "",
+        "armorPiercing": true,
+        "attackTraits": [],
+        "damageFormula": "",
+        "steady": false,
+        "damageModifierType": "formula",
+        "notes": "",
+        "id": "_defaultID"
+      }
+    ]
+  },
+  "flags": {},
+  "effects": [],
+  "_id": "8f8dD2YZjAdDMK9y",
+  "_key": "!items!8f8dD2YZjAdDMK9y"
+}

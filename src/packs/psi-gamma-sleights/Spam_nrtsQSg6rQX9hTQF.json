@@ -1,0 +1,68 @@
+{
+  "name": "Spam",
+  "permission": {
+    "default": 0,
+    "qJl17WpEHiovQQBC": 3
+  },
+  "type": "sleight",
+  "system": {
+    "description": "<p>You overload and flood the target&rsquo;s sensory cortices, spamming them with confusing and distracting sensory input. The target is impaired, suffering -10 to all actions, plus an extra -10 per superior success, for WIL &divide; 5 action turns.</p>",
+    "reference": "Eclipse Phase Second Edition p. 285",
+    "duration": "actionTurns",
+    "infectionMod": 6,
+    "sleightType": "gamma",
+    "action": "complex",
+    "timeframe": 0,
+    "effectsToSelf": [],
+    "effectsToTarget": [
+      {
+        "type": "successTest",
+        "tags": [
+          {
+            "type": "action",
+            "action": "",
+            "subtype": ""
+          }
+        ],
+        "modifier": -10,
+        "toOpponent": false,
+        "requirement": "",
+        "id": "1tjtyos052"
+      },
+      {
+        "type": "misc",
+        "unique": "",
+        "description": "Overwhelmed by sensory input",
+        "id": "yjzspcp5ko"
+      }
+    ],
+    "scaleEffectsOnSuperior": true,
+    "attack": {
+      "useMentalArmor": false,
+      "attackTraits": [],
+      "damageFormula": "",
+      "damageType": "mental",
+      "notes": ""
+    },
+    "heal": {
+      "formula": "",
+      "healthType": "mental"
+    },
+    "mentalArmor": {
+      "apply": false,
+      "divisor": 3,
+      "formula": "1d6"
+    },
+    "status": {
+      "sustaining": false,
+      "pushDuration": 0,
+      "pushed": false,
+      "pushStartTime": 0,
+      "sustainingOn": []
+    }
+  },
+  "flags": {},
+  "effects": [],
+  "_id": "nrtsQSg6rQX9hTQF",
+  "_key": "!items!nrtsQSg6rQX9hTQF"
+}

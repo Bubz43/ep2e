@@ -1,0 +1,76 @@
+{
+  "name": "BTX2",
+  "permission": {
+    "default": 0,
+    "qJl17WpEHiovQQBC": 3
+  },
+  "type": "substance",
+  "system": {
+    "description": "<p>Also called &ldquo;frog bite,&rdquo; BTX2 is a genetically enhanced variant of batrachotoxin, an extremely potent cardiotoxin and neurotoxin. It leads to fast paralysis and cardiac arrest that usually kills the target within a few action turns. Affected characters suffer DV 2d10 + 10 for 3 action turns; medichines reduce this damage by half. You must also make a SOM Check or be immobilized for 1 hour.</p>",
+    "reference": "Eclipse Phase Second Edition p. 335",
+    "complexity": "major",
+    "restricted": true,
+    "quality": "average",
+    "blueprint": {
+      "blueprintType": "",
+      "cracked": false,
+      "used": false
+    },
+    "quantity": 5,
+    "state": {
+      "stashed": false
+    },
+    "addiction": "",
+    "addictionMod": 0,
+    "hasSeverity": true,
+    "application": [
+      "dermal",
+      "injection",
+      "oral"
+    ],
+    "base": {
+      "damage": {
+        "damageFormula": "2d10 + 10",
+        "perTurn": true,
+        "armorPiercing": false,
+        "attackTraits": [],
+        "reduceAVbyDV": false,
+        "armorUsed": [],
+        "damageType": "physical"
+      },
+      "duration": 9000,
+      "effects": [],
+      "wearOffStress": "",
+      "notes": "Medichines reduce this damage by half"
+    },
+    "category": "",
+    "classification": "biochem",
+    "consumeOnUse": true,
+    "substanceType": "toxin",
+    "quantityPerCost": 5,
+    "severity": {
+      "check": "som",
+      "checkMod": 0,
+      "conditions": [
+        "immobilized"
+      ],
+      "wearOffStress": "",
+      "damage": {
+        "damageFormula": "",
+        "perTurn": false,
+        "armorPiercing": false,
+        "attackTraits": [],
+        "reduceAVbyDV": false,
+        "armorUsed": [],
+        "damageType": "physical"
+      },
+      "duration": 3600000,
+      "effects": [],
+      "notes": ""
+    }
+  },
+  "flags": {},
+  "effects": [],
+  "_id": "QGJi1sIEgDa5o9Zj",
+  "_key": "!items!QGJi1sIEgDa5o9Zj"
+}

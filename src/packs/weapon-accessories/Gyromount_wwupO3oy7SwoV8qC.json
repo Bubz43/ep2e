@@ -1,0 +1,18 @@
+{
+  "_id": "wwupO3oy7SwoV8qC",
+  "name": "Gyromount",
+  "permission": {
+    "default": 0,
+    "qHi89sFcK4gHlOPd": 3
+  },
+  "folder": "",
+  "flags": {
+    "core": {
+      "sourceId": "JournalEntry.02SXaEm5fLnOfqCj"
+    }
+  },
+  "content": "<p>This weapon harness features a gyro-stabilized weapon mount that keeps the weapon steady. Negate all modifiers from movement.</p>",
+  "pages": [],
+  "categories": [],
+  "_key": "!journal!wwupO3oy7SwoV8qC"
+}

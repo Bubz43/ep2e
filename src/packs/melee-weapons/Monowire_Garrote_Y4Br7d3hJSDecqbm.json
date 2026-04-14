@@ -1,0 +1,54 @@
+{
+  "name": "Monowire Garrote",
+  "permission": {
+    "default": 0,
+    "qJl17WpEHiovQQBC": 3
+  },
+  "type": "meleeWeapon",
+  "system": {
+    "description": "<p>This assassin&rsquo;s weapon features a dangerous near-monomolecular wire wrapped around a contained spool with two handles. One handle grips the spool, while the other extends the wire so that it can be wrapped around targets (typically necks or limbs) and slice through them when pulled. Monofilament tensile strength is weak, however; it breaks on a superior failure. This weapon is wielded with Exotic Skill: Monowire Garrote.</p>",
+    "reference": "Eclipse Phase Second Edition p. 204",
+    "complexity": "moderate",
+    "restricted": true,
+    "quality": "average",
+    "concealable": false,
+    "fragile": true,
+    "singleUse": false,
+    "twoHanded": false,
+    "blueprint": {
+      "blueprintType": "",
+      "cracked": false,
+      "used": false
+    },
+    "state": {
+      "disabled": false,
+      "equipped": false
+    },
+    "primaryAttack": {
+      "armorPiercing": true,
+      "attackTraits": [],
+      "damageFormula": "3d10",
+      "label": "",
+      "notes": ""
+    },
+    "secondaryAttack": {
+      "armorPiercing": false,
+      "attackTraits": [],
+      "damageFormula": "",
+      "label": "",
+      "notes": ""
+    },
+    "hasSecondaryAttack": false,
+    "augmentUnarmed": false,
+    "acceptsPayload": false,
+    "reachBonus": 0,
+    "improvised": false,
+    "touchOnly": false,
+    "wareType": "",
+    "exoticSkill": "Monowire Garrote"
+  },
+  "flags": {},
+  "effects": [],
+  "_id": "Y4Br7d3hJSDecqbm",
+  "_key": "!items!Y4Br7d3hJSDecqbm"
+}

@@ -1,0 +1,63 @@
+{
+  "name": "Machine Pistol",
+  "permission": {
+    "default": 0,
+    "qJl17WpEHiovQQBC": 3
+  },
+  "type": "railgun",
+  "system": {
+    "description": "<p>Holdout pistols sacrifice penetrating ability for concealability. Heavy pistols focus on stopping power, with medium pistols occupying a middle ground. Machine pistols use smaller caliber rounds but provide larger magazines for automatic firing.</p>\n<p>&nbsp;</p>\n<p>Railguns slide and accelerate a non-explosive conductive tungsten slug along electromagnetic rails at extremely high velocities (Mach 6+) to create an overwhelming, penetrating attack. The kinetic energy of the projectile exceeds that of an explosive-filled shell of greater mass and creates shock and heat waves upon impact that shatter and incinerate the target, or portions of it. While railguns are more potent than firearms, they cannot use smart or specialty ammunition as the projectile must be conductive and able to survive both acceleration and heat created in the process due to friction. Nanofabrication allows railguns to be manufactured on the personal-weapons scale while high-energy portable batteries provide the power to fire them. Railgun operation makes no flash and is silent except for the supersonic crack of the projectile.</p>\n<p>Railguns are available in the same models as firearms. They are equipped with standard and nuclear batteries just like beam weapons, holding enough power for 200 shots.</p>",
+    "reference": "Eclipse Phase Second Edition p. 210 - 211",
+    "complexity": "minor",
+    "restricted": true,
+    "quality": "average",
+    "concealable": false,
+    "fragile": false,
+    "singleUse": false,
+    "twoHanded": false,
+    "blueprint": {
+      "blueprintType": "",
+      "cracked": false,
+      "used": false
+    },
+    "state": {
+      "disabled": false,
+      "equipped": false,
+      "braced": false,
+      "interface": false
+    },
+    "fixed": false,
+    "long": false,
+    "shapeChanging": false,
+    "shapeName": "",
+    "accessories": [
+      "safetySystem",
+      "smartlink"
+    ],
+    "ammo": {
+      "ammoClass": "machinePistol",
+      "max": 60,
+      "value": 61
+    },
+    "battery": {
+      "charge": 200,
+      "max": 200,
+      "recharge": 0
+    },
+    "primaryAttack": {
+      "damageFormula": "1d10 + 1d6",
+      "firingModes": [
+        "semiAuto",
+        "burstFire",
+        "fullAuto"
+      ],
+      "notes": ""
+    },
+    "range": 38,
+    "wareType": ""
+  },
+  "flags": {},
+  "effects": [],
+  "_id": "LatHWv79Ncuoq8q8",
+  "_key": "!items!LatHWv79Ncuoq8q8"
+}

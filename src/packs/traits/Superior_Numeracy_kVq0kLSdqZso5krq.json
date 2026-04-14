@@ -1,0 +1,76 @@
+{
+  "_id": "kVq0kLSdqZso5krq",
+  "name": "Superior Numeracy",
+  "permission": {
+    "default": 0,
+    "qHi89sFcK4gHlOPd": 3
+  },
+  "type": "trait",
+  "system": {
+    "description": "<p>You are quite good with numbers. Apply a +10 per level to Know and Technical Tests that directly involve math.</p>",
+    "reference": "Eclipse Phase Second Edition p. 76",
+    "restrictions": "",
+    "triggers": "",
+    "source": "ego",
+    "state": {
+      "level": 0,
+      "triggered": false
+    },
+    "levels": [
+      {
+        "cost": 2,
+        "effects": [
+          {
+            "type": "successTest",
+            "tags": [
+              {
+                "type": "fieldSkill",
+                "fieldSkill": "know",
+                "field": ""
+              },
+              {
+                "type": "skillCategory",
+                "category": "technical"
+              }
+            ],
+            "modifier": 10,
+            "toOpponent": false,
+            "requirement": "involving math",
+            "id": "7djy4m4u9m"
+          }
+        ],
+        "id": "5jtjfqtddr"
+      },
+      {
+        "cost": 4,
+        "effects": [
+          {
+            "type": "successTest",
+            "tags": [
+              {
+                "type": "fieldSkill",
+                "fieldSkill": "know",
+                "field": ""
+              },
+              {
+                "type": "skillCategory",
+                "category": "technical"
+              }
+            ],
+            "modifier": 20,
+            "toOpponent": false,
+            "requirement": "involving math",
+            "id": "7djy4m4u9m"
+          }
+        ],
+        "id": "67m5rcxw1u"
+      }
+    ],
+    "subtype": "",
+    "traitType": "positive"
+  },
+  "flags": {},
+  "img": "icons/svg/mystery-man.svg",
+  "effects": [],
+  "_key": "!items!kVq0kLSdqZso5krq"
+}

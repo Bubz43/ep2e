@@ -1,0 +1,85 @@
+{
+  "_id": "T51C9vDr4qchraFu",
+  "name": "Infection Risk",
+  "permission": {
+    "default": 0,
+    "qHi89sFcK4gHlOPd": 3
+  },
+  "type": "trait",
+  "system": {
+    "description": "<p>Your morph is vulnerable to exsurgent infection. Apply a -10 modifier per level to SOM Checks made to resist biological exsurgent virus infection.</p>",
+    "reference": "Eclipse Phase Second Edition p. 78",
+    "restrictions": "",
+    "triggers": "",
+    "source": "morph",
+    "state": {
+      "level": 0,
+      "triggered": false
+    },
+    "levels": [
+      {
+        "cost": 1,
+        "effects": [
+          {
+            "type": "successTest",
+            "tags": [
+              {
+                "type": "aptitudeCheck",
+                "aptitude": "som"
+              }
+            ],
+            "modifier": -10,
+            "toOpponent": false,
+            "requirement": "resisting biological exsurgent virus infection",
+            "id": "pb2omuc8vf"
+          }
+        ],
+        "id": "5ufg3cmtiy"
+      },
+      {
+        "cost": 2,
+        "effects": [
+          {
+            "type": "successTest",
+            "tags": [
+              {
+                "type": "aptitudeCheck",
+                "aptitude": "som"
+              }
+            ],
+            "modifier": -20,
+            "toOpponent": false,
+            "requirement": "resisting biological exsurgent virus infection",
+            "id": "pb2omuc8vf"
+          }
+        ],
+        "id": "7ru2fns699"
+      },
+      {
+        "cost": 3,
+        "effects": [
+          {
+            "type": "successTest",
+            "tags": [
+              {
+                "type": "aptitudeCheck",
+                "aptitude": "som"
+              }
+            ],
+            "modifier": -30,
+            "toOpponent": false,
+            "requirement": "resisting biological exsurgent virus infection",
+            "id": "pb2omuc8vf"
+          }
+        ],
+        "id": "vrvknlve9l"
+      }
+    ],
+    "subtype": "",
+    "traitType": "negative"
+  },
+  "flags": {},
+  "img": "icons/svg/mystery-man.svg",
+  "effects": [],
+  "_key": "!items!T51C9vDr4qchraFu"
+}

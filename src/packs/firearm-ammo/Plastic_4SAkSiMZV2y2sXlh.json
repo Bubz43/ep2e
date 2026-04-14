@@ -1,0 +1,45 @@
+{
+  "name": "Plastic",
+  "permission": {
+    "default": 0,
+    "qJl17WpEHiovQQBC": 3
+  },
+  "type": "firearmAmmo",
+  "system": {
+    "description": "<p>Plastic ammo is designed to hurt but not wound targets and is commonly used for crowd control purposes.</p>",
+    "reference": "Eclipse Phase Second Edition p. 211",
+    "complexity": "minor",
+    "restricted": false,
+    "quality": "average",
+    "blueprint": {
+      "blueprintType": "",
+      "cracked": false,
+      "used": false
+    },
+    "quantity": 100,
+    "state": {
+      "stashed": false
+    },
+    "ammoClass": "machineGun",
+    "carryPayload": false,
+    "roundsPerComplexity": 100,
+    "modes": [
+      {
+        "name": "",
+        "armorPiercing": false,
+        "attackTraits": [
+          "stun"
+        ],
+        "damageFormula": "",
+        "steady": false,
+        "damageModifierType": "halve",
+        "notes": "(stun only affects biomorphs)",
+        "id": "_defaultID"
+      }
+    ]
+  },
+  "flags": {},
+  "effects": [],
+  "_id": "4SAkSiMZV2y2sXlh",
+  "_key": "!items!4SAkSiMZV2y2sXlh"
+}

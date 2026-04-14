@@ -1,0 +1,39 @@
+{
+  "_id": "kfEC9rsDxGAncuYD",
+  "name": "Lethal",
+  "permission": {
+    "default": 0,
+    "qHi89sFcK4gHlOPd": 3
+  },
+  "type": "trait",
+  "system": {
+    "description": "<p>This morph inflicts more damage in melee combat. Add +1d6 DV to all melee damage rolls.</p>",
+    "reference": "Eclipse Phase Second Edition p. 74",
+    "restrictions": "",
+    "triggers": "",
+    "source": "morph",
+    "state": {
+      "level": 0,
+      "triggered": false
+    },
+    "levels": [
+      {
+        "cost": 1,
+        "effects": [
+          {
+            "type": "melee",
+            "dvModifier": "1d6",
+            "id": "g6d8u65phh"
+          }
+        ],
+        "id": "t34p3c3pfi"
+      }
+    ],
+    "subtype": "",
+    "traitType": "positive"
+  },
+  "flags": {},
+  "img": "icons/svg/mystery-man.svg",
+  "effects": [],
+  "_key": "!items!kfEC9rsDxGAncuYD"
+}

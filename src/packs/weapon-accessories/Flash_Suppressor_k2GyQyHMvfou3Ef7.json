@@ -1,0 +1,18 @@
+{
+  "_id": "k2GyQyHMvfou3Ef7",
+  "name": "Flash Suppressor",
+  "permission": {
+    "default": 0,
+    "qHi89sFcK4gHlOPd": 3
+  },
+  "folder": "",
+  "flags": {
+    "core": {
+      "sourceId": "JournalEntry.pbf639YM7wpVO95d"
+    }
+  },
+  "content": "<p>This device obscures the muzzle flash on firearms, applying a -30 modifier to Perceive Tests to locate a firing weapon by its flash.</p>",
+  "pages": [],
+  "categories": [],
+  "_key": "!journal!k2GyQyHMvfou3Ef7"
+}

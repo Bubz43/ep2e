@@ -1,0 +1,191 @@
+{
+  "name": "Juice",
+  "permission": {
+    "default": 0,
+    "qJl17WpEHiovQQBC": 3
+  },
+  "type": "substance",
+  "system": {
+    "description": "<p>This potent anti-depressant makes it almost impossible to have bad feelings or negative thoughts. You are unnaturally happy and positive &mdash; often irritatingly or strangely so. You receive a +30 modifier to SAV/WIL Checks against fear or attempts to manipulate your emotions in a negative direction. You gain the Enhanced Behavior: Happy (Level 3) trait. Under juice&rsquo;s influence, you may act inappropriately, like giggling over the massive amount of spilled blood or cheerfully changing the subject to inane topics when someone else is freaking out.</p>",
+    "reference": "Eclipse Phase Second Edition p. 335",
+    "complexity": "minor",
+    "restricted": false,
+    "quality": "average",
+    "blueprint": {
+      "blueprintType": "",
+      "cracked": false,
+      "used": false
+    },
+    "quantity": 5,
+    "state": {
+      "stashed": false
+    },
+    "addiction": "mental",
+    "addictionMod": -20,
+    "hasSeverity": false,
+    "application": [
+      "dermal",
+      "inhalation",
+      "injection",
+      "oral"
+    ],
+    "base": {
+      "damage": {
+        "damageFormula": "",
+        "perTurn": false,
+        "armorPiercing": false,
+        "attackTraits": [],
+        "reduceAVbyDV": false,
+        "armorUsed": [],
+        "damageType": "physical"
+      },
+      "duration": 3600000,
+      "effects": [
+        {
+          "type": "successTest",
+          "tags": [
+            {
+              "type": "aptitudeCheck",
+              "aptitude": "sav"
+            },
+            {
+              "type": "aptitudeCheck",
+              "aptitude": "wil"
+            }
+          ],
+          "modifier": 30,
+          "toOpponent": false,
+          "requirement": "opposing fear or negative emotions",
+          "id": "xpk1ev043o"
+        }
+      ],
+      "wearOffStress": "",
+      "notes": ""
+    },
+    "category": "Social",
+    "classification": "biochem",
+    "consumeOnUse": true,
+    "substanceType": "drug",
+    "quantityPerCost": 5,
+    "severity": {
+      "check": "som",
+      "checkMod": 0,
+      "conditions": [],
+      "wearOffStress": "",
+      "damage": {
+        "damageFormula": "",
+        "perTurn": false,
+        "armorPiercing": false,
+        "attackTraits": [],
+        "reduceAVbyDV": false,
+        "armorUsed": [],
+        "damageType": "physical"
+      },
+      "duration": 3000,
+      "effects": [],
+      "notes": ""
+    }
+  },
+  "flags": {
+    "ep2e": {
+      "baseAppliedItems": [
+        {
+          "_id": "Z4lnXqpRk9yPsOQo-base-3uhun5rhof",
+          "name": "Enhanced Behavior: Happy",
+          "permission": {
+            "default": 0,
+            "qHi89sFcK4gHlOPd": 3
+          },
+          "type": "trait",
+          "system": {
+            "description": "<p>Your conduct or moods are modified. This may be due to conditioning and reprogramming via time-accelerated psychosurgery ▶294, drugs, genetic tweaks, psi, or other factors. This may have been a deliberate choice or it may have been inflicted against your will. Work with your GM to define a specific emotion (e.g., happiness, contentment, love) or behavior (e.g., aggression, commitment, curiosity, orderliness, loyalty). Apply a -10 modifier per level to all actions when withheld from the behavior/emotion.</p><p>Level 1: You are encouraged to pursue the behavior and associate it with positive feelings; emotions are boosted.</p><p>Level 2: You are driven to engage in the specified behavior; emotions are exaggerated. Holding back requires a WIL Check.</p><p>Level 3: The behavior is enforced; emotions are compulsory and ongoing. If restrained from the conduct or the emotion is suppressed, suffer SV 1d6.</p><p>This trait may be taken more than once for different behaviors.</p>",
+            "reference": "Eclipse Phase Second Edition p. 78",
+            "restrictions": "",
+            "triggers": "",
+            "source": "morph",
+            "state": {
+              "level": 2,
+              "triggered": false
+            },
+            "levels": [
+              {
+                "cost": 1,
+                "effects": [
+                  {
+                    "type": "successTest",
+                    "tags": [
+                      {
+                        "type": "allActions"
+                      }
+                    ],
+                    "modifier": -10,
+                    "toOpponent": false,
+                    "requirement": "withheld from behavior/emotion",
+                    "id": "unpmong88t"
+                  }
+                ],
+                "id": "fngiund4yp"
+              },
+              {
+                "cost": 2,
+                "effects": [
+                  {
+                    "type": "successTest",
+                    "tags": [
+                      {
+                        "type": "allActions"
+                      }
+                    ],
+                    "modifier": -20,
+                    "toOpponent": false,
+                    "requirement": "withheld from behavior/emotion",
+                    "id": "cgx0t1h7ch"
+                  },
+                  {
+                    "type": "misc",
+                    "unique": "",
+                    "description": "Holding back requires a WIL Check",
+                    "id": "qcskn12n5u"
+                  }
+                ],
+                "id": "tgi795dt5c"
+              },
+              {
+                "cost": 4,
+                "effects": [
+                  {
+                    "type": "successTest",
+                    "tags": [
+                      {
+                        "type": "allActions"
+                      }
+                    ],
+                    "modifier": -30,
+                    "toOpponent": false,
+                    "requirement": "withheld from behavior/emotion",
+                    "id": "nsjss6h3ns"
+                  },
+                  {
+                    "type": "misc",
+                    "unique": "",
+                    "description": "If restrained from conduct or suppressing the emotion, suffer SV 1d6",
+                    "id": "yp1twi8nwr"
+                  }
+                ],
+                "id": "prw6g3i4gq"
+              }
+            ],
+            "subtype": "",
+            "traitType": "negative"
+          },
+          "flags": {},
+          "img": "icons/svg/mystery-man.svg",
+          "effects": []
+        }
+      ]
+    }
+  },
+  "effects": [],
+  "_id": "JzqbAWqd58hNYM5C",
+  "_key": "!items!JzqbAWqd58hNYM5C"
+}

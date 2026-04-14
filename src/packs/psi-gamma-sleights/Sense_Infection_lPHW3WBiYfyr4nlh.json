@@ -1,0 +1,54 @@
+{
+  "name": "Sense Infection",
+  "permission": {
+    "default": 0,
+    "qJl17WpEHiovQQBC": 3
+  },
+  "type": "sleight",
+  "system": {
+    "description": "<p>You detect whether the target is infected with a biological nanovirus or nanoplague strain of the exsurgent virus &mdash; or if they are an async. You know only whether or not the target is infected; superior successes may provide gut feelings about the target&rsquo;s specific strain and its effects.</p>\n<p>GM note: under no circumstances should you provide the name of the strain &mdash; focus on its nature.</p>",
+    "reference": "Eclipse Phase Second Edition p. 285",
+    "duration": "instant",
+    "infectionMod": 2,
+    "sleightType": "gamma",
+    "action": "complex",
+    "timeframe": 0,
+    "effectsToSelf": [],
+    "effectsToTarget": [
+      {
+        "type": "misc",
+        "unique": "",
+        "description": "Detect exsurgent infection in biological life.",
+        "id": "wogfzn4q31"
+      }
+    ],
+    "scaleEffectsOnSuperior": false,
+    "attack": {
+      "useMentalArmor": false,
+      "attackTraits": [],
+      "damageFormula": "",
+      "damageType": "mental",
+      "notes": ""
+    },
+    "heal": {
+      "formula": "",
+      "healthType": "mental"
+    },
+    "mentalArmor": {
+      "apply": false,
+      "divisor": 3,
+      "formula": "1d6"
+    },
+    "status": {
+      "sustaining": false,
+      "pushDuration": 0,
+      "pushed": false,
+      "pushStartTime": 0,
+      "sustainingOn": []
+    }
+  },
+  "flags": {},
+  "effects": [],
+  "_id": "lPHW3WBiYfyr4nlh",
+  "_key": "!items!lPHW3WBiYfyr4nlh"
+}

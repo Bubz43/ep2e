@@ -1,0 +1,44 @@
+{
+  "name": "Conversion Disorder",
+  "permission": {
+    "default": 0,
+    "qJl17WpEHiovQQBC": 3
+  },
+  "type": "trait",
+  "system": {
+    "description": "<p>You suffer a neurological condition such as blindness, deafness, inability to speak, loss of balance, seizures, or paralysis in high-stress situations. Some asyncs suffer from a similar condition, alien sensory disorder, where attempts to use phantom alien sensory organs disrupt one or more of their actual physical senses.</p>",
+    "reference": "Eclipse Phase Second Edition p. 224",
+    "restrictions": "",
+    "triggers": "Alienation, the unkown, violence",
+    "source": "ego",
+    "state": {
+      "level": 0,
+      "triggered": false
+    },
+    "levels": [
+      {
+        "cost": 2,
+        "effects": [
+          {
+            "type": "misc",
+            "unique": "",
+            "description": "WIL Check or suffer from one of the chosen conditions.",
+            "id": "htbwlmakn4"
+          }
+        ],
+        "id": "_defaultLevel"
+      }
+    ],
+    "subtype": "",
+    "traitType": "positive"
+  },
+  "flags": {
+    "core": {
+      "sourceId": "Item.T8bkbQsPN3CVNWXG"
+    }
+  },
+  "img": "icons/svg/mystery-man.svg",
+  "effects": [],
+  "_id": "KRtLAVug932mimDb",
+  "_key": "!items!KRtLAVug932mimDb"
+}

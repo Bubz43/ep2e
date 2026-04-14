@@ -1,0 +1,54 @@
+{
+  "name": "Implant Memory",
+  "permission": {
+    "default": 0,
+    "qJl17WpEHiovQQBC": 3
+  },
+  "type": "sleight",
+  "system": {
+    "description": "<p>You implant a memory of up to an hour&rsquo;s length inside the target&rsquo;s mind. This memory may be completely fabricated, based on your real memories, or a combination of the two. Implanting real memories is useful for archiving important data with an ally, providing a literal alternate perspective, or simply making a memory dump for the target to peruse. Fake memories are often fuzzy and lacking detail, but bolstering them with real memories makes them more convincing. At the GM&rsquo;s discretion, a fake memory that contradicts the target&rsquo;s other memories, is drastically out of character, or includes details that inspire skepticism may be identified as false with an INT Check. Particularly traumatic memories may inflict mental stress on the recipient when they are first experienced. Implanted memories do not overwrite real memories.</p>",
+    "reference": "Eclipse Phase Second Edition p. 284",
+    "duration": "instant",
+    "infectionMod": 6,
+    "sleightType": "gamma",
+    "action": "complex",
+    "timeframe": 0,
+    "effectsToSelf": [],
+    "effectsToTarget": [
+      {
+        "type": "misc",
+        "unique": "",
+        "description": "Implant fake memory permanently in target.",
+        "id": "lnkbd5arso"
+      }
+    ],
+    "scaleEffectsOnSuperior": false,
+    "attack": {
+      "useMentalArmor": false,
+      "attackTraits": [],
+      "damageFormula": "",
+      "damageType": "mental",
+      "notes": ""
+    },
+    "heal": {
+      "formula": "",
+      "healthType": "mental"
+    },
+    "mentalArmor": {
+      "apply": false,
+      "divisor": 3,
+      "formula": "1d6"
+    },
+    "status": {
+      "sustaining": false,
+      "pushDuration": 0,
+      "pushed": false,
+      "pushStartTime": 0,
+      "sustainingOn": []
+    }
+  },
+  "flags": {},
+  "effects": [],
+  "_id": "FrxTtmEhpwEnSzKW",
+  "_key": "!items!FrxTtmEhpwEnSzKW"
+}

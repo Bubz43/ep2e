@@ -1,0 +1,949 @@
+{
+  "_id": "FyCJL0C21rbuD9CJ",
+  "name": "Smart Hawk",
+  "type": "character",
+  "sort": 100001,
+  "flags": {
+    "ep2e": {
+      "biological": {
+        "name": "Smart Hawk",
+        "permission": {
+          "default": 0,
+          "qJl17WpEHiovQQBC": 3
+        },
+        "type": "biological",
+        "folder": "c14Gbxurusgb9xVz",
+        "sort": 900001,
+        "flags": {},
+        "prototypeToken": {
+          "flags": {},
+          "name": "Smart Hawk",
+          "displayName": 0,
+          "img": "icons/svg/mystery-man.svg",
+          "tint": null,
+          "width": 1,
+          "height": 1,
+          "scale": 1,
+          "lockRotation": false,
+          "rotation": 0,
+          "vision": false,
+          "dimSight": 0,
+          "brightSight": 0,
+          "dimLight": 0,
+          "brightLight": 0,
+          "sightAngle": 360,
+          "lightAngle": 360,
+          "lightAlpha": 1,
+          "lightAnimation": {
+            "speed": 5,
+            "intensity": 5
+          },
+          "actorId": "JY4GAaPNlsVknidn",
+          "actorLink": true,
+          "disposition": -1,
+          "displayBars": 0,
+          "bar1": {},
+          "bar2": {},
+          "randomImg": false
+        },
+        "items": [
+          {
+            "_id": "wsFjREUxjJamxC8e",
+            "name": "Enhanced Hearing",
+            "type": "physicalTech",
+            "system": {
+              "description": "<p>The morph&rsquo;s ears can hear both higher and lower frequency sounds &mdash; the range of sounds they can hear is twice that of normal human ears (Senses and Sensors ▶318). Your hearing is also more sensitive, allowing you to hear sounds as if you are 5 times closer. Apply a +10 to hearing-based Perceive Tests.</p>",
+              "reference": "Eclipse Phase Second Edition p. 318",
+              "complexity": "minor",
+              "restricted": false,
+              "quality": "average",
+              "concealable": false,
+              "fragile": false,
+              "singleUse": false,
+              "twoHanded": false,
+              "blueprint": {
+                "blueprintType": "",
+                "cracked": false,
+                "used": false
+              },
+              "state": {
+                "disabled": false,
+                "equipped": true,
+                "fabStartTime": 6471555000,
+                "activated": false,
+                "embeddedEgos": [],
+                "onboardAliDeleted": false
+              },
+              "activatedEffects": [],
+              "deviceType": "",
+              "category": "Sensory Augments",
+              "fabricator": "",
+              "activationAction": "automatic",
+              "passiveEffects": [
+                {
+                  "type": "misc",
+                  "unique": "",
+                  "description": "Hear higher and lower frequencies.",
+                  "id": "beyatjatoa"
+                },
+                {
+                  "type": "successTest",
+                  "tags": [
+                    {
+                      "type": "skill",
+                      "skillType": "perceive"
+                    }
+                  ],
+                  "modifier": 10,
+                  "toOpponent": false,
+                  "requirement": "hearing related",
+                  "id": "cf70cje5od"
+                }
+              ],
+              "activation": "none",
+              "resistEffectsCheck": "",
+              "usedEffectsDuration": 3000,
+              "onboardALI": false,
+              "firewallRating": 30,
+              "fabPrintDuration": 0,
+              "firewallHealth": {
+                "baseDurability": 30,
+                "rebootEndTime": -1,
+                "crashWounds": 0,
+                "damage": 0,
+                "log": [],
+                "wounds": 0
+              },
+              "meshHealth": {
+                "baseDurability": 20,
+                "damage": 0,
+                "wounds": 0,
+                "aidedHealTickStartTime": 0,
+                "ownHealTickStartTime": 0,
+                "damageRepair": {
+                  "amount": "1d10",
+                  "interval": 86400000
+                },
+                "woundRepair": {
+                  "amount": 1,
+                  "interval": 86400000
+                },
+                "log": [],
+                "rebootEndTime": -1,
+                "crashWounds": 0
+              },
+              "wareType": "bioware"
+            },
+            "sort": 600001,
+            "flags": {},
+            "img": "icons/svg/mystery-man.svg",
+            "effects": []
+          },
+          {
+            "_id": "Rs90fOeVt8JWdH8n",
+            "name": "Enhanced Vision",
+            "type": "physicalTech",
+            "system": {
+              "description": "<p>The morph&rsquo;s eyes have tetrachromatic vision capable of exceptional color differentiation. These eyes can also see the electromagnetic spectrum from terahertz wave frequencies to gamma rays, enabling them to see a total of several dozen colors, instead of the seven ordinary human eyes can perceive (Senses and Sensors ▶318). In addition, these eyes have a variable focus equivalent to 5 power magnifiers or binoculars. You can also selectively filter what frequencies you perceive to avoid minor distractions on those wavelengths. This augmentation provides a +10 modifier to all Perceive Tests involving vision.</p>",
+              "reference": "Eclipse Phase Second Edition p. 318",
+              "complexity": "moderate",
+              "restricted": false,
+              "quality": "average",
+              "concealable": false,
+              "fragile": false,
+              "singleUse": false,
+              "twoHanded": false,
+              "blueprint": {
+                "blueprintType": "",
+                "cracked": false,
+                "used": false
+              },
+              "state": {
+                "disabled": false,
+                "equipped": true,
+                "fabStartTime": 6471555000,
+                "activated": false,
+                "embeddedEgos": [],
+                "onboardAliDeleted": false
+              },
+              "activatedEffects": [],
+              "deviceType": "",
+              "category": "Standard Augments",
+              "fabricator": "",
+              "activationAction": "automatic",
+              "passiveEffects": [
+                {
+                  "type": "successTest",
+                  "tags": [
+                    {
+                      "type": "skill",
+                      "skillType": "perceive"
+                    }
+                  ],
+                  "modifier": 10,
+                  "toOpponent": false,
+                  "requirement": "vision related",
+                  "id": "245dni6e3p"
+                },
+                {
+                  "type": "misc",
+                  "unique": "",
+                  "description": "Tetrachromatic vision, wider frequency range, better focus.",
+                  "id": "onyzngmjwq"
+                }
+              ],
+              "activation": "none",
+              "resistEffectsCheck": "",
+              "usedEffectsDuration": 3000,
+              "onboardALI": false,
+              "firewallRating": 30,
+              "fabPrintDuration": 0,
+              "firewallHealth": {
+                "baseDurability": 30,
+                "rebootEndTime": -1,
+                "crashWounds": 0,
+                "damage": 0,
+                "log": [],
+                "wounds": 0
+              },
+              "meshHealth": {
+                "baseDurability": 20,
+                "damage": 0,
+                "wounds": 0,
+                "aidedHealTickStartTime": 0,
+                "ownHealTickStartTime": 0,
+                "damageRepair": {
+                  "amount": "1d10",
+                  "interval": 86400000
+                },
+                "woundRepair": {
+                  "amount": 1,
+                  "interval": 86400000
+                },
+                "log": [],
+                "rebootEndTime": -1,
+                "crashWounds": 0
+              },
+              "wareType": "bioware"
+            },
+            "sort": 800001,
+            "flags": {},
+            "img": "icons/svg/mystery-man.svg",
+            "effects": []
+          },
+          {
+            "_id": "YLIRJtqVnb4fy0Un",
+            "name": "Claws",
+            "type": "meleeWeapon",
+            "system": {
+              "description": "<p>The morph has retractable claws like those of a cat. These claws do not interfere with manual dexterity and are razor sharp. They are legal in most habitats and considered tools as much as weapons. A set of claws in each hand counts as a single weapon.</p>",
+              "reference": "Eclipse Phase Second Edition p. 204",
+              "complexity": "minor",
+              "restricted": false,
+              "quality": "average",
+              "concealable": true,
+              "fragile": false,
+              "singleUse": false,
+              "twoHanded": false,
+              "blueprint": {
+                "blueprintType": "",
+                "cracked": false,
+                "used": false
+              },
+              "state": {
+                "disabled": false,
+                "equipped": true
+              },
+              "primaryAttack": {
+                "armorPiercing": false,
+                "attackTraits": [],
+                "damageFormula": "2d6",
+                "label": "",
+                "notes": ""
+              },
+              "secondaryAttack": {
+                "armorPiercing": false,
+                "attackTraits": [],
+                "damageFormula": "",
+                "label": "",
+                "notes": ""
+              },
+              "hasSecondaryAttack": false,
+              "augmentUnarmed": false,
+              "acceptsPayload": false,
+              "reachBonus": 0,
+              "improvised": false,
+              "touchOnly": false,
+              "wareType": "bioware",
+              "exoticSkill": "Claws"
+            },
+            "sort": 3900000,
+            "flags": {},
+            "img": "icons/svg/mystery-man.svg",
+            "effects": []
+          }
+        ],
+        "effects": [],
+        "_id": "JY4GAaPNlsVknidn",
+        "img": "icons/svg/mystery-man.svg",
+        "system": {
+          "description": "<p>Enhanced versions of peregrine falcons and other predatory birds are common in large, open habitats. The art of falconry has made a comeback, with birds trained for surveillance and tracking.</p>",
+          "reference": "Eclipse Phase Second Edition p. 328",
+          "movementRates": [
+            {
+              "type": "winged",
+              "base": 8,
+              "full": 32,
+              "id": "jjgvw7svt0"
+            }
+          ],
+          "acquisition": {
+            "availability": 0,
+            "complexity": "minor",
+            "cost": 0,
+            "resource": "gearPoints",
+            "restricted": false
+          },
+          "pools": {
+            "insight": 0,
+            "moxie": 0,
+            "vigor": 0,
+            "flex": 0
+          },
+          "conditions": [],
+          "damagedArmor": [],
+          "prehensileLimbs": 0,
+          "sex": "",
+          "subtype": "Smart Animal",
+          "unarmedDV": "1d6",
+          "isSwarm": false,
+          "brain": "",
+          "recoveryConditions": "normal",
+          "size": "small",
+          "reach": 0,
+          "physicalHealth": {
+            "baseDurability": 15,
+            "bleedingOut": false,
+            "damage": 0,
+            "dots": [],
+            "aidedHealTickStartTime": 0,
+            "ownHealTickStartTime": 0,
+            "damageRepair": {
+              "amount": "1d10",
+              "interval": 86400000
+            },
+            "woundRepair": {
+              "amount": 1,
+              "interval": 604800000
+            },
+            "log": [],
+            "wounds": 0
+          }
+        }
+      }
+    }
+  },
+  "items": [
+    {
+      "_id": "iM0dMLsdS4rT3TCj",
+      "name": "Enhanced Hearing",
+      "type": "physicalTech",
+      "sort": 600001,
+      "flags": {},
+      "img": "icons/svg/mystery-man.svg",
+      "effects": [],
+      "system": {
+        "description": "<p>The morph&rsquo;s ears can hear both higher and lower frequency sounds &mdash; the range of sounds they can hear is twice that of normal human ears (Senses and Sensors ▶318). Your hearing is also more sensitive, allowing you to hear sounds as if you are 5 times closer. Apply a +10 to hearing-based Perceive Tests.</p>",
+        "reference": "Eclipse Phase Second Edition p. 318",
+        "complexity": "minor",
+        "restricted": false,
+        "quality": "average",
+        "concealable": false,
+        "fragile": false,
+        "singleUse": false,
+        "twoHanded": false,
+        "blueprint": {
+          "blueprintType": "",
+          "cracked": false,
+          "used": false
+        },
+        "state": {
+          "disabled": false,
+          "equipped": true,
+          "fabStartTime": 6471555000,
+          "activated": false,
+          "embeddedEgos": [],
+          "onboardAliDeleted": false
+        },
+        "activatedEffects": [],
+        "deviceType": "",
+        "category": "Sensory Augments",
+        "fabricator": "",
+        "activationAction": "automatic",
+        "passiveEffects": [
+          {
+            "type": "misc",
+            "unique": "",
+            "description": "Hear higher and lower frequencies.",
+            "id": "beyatjatoa"
+          },
+          {
+            "type": "successTest",
+            "tags": [
+              {
+                "type": "skill",
+                "skillType": "perceive"
+              }
+            ],
+            "modifier": 10,
+            "toOpponent": false,
+            "requirement": "hearing related",
+            "id": "cf70cje5od"
+          }
+        ],
+        "activation": "none",
+        "resistEffectsCheck": "",
+        "usedEffectsDuration": 3000,
+        "onboardALI": false,
+        "firewallRating": 30,
+        "fabPrintDuration": 0,
+        "firewallHealth": {
+          "baseDurability": 30,
+          "rebootEndTime": -1,
+          "crashWounds": 0,
+          "damage": 0,
+          "log": [],
+          "wounds": 0
+        },
+        "meshHealth": {
+          "baseDurability": 20,
+          "damage": 0,
+          "wounds": 0,
+          "aidedHealTickStartTime": 0,
+          "ownHealTickStartTime": 0,
+          "damageRepair": {
+            "amount": "1d10",
+            "interval": 86400000
+          },
+          "woundRepair": {
+            "amount": 1,
+            "interval": 86400000
+          },
+          "log": [],
+          "rebootEndTime": -1,
+          "crashWounds": 0
+        },
+        "wareType": "bioware"
+      },
+      "folder": null,
+      "ownership": {
+        "default": 0
+      },
+      "_stats": {
+        "systemId": null,
+        "systemVersion": null,
+        "coreVersion": null,
+        "createdTime": null,
+        "modifiedTime": null,
+        "lastModifiedBy": null
+      },
+      "_key": "!actors.items!FyCJL0C21rbuD9CJ.iM0dMLsdS4rT3TCj"
+    },
+    {
+      "_id": "VcBbyculSQfXQyne",
+      "name": "Enhanced Vision",
+      "type": "physicalTech",
+      "sort": 800001,
+      "flags": {},
+      "img": "icons/svg/mystery-man.svg",
+      "effects": [],
+      "system": {
+        "description": "<p>The morph&rsquo;s eyes have tetrachromatic vision capable of exceptional color differentiation. These eyes can also see the electromagnetic spectrum from terahertz wave frequencies to gamma rays, enabling them to see a total of several dozen colors, instead of the seven ordinary human eyes can perceive (Senses and Sensors ▶318). In addition, these eyes have a variable focus equivalent to 5 power magnifiers or binoculars. You can also selectively filter what frequencies you perceive to avoid minor distractions on those wavelengths. This augmentation provides a +10 modifier to all Perceive Tests involving vision.</p>",
+        "reference": "Eclipse Phase Second Edition p. 318",
+        "complexity": "moderate",
+        "restricted": false,
+        "quality": "average",
+        "concealable": false,
+        "fragile": false,
+        "singleUse": false,
+        "twoHanded": false,
+        "blueprint": {
+          "blueprintType": "",
+          "cracked": false,
+          "used": false
+        },
+        "state": {
+          "disabled": false,
+          "equipped": true,
+          "fabStartTime": 6471555000,
+          "activated": false,
+          "embeddedEgos": [],
+          "onboardAliDeleted": false
+        },
+        "activatedEffects": [],
+        "deviceType": "",
+        "category": "Standard Augments",
+        "fabricator": "",
+        "activationAction": "automatic",
+        "passiveEffects": [
+          {
+            "type": "successTest",
+            "tags": [
+              {
+                "type": "skill",
+                "skillType": "perceive"
+              }
+            ],
+            "modifier": 10,
+            "toOpponent": false,
+            "requirement": "vision related",
+            "id": "245dni6e3p"
+          },
+          {
+            "type": "misc",
+            "unique": "",
+            "description": "Tetrachromatic vision, wider frequency range, better focus.",
+            "id": "onyzngmjwq"
+          }
+        ],
+        "activation": "none",
+        "resistEffectsCheck": "",
+        "usedEffectsDuration": 3000,
+        "onboardALI": false,
+        "firewallRating": 30,
+        "fabPrintDuration": 0,
+        "firewallHealth": {
+          "baseDurability": 30,
+          "rebootEndTime": -1,
+          "crashWounds": 0,
+          "damage": 0,
+          "log": [],
+          "wounds": 0
+        },
+        "meshHealth": {
+          "baseDurability": 20,
+          "damage": 0,
+          "wounds": 0,
+          "aidedHealTickStartTime": 0,
+          "ownHealTickStartTime": 0,
+          "damageRepair": {
+            "amount": "1d10",
+            "interval": 86400000
+          },
+          "woundRepair": {
+            "amount": 1,
+            "interval": 86400000
+          },
+          "log": [],
+          "rebootEndTime": -1,
+          "crashWounds": 0
+        },
+        "wareType": "bioware"
+      },
+      "folder": null,
+      "ownership": {
+        "default": 0
+      },
+      "_stats": {
+        "systemId": null,
+        "systemVersion": null,
+        "coreVersion": null,
+        "createdTime": null,
+        "modifiedTime": null,
+        "lastModifiedBy": null
+      },
+      "_key": "!actors.items!FyCJL0C21rbuD9CJ.VcBbyculSQfXQyne"
+    },
+    {
+      "_id": "G1hMbaAfqaASIekT",
+      "name": "Claws",
+      "type": "meleeWeapon",
+      "sort": 3900000,
+      "flags": {},
+      "img": "icons/svg/mystery-man.svg",
+      "effects": [],
+      "system": {
+        "description": "<p>The morph has retractable claws like those of a cat. These claws do not interfere with manual dexterity and are razor sharp. They are legal in most habitats and considered tools as much as weapons. A set of claws in each hand counts as a single weapon.</p>",
+        "reference": "Eclipse Phase Second Edition p. 204",
+        "complexity": "minor",
+        "restricted": false,
+        "quality": "average",
+        "concealable": true,
+        "fragile": false,
+        "singleUse": false,
+        "twoHanded": false,
+        "blueprint": {
+          "blueprintType": "",
+          "cracked": false,
+          "used": false
+        },
+        "state": {
+          "disabled": false,
+          "equipped": true,
+          "used": false
+        },
+        "primaryAttack": {
+          "armorPiercing": false,
+          "attackTraits": [],
+          "damageFormula": "2d6",
+          "label": "",
+          "notes": ""
+        },
+        "secondaryAttack": {
+          "armorPiercing": false,
+          "attackTraits": [],
+          "damageFormula": "",
+          "label": "",
+          "notes": ""
+        },
+        "hasSecondaryAttack": false,
+        "augmentUnarmed": false,
+        "acceptsPayload": false,
+        "reachBonus": 0,
+        "improvised": false,
+        "touchOnly": false,
+        "wareType": "bioware",
+        "exoticSkill": "Claws"
+      },
+      "folder": null,
+      "ownership": {
+        "default": 0
+      },
+      "_stats": {
+        "systemId": null,
+        "systemVersion": null,
+        "coreVersion": null,
+        "createdTime": null,
+        "modifiedTime": null,
+        "lastModifiedBy": null
+      },
+      "_key": "!actors.items!FyCJL0C21rbuD9CJ.G1hMbaAfqaASIekT"
+    }
+  ],
+  "effects": [],
+  "system": {
+    "description": "",
+    "reference": "Eclipse Phase Second Edition p. 328",
+    "fakeId": "",
+    "aptitudes": {
+      "cog": 5,
+      "int": 15,
+      "ref": 15,
+      "sav": 5,
+      "som": 15,
+      "wil": 15
+    },
+    "temporary": [],
+    "favoriteItems": [],
+    "purchaseLog": [],
+    "fieldSkills": {
+      "exotic": [],
+      "hardware": [],
+      "know": [],
+      "medicine": [],
+      "pilot": []
+    },
+    "homeDevice": {
+      "actorId": "",
+      "itemId": ""
+    },
+    "network": {
+      "masterDeviceId": "",
+      "systemDefenders": [],
+      "unslavedDevices": []
+    },
+    "assets": [],
+    "settings": {
+      "canDefault": false,
+      "trackMentalHealth": true,
+      "useThreat": false,
+      "characterDetails": true,
+      "threatDetails": false,
+      "trackPoints": false,
+      "trackReputations": false,
+      "ignoreOverburdened": false
+    },
+    "shortRecharge": {
+      "refreshStartTime": 0,
+      "taken": 0
+    },
+    "longRecharge": {
+      "refreshStartTime": 0,
+      "taken": 0
+    },
+    "motivations": [],
+    "points": {
+      "customization": 0,
+      "gear": 0,
+      "morph": 0,
+      "rez": 0,
+      "credits": 0
+    },
+    "accumulatedTimeStart": 0,
+    "tasks": [],
+    "reps": {
+      "@Rep": {
+        "major": 0,
+        "minor": 0,
+        "moderate": 0,
+        "refreshStartTime": 0,
+        "score": 0,
+        "track": false
+      },
+      "cRep": {
+        "major": 0,
+        "minor": 0,
+        "moderate": 0,
+        "refreshStartTime": 0,
+        "score": 0,
+        "track": false
+      },
+      "fRep": {
+        "major": 0,
+        "minor": 0,
+        "moderate": 0,
+        "refreshStartTime": 0,
+        "score": 0,
+        "track": false
+      },
+      "gRep": {
+        "major": 0,
+        "minor": 0,
+        "moderate": 0,
+        "refreshStartTime": 0,
+        "score": 0,
+        "track": false
+      },
+      "iRep": {
+        "major": 0,
+        "minor": 0,
+        "moderate": 0,
+        "refreshStartTime": 0,
+        "score": 0,
+        "track": false
+      },
+      "rRep": {
+        "major": 0,
+        "minor": 0,
+        "moderate": 0,
+        "refreshStartTime": 0,
+        "score": 0,
+        "track": false
+      },
+      "xRep": {
+        "major": 0,
+        "minor": 0,
+        "moderate": 0,
+        "refreshStartTime": 0,
+        "score": 0,
+        "track": false
+      }
+    },
+    "skills": {
+      "athletics": {
+        "points": 55,
+        "specialization": ""
+      },
+      "deceive": {
+        "points": 0,
+        "specialization": ""
+      },
+      "fray": {
+        "points": 20,
+        "specialization": ""
+      },
+      "freeFall": {
+        "points": 0,
+        "specialization": ""
+      },
+      "guns": {
+        "points": 0,
+        "specialization": ""
+      },
+      "infiltrate": {
+        "points": 15,
+        "specialization": ""
+      },
+      "infosec": {
+        "points": 0,
+        "specialization": ""
+      },
+      "interface": {
+        "points": 0,
+        "specialization": ""
+      },
+      "kinesics": {
+        "points": 0,
+        "specialization": ""
+      },
+      "melee": {
+        "points": 35,
+        "specialization": ""
+      },
+      "perceive": {
+        "points": 20,
+        "specialization": ""
+      },
+      "persuade": {
+        "points": 0,
+        "specialization": ""
+      },
+      "program": {
+        "points": 0,
+        "specialization": ""
+      },
+      "provoke": {
+        "points": 0,
+        "specialization": ""
+      },
+      "psi": {
+        "points": 0,
+        "specialization": ""
+      },
+      "research": {
+        "points": 0,
+        "specialization": ""
+      },
+      "survival": {
+        "points": 0,
+        "specialization": ""
+      }
+    },
+    "spentPools": {
+      "flex": 0,
+      "insight": 0,
+      "moxie": 0,
+      "threat": 0,
+      "vigor": 0
+    },
+    "flex": 0,
+    "threat": 0,
+    "characterDetails": {
+      "age": "",
+      "aliases": "",
+      "background": "",
+      "career": "",
+      "faction": "",
+      "gender": "",
+      "interest": "",
+      "languages": ""
+    },
+    "egoType": "Smart Animal",
+    "forkType": "",
+    "threatDetails": {
+      "level": "yellow",
+      "niche": "",
+      "numbers": "",
+      "stress": {
+        "sv": "",
+        "minSV": 1,
+        "minStressOption": "none",
+        "notes": ""
+      }
+    },
+    "combatState": {
+      "complexAim": false,
+      "fullDefense": "",
+      "aggressive": false
+    },
+    "mentalHealth": {
+      "alienation": 0,
+      "damage": 0,
+      "helplessness": 0,
+      "log": [],
+      "naturalHealAttempts": [],
+      "violence": 0,
+      "wounds": 0,
+      "lastGainedStressTime": 0,
+      "aidedHealTickStartTime": -1,
+      "damageRepair": {
+        "amount": "",
+        "interval": 0
+      },
+      "ownHealTickStartTime": -1,
+      "woundRepair": {
+        "interval": 0,
+        "amount": 0
+      }
+    }
+  },
+  "ownership": {
+    "default": 0,
+    "qJl17WpEHiovQQBC": 3
+  },
+  "prototypeToken": {
+    "flags": {},
+    "name": "Smart Hawk",
+    "displayName": 0,
+    "width": 1,
+    "height": 1,
+    "lockRotation": false,
+    "rotation": 0,
+    "actorLink": true,
+    "disposition": -1,
+    "displayBars": 0,
+    "bar1": {
+      "attribute": null
+    },
+    "bar2": {
+      "attribute": null
+    },
+    "randomImg": false,
+    "light": {
+      "dim": 0,
+      "bright": 0,
+      "angle": 360,
+      "alpha": 1,
+      "animation": {
+        "speed": 5,
+        "intensity": 5,
+        "type": null,
+        "reverse": false
+      },
+      "color": null,
+      "coloration": 1,
+      "attenuation": 0.5,
+      "luminosity": 0.5,
+      "saturation": 0,
+      "contrast": 0,
+      "shadows": 0,
+      "darkness": {
+        "min": 0,
+        "max": 1
+      }
+    },
+    "texture": {
+      "src": "icons/svg/mystery-man.svg",
+      "tint": null,
+      "scaleX": 1,
+      "scaleY": 1,
+      "offsetX": 0,
+      "offsetY": 0,
+      "rotation": 0
+    },
+    "sight": {
+      "angle": 360,
+      "enabled": false,
+      "range": 0,
+      "brightness": 1,
+      "visionMode": "basic",
+      "color": null,
+      "attenuation": 0.1,
+      "saturation": 0,
+      "contrast": 0
+    },
+    "alpha": 1,
+    "detectionModes": []
+  },
+  "img": "icons/svg/mystery-man.svg",
+  "folder": null,
+  "_stats": {
+    "systemId": "ep2e",
+    "systemVersion": "1.0",
+    "coreVersion": "10.279",
+    "createdTime": null,
+    "modifiedTime": 1661875708327,
+    "lastModifiedBy": "insS7Tc4tz1EbXlo"
+  },
+  "_key": "!actors!FyCJL0C21rbuD9CJ"
+}

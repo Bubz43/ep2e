@@ -1,0 +1,55 @@
+{
+  "name": "Burst of Clarity",
+  "permission": {
+    "default": 0,
+    "qJl17WpEHiovQQBC": 3
+  },
+  "type": "sleight",
+  "system": {
+    "description": "<p>You refresh the target&rsquo;s mind, enabling them to see things in a new light. They receive +1 Insight pool for WIL &divide; 5 minutes. A target may only benefit from one burst of clarity at a time.</p>",
+    "reference": "Eclipse Phase Second Edition p. 283",
+    "duration": "minutes",
+    "infectionMod": 6,
+    "sleightType": "gamma",
+    "action": "complex",
+    "timeframe": 0,
+    "effectsToSelf": [],
+    "effectsToTarget": [
+      {
+        "type": "pool",
+        "pool": "insight",
+        "modifier": 1,
+        "usabilityModification": "",
+        "id": "t8qe2vlv4g"
+      }
+    ],
+    "scaleEffectsOnSuperior": false,
+    "attack": {
+      "useMentalArmor": false,
+      "attackTraits": [],
+      "damageFormula": "",
+      "damageType": "mental",
+      "notes": ""
+    },
+    "heal": {
+      "formula": "",
+      "healthType": "mental"
+    },
+    "mentalArmor": {
+      "apply": false,
+      "divisor": 3,
+      "formula": "1d6"
+    },
+    "status": {
+      "sustaining": false,
+      "pushDuration": 0,
+      "pushed": false,
+      "pushStartTime": 0,
+      "sustainingOn": []
+    }
+  },
+  "flags": {},
+  "effects": [],
+  "_id": "kOlUKl3cItw5JJ8E",
+  "_key": "!items!kOlUKl3cItw5JJ8E"
+}

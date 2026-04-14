@@ -1,0 +1,26 @@
+{
+  "name": "Recovery Bond (Hazardous)",
+  "permission": {
+    "default": 0,
+    "qJl17WpEHiovQQBC": 3
+  },
+  "type": "physicalService",
+  "system": {
+    "description": "<p>A team will seek to retrieve your stack despite threats/legalities.</p>\n<p>&nbsp;</p>\n<p>As a regular bond, except that a team of agents will seek out your stack even against adverse and hostile conditions, including infiltrating war zones and running rescue ops on unknown exoplanets. This may include stealing the stack back from hostile parties.</p>",
+    "reference": "Eclipse Phase Second Edition p. 315",
+    "complexity": "rare",
+    "restricted": false,
+    "quality": "average",
+    "serviceDuration": -1,
+    "reputations": [],
+    "serviceType": "generic",
+    "state": {
+      "serviceStartTime": 0,
+      "equipped": false
+    }
+  },
+  "flags": {},
+  "effects": [],
+  "_id": "i3Yvr9H1RDioascu",
+  "_key": "!items!i3Yvr9H1RDioascu"
+}

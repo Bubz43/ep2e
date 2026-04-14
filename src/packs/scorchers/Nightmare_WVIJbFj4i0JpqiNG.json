@@ -1,0 +1,100 @@
+{
+  "name": "Nightmare",
+  "permission": {
+    "default": 0,
+    "qJl17WpEHiovQQBC": 3
+  },
+  "type": "software",
+  "system": {
+    "description": "<p>Nightmares trigger anxiety and panic attacks within the victim by stimulating the neural circuitry representing the amygdala and hippocampus. The target ego must make a WIL Check. If they succeed, they are shaken, suffering a -10 impairment modifier to all actions until the end of the next action turn. If they fail, they suffer SV 1d6 and suffer an acute stress response ▶222 lasting for 1d6 minutes, +1 per superior failure.</p>",
+    "reference": "Eclipse Phase Second Edition p. 327",
+    "complexity": "moderate",
+    "restricted": true,
+    "quality": "average",
+    "softwareType": "app",
+    "activatedEffects": [],
+    "effects": [],
+    "category": "Scorchers",
+    "serviceDuration": -1,
+    "skills": [],
+    "activation": "",
+    "meshAttacks": 1,
+    "meshHealth": {
+      "baseDurability": 10,
+      "damage": 0,
+      "log": [],
+      "wounds": 0,
+      "rebootEndTime": -1,
+      "crashWounds": 0
+    },
+    "state": {
+      "activated": false,
+      "equipped": false,
+      "serviceStartTime": 0,
+      "paused": false
+    },
+    "primaryAttack": {
+      "armorPiercing": false,
+      "attackTraits": [],
+      "damageFormula": "",
+      "damageType": "mesh",
+      "useMeshArmor": true,
+      "notes": "Trigger anxiety/panic",
+      "aptitudeCheckInfo": {
+        "armorAsModifier": "",
+        "check": "wil",
+        "checkModifier": 0,
+        "checkFailure": [
+          {
+            "condition": "",
+            "impairment": 0,
+            "stress": "1d6",
+            "notes": "suffer an acute stress response ▶223",
+            "fallDown": false,
+            "additionalDurationPerSuperior": 60000,
+            "staticDuration": 0,
+            "variableDuration": "1d6",
+            "variableInterval": "turns"
+          }
+        ],
+        "checkSuccess": [
+          {
+            "condition": "",
+            "impairment": -10,
+            "stress": "",
+            "notes": "",
+            "fallDown": false,
+            "staticDuration": 3000,
+            "variableDuration": "",
+            "variableInterval": "turns"
+          }
+        ],
+        "criticalCheckFailure": []
+      },
+      "label": "",
+      "reduceAVbyDV": false
+    },
+    "secondaryAttack": {
+      "armorPiercing": false,
+      "attackTraits": [],
+      "damageFormula": "",
+      "damageType": "mesh",
+      "useMeshArmor": true,
+      "notes": "",
+      "aptitudeCheckInfo": {
+        "armorAsModifier": "",
+        "check": "",
+        "checkModifier": 0,
+        "checkFailure": [],
+        "checkSuccess": [],
+        "criticalCheckFailure": []
+      },
+      "label": "",
+      "reduceAVbyDV": false
+    }
+  },
+  "flags": {},
+  "effects": [],
+  "_id": "WVIJbFj4i0JpqiNG",
+  "_key": "!items!WVIJbFj4i0JpqiNG"
+}

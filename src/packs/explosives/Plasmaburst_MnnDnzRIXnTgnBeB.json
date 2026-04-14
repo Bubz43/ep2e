@@ -1,0 +1,57 @@
+{
+  "name": "Plasmaburst",
+  "permission": {
+    "default": 0,
+    "qJl17WpEHiovQQBC": 3
+  },
+  "type": "explosive",
+  "system": {
+    "description": "<p>These munitions release a burst of plasma upon detonation that causes searing heat and fire damage across the area of effect without the devastating shockwaves of explosions that might rebound in an enclosed environment and/or breach a habitat&rsquo;s infrastructure.</p>",
+    "reference": "Eclipse Phase Second Edition p. 212",
+    "complexity": "major",
+    "restricted": true,
+    "quality": "average",
+    "blueprint": {
+      "blueprintType": "",
+      "cracked": false,
+      "used": false
+    },
+    "quantity": 5,
+    "state": {
+      "stashed": false
+    },
+    "areaEffect": "centered",
+    "explosiveType": "grenade",
+    "useSubstance": "",
+    "areaEffectRadius": 10,
+    "size": "micro",
+    "sticky": true,
+    "unitsPerComplexity": 5,
+    "dosesPerUnit": 1,
+    "hasSecondaryMode": false,
+    "primaryAttack": {
+      "armorUsed": "energy",
+      "attackTraits": [],
+      "armorPiercing": true,
+      "damageFormula": "3d10 + 10",
+      "duration": 0,
+      "attackTraitNotes": "",
+      "label": "",
+      "notes": ""
+    },
+    "secondaryAttack": {
+      "armorUsed": "",
+      "attackTraits": [],
+      "armorPiercing": false,
+      "damageFormula": "",
+      "duration": 0,
+      "attackTraitNotes": "",
+      "label": "",
+      "notes": ""
+    }
+  },
+  "flags": {},
+  "effects": [],
+  "_id": "MnnDnzRIXnTgnBeB",
+  "_key": "!items!MnnDnzRIXnTgnBeB"
+}

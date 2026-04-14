@@ -1,0 +1,54 @@
+{
+  "name": "Induce Error",
+  "permission": {
+    "default": 0,
+    "qJl17WpEHiovQQBC": 3
+  },
+  "type": "sleight",
+  "system": {
+    "description": "<p>You create a glitch in the target&rsquo;s mind that causes them to unconsciously do something wrong. The target automatically fails a random skill test (chosen by the GM) made in the next WIL &divide; 5 minutes. With a superior success, you may choose which skill will fail the next time it is used (if that skill is not used within the duration, the sleight has no effect) or make the failure a superior failure. This usually manifests as the type of common mistake that even a seasoned professional might make. For example, in combat the target could forget to reload a weapon or alert an ally of a flanking foe. Out of combat, the target might save the wrong file, forget where they left something, mistake someone for someone else, or leave a security door unlocked.</p>",
+    "reference": "Eclipse Phase Second Edition p. 284",
+    "duration": "minutes",
+    "infectionMod": 6,
+    "sleightType": "gamma",
+    "action": "complex",
+    "timeframe": 0,
+    "effectsToSelf": [],
+    "effectsToTarget": [
+      {
+        "type": "misc",
+        "unique": "",
+        "description": "The target automatically fails the next test they make using skill chosen by async.",
+        "id": "fkr6618sgp"
+      }
+    ],
+    "scaleEffectsOnSuperior": false,
+    "attack": {
+      "useMentalArmor": false,
+      "attackTraits": [],
+      "damageFormula": "",
+      "damageType": "mental",
+      "notes": ""
+    },
+    "heal": {
+      "formula": "",
+      "healthType": "mental"
+    },
+    "mentalArmor": {
+      "apply": false,
+      "divisor": 3,
+      "formula": "1d6"
+    },
+    "status": {
+      "sustaining": false,
+      "pushDuration": 0,
+      "pushed": false,
+      "pushStartTime": 0,
+      "sustainingOn": []
+    }
+  },
+  "flags": {},
+  "effects": [],
+  "_id": "vxogEEWuwttDnJoT",
+  "_key": "!items!vxogEEWuwttDnJoT"
+}

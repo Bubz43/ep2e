@@ -1,0 +1,110 @@
+{
+  "name": "Copylock",
+  "permission": {
+    "default": 0,
+    "qJl17WpEHiovQQBC": 3
+  },
+  "type": "software",
+  "system": {
+    "description": "<p>Copylock prevents an infomorph (or ego within a cyberbrain) from copying, whether voluntarily or not, without proper authorization. This is used to restrict forks, indentures, and people who don&rsquo;t trust themselves. It also defends against forknappers: brainhackers that attempt to copy the infomorph suffer -30 to their Infosec Tests. Copylock also prevents an infomorph from moving between devices or sleeving into a morph.</p>",
+    "reference": "Eclipse Phase Second Edition p. 326",
+    "complexity": "minor",
+    "restricted": false,
+    "quality": "average",
+    "softwareType": "meshware",
+    "activatedEffects": [],
+    "effects": [
+      {
+        "type": "misc",
+        "unique": "",
+        "description": "Prevents copying/forking",
+        "id": "m21uzf2vvf"
+      },
+      {
+        "type": "successTest",
+        "tags": [
+          {
+            "type": "skill",
+            "skillType": "infosec"
+          }
+        ],
+        "modifier": -30,
+        "toOpponent": false,
+        "requirement": "attempting to copy",
+        "id": "nnkqmkjl7u"
+      },
+      {
+        "type": "successTest",
+        "tags": [
+          {
+            "type": "skill",
+            "skillType": "infosec"
+          }
+        ],
+        "modifier": -30,
+        "toOpponent": true,
+        "requirement": "attempting to copy",
+        "id": "dmofnkcbpy"
+      }
+    ],
+    "category": "Meshware",
+    "serviceDuration": -1,
+    "skills": [],
+    "activation": "",
+    "meshAttacks": 0,
+    "meshHealth": {
+      "baseDurability": 10,
+      "damage": 0,
+      "log": [],
+      "wounds": 0,
+      "rebootEndTime": -1,
+      "crashWounds": 0
+    },
+    "state": {
+      "activated": false,
+      "equipped": false,
+      "serviceStartTime": 0,
+      "paused": false
+    },
+    "primaryAttack": {
+      "armorPiercing": false,
+      "attackTraits": [],
+      "damageFormula": "",
+      "damageType": "mesh",
+      "useMeshArmor": true,
+      "notes": "",
+      "aptitudeCheckInfo": {
+        "armorAsModifier": "",
+        "check": "",
+        "checkModifier": 0,
+        "checkFailure": [],
+        "checkSuccess": [],
+        "criticalCheckFailure": []
+      },
+      "label": "",
+      "reduceAVbyDV": false
+    },
+    "secondaryAttack": {
+      "armorPiercing": false,
+      "attackTraits": [],
+      "damageFormula": "",
+      "damageType": "mesh",
+      "useMeshArmor": true,
+      "notes": "",
+      "aptitudeCheckInfo": {
+        "armorAsModifier": "",
+        "check": "",
+        "checkModifier": 0,
+        "checkFailure": [],
+        "checkSuccess": [],
+        "criticalCheckFailure": []
+      },
+      "label": "",
+      "reduceAVbyDV": false
+    }
+  },
+  "flags": {},
+  "effects": [],
+  "_id": "3je17v3rZ2B9EBG7",
+  "_key": "!items!3je17v3rZ2B9EBG7"
+}

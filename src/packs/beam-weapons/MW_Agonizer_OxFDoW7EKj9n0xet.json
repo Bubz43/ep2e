@@ -1,0 +1,78 @@
+{
+  "name": "MW Agonizer",
+  "permission": {
+    "default": 0,
+    "qJl17WpEHiovQQBC": 3
+  },
+  "type": "beamWeapon",
+  "system": {
+    "description": "<p>Originally developed for crowd control, the agonizer is also useful for repelling animals. The agonizer fires millimeter-wave beams that create an unpleasant burning sensation in skin (even through armor). Agonizers have two settings. The first is an active denial setting that causes extreme burning pain in biomorph targets, inflicting a pain effect ▶216 until the end of the next turn and forcing them to move away from the beam.</p>\n<p>The second &ldquo;roast&rdquo; setting has the same effect as the first, but also actually burns the target. Synthmorphs are unaffected by the pain, but damaged by the roast.</p>",
+    "reference": "Eclipse Phase Second Edition p. 208",
+    "complexity": "moderate",
+    "restricted": false,
+    "quality": "average",
+    "concealable": false,
+    "fragile": false,
+    "singleUse": false,
+    "twoHanded": false,
+    "blueprint": {
+      "blueprintType": "",
+      "cracked": false,
+      "used": false
+    },
+    "state": {
+      "disabled": false,
+      "equipped": false,
+      "braced": false,
+      "interface": false
+    },
+    "accessories": [
+      "smartlink",
+      "safetySystem"
+    ],
+    "battery": {
+      "charge": 20,
+      "max": 20,
+      "recharge": 4083750000
+    },
+    "primaryAttack": {
+      "armorPiercing": false,
+      "attackTraits": [
+        "pain"
+      ],
+      "damageFormula": "",
+      "firingModes": [
+        "semiAuto"
+      ],
+      "label": "Pain",
+      "notes": "biomorphs only",
+      "areaEffect": "",
+      "areaEffectRadius": 1
+    },
+    "hasSecondaryAttack": true,
+    "range": 15,
+    "secondaryAttack": {
+      "armorPiercing": true,
+      "attackTraits": [
+        "pain"
+      ],
+      "damageFormula": "2d10",
+      "firingModes": [
+        "singleShot"
+      ],
+      "label": "Roast",
+      "notes": "biomorphs only",
+      "areaEffect": "",
+      "areaEffectRadius": 1
+    },
+    "fixed": false,
+    "long": false,
+    "noClose": false,
+    "noPointBlank": false,
+    "wareType": ""
+  },
+  "flags": {},
+  "effects": [],
+  "_id": "OxFDoW7EKj9n0xet",
+  "_key": "!items!OxFDoW7EKj9n0xet"
+}

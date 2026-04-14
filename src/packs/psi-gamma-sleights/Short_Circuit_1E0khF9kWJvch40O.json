@@ -1,0 +1,56 @@
+{
+  "name": "Short Circuit",
+  "permission": {
+    "default": 0,
+    "qJl17WpEHiovQQBC": 3
+  },
+  "type": "sleight",
+  "system": {
+    "description": "<p>You force the target&rsquo;s synapses to misfire. This functions like a shock attack ▶219; the target loses neuromuscular control, falls down, and is incapacitated for 1 action turn (+2 turns per superior success) and stunned for 3 minutes.</p>",
+    "reference": "Eclipse Phase Second Edition p. 285",
+    "duration": "instant",
+    "infectionMod": 6,
+    "sleightType": "gamma",
+    "action": "complex",
+    "timeframe": 0,
+    "effectsToSelf": [],
+    "effectsToTarget": [
+      {
+        "type": "misc",
+        "unique": "",
+        "description": "Target’s synapses misfire, they are incapacitated for 1 turn and stunned for 3 minutes.",
+        "id": "7f819i0pqb"
+      }
+    ],
+    "scaleEffectsOnSuperior": false,
+    "attack": {
+      "useMentalArmor": false,
+      "attackTraits": [
+        "shock"
+      ],
+      "damageFormula": "",
+      "damageType": "mental",
+      "notes": ""
+    },
+    "heal": {
+      "formula": "",
+      "healthType": "mental"
+    },
+    "mentalArmor": {
+      "apply": false,
+      "divisor": 3,
+      "formula": "1d6"
+    },
+    "status": {
+      "sustaining": false,
+      "pushDuration": 0,
+      "pushed": false,
+      "pushStartTime": 0,
+      "sustainingOn": []
+    }
+  },
+  "flags": {},
+  "effects": [],
+  "_id": "1E0khF9kWJvch40O",
+  "_key": "!items!1E0khF9kWJvch40O"
+}

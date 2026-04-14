@@ -1,0 +1,82 @@
+{
+  "name": "Linkstate",
+  "permission": {
+    "default": 0,
+    "qJl17WpEHiovQQBC": 3
+  },
+  "type": "substance",
+  "system": {
+    "description": "<p>This app connects you via VPN to other linkstate users and samples their XP feed and randomly accessed memories &mdash; typically just enough to provide context, but not enough to acquire private personal details. These inputs are spliced together, their emotional inputs amplified, and the entire package spiked with hormonal circuit triggers and artificial synaesthesia. The effect is a mind-blowing mixed sampling of people&rsquo;s lives, mashed together in a sensory soup that hits the mind with a euphoric rush. You are catatonic while under linkstate&rsquo;s effects, but afterwards you may experience flashbacks of events in other people&rsquo;s lives.</p>",
+    "reference": "Eclipse Phase Second Edition p. 333",
+    "complexity": "minor",
+    "restricted": false,
+    "quality": "average",
+    "blueprint": {
+      "blueprintType": "",
+      "cracked": false,
+      "used": false
+    },
+    "quantity": 5,
+    "state": {
+      "stashed": false
+    },
+    "addiction": "mental",
+    "addictionMod": -10,
+    "hasSeverity": false,
+    "application": [
+      "dermal",
+      "inhalation",
+      "injection",
+      "oral"
+    ],
+    "base": {
+      "damage": {
+        "damageFormula": "",
+        "perTurn": false,
+        "armorPiercing": false,
+        "attackTraits": [],
+        "reduceAVbyDV": false,
+        "armorUsed": [],
+        "damageType": "physical"
+      },
+      "duration": 3600000,
+      "effects": [
+        {
+          "type": "misc",
+          "unique": "",
+          "description": "Samples memories from others",
+          "id": "z0xcb9y923"
+        }
+      ],
+      "wearOffStress": "",
+      "notes": ""
+    },
+    "category": "Narcoalgorithm",
+    "classification": "electronic",
+    "consumeOnUse": true,
+    "substanceType": "drug",
+    "quantityPerCost": 5,
+    "severity": {
+      "check": "som",
+      "checkMod": 0,
+      "conditions": [],
+      "wearOffStress": "",
+      "damage": {
+        "damageFormula": "",
+        "perTurn": false,
+        "armorPiercing": false,
+        "attackTraits": [],
+        "reduceAVbyDV": false,
+        "armorUsed": [],
+        "damageType": "physical"
+      },
+      "duration": 3000,
+      "effects": [],
+      "notes": ""
+    }
+  },
+  "flags": {},
+  "effects": [],
+  "_id": "noSwotYvKE9wnUJc",
+  "_key": "!items!noSwotYvKE9wnUJc"
+}

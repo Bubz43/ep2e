@@ -1,0 +1,44 @@
+{
+  "name": "Neural Damage",
+  "permission": {
+    "default": 0,
+    "qJl17WpEHiovQQBC": 3
+  },
+  "type": "trait",
+  "system": {
+    "description": "<p>You suffered some type of neurological damage that cannot yet be cured. The affliction is part of your ego and remains even when resleeving. This damage may have been inherited, resulted from a poorly designed morph or implant, or inflicted by a nanovirus during the Fall. Work with your GM to agree on a specific disorder appropriate to your game. The GM may inflict impairment modifiers (usually &ndash;10) as appropriate, according to the affliction.<br />This trait may be taken multiple times, for different afflictions.</p>",
+    "reference": "Eclipse Phase Second Edition p. 79",
+    "restrictions": "",
+    "triggers": "",
+    "source": "ego",
+    "state": {
+      "level": 0,
+      "triggered": false
+    },
+    "levels": [
+      {
+        "cost": 2,
+        "effects": [
+          {
+            "type": "misc",
+            "unique": "",
+            "description": "Some types of sensory input are conflated with other perceptual phenomena.",
+            "id": "s7s1o0q06h"
+          }
+        ],
+        "id": "_defaultLevel"
+      }
+    ],
+    "subtype": "Synaesthesia",
+    "traitType": "positive"
+  },
+  "flags": {
+    "core": {
+      "sourceId": "Item.fNDiX4wH5sOogDSv"
+    }
+  },
+  "img": "icons/svg/mystery-man.svg",
+  "effects": [],
+  "_id": "TAwtEyMfmWMBoxQx",
+  "_key": "!items!TAwtEyMfmWMBoxQx"
+}

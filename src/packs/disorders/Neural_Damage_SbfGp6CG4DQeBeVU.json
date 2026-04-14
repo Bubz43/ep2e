@@ -1,0 +1,55 @@
+{
+  "name": "Neural Damage",
+  "permission": {
+    "default": 0,
+    "qJl17WpEHiovQQBC": 3
+  },
+  "type": "trait",
+  "system": {
+    "description": "<p>You sometimes have difficulty communicating or using words.<span style=\"font-family: SinaNova-Regular; font-size: 9pt; color: #000000; font-variant-numeric: normal; font-variant-east-asian: normal;\"><br class=\"Apple-interchange-newline\" /></span></p>\n<p>&nbsp;</p>\n<p>You suffered some type of neurological damage that cannot yet be cured. The affliction is part of your ego and remains even when resleeving. This damage may have been inherited, resulted from a poorly designed morph or implant, or inflicted by a nanovirus during the Fall. Work with your GM to agree on a specific disorder appropriate to your game. The GM may inflict impairment modifiers (usually &ndash;10) as appropriate, according to the affliction.<br />This trait may be taken multiple times, for different afflictions.</p>",
+    "reference": "Eclipse Phase Second Edition p. 79",
+    "restrictions": "",
+    "triggers": "",
+    "source": "ego",
+    "state": {
+      "level": 0,
+      "triggered": false
+    },
+    "levels": [
+      {
+        "cost": 2,
+        "effects": [
+          {
+            "type": "successTest",
+            "tags": [
+              {
+                "type": "skill",
+                "skillType": "persuade"
+              },
+              {
+                "type": "skill",
+                "skillType": "provoke"
+              }
+            ],
+            "modifier": -10,
+            "toOpponent": false,
+            "requirement": "verbal",
+            "id": "xe34z9ytub"
+          }
+        ],
+        "id": "_defaultLevel"
+      }
+    ],
+    "subtype": "Partial Aphasia",
+    "traitType": "positive"
+  },
+  "flags": {
+    "core": {
+      "sourceId": "Item.fNDiX4wH5sOogDSv"
+    }
+  },
+  "img": "icons/svg/mystery-man.svg",
+  "effects": [],
+  "_id": "SbfGp6CG4DQeBeVU",
+  "_key": "!items!SbfGp6CG4DQeBeVU"
+}

@@ -1,0 +1,69 @@
+{
+  "name": "Insomnia",
+  "permission": {
+    "default": 0,
+    "qJl17WpEHiovQQBC": 3
+  },
+  "type": "trait",
+  "system": {
+    "description": "<p>You are unable to sleep, or unable to sleep for an extended period of time. Ths is most often due to anxiety or depression and the accompanying negative thought patterns. Insomniacs may find themselves nodding of at inopportune times, but never for long. As a result, they are frequently lethargic, inattentive, and irritable.</p>",
+    "reference": "Eclipse Phase Second Edition p. 225",
+    "restrictions": "",
+    "triggers": "Alienation, responsibility overload, the unknown, violence",
+    "source": "ego",
+    "state": {
+      "level": 0,
+      "triggered": false
+    },
+    "levels": [
+      {
+        "cost": 2,
+        "effects": [
+          {
+            "type": "misc",
+            "unique": "",
+            "description": "You have a near total inability to find rest in sleep when it is desired. Treat long recharges as short recharges, or do not receive any recharge benefis at all.",
+            "id": "6d58wn9yr5"
+          },
+          {
+            "type": "successTest",
+            "tags": [
+              {
+                "type": "skill",
+                "skillType": "perceive"
+              }
+            ],
+            "modifier": -30,
+            "toOpponent": false,
+            "requirement": "",
+            "id": "caqbphr2zo"
+          },
+          {
+            "type": "successTest",
+            "tags": [
+              {
+                "type": "allActions"
+              }
+            ],
+            "modifier": -10,
+            "toOpponent": false,
+            "requirement": "",
+            "id": "ur7b3bsnvm"
+          }
+        ],
+        "id": "_defaultLevel"
+      }
+    ],
+    "subtype": "",
+    "traitType": "positive"
+  },
+  "flags": {
+    "core": {
+      "sourceId": "Item.Ri4FOaqxsl3hYaBh"
+    }
+  },
+  "img": "icons/svg/mystery-man.svg",
+  "effects": [],
+  "_id": "0uJyO8rR1JgNzQgg",
+  "_key": "!items!0uJyO8rR1JgNzQgg"
+}

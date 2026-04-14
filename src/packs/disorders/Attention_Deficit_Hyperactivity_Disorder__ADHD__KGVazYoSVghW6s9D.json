@@ -1,0 +1,64 @@
+{
+  "name": "Attention Deficit Hyperactivity Disorder (ADHD)",
+  "permission": {
+    "default": 0,
+    "qJl17WpEHiovQQBC": 3
+  },
+  "type": "trait",
+  "system": {
+    "description": "<p>ADHD is the inability to notice details and focus on any one task for an extended period. You may find yourself starting multiple tasks, beginning a new one after only a cursory attempt at the prior task. You may also have a manic edge that manifests as confience in your ability to get a job done, even though you will quickly lose all interest in it.</p>",
+    "reference": "Eclipse Phase Second Edition p. 224",
+    "restrictions": "",
+    "triggers": "Overstimulation, sleep deprivation, the unknown, violence",
+    "source": "ego",
+    "state": {
+      "level": 0,
+      "triggered": false
+    },
+    "levels": [
+      {
+        "cost": 2,
+        "effects": [
+          {
+            "type": "successTest",
+            "tags": [
+              {
+                "type": "skill",
+                "skillType": "perceive"
+              },
+              {
+                "type": "action",
+                "action": "task",
+                "subtype": ""
+              }
+            ],
+            "modifier": -30,
+            "toOpponent": false,
+            "requirement": "",
+            "id": "qvpxavzosu"
+          },
+          {
+            "type": "duration",
+            "subtype": "taskActionTimeframe",
+            "modifier": 50,
+            "taskType": "",
+            "halve": false,
+            "id": "y4ltfs02lk"
+          }
+        ],
+        "id": "_defaultLevel"
+      }
+    ],
+    "subtype": "",
+    "traitType": "positive"
+  },
+  "flags": {
+    "core": {
+      "sourceId": "Item.hmAB5ZRLlBwzoNCN"
+    }
+  },
+  "img": "icons/svg/mystery-man.svg",
+  "effects": [],
+  "_id": "KGVazYoSVghW6s9D",
+  "_key": "!items!KGVazYoSVghW6s9D"
+}

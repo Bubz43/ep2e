@@ -1,0 +1,69 @@
+{
+  "name": "Pattern Recognition",
+  "permission": {
+    "default": 0,
+    "qJl17WpEHiovQQBC": 3
+  },
+  "type": "sleight",
+  "system": {
+    "description": "<p>You are adept at spotting patterns and correlating non-random elements. This is useful for translating languages, breaking codes, or finding clues hidden among massive amounts of data. Apply a +10 modifier to appropriate Infosec, Perceive, or Research Tests where you have a sufficiently large sample and time enough to study, as determined by the gamemaster. This might range from a few hours of investigating inscriptions left by long-dead aliens to a week or more of researching a lengthy cipher. This does not apply to bruteforce hacking or Infosec tests made by decrypt apps to break a code. You also learn new languages easily; reduce the timeframe to weeks rather than months.</p>",
+    "reference": "Eclipse Phase Second Edition p. 281",
+    "duration": "actionTurns",
+    "infectionMod": 1,
+    "sleightType": "chi",
+    "action": "complex",
+    "timeframe": 0,
+    "effectsToSelf": [
+      {
+        "type": "successTest",
+        "tags": [
+          {
+            "type": "skill",
+            "skillType": "infosec"
+          },
+          {
+            "type": "skill",
+            "skillType": "perceive"
+          },
+          {
+            "type": "skill",
+            "skillType": "research"
+          }
+        ],
+        "modifier": 10,
+        "toOpponent": false,
+        "requirement": "detecting patterns",
+        "id": "vws8ivh7wi"
+      }
+    ],
+    "effectsToTarget": [],
+    "scaleEffectsOnSuperior": false,
+    "attack": {
+      "useMentalArmor": false,
+      "attackTraits": [],
+      "damageFormula": "",
+      "damageType": "mental",
+      "notes": ""
+    },
+    "heal": {
+      "formula": "",
+      "healthType": "mental"
+    },
+    "mentalArmor": {
+      "apply": false,
+      "divisor": 3,
+      "formula": "1d6"
+    },
+    "status": {
+      "sustaining": false,
+      "pushDuration": 0,
+      "pushed": false,
+      "pushStartTime": 0,
+      "sustainingOn": []
+    }
+  },
+  "flags": {},
+  "effects": [],
+  "_id": "YwsJP7ZN5JAqJBJY",
+  "_key": "!items!YwsJP7ZN5JAqJBJY"
+}

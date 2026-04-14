@@ -1,0 +1,43 @@
+{
+  "name": "Biter",
+  "permission": {
+    "default": 0,
+    "qJl17WpEHiovQQBC": 3
+  },
+  "type": "firearmAmmo",
+  "system": {
+    "description": "<p>Biters fragment in opposite proportion to the hardness of the target they strike. For hard targets (synthmorphs), they fragment very little, blasting a big hole. For soft targets (biomorphs), they fragment and tumble in multiple directions within the body.</p>",
+    "reference": "Eclipse Phase Second Edition p. 211",
+    "complexity": "moderate",
+    "restricted": true,
+    "quality": "average",
+    "blueprint": {
+      "blueprintType": "",
+      "cracked": false,
+      "used": false
+    },
+    "quantity": 100,
+    "state": {
+      "stashed": false
+    },
+    "ammoClass": "battleRifle",
+    "carryPayload": false,
+    "roundsPerComplexity": 100,
+    "modes": [
+      {
+        "name": "",
+        "armorPiercing": false,
+        "attackTraits": [],
+        "damageFormula": "1d6",
+        "steady": false,
+        "damageModifierType": "formula",
+        "notes": "",
+        "id": "_defaultID"
+      }
+    ]
+  },
+  "flags": {},
+  "effects": [],
+  "_id": "YwxdM6ZElRHaiTjx",
+  "_key": "!items!YwxdM6ZElRHaiTjx"
+}

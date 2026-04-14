@@ -1,0 +1,40 @@
+{
+  "_id": "V1UME476Vxpf804w",
+  "name": "Combat Paralysis",
+  "permission": {
+    "default": 0,
+    "qHi89sFcK4gHlOPd": 3
+  },
+  "type": "trait",
+  "system": {
+    "description": "<p>Like a deer caught in headlights, you freeze in combat and stressful situations. Anytime violence erupts, you are caught off guard, or lives are at stake, you must make a WIL Check each action turn to act or respond in any way. If you fail, you lose your action and simply stand there, incapable of reacting to the situation.</p>",
+    "reference": "Eclipse Phase Second Edition p. 77",
+    "restrictions": "",
+    "triggers": "",
+    "source": "ego",
+    "state": {
+      "level": 0,
+      "triggered": false
+    },
+    "levels": [
+      {
+        "cost": 4,
+        "effects": [
+          {
+            "type": "misc",
+            "unique": "",
+            "description": "You must make a WIL check per action turn in stressful situations or lose your action",
+            "id": "vv0kzr79yw"
+          }
+        ],
+        "id": "6o1shit2a7"
+      }
+    ],
+    "subtype": "",
+    "traitType": "negative"
+  },
+  "flags": {},
+  "img": "icons/svg/mystery-man.svg",
+  "effects": [],
+  "_key": "!items!V1UME476Vxpf804w"
+}

@@ -1,0 +1,66 @@
+{
+  "_id": "fAnaLc8b6O0bx4o7",
+  "name": "Weak Immune System",
+  "permission": {
+    "default": 0,
+    "qHi89sFcK4gHlOPd": 3
+  },
+  "type": "trait",
+  "system": {
+    "description": "<p>This trait is only available to biomorphs. The morph’s immune system is easily compromised. Apply a -10 modifier per level when resisting the effects of diseases, drugs, chemicals, and toxins.</p>",
+    "reference": "Eclipse Phase Second Edition p. 80",
+    "restrictions": "",
+    "triggers": "",
+    "source": "morph",
+    "state": {
+      "level": 0,
+      "triggered": false
+    },
+    "levels": [
+      {
+        "cost": 1,
+        "effects": [
+          {
+            "type": "successTest",
+            "tags": [
+              {
+                "type": "special",
+                "test": "resistSubstanceOrDisease"
+              }
+            ],
+            "modifier": -10,
+            "toOpponent": false,
+            "requirement": "",
+            "id": "qdf4v490il"
+          }
+        ],
+        "id": "2rsqpe0wjv"
+      },
+      {
+        "cost": 2,
+        "effects": [
+          {
+            "type": "successTest",
+            "tags": [
+              {
+                "type": "special",
+                "test": "resistSubstanceOrDisease"
+              }
+            ],
+            "modifier": -20,
+            "toOpponent": false,
+            "requirement": "",
+            "id": "qdf4v490il"
+          }
+        ],
+        "id": "82uetxtlq7"
+      }
+    ],
+    "subtype": "",
+    "traitType": "negative"
+  },
+  "flags": {},
+  "img": "icons/svg/mystery-man.svg",
+  "effects": [],
+  "_key": "!items!fAnaLc8b6O0bx4o7"
+}

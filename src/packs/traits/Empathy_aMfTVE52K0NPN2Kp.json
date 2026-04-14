@@ -1,0 +1,85 @@
+{
+  "_id": "aMfTVE52K0NPN2Kp",
+  "name": "Empathy",
+  "permission": {
+    "default": 0,
+    "qHi89sFcK4gHlOPd": 3
+  },
+  "type": "trait",
+  "system": {
+    "description": "<p>You instinctively relate to others. Apply a +5 modifier per level to SAV Checks.</p>",
+    "reference": "Eclipse Phase Second Edition p. 74",
+    "restrictions": "",
+    "triggers": "",
+    "source": "morph",
+    "state": {
+      "level": 0,
+      "triggered": false
+    },
+    "levels": [
+      {
+        "cost": 1,
+        "effects": [
+          {
+            "type": "successTest",
+            "tags": [
+              {
+                "type": "aptitudeCheck",
+                "aptitude": "sav"
+              }
+            ],
+            "modifier": 5,
+            "toOpponent": false,
+            "requirement": "",
+            "id": "gb4qqhws0x"
+          }
+        ],
+        "id": "g4fnysrh4o"
+      },
+      {
+        "cost": 2,
+        "effects": [
+          {
+            "type": "successTest",
+            "tags": [
+              {
+                "type": "aptitudeCheck",
+                "aptitude": "sav"
+              }
+            ],
+            "modifier": 10,
+            "toOpponent": false,
+            "requirement": "",
+            "id": "08ub961o78"
+          }
+        ],
+        "id": "blhfnl1msm"
+      },
+      {
+        "cost": 3,
+        "effects": [
+          {
+            "type": "successTest",
+            "tags": [
+              {
+                "type": "aptitudeCheck",
+                "aptitude": "sav"
+              }
+            ],
+            "modifier": 15,
+            "toOpponent": false,
+            "requirement": "",
+            "id": "vtnpn3nn3c"
+          }
+        ],
+        "id": "k1dcpdc16n"
+      }
+    ],
+    "subtype": "",
+    "traitType": "positive"
+  },
+  "flags": {},
+  "img": "icons/svg/mystery-man.svg",
+  "effects": [],
+  "_key": "!items!aMfTVE52K0NPN2Kp"
+}

@@ -1,0 +1,53 @@
+{
+  "_id": "SuAEUMCnZ2sDBUQH",
+  "name": "Obliviousness",
+  "permission": {
+    "default": 0,
+    "qHi89sFcK4gHlOPd": 3
+  },
+  "type": "trait",
+  "system": {
+    "description": "<p>You are oblivious to events around you or anything other than what your attention is focused on. Suffer a -10 modifier to Perceive Tests against surprise and increase your distracted modifier to -30.</p>",
+    "reference": "Eclipse Phase Second Edition p. 79",
+    "restrictions": "",
+    "triggers": "",
+    "source": "ego",
+    "state": {
+      "level": 0,
+      "triggered": false
+    },
+    "levels": [
+      {
+        "cost": 2,
+        "effects": [
+          {
+            "type": "successTest",
+            "tags": [
+              {
+                "type": "skill",
+                "skillType": "perceive"
+              }
+            ],
+            "modifier": -10,
+            "toOpponent": false,
+            "requirement": "vs surprise",
+            "id": "tx7au0cagz"
+          },
+          {
+            "type": "misc",
+            "unique": "",
+            "description": "Increase your distracted modifier to -30.",
+            "id": "an2xsnyzrm"
+          }
+        ],
+        "id": "x8iroz6ry9"
+      }
+    ],
+    "subtype": "",
+    "traitType": "negative"
+  },
+  "flags": {},
+  "img": "icons/svg/mystery-man.svg",
+  "effects": [],
+  "_key": "!items!SuAEUMCnZ2sDBUQH"
+}

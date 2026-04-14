@@ -1,0 +1,54 @@
+{
+  "name": "Casimir Force Repulsion",
+  "permission": {
+    "default": 0,
+    "qJl17WpEHiovQQBC": 3
+  },
+  "type": "sleight",
+  "system": {
+    "description": "<p>This sleight exploits the Casimir effect (an interaction between the electromagnetic fields of different objects) on a macro-scale, allowing the exsurgent to levitate themself or other objects by creating repulsing fields. This could also allow the exsurgent to push targets away, pin them against walls, etc. Use SOM Checks to resist this pressure, opposed by the exsurgent&rsquo;s WIL Check.</p>",
+    "reference": "Eclipse Phase Second Edition p. 386",
+    "duration": "sustained",
+    "infectionMod": 1,
+    "sleightType": "epsilon",
+    "action": "complex",
+    "timeframe": 0,
+    "effectsToSelf": [
+      {
+        "type": "misc",
+        "unique": "",
+        "description": "Levitate self or objects.",
+        "id": "jfpk6r2qnm"
+      }
+    ],
+    "effectsToTarget": [],
+    "scaleEffectsOnSuperior": false,
+    "attack": {
+      "useMentalArmor": false,
+      "attackTraits": [],
+      "damageFormula": "",
+      "damageType": "mental",
+      "notes": ""
+    },
+    "heal": {
+      "formula": "",
+      "healthType": "mental"
+    },
+    "mentalArmor": {
+      "apply": false,
+      "divisor": 3,
+      "formula": "1d6"
+    },
+    "status": {
+      "sustaining": false,
+      "pushDuration": 0,
+      "pushed": false,
+      "pushStartTime": 0,
+      "sustainingOn": []
+    }
+  },
+  "flags": {},
+  "effects": [],
+  "_id": "mHbblulFZKQFq2rc",
+  "_key": "!items!mHbblulFZKQFq2rc"
+}

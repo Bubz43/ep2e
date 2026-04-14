@@ -1,0 +1,54 @@
+{
+  "name": "Deja Vu",
+  "permission": {
+    "default": 0,
+    "qJl17WpEHiovQQBC": 3
+  },
+  "type": "sleight",
+  "system": {
+    "description": "<p>Your force the target&rsquo;s mind into recursive loop. They will repeat their actions from the previous 15-30 seconds (5-10 action turns) for the next WIL &divide; 5 minutes. They will repeat their actions as closely as possible, even if their environment and circumstances change. If someone actively interrupts or restrains the target, or otherwise disrupts the loop, they may make a WIL Check to break out of the loop, ending the sleight.</p>",
+    "reference": "Eclipse Phase Second Edition p. 283",
+    "duration": "minutes",
+    "infectionMod": 8,
+    "sleightType": "gamma",
+    "action": "complex",
+    "timeframe": 0,
+    "effectsToSelf": [],
+    "effectsToTarget": [
+      {
+        "type": "misc",
+        "unique": "",
+        "description": "The target is forced to repeat their actions of the past 15-30 seconds.",
+        "id": "sqkyxbfxu5"
+      }
+    ],
+    "scaleEffectsOnSuperior": false,
+    "attack": {
+      "useMentalArmor": false,
+      "attackTraits": [],
+      "damageFormula": "",
+      "damageType": "mental",
+      "notes": ""
+    },
+    "heal": {
+      "formula": "",
+      "healthType": "mental"
+    },
+    "mentalArmor": {
+      "apply": false,
+      "divisor": 3,
+      "formula": "1d6"
+    },
+    "status": {
+      "sustaining": false,
+      "pushDuration": 0,
+      "pushed": false,
+      "pushStartTime": 0,
+      "sustainingOn": []
+    }
+  },
+  "flags": {},
+  "effects": [],
+  "_id": "nCRGjXnPUgR854tv",
+  "_key": "!items!nCRGjXnPUgR854tv"
+}

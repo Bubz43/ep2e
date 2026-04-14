@@ -1,0 +1,62 @@
+{
+  "name": "Machine Gun",
+  "permission": {
+    "default": 0,
+    "qJl17WpEHiovQQBC": 3
+  },
+  "type": "railgun",
+  "system": {
+    "description": "<p>Machine guns are heavy weapons, typically mounted, and intended to provide continuous fire for support or suppressive purposes.</p>\n<p>&nbsp;</p>\n<p>Railguns slide and accelerate a non-explosive conductive tungsten slug along electromagnetic rails at extremely high velocities (Mach 6+) to create an overwhelming, penetrating attack. The kinetic energy of the projectile exceeds that of an explosive-filled shell of greater mass and creates shock and heat waves upon impact that shatter and incinerate the target, or portions of it. While railguns are more potent than firearms, they cannot use smart or specialty ammunition as the projectile must be conductive and able to survive both acceleration and heat created in the process due to friction. Nanofabrication allows railguns to be manufactured on the personal-weapons scale while high-energy portable batteries provide the power to fire them. Railgun operation makes no flash and is silent except for the supersonic crack of the projectile.</p>\n<p>Railguns are available in the same models as firearms. They are equipped with standard and nuclear batteries just like beam weapons, holding enough power for 200 shots.</p>",
+    "reference": "Eclipse Phase Second Edition p. 210 - 211",
+    "complexity": "major",
+    "restricted": true,
+    "quality": "average",
+    "concealable": false,
+    "fragile": false,
+    "singleUse": false,
+    "twoHanded": false,
+    "blueprint": {
+      "blueprintType": "",
+      "cracked": false,
+      "used": false
+    },
+    "state": {
+      "disabled": false,
+      "equipped": false,
+      "braced": false,
+      "interface": false
+    },
+    "fixed": true,
+    "long": true,
+    "shapeChanging": false,
+    "shapeName": "",
+    "accessories": [
+      "safetySystem",
+      "smartlink"
+    ],
+    "ammo": {
+      "ammoClass": "machineGun",
+      "max": 100,
+      "value": 101
+    },
+    "battery": {
+      "charge": 200,
+      "max": 200,
+      "recharge": 0
+    },
+    "primaryAttack": {
+      "damageFormula": "3d10 + 2",
+      "firingModes": [
+        "burstFire",
+        "fullAuto"
+      ],
+      "notes": ""
+    },
+    "range": 750,
+    "wareType": ""
+  },
+  "flags": {},
+  "effects": [],
+  "_id": "BWOZkvTPszWirARm",
+  "_key": "!items!BWOZkvTPszWirARm"
+}

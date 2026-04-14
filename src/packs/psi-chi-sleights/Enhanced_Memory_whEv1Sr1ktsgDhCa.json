@@ -1,0 +1,54 @@
+{
+  "name": "Enhanced Memory",
+  "permission": {
+    "default": 0,
+    "qJl17WpEHiovQQBC": 3
+  },
+  "type": "sleight",
+  "system": {
+    "description": "<p>You have a perfect memory. Unlike transhumans with hyperthymesia, this is not strictly autobiographical. You can be asked a random date and immediately recall trivial details such as the day of the week it was, what you did that day, what the weather was like, and the exact wording of a paragraph you read. Your memory is always &ldquo;on&rdquo; &mdash; in fact, you perceive reality and memory much like a split screen and are often caught in reverie. Enhanced memory has no effect on psychosurgery memory editing.</p>\n<p>You can push this sleight to recall your memories from a sort of third-person point of view, allowing you to make Perceive Tests to notice details you may have previously missed.</p>",
+    "reference": "Eclipse Phase Second Edition p. 280",
+    "duration": "actionTurns",
+    "infectionMod": 1,
+    "sleightType": "chi",
+    "action": "complex",
+    "timeframe": 0,
+    "effectsToSelf": [
+      {
+        "type": "misc",
+        "unique": "",
+        "description": "Perfect memory recall.",
+        "id": "5zu28duqx9"
+      }
+    ],
+    "effectsToTarget": [],
+    "scaleEffectsOnSuperior": false,
+    "attack": {
+      "useMentalArmor": false,
+      "attackTraits": [],
+      "damageFormula": "",
+      "damageType": "mental",
+      "notes": ""
+    },
+    "heal": {
+      "formula": "",
+      "healthType": "mental"
+    },
+    "mentalArmor": {
+      "apply": false,
+      "divisor": 3,
+      "formula": "1d6"
+    },
+    "status": {
+      "sustaining": false,
+      "pushDuration": 0,
+      "pushed": false,
+      "pushStartTime": 0,
+      "sustainingOn": []
+    }
+  },
+  "flags": {},
+  "effects": [],
+  "_id": "whEv1Sr1ktsgDhCa",
+  "_key": "!items!whEv1Sr1ktsgDhCa"
+}

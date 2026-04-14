@@ -1,0 +1,52 @@
+{
+  "_id": "Lt6tPhcbsfYSPQS4",
+  "name": "Blacklisted Rep",
+  "permission": {
+    "default": 0,
+    "qHi89sFcK4gHlOPd": 3
+  },
+  "type": "trait",
+  "system": {
+    "description": "<p>You are blacklisted in certain circles, whether you did something to deserve it or not. You are barred from having a Rep score higher than 0 in one particular reputation network. For rep nets outside your faction, this counts as Level 1. For the rep net central to your faction, this counts as Level 2. People within that network will refuse to help you out of fear of reprisals and ruining their own reputation. This trait may be taken more than once for different rep nets.</p>",
+    "reference": "Eclipse Phase Second Edition p. 77",
+    "restrictions": "",
+    "triggers": "",
+    "source": "ego",
+    "state": {
+      "level": 0,
+      "triggered": false
+    },
+    "levels": [
+      {
+        "cost": 1,
+        "effects": [
+          {
+            "type": "misc",
+            "unique": "",
+            "description": "Cannot have rep score in one rep network",
+            "id": "4rcdi01v0m"
+          }
+        ],
+        "id": "2mmy7c7668"
+      },
+      {
+        "cost": 4,
+        "effects": [
+          {
+            "type": "misc",
+            "unique": "",
+            "description": "Cannot have rep score in your own faction's network",
+            "id": "2m0a24my81"
+          }
+        ],
+        "id": "njau10qw1f"
+      }
+    ],
+    "subtype": "",
+    "traitType": "negative"
+  },
+  "flags": {},
+  "img": "icons/svg/mystery-man.svg",
+  "effects": [],
+  "_key": "!items!Lt6tPhcbsfYSPQS4"
+}

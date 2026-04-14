@@ -1,0 +1,54 @@
+{
+  "name": "Implant Skill",
+  "permission": {
+    "default": 0,
+    "qJl17WpEHiovQQBC": 3
+  },
+  "type": "sleight",
+  "system": {
+    "description": "<p>You impart your expertise and implant it into the target&rsquo;s mind. The target acquires your chosen existing skill at half value for WIL &divide; 5 hours. If the target already has the skill, they use whichever value is higher. Specialization bonuses also apply. Psi skill may only be implanted if the target has the Psi trait. Recipients of skills will exercise them with the async&rsquo;s flair and mannerisms.</p>",
+    "reference": "Eclipse Phase Second Edition p. 284",
+    "duration": "hours",
+    "infectionMod": 6,
+    "sleightType": "gamma",
+    "action": "complex",
+    "timeframe": 0,
+    "effectsToSelf": [],
+    "effectsToTarget": [
+      {
+        "type": "misc",
+        "unique": "",
+        "description": "Implant skill possessed by async in target’s mind at half value.",
+        "id": "udkr4qh6mx"
+      }
+    ],
+    "scaleEffectsOnSuperior": false,
+    "attack": {
+      "useMentalArmor": false,
+      "attackTraits": [],
+      "damageFormula": "",
+      "damageType": "mental",
+      "notes": ""
+    },
+    "heal": {
+      "formula": "",
+      "healthType": "mental"
+    },
+    "mentalArmor": {
+      "apply": false,
+      "divisor": 3,
+      "formula": "1d6"
+    },
+    "status": {
+      "sustaining": false,
+      "pushDuration": 0,
+      "pushed": false,
+      "pushStartTime": 0,
+      "sustainingOn": []
+    }
+  },
+  "flags": {},
+  "effects": [],
+  "_id": "L0xa93swT3uD8fQW",
+  "_key": "!items!L0xa93swT3uD8fQW"
+}

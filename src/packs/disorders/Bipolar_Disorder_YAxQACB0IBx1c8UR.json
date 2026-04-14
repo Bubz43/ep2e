@@ -1,0 +1,44 @@
+{
+  "name": "Bipolar Disorder",
+  "permission": {
+    "default": 0,
+    "qJl17WpEHiovQQBC": 3
+  },
+  "type": "trait",
+  "system": {
+    "description": "<p>With manic depression, your periods of depression are interrupted by brief (a matter of days at most) periods of mania with heightened energy and a general disregard for consequences. The depressive stages are similar in all ways to depression ▶225. When manic, you will take risks, spend wildly, and engage in behavior without forethought or consideration of long-term consequences.</p>",
+    "reference": "Eclipse Phase Second Edition p. 224",
+    "restrictions": "",
+    "triggers": "Grief, helplessness, sleep deprivation, violence",
+    "source": "ego",
+    "state": {
+      "level": 0,
+      "triggered": false
+    },
+    "levels": [
+      {
+        "cost": 2,
+        "effects": [
+          {
+            "type": "misc",
+            "unique": "",
+            "description": "Similar to depression, but when manic you must make a WIL Check to stop yourself from undertaking a risky endeavor. You will also try to convince others to go along with the idea.",
+            "id": "makxbk1dmy"
+          }
+        ],
+        "id": "_defaultLevel"
+      }
+    ],
+    "subtype": "",
+    "traitType": "positive"
+  },
+  "flags": {
+    "core": {
+      "sourceId": "Item.AuP7LF1sne1VAbEb"
+    }
+  },
+  "img": "icons/svg/mystery-man.svg",
+  "effects": [],
+  "_id": "YAxQACB0IBx1c8UR",
+  "_key": "!items!YAxQACB0IBx1c8UR"
+}

@@ -1,0 +1,50 @@
+{
+  "name": "Battlesuit",
+  "permission": {
+    "default": 0,
+    "qJl17WpEHiovQQBC": 3
+  },
+  "type": "armor",
+  "system": {
+    "description": "<p>This power armor features a military-grade fullerene armor shell with flexible aerogel for thermal insulation and a diamond-hardened exterior designed to resist even potent ballistic and energy-based weapons. It increases Vigor pool by 2, inflicts an extra 1d10 damage in melee, increases your Walker movement rate to 8/32, and doubles your jumping distance.</p>",
+    "reference": "Eclipse Phase Second Edition p. 215",
+    "complexity": "rare",
+    "restricted": true,
+    "quality": "average",
+    "blueprint": {
+      "blueprintType": "",
+      "cracked": false,
+      "used": false
+    },
+    "state": {
+      "disabled": false,
+      "equipped": false,
+      "activated": false
+    },
+    "activeArmor": {
+      "energy": 0,
+      "kinetic": 0,
+      "concealable": false,
+      "layerable": false
+    },
+    "armorValues": {
+      "energy": 25,
+      "kinetic": 25,
+      "concealable": false,
+      "layerable": false
+    },
+    "attackTraits": [],
+    "effects": [],
+    "hasActiveState": false,
+    "fragile": false,
+    "singleUse": false,
+    "twoHanded": false,
+    "notes": "Double jump distance",
+    "wareType": ""
+  },
+  "flags": {},
+  "img": "icons/svg/mystery-man.svg",
+  "effects": [],
+  "_id": "72X1rBruXkGai6Ip",
+  "_key": "!items!72X1rBruXkGai6Ip"
+}

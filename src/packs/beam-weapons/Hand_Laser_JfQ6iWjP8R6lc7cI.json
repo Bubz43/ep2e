@@ -1,0 +1,74 @@
+{
+  "name": "Hand Laser",
+  "permission": {
+    "default": 0,
+    "qJl17WpEHiovQQBC": 3
+  },
+  "type": "beamWeapon",
+  "system": {
+    "description": "<p>The morph has a weapon-grade laser implanted in its forearm, with a flexible waveguide leading to a lens located between the first two knuckles on the morph&rsquo;s dominant hand. The laser&rsquo;s batteries are implanted and not easily swapped out in biomorphs.</p>",
+    "reference": "Eclipse Phase Second Edition p. 208",
+    "complexity": "moderate",
+    "restricted": true,
+    "quality": "average",
+    "concealable": true,
+    "fragile": false,
+    "singleUse": false,
+    "twoHanded": false,
+    "blueprint": {
+      "blueprintType": "",
+      "cracked": false,
+      "used": false
+    },
+    "state": {
+      "disabled": false,
+      "equipped": false,
+      "braced": false,
+      "interface": false
+    },
+    "accessories": [
+      "smartlink",
+      "safetySystem"
+    ],
+    "battery": {
+      "charge": 10,
+      "max": 10,
+      "recharge": 0
+    },
+    "primaryAttack": {
+      "armorPiercing": false,
+      "attackTraits": [],
+      "damageFormula": "1d10 + 1d6",
+      "firingModes": [
+        "semiAuto"
+      ],
+      "label": "",
+      "notes": "",
+      "areaEffect": "",
+      "areaEffectRadius": 1
+    },
+    "hasSecondaryAttack": false,
+    "range": 75,
+    "secondaryAttack": {
+      "armorPiercing": false,
+      "attackTraits": [],
+      "damageFormula": "",
+      "firingModes": [
+        "semiAuto"
+      ],
+      "label": "",
+      "notes": "",
+      "areaEffect": "",
+      "areaEffectRadius": 1
+    },
+    "fixed": false,
+    "long": false,
+    "noClose": false,
+    "noPointBlank": false,
+    "wareType": "cyberware"
+  },
+  "flags": {},
+  "effects": [],
+  "_id": "JfQ6iWjP8R6lc7cI",
+  "_key": "!items!JfQ6iWjP8R6lc7cI"
+}

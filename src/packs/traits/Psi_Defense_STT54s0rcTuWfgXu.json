@@ -1,0 +1,66 @@
+{
+  "_id": "STT54s0rcTuWfgXu",
+  "name": "Psi Defense",
+  "permission": {
+    "default": 0,
+    "qHi89sFcK4gHlOPd": 3
+  },
+  "type": "trait",
+  "system": {
+    "description": "<p>Your mind is inherently resistant to mental attacks and manipulations. Apply a +10 modifier per level to defense rolls against psi sleights. The morph trait is only available to morphs with biological brains.</p>",
+    "reference": "Eclipse Phase Second Edition p. 75",
+    "restrictions": "",
+    "triggers": "",
+    "source": "ego",
+    "state": {
+      "level": 0,
+      "triggered": false
+    },
+    "levels": [
+      {
+        "cost": 1,
+        "effects": [
+          {
+            "type": "successTest",
+            "tags": [
+              {
+                "type": "aptitudeCheck",
+                "aptitude": "wil"
+              }
+            ],
+            "modifier": 10,
+            "toOpponent": false,
+            "requirement": "defending against psi sleights",
+            "id": "8c1bx1neii"
+          }
+        ],
+        "id": "t8c9pq9j9o"
+      },
+      {
+        "cost": 2,
+        "effects": [
+          {
+            "type": "successTest",
+            "tags": [
+              {
+                "type": "aptitudeCheck",
+                "aptitude": "wil"
+              }
+            ],
+            "modifier": 20,
+            "toOpponent": false,
+            "requirement": "defending against psi sleights",
+            "id": "8c1bx1neii"
+          }
+        ],
+        "id": "nozd05g5b9"
+      }
+    ],
+    "subtype": "",
+    "traitType": "positive"
+  },
+  "flags": {},
+  "img": "icons/svg/mystery-man.svg",
+  "effects": [],
+  "_key": "!items!STT54s0rcTuWfgXu"
+}

@@ -1,0 +1,54 @@
+{
+  "name": "Cloud Memory",
+  "permission": {
+    "default": 0,
+    "qJl17WpEHiovQQBC": 3
+  },
+  "type": "sleight",
+  "system": {
+    "description": "<p>You temporarily disrupt the target&rsquo;s ability to form long-term memories. The target will retain short-term memories during the duration (WIL &divide; 5 minutes), but will soon (after d6 + 4 action turns) forget anything that occurred while this sleight was in effect.</p>",
+    "reference": "Eclipse Phase Second Edition p. 283",
+    "duration": "minutes",
+    "infectionMod": 6,
+    "sleightType": "gamma",
+    "action": "complex",
+    "timeframe": 0,
+    "effectsToSelf": [],
+    "effectsToTarget": [
+      {
+        "type": "misc",
+        "unique": "",
+        "description": "Target retains no long-term memories.",
+        "id": "drth0l0uvw"
+      }
+    ],
+    "scaleEffectsOnSuperior": false,
+    "attack": {
+      "useMentalArmor": false,
+      "attackTraits": [],
+      "damageFormula": "",
+      "damageType": "mental",
+      "notes": ""
+    },
+    "heal": {
+      "formula": "",
+      "healthType": "mental"
+    },
+    "mentalArmor": {
+      "apply": false,
+      "divisor": 3,
+      "formula": "1d6"
+    },
+    "status": {
+      "sustaining": false,
+      "pushDuration": 0,
+      "pushed": false,
+      "pushStartTime": 0,
+      "sustainingOn": []
+    }
+  },
+  "flags": {},
+  "effects": [],
+  "_id": "uuHOs9rpPH9biwSf",
+  "_key": "!items!uuHOs9rpPH9biwSf"
+}

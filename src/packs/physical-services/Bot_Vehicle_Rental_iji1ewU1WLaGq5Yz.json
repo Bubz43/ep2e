@@ -1,0 +1,26 @@
+{
+  "name": "Bot/Vehicle Rental",
+  "permission": {
+    "default": 0,
+    "qJl17WpEHiovQQBC": 3
+  },
+  "type": "physicalService",
+  "system": {
+    "description": "<p>Rent a bot for 1 week.<br /><br />In some locations, bots and vehicles can be rented on a weekly basis, though you are liable for damages/replacement. The GM determines availability.</p>",
+    "reference": "Eclipse Phase Second Edition p. 315",
+    "complexity": "minor",
+    "restricted": false,
+    "quality": "average",
+    "serviceDuration": 604800000,
+    "reputations": [],
+    "serviceType": "generic",
+    "state": {
+      "serviceStartTime": 0,
+      "equipped": false
+    }
+  },
+  "flags": {},
+  "effects": [],
+  "_id": "iji1ewU1WLaGq5Yz",
+  "_key": "!items!iji1ewU1WLaGq5Yz"
+}

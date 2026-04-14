@@ -1,0 +1,268 @@
+{
+  "name": "Polygun Pistol",
+  "permission": {
+    "default": 0,
+    "qJl17WpEHiovQQBC": 3
+  },
+  "type": "railgun",
+  "system": {
+    "description": "<p>Polyguns are modular, shape-changing weapons that can switch between holdout, medium pistol, heavy pistol, and machine pistol forms. Each form requires separate ammunition. Switching forms takes 3 action turns.</p>\n<p>&nbsp;</p>\n<p>Railguns slide and accelerate a non-explosive conductive tungsten slug along electromagnetic rails at extremely high velocities (Mach 6+) to create an overwhelming, penetrating attack. The kinetic energy of the projectile exceeds that of an explosive-filled shell of greater mass and creates shock and heat waves upon impact that shatter and incinerate the target, or portions of it. While railguns are more potent than firearms, they cannot use smart or specialty ammunition as the projectile must be conductive and able to survive both acceleration and heat created in the process due to friction. Nanofabrication allows railguns to be manufactured on the personal-weapons scale while high-energy portable batteries provide the power to fire them. Railgun operation makes no flash and is silent except for the supersonic crack of the projectile.</p>\n<p>Railguns are available in the same models as firearms. They are equipped with standard and nuclear batteries just like beam weapons, holding enough power for 200 shots.</p>",
+    "reference": "Eclipse Phase Second Edition p. 210 - 211",
+    "complexity": "moderate",
+    "restricted": true,
+    "quality": "average",
+    "concealable": false,
+    "fragile": false,
+    "singleUse": false,
+    "twoHanded": false,
+    "blueprint": {
+      "blueprintType": "",
+      "cracked": false,
+      "used": false
+    },
+    "state": {
+      "disabled": false,
+      "equipped": false,
+      "braced": false,
+      "interface": false
+    },
+    "fixed": false,
+    "long": false,
+    "shapeChanging": true,
+    "shapeName": "Medium Pistol",
+    "accessories": [
+      "safetySystem",
+      "smartlink"
+    ],
+    "ammo": {
+      "ammoClass": "mediumPistol",
+      "max": 30,
+      "value": 31
+    },
+    "battery": {
+      "charge": 200,
+      "max": 200,
+      "recharge": 0
+    },
+    "primaryAttack": {
+      "damageFormula": "2d10",
+      "firingModes": [
+        "semiAuto",
+        "burstFire",
+        "fullAuto"
+      ],
+      "notes": ""
+    },
+    "range": 45,
+    "wareType": ""
+  },
+  "flags": {
+    "ep2e": {
+      "shapes": [
+        {
+          "name": "Holdout",
+          "permission": {
+            "default": 0,
+            "qJl17WpEHiovQQBC": 3
+          },
+          "type": "railgun",
+          "system": {
+            "description": "<p>Polyguns are modular, shape-changing weapons that can switch between holdout, medium pistol, heavy pistol, and machine pistol forms. Each form requires separate ammunition. Switching forms takes 3 action turns.</p>\n<p>&nbsp;</p>\n<p>Railguns slide and accelerate a non-explosive conductive tungsten slug along electromagnetic rails at extremely high velocities (Mach 6+) to create an overwhelming, penetrating attack. The kinetic energy of the projectile exceeds that of an explosive-filled shell of greater mass and creates shock and heat waves upon impact that shatter and incinerate the target, or portions of it. While railguns are more potent than firearms, they cannot use smart or specialty ammunition as the projectile must be conductive and able to survive both acceleration and heat created in the process due to friction. Nanofabrication allows railguns to be manufactured on the personal-weapons scale while high-energy portable batteries provide the power to fire them. Railgun operation makes no flash and is silent except for the supersonic crack of the projectile.</p>\n<p>Railguns are available in the same models as firearms. They are equipped with standard and nuclear batteries just like beam weapons, holding enough power for 200 shots.</p>",
+            "reference": "Eclipse Phase Second Edition p. 210 - 211",
+            "complexity": "minor",
+            "restricted": false,
+            "quality": "average",
+            "concealable": true,
+            "fragile": false,
+            "singleUse": false,
+            "twoHanded": false,
+            "blueprint": {
+              "blueprintType": "",
+              "cracked": false,
+              "used": false
+            },
+            "state": {
+              "disabled": false,
+              "equipped": false,
+              "braced": false,
+              "interface": false
+            },
+            "fixed": false,
+            "long": false,
+            "shapeChanging": true,
+            "shapeName": "Holdout",
+            "accessories": [
+              "safetySystem",
+              "smartlink"
+            ],
+            "ammo": {
+              "ammoClass": "holdoutPistol",
+              "max": 18,
+              "value": 20
+            },
+            "battery": {
+              "charge": 200,
+              "max": 200,
+              "recharge": 0
+            },
+            "primaryAttack": {
+              "damageFormula": "1d10 + 1d6",
+              "firingModes": [
+                "semiAuto",
+                "burstFire"
+              ],
+              "notes": ""
+            },
+            "range": 38,
+            "wareType": ""
+          },
+          "folder": "R7CI3UJN1khs9aUI",
+          "sort": 100001,
+          "flags": {
+            "ep2e": {}
+          },
+          "effects": [],
+          "_id": "jfskqwmkqi",
+          "img": "icons/svg/mystery-man.svg"
+        },
+        {
+          "name": "Machine Pistol",
+          "permission": {
+            "default": 0,
+            "qJl17WpEHiovQQBC": 3
+          },
+          "type": "railgun",
+          "system": {
+            "description": "<p>Polyguns are modular, shape-changing weapons that can switch between holdout, medium pistol, heavy pistol, and machine pistol forms. Each form requires separate ammunition. Switching forms takes 3 action turns.</p>\n<p>&nbsp;</p>\n<p>Railguns slide and accelerate a non-explosive conductive tungsten slug along electromagnetic rails at extremely high velocities (Mach 6+) to create an overwhelming, penetrating attack. The kinetic energy of the projectile exceeds that of an explosive-filled shell of greater mass and creates shock and heat waves upon impact that shatter and incinerate the target, or portions of it. While railguns are more potent than firearms, they cannot use smart or specialty ammunition as the projectile must be conductive and able to survive both acceleration and heat created in the process due to friction. Nanofabrication allows railguns to be manufactured on the personal-weapons scale while high-energy portable batteries provide the power to fire them. Railgun operation makes no flash and is silent except for the supersonic crack of the projectile.</p>\n<p>Railguns are available in the same models as firearms. They are equipped with standard and nuclear batteries just like beam weapons, holding enough power for 200 shots.</p>",
+            "reference": "Eclipse Phase Second Edition p. 210 - 211",
+            "complexity": "minor",
+            "restricted": false,
+            "quality": "average",
+            "concealable": false,
+            "fragile": false,
+            "singleUse": false,
+            "twoHanded": false,
+            "blueprint": {
+              "blueprintType": "",
+              "cracked": false,
+              "used": false
+            },
+            "state": {
+              "disabled": false,
+              "equipped": false,
+              "braced": false,
+              "interface": false
+            },
+            "fixed": false,
+            "long": false,
+            "shapeChanging": true,
+            "shapeName": "Machine Pistol",
+            "accessories": [
+              "safetySystem",
+              "smartlink"
+            ],
+            "ammo": {
+              "ammoClass": "machinePistol",
+              "max": 60,
+              "value": 61
+            },
+            "battery": {
+              "charge": 200,
+              "max": 200,
+              "recharge": 0
+            },
+            "primaryAttack": {
+              "damageFormula": "1d10 + 1d6",
+              "firingModes": [
+                "semiAuto",
+                "burstFire",
+                "fullAuto"
+              ],
+              "notes": ""
+            },
+            "range": 38,
+            "wareType": ""
+          },
+          "folder": "R7CI3UJN1khs9aUI",
+          "sort": 400000,
+          "flags": {
+            "ep2e": {}
+          },
+          "effects": [],
+          "_id": "1t6nn58auw",
+          "img": "icons/svg/mystery-man.svg"
+        },
+        {
+          "name": "Heavy Pistol",
+          "permission": {
+            "default": 0,
+            "qJl17WpEHiovQQBC": 3
+          },
+          "type": "railgun",
+          "system": {
+            "description": "<p>Polyguns are modular, shape-changing weapons that can switch between holdout, medium pistol, heavy pistol, and machine pistol forms. Each form requires separate ammunition. Switching forms takes 3 action turns.</p>\n<p>&nbsp;</p>\n<p>Railguns slide and accelerate a non-explosive conductive tungsten slug along electromagnetic rails at extremely high velocities (Mach 6+) to create an overwhelming, penetrating attack. The kinetic energy of the projectile exceeds that of an explosive-filled shell of greater mass and creates shock and heat waves upon impact that shatter and incinerate the target, or portions of it. While railguns are more potent than firearms, they cannot use smart or specialty ammunition as the projectile must be conductive and able to survive both acceleration and heat created in the process due to friction. Nanofabrication allows railguns to be manufactured on the personal-weapons scale while high-energy portable batteries provide the power to fire them. Railgun operation makes no flash and is silent except for the supersonic crack of the projectile.</p>\n<p>Railguns are available in the same models as firearms. They are equipped with standard and nuclear batteries just like beam weapons, holding enough power for 200 shots.</p>",
+            "reference": "Eclipse Phase Second Edition p. 210 - 211",
+            "complexity": "minor",
+            "restricted": false,
+            "quality": "average",
+            "concealable": false,
+            "fragile": false,
+            "singleUse": false,
+            "twoHanded": false,
+            "blueprint": {
+              "blueprintType": "",
+              "cracked": false,
+              "used": false
+            },
+            "state": {
+              "disabled": false,
+              "equipped": false,
+              "braced": false,
+              "interface": false
+            },
+            "fixed": false,
+            "long": false,
+            "shapeChanging": true,
+            "shapeName": "Heavy Pistol",
+            "accessories": [
+              "safetySystem",
+              "smartlink"
+            ],
+            "ammo": {
+              "ammoClass": "heavyPistol",
+              "max": 18,
+              "value": 19
+            },
+            "battery": {
+              "charge": 200,
+              "max": 200,
+              "recharge": 0
+            },
+            "primaryAttack": {
+              "damageFormula": "2d10 + 2",
+              "firingModes": [
+                "semiAuto",
+                "burstFire",
+                "fullAuto"
+              ],
+              "notes": ""
+            },
+            "range": 53,
+            "wareType": ""
+          },
+          "folder": "R7CI3UJN1khs9aUI",
+          "sort": 300001,
+          "flags": {
+            "ep2e": {}
+          },
+          "effects": [],
+          "_id": "1a0vkta4ez",
+          "img": "icons/svg/mystery-man.svg"
+        }
+      ]
+    }
+  },
+  "effects": [],
+  "_id": "bSpluCEKeoGiGhKJ",
+  "_key": "!items!bSpluCEKeoGiGhKJ"
+}

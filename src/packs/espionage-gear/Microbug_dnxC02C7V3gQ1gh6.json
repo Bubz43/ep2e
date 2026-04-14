@@ -1,0 +1,82 @@
+{
+  "name": "Microbug",
+  "permission": {
+    "default": 0,
+    "qJl17WpEHiovQQBC": 3
+  },
+  "type": "physicalTech",
+  "system": {
+    "description": "<p>This micro-sized camera and microphone package is only 1 millimeter across. It records audio and visual from one section of the electromagnetic spectrum (Senses and Sensors ▶318) &mdash; usually the visual spectrum. It is meshed and can be remote controlled, but can also be instructed to broadcast only at specific intervals or when it has received a special code. It can record 100 hours of surveillance. It can also be set to only record when movement or audio is detected. Microbugs have adhesive backs and can stick to almost any surface. Microbugs can also establish their location via mesh positioning or GPS, and so double as tracking devices. Microbugs are sometimes attached to quantum farcasters ▶336 to avoid their signals being detected or jammed.</p>",
+    "reference": "Eclipse Phase Second Edition p. 338",
+    "complexity": "minor",
+    "restricted": false,
+    "quality": "average",
+    "concealable": false,
+    "fragile": false,
+    "singleUse": false,
+    "twoHanded": false,
+    "blueprint": {
+      "blueprintType": "",
+      "cracked": false,
+      "used": false
+    },
+    "state": {
+      "disabled": false,
+      "equipped": false,
+      "fabStartTime": 0,
+      "activated": false,
+      "embeddedEgos": [],
+      "onboardAliDeleted": false
+    },
+    "activatedEffects": [],
+    "deviceType": "",
+    "category": "Espionage Gear",
+    "fabricator": "",
+    "activationAction": "automatic",
+    "passiveEffects": [
+      {
+        "type": "misc",
+        "unique": "",
+        "description": "Micro-sized camera/audio recorder.",
+        "id": "q923glpof8"
+      }
+    ],
+    "activation": "none",
+    "resistEffectsCheck": "",
+    "usedEffectsDuration": 3000,
+    "onboardALI": false,
+    "firewallRating": 30,
+    "fabPrintDuration": 0,
+    "firewallHealth": {
+      "baseDurability": 30,
+      "rebootEndTime": -1,
+      "crashWounds": 0,
+      "damage": 0,
+      "log": [],
+      "wounds": 0
+    },
+    "meshHealth": {
+      "baseDurability": 20,
+      "damage": 0,
+      "wounds": 0,
+      "aidedHealTickStartTime": 0,
+      "ownHealTickStartTime": 0,
+      "damageRepair": {
+        "amount": "1d10",
+        "interval": 86400000
+      },
+      "woundRepair": {
+        "amount": 1,
+        "interval": 86400000
+      },
+      "log": [],
+      "rebootEndTime": -1,
+      "crashWounds": 0
+    },
+    "wareType": ""
+  },
+  "flags": {},
+  "effects": [],
+  "_id": "dnxC02C7V3gQ1gh6",
+  "_key": "!items!dnxC02C7V3gQ1gh6"
+}

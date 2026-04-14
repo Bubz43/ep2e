@@ -1,0 +1,50 @@
+{
+  "name": "Body Armor",
+  "permission": {
+    "default": 0,
+    "qJl17WpEHiovQQBC": 3
+  },
+  "type": "armor",
+  "system": {
+    "description": "<p>These high performance armor outfits, typically worn by security and police forces, protect the wearer from head to toe. The integrated armor vest, helmet, gauntlets, and limb guards are form-fitting, flexible, and non-restrictive. The suit includes a built-in ecto, cameras, and health monitors.</p>",
+    "reference": "Eclipse Phase Second Edition p. 215",
+    "complexity": "moderate",
+    "restricted": false,
+    "quality": "average",
+    "blueprint": {
+      "blueprintType": "",
+      "cracked": false,
+      "used": false
+    },
+    "state": {
+      "disabled": false,
+      "equipped": false,
+      "activated": false
+    },
+    "activeArmor": {
+      "energy": 0,
+      "kinetic": 0,
+      "concealable": false,
+      "layerable": false
+    },
+    "armorValues": {
+      "energy": 8,
+      "kinetic": 14,
+      "concealable": false,
+      "layerable": false
+    },
+    "attackTraits": [],
+    "effects": [],
+    "hasActiveState": false,
+    "fragile": false,
+    "singleUse": false,
+    "twoHanded": false,
+    "notes": "",
+    "wareType": ""
+  },
+  "flags": {},
+  "img": "icons/svg/mystery-man.svg",
+  "effects": [],
+  "_id": "vfvZv5B2OQtez3n4",
+  "_key": "!items!vfvZv5B2OQtez3n4"
+}

@@ -1,0 +1,26 @@
+{
+  "name": "Egocasting",
+  "permission": {
+    "default": 0,
+    "qJl17WpEHiovQQBC": 3
+  },
+  "type": "physicalService",
+  "system": {
+    "description": "<p>Transmit your ego to another location.</p>\n<p>&nbsp;</p>\n<p>This is the use of a ship or habitat&rsquo;s farcaster to transmit an ego/infomorph. Farcasting is not cheap, and the cost is impacted by factors such as distance to receiver station and priority service (paying extra to get bumped ahead in line).</p>",
+    "reference": "Eclipse Phase Second Edition p. 315",
+    "complexity": "moderate",
+    "restricted": false,
+    "quality": "average",
+    "serviceDuration": -1,
+    "reputations": [],
+    "serviceType": "generic",
+    "state": {
+      "serviceStartTime": 0,
+      "equipped": false
+    }
+  },
+  "flags": {},
+  "effects": [],
+  "_id": "bMuoCLv8h6KsXlC7",
+  "_key": "!items!bMuoCLv8h6KsXlC7"
+}

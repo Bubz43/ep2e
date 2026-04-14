@@ -1,0 +1,117 @@
+{
+  "name": "Enhanced Security",
+  "permission": {
+    "default": 0,
+    "qJl17WpEHiovQQBC": 3
+  },
+  "type": "software",
+  "system": {
+    "description": "<p>This meshware installs additional firewall and security layers, making the infomorph/cyberbrain harder to hack. Apply a -10 modifier to attempts to brainhack your digital mind.</p>\n<p>You can also use this meshware to enter a heightened state of security &mdash; Defensive Mode. When activated with a quick action, the modifier to brainhack you is increased to -30. This lock-down status impairs your functions, however; you cannot use Insight pool while it is active and suffer a -3 Initiative modifier.</p>",
+    "reference": "Eclipse Phase Second Edition p. 326",
+    "complexity": "moderate",
+    "restricted": false,
+    "quality": "average",
+    "softwareType": "meshware",
+    "activatedEffects": [
+      {
+        "type": "successTest",
+        "tags": [
+          {
+            "type": "skill",
+            "skillType": "infosec"
+          }
+        ],
+        "modifier": -30,
+        "toOpponent": true,
+        "requirement": "hacking your mind",
+        "id": "ztmv537ejw"
+      },
+      {
+        "type": "initiative",
+        "modifier": -3,
+        "id": "329t6l83ji"
+      },
+      {
+        "type": "pool",
+        "pool": "insight",
+        "modifier": 1,
+        "usabilityModification": "disable",
+        "id": "847qckwlak"
+      }
+    ],
+    "effects": [
+      {
+        "type": "successTest",
+        "tags": [
+          {
+            "type": "skill",
+            "skillType": "infosec"
+          }
+        ],
+        "modifier": -10,
+        "toOpponent": true,
+        "requirement": "hacking your mind",
+        "id": "9z4gusdopx"
+      }
+    ],
+    "category": "Meshware",
+    "serviceDuration": -1,
+    "skills": [],
+    "activation": "quick",
+    "meshAttacks": 0,
+    "meshHealth": {
+      "baseDurability": 10,
+      "damage": 0,
+      "log": [],
+      "wounds": 0,
+      "rebootEndTime": -1,
+      "crashWounds": 0
+    },
+    "state": {
+      "activated": false,
+      "equipped": false,
+      "serviceStartTime": 0,
+      "paused": false
+    },
+    "primaryAttack": {
+      "armorPiercing": false,
+      "attackTraits": [],
+      "damageFormula": "",
+      "damageType": "mesh",
+      "useMeshArmor": true,
+      "notes": "",
+      "aptitudeCheckInfo": {
+        "armorAsModifier": "",
+        "check": "",
+        "checkModifier": 0,
+        "checkFailure": [],
+        "checkSuccess": [],
+        "criticalCheckFailure": []
+      },
+      "label": "",
+      "reduceAVbyDV": false
+    },
+    "secondaryAttack": {
+      "armorPiercing": false,
+      "attackTraits": [],
+      "damageFormula": "",
+      "damageType": "mesh",
+      "useMeshArmor": true,
+      "notes": "",
+      "aptitudeCheckInfo": {
+        "armorAsModifier": "",
+        "check": "",
+        "checkModifier": 0,
+        "checkFailure": [],
+        "checkSuccess": [],
+        "criticalCheckFailure": []
+      },
+      "label": "",
+      "reduceAVbyDV": false
+    }
+  },
+  "flags": {},
+  "effects": [],
+  "_id": "PdHJjwJLYacHKuoD",
+  "_key": "!items!PdHJjwJLYacHKuoD"
+}

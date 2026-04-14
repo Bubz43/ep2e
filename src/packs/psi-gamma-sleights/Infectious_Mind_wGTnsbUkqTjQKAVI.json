@@ -1,0 +1,61 @@
+{
+  "name": "Infectious Mind",
+  "permission": {
+    "default": 0,
+    "qJl17WpEHiovQQBC": 3
+  },
+  "type": "sleight",
+  "system": {
+    "description": "<p>You share a triggered disorder or active infection influence effect with the target. At the GM&rsquo;s discretion, prolonged exposure may inflict stress damage to the target.</p>",
+    "reference": "Eclipse Phase Second Edition p. 285",
+    "duration": "sustained",
+    "infectionMod": 4,
+    "sleightType": "gamma",
+    "action": "complex",
+    "timeframe": 0,
+    "effectsToSelf": [
+      {
+        "type": "misc",
+        "unique": "",
+        "description": "You share a triggered disorder or influence effect with the target.",
+        "id": "r2yy7z0lhr"
+      }
+    ],
+    "effectsToTarget": [
+      {
+        "type": "misc",
+        "unique": "",
+        "description": "A triggered disorder or influence effect is being shared with you.",
+        "id": "pjz2eix4kz"
+      }
+    ],
+    "scaleEffectsOnSuperior": false,
+    "attack": {
+      "useMentalArmor": false,
+      "attackTraits": [],
+      "damageFormula": "",
+      "damageType": "mental",
+      "notes": ""
+    },
+    "heal": {
+      "formula": "",
+      "healthType": "mental"
+    },
+    "mentalArmor": {
+      "apply": false,
+      "divisor": 3,
+      "formula": "1d6"
+    },
+    "status": {
+      "sustaining": false,
+      "pushDuration": 0,
+      "pushed": false,
+      "pushStartTime": 0,
+      "sustainingOn": []
+    }
+  },
+  "flags": {},
+  "effects": [],
+  "_id": "wGTnsbUkqTjQKAVI",
+  "_key": "!items!wGTnsbUkqTjQKAVI"
+}

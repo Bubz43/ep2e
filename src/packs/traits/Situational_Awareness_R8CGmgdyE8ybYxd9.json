@@ -1,0 +1,40 @@
+{
+  "_id": "R8CGmgdyE8ybYxd9",
+  "name": "Situational Awareness",
+  "permission": {
+    "default": 0,
+    "qHi89sFcK4gHlOPd": 3
+  },
+  "type": "trait",
+  "system": {
+    "description": "<p>You maintain continuous partial awareness of the goings-on in your immediate environment. You do not suffer the Distracted modifier on Perceive Tests to notice things even when your attention is focused elsewhere or when making quick Perceive Tests during combat.</p>",
+    "reference": "Eclipse Phase Second Edition p. 75",
+    "restrictions": "",
+    "triggers": "",
+    "source": "ego",
+    "state": {
+      "level": 0,
+      "triggered": false
+    },
+    "levels": [
+      {
+        "cost": 1,
+        "effects": [
+          {
+            "type": "misc",
+            "unique": "",
+            "description": "You do not suffer the Distracted modifier",
+            "id": "qxyu5kdtuw"
+          }
+        ],
+        "id": "7l8ldwaort"
+      }
+    ],
+    "subtype": "",
+    "traitType": "positive"
+  },
+  "flags": {},
+  "img": "icons/svg/mystery-man.svg",
+  "effects": [],
+  "_key": "!items!R8CGmgdyE8ybYxd9"
+}

@@ -1,0 +1,66 @@
+{
+  "name": "Enhanced Creativity",
+  "permission": {
+    "default": 0,
+    "qJl17WpEHiovQQBC": 3
+  },
+  "type": "sleight",
+  "system": {
+    "description": "<p>You are more imaginative and inclined to think outside the box. Apply a +10 modifier to Know or Technical skill tests where creativity plays a major role. This level of ingenuity sometimes seems strange and unusual, manifesting as odd insights or creepy details, especially with artwork.</p>",
+    "reference": "Eclipse Phase Second Edition p. 280",
+    "duration": "actionTurns",
+    "infectionMod": 1,
+    "sleightType": "chi",
+    "action": "complex",
+    "timeframe": 0,
+    "effectsToSelf": [
+      {
+        "type": "successTest",
+        "tags": [
+          {
+            "type": "fieldSkill",
+            "fieldSkill": "know",
+            "field": ""
+          },
+          {
+            "type": "skillCategory",
+            "category": "technical"
+          }
+        ],
+        "modifier": 10,
+        "toOpponent": false,
+        "requirement": "creativity is a major factor",
+        "id": "zw8pixht58"
+      }
+    ],
+    "effectsToTarget": [],
+    "scaleEffectsOnSuperior": false,
+    "attack": {
+      "useMentalArmor": false,
+      "attackTraits": [],
+      "damageFormula": "",
+      "damageType": "mental",
+      "notes": ""
+    },
+    "heal": {
+      "formula": "",
+      "healthType": "mental"
+    },
+    "mentalArmor": {
+      "apply": false,
+      "divisor": 3,
+      "formula": "1d6"
+    },
+    "status": {
+      "sustaining": false,
+      "pushDuration": 0,
+      "pushed": false,
+      "pushStartTime": 0,
+      "sustainingOn": []
+    }
+  },
+  "flags": {},
+  "effects": [],
+  "_id": "SNXIaz2QGhQfDq29",
+  "_key": "!items!SNXIaz2QGhQfDq29"
+}

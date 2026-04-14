@@ -1,0 +1,18 @@
+{
+  "_id": "ySXzofJmeyT8Crst",
+  "name": "Arm Slide",
+  "permission": {
+    "default": 0,
+    "qHi89sFcK4gHlOPd": 3
+  },
+  "folder": "",
+  "flags": {
+    "core": {
+      "sourceId": "JournalEntry.HBc1IDpdQVXQUnBp"
+    }
+  },
+  "content": "<p>This slide-mount can hold a one-handed weapon under your sleeve, pushing the weapon into your hand with an electronic signal or specific sequence of arm movements. You can draw the weapon and attack with a single complex action.</p>",
+  "pages": [],
+  "categories": [],
+  "_key": "!journal!ySXzofJmeyT8Crst"
+}

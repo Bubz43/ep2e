@@ -1,0 +1,55 @@
+{
+  "name": "Burst of Confidence",
+  "permission": {
+    "default": 0,
+    "qJl17WpEHiovQQBC": 3
+  },
+  "type": "sleight",
+  "system": {
+    "description": "<p>You instill the target with renewed determination and empowerment. They receive +1 Moxie pool for WIL &divide; 5 minutes. A target may only benefit from one burst of confidence at a time.</p>",
+    "reference": "Eclipse Phase Second Edition p. 283",
+    "duration": "minutes",
+    "infectionMod": 6,
+    "sleightType": "gamma",
+    "action": "complex",
+    "timeframe": 0,
+    "effectsToSelf": [],
+    "effectsToTarget": [
+      {
+        "type": "pool",
+        "pool": "moxie",
+        "modifier": 1,
+        "usabilityModification": "",
+        "id": "d9dooc9uf6"
+      }
+    ],
+    "scaleEffectsOnSuperior": false,
+    "attack": {
+      "useMentalArmor": false,
+      "attackTraits": [],
+      "damageFormula": "",
+      "damageType": "mental",
+      "notes": ""
+    },
+    "heal": {
+      "formula": "",
+      "healthType": "mental"
+    },
+    "mentalArmor": {
+      "apply": false,
+      "divisor": 3,
+      "formula": "1d6"
+    },
+    "status": {
+      "sustaining": false,
+      "pushDuration": 0,
+      "pushed": false,
+      "pushStartTime": 0,
+      "sustainingOn": []
+    }
+  },
+  "flags": {},
+  "effects": [],
+  "_id": "xm4ZKwxryqXUrDHh",
+  "_key": "!items!xm4ZKwxryqXUrDHh"
+}

@@ -1,0 +1,59 @@
+{
+  "name": "Torch",
+  "permission": {
+    "default": 0,
+    "qJl17WpEHiovQQBC": 3
+  },
+  "type": "sprayWeapon",
+  "system": {
+    "description": "<p>This modern flamethrower uses condensed ammunition capsules rather than fuel tanks, scorching targets and setting them on fire. A superior success sets the target on fire; they will continue to take DV 2d10 per action turn (armor does not apply) until extinguished. These chemical fires are particularly difficult to put out unless they are deprived of oxygen.</p>",
+    "reference": "Eclipse Phase Second Edition p. 209",
+    "complexity": "major",
+    "restricted": true,
+    "quality": "average",
+    "concealable": false,
+    "fragile": false,
+    "singleUse": false,
+    "twoHanded": true,
+    "blueprint": {
+      "blueprintType": "",
+      "cracked": false,
+      "used": false
+    },
+    "state": {
+      "disabled": false,
+      "equipped": false,
+      "braced": false,
+      "interface": false
+    },
+    "accessories": [
+      "safetySystem",
+      "smartlink"
+    ],
+    "ammo": {
+      "max": 20,
+      "value": 20
+    },
+    "dosesPerShot": 1,
+    "fixed": false,
+    "long": true,
+    "range": 15,
+    "payloadUse": "",
+    "primaryAttack": {
+      "armorPiercing": false,
+      "armorUsed": "energy",
+      "attackTraits": [],
+      "damageFormula": "3d10",
+      "firingModes": [
+        "semiAuto"
+      ],
+      "superiorSuccessDot": "2d10",
+      "notes": ""
+    },
+    "wareType": ""
+  },
+  "flags": {},
+  "effects": [],
+  "_id": "zvVtOSlBkztZQM0r",
+  "_key": "!items!zvVtOSlBkztZQM0r"
+}

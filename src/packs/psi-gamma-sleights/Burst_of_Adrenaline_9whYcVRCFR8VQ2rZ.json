@@ -1,0 +1,55 @@
+{
+  "name": "Burst of Adrenaline",
+  "permission": {
+    "default": 0,
+    "qJl17WpEHiovQQBC": 3
+  },
+  "type": "sleight",
+  "system": {
+    "description": "<p>You revive the target with a rush of endorphins and energy. They receive +1 Vigor pool for WIL &divide; 5 minutes. A target may only benefit from one burst of adrenaline at a time.</p>",
+    "reference": "Eclipse Phase Second Edition p. 283",
+    "duration": "minutes",
+    "infectionMod": 6,
+    "sleightType": "gamma",
+    "action": "complex",
+    "timeframe": 0,
+    "effectsToSelf": [],
+    "effectsToTarget": [
+      {
+        "type": "pool",
+        "pool": "vigor",
+        "modifier": 1,
+        "usabilityModification": "",
+        "id": "zwr1xjq98k"
+      }
+    ],
+    "scaleEffectsOnSuperior": false,
+    "attack": {
+      "useMentalArmor": false,
+      "attackTraits": [],
+      "damageFormula": "",
+      "damageType": "mental",
+      "notes": ""
+    },
+    "heal": {
+      "formula": "",
+      "healthType": "mental"
+    },
+    "mentalArmor": {
+      "apply": false,
+      "divisor": 3,
+      "formula": "1d6"
+    },
+    "status": {
+      "sustaining": false,
+      "pushDuration": 0,
+      "pushed": false,
+      "pushStartTime": 0,
+      "sustainingOn": []
+    }
+  },
+  "flags": {},
+  "effects": [],
+  "_id": "9whYcVRCFR8VQ2rZ",
+  "_key": "!items!9whYcVRCFR8VQ2rZ"
+}

@@ -1,0 +1,85 @@
+{
+  "_id": "AWLFb4orkhyksEPc",
+  "name": "Stalwart",
+  "permission": {
+    "default": 0,
+    "qHi89sFcK4gHlOPd": 3
+  },
+  "type": "trait",
+  "system": {
+    "description": "<p>You laugh at fear. Apply a +10 modifier per level to WIL Checks and other tests that involve resisting fear.</p>",
+    "reference": "Eclipse Phase Second Edition p. 75",
+    "restrictions": "",
+    "triggers": "",
+    "source": "ego",
+    "state": {
+      "level": 0,
+      "triggered": false
+    },
+    "levels": [
+      {
+        "cost": 1,
+        "effects": [
+          {
+            "type": "successTest",
+            "tags": [
+              {
+                "type": "aptitudeCheck",
+                "aptitude": "wil"
+              }
+            ],
+            "modifier": 10,
+            "toOpponent": false,
+            "requirement": "resisting fear",
+            "id": "s5d3rbwif5"
+          }
+        ],
+        "id": "otv7evwwan"
+      },
+      {
+        "cost": 2,
+        "effects": [
+          {
+            "type": "successTest",
+            "tags": [
+              {
+                "type": "aptitudeCheck",
+                "aptitude": "wil"
+              }
+            ],
+            "modifier": 20,
+            "toOpponent": false,
+            "requirement": "resisting fear",
+            "id": "s5d3rbwif5"
+          }
+        ],
+        "id": "35svc5rku3"
+      },
+      {
+        "cost": 3,
+        "effects": [
+          {
+            "type": "successTest",
+            "tags": [
+              {
+                "type": "aptitudeCheck",
+                "aptitude": "wil"
+              }
+            ],
+            "modifier": 30,
+            "toOpponent": false,
+            "requirement": "resisting fear",
+            "id": "s5d3rbwif5"
+          }
+        ],
+        "id": "cmjwvg3xb7"
+      }
+    ],
+    "subtype": "",
+    "traitType": "positive"
+  },
+  "flags": {},
+  "img": "icons/svg/mystery-man.svg",
+  "effects": [],
+  "_key": "!items!AWLFb4orkhyksEPc"
+}

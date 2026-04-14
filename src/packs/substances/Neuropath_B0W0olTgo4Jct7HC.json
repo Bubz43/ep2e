@@ -1,0 +1,89 @@
+{
+  "name": "Neuropath",
+  "permission": {
+    "default": 0,
+    "qJl17WpEHiovQQBC": 3
+  },
+  "type": "substance",
+  "system": {
+    "description": "<p>These nanobots stimulate pain receptors on a systemic level, inflicting agony. Suffer -30 to all actions from the inflicted agony and make a WIL Check or become incapacitated for 8 hours. Anything that allows you to ignore wound modifiers can be used to reduce the pain modifier by 10.</p>",
+    "reference": "Eclipse Phase Second Edition p. 335",
+    "complexity": "moderate",
+    "restricted": true,
+    "quality": "average",
+    "blueprint": {
+      "blueprintType": "",
+      "cracked": false,
+      "used": false
+    },
+    "quantity": 5,
+    "state": {
+      "stashed": false
+    },
+    "addiction": "",
+    "addictionMod": 0,
+    "hasSeverity": true,
+    "application": [
+      "dermal",
+      "injection",
+      "oral"
+    ],
+    "base": {
+      "damage": {
+        "damageFormula": "",
+        "perTurn": false,
+        "armorPiercing": false,
+        "attackTraits": [],
+        "reduceAVbyDV": false,
+        "armorUsed": [],
+        "damageType": "physical"
+      },
+      "duration": 28800000,
+      "effects": [
+        {
+          "type": "successTest",
+          "tags": [
+            {
+              "type": "allActions"
+            }
+          ],
+          "modifier": -30,
+          "toOpponent": false,
+          "requirement": "",
+          "id": "zuswhdbrl6"
+        }
+      ],
+      "wearOffStress": "",
+      "notes": "Ignore wound modifiers can be used to reduce the pain modifier by 10."
+    },
+    "category": "",
+    "classification": "nano",
+    "consumeOnUse": true,
+    "substanceType": "toxin",
+    "quantityPerCost": 5,
+    "severity": {
+      "check": "wil",
+      "checkMod": 0,
+      "conditions": [
+        "incapacitated"
+      ],
+      "wearOffStress": "",
+      "damage": {
+        "damageFormula": "",
+        "perTurn": false,
+        "armorPiercing": false,
+        "attackTraits": [],
+        "reduceAVbyDV": false,
+        "armorUsed": [],
+        "damageType": "physical"
+      },
+      "duration": 28800000,
+      "effects": [],
+      "notes": ""
+    }
+  },
+  "flags": {},
+  "effects": [],
+  "_id": "B0W0olTgo4Jct7HC",
+  "_key": "!items!B0W0olTgo4Jct7HC"
+}

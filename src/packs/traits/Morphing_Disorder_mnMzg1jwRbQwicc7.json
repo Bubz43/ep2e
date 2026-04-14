@@ -1,0 +1,97 @@
+{
+  "_id": "mnMzg1jwRbQwicc7",
+  "name": "Morphing Disorder",
+  "permission": {
+    "default": 0,
+    "qHi89sFcK4gHlOPd": 3
+  },
+  "type": "trait",
+  "system": {
+    "description": "<p>Adapting to new morphs is particularly challenging for you. Apply a -10 modifier per level to Integration Tests ▶288 and Resleeving Stress Tests ▶288.</p>",
+    "reference": "Eclipse Phase Second Edition p. 79",
+    "restrictions": "",
+    "triggers": "",
+    "source": "ego",
+    "state": {
+      "level": 0,
+      "triggered": false
+    },
+    "levels": [
+      {
+        "cost": 2,
+        "effects": [
+          {
+            "type": "successTest",
+            "tags": [
+              {
+                "type": "special",
+                "test": "integration"
+              },
+              {
+                "type": "special",
+                "test": "resleevingStress"
+              }
+            ],
+            "modifier": -10,
+            "toOpponent": false,
+            "requirement": "",
+            "id": "97kcqrcvgu"
+          }
+        ],
+        "id": "jd9e9oxqhs"
+      },
+      {
+        "cost": 4,
+        "effects": [
+          {
+            "type": "successTest",
+            "tags": [
+              {
+                "type": "special",
+                "test": "integration"
+              },
+              {
+                "type": "special",
+                "test": "resleevingStress"
+              }
+            ],
+            "modifier": -20,
+            "toOpponent": false,
+            "requirement": "",
+            "id": "97kcqrcvgu"
+          }
+        ],
+        "id": "e5ffx3o42g"
+      },
+      {
+        "cost": 6,
+        "effects": [
+          {
+            "type": "successTest",
+            "tags": [
+              {
+                "type": "special",
+                "test": "integration"
+              },
+              {
+                "type": "special",
+                "test": "resleevingStress"
+              }
+            ],
+            "modifier": -30,
+            "toOpponent": false,
+            "requirement": "",
+            "id": "97kcqrcvgu"
+          }
+        ],
+        "id": "2b24walgyl"
+      }
+    ],
+    "subtype": "",
+    "traitType": "negative"
+  },
+  "flags": {},
+  "img": "icons/svg/mystery-man.svg",
+  "effects": [],
+  "_key": "!items!mnMzg1jwRbQwicc7"
+}

@@ -1,0 +1,85 @@
+{
+  "_id": "qiPEePGkcDtpXRgr",
+  "name": "Feebleness",
+  "permission": {
+    "default": 0,
+    "qHi89sFcK4gHlOPd": 3
+  },
+  "type": "trait",
+  "system": {
+    "description": "<p>Either your morph is weak or you are not adept at using its strength. Apply a -5 per level to SOM Checks.</p>",
+    "reference": "Eclipse Phase Second Edition p. 78",
+    "restrictions": "",
+    "triggers": "",
+    "source": "morph",
+    "state": {
+      "level": 0,
+      "triggered": false
+    },
+    "levels": [
+      {
+        "cost": 1,
+        "effects": [
+          {
+            "type": "successTest",
+            "tags": [
+              {
+                "type": "aptitudeCheck",
+                "aptitude": "som"
+              }
+            ],
+            "modifier": -5,
+            "toOpponent": false,
+            "requirement": "",
+            "id": "xw5nv7stld"
+          }
+        ],
+        "id": "dt9rp23lp9"
+      },
+      {
+        "cost": 2,
+        "effects": [
+          {
+            "type": "successTest",
+            "tags": [
+              {
+                "type": "aptitudeCheck",
+                "aptitude": "som"
+              }
+            ],
+            "modifier": -10,
+            "toOpponent": false,
+            "requirement": "",
+            "id": "4mgn9h5wdh"
+          }
+        ],
+        "id": "tg4f8i2upz"
+      },
+      {
+        "cost": 3,
+        "effects": [
+          {
+            "type": "successTest",
+            "tags": [
+              {
+                "type": "aptitudeCheck",
+                "aptitude": "som"
+              }
+            ],
+            "modifier": -15,
+            "toOpponent": false,
+            "requirement": "",
+            "id": "6zet047ftc"
+          }
+        ],
+        "id": "rt9d51eguh"
+      }
+    ],
+    "subtype": "",
+    "traitType": "negative"
+  },
+  "flags": {},
+  "img": "icons/svg/mystery-man.svg",
+  "effects": [],
+  "_key": "!items!qiPEePGkcDtpXRgr"
+}

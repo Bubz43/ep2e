@@ -1,0 +1,62 @@
+{
+  "name": "Pryokinesis",
+  "permission": {
+    "default": 0,
+    "qJl17WpEHiovQQBC": 3
+  },
+  "type": "sleight",
+  "system": {
+    "description": "<p>The exsurgent rapidly accelerates the molecules and focuses heat around a specific object or person. This causes solids to liquefy and melt, liquids to evaporate into gas, and matter to smolder and ignite. Electronics may overheat and fail (GM discretion). You suffer DV 1d10 per action turn (thermogenic protection halves the damage, but armor does not protect) and suffer from a pain effect ▶216. Fire from clothing or items set aflame may spread to the surroundings.</p>",
+    "reference": "Eclipse Phase Second Edition p. 387",
+    "duration": "sustained",
+    "infectionMod": 1,
+    "sleightType": "epsilon",
+    "action": "complex",
+    "timeframe": 0,
+    "effectsToSelf": [],
+    "effectsToTarget": [
+      {
+        "type": "misc",
+        "unique": "",
+        "description": "Raises heat around target",
+        "id": "coxzug4124"
+      },
+      {
+        "type": "misc",
+        "unique": "",
+        "description": "Damage per turn",
+        "id": "mgu2lij3hb"
+      }
+    ],
+    "scaleEffectsOnSuperior": false,
+    "attack": {
+      "useMentalArmor": false,
+      "attackTraits": [
+        "pain"
+      ],
+      "damageFormula": "1d10",
+      "damageType": "physical",
+      "notes": ""
+    },
+    "heal": {
+      "formula": "",
+      "healthType": "mental"
+    },
+    "mentalArmor": {
+      "apply": false,
+      "divisor": 3,
+      "formula": "1d6"
+    },
+    "status": {
+      "sustaining": false,
+      "pushDuration": 0,
+      "pushed": false,
+      "pushStartTime": 0,
+      "sustainingOn": []
+    }
+  },
+  "flags": {},
+  "effects": [],
+  "_id": "7Sq8f5EAlu5N8rLL",
+  "_key": "!items!7Sq8f5EAlu5N8rLL"
+}

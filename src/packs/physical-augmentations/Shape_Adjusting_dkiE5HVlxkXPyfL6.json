@@ -1,0 +1,82 @@
+{
+  "name": "Shape Adjusting",
+  "permission": {
+    "default": 0,
+    "qJl17WpEHiovQQBC": 3
+  },
+  "type": "physicalTech",
+  "system": {
+    "description": "<p>This shell is made from smart materials that allow it to alter its shape, height, width, circumference, and external features, while retaining the same mass. The ability to change shape is not completely unlimited, due to the shell&rsquo;s internal components; work with the GM to establish what is possible. This mod is primarily used to reshape the morph into special pre-set configurations adapted to specific tasks (for example, lengthening to crawl through a tunnel, widening its base for stability, expanding to reach out and attach to multiple access points simultaneously, and so on). Shapechanging allows you to change your composition to function as any 2 Minor complexity items/ware or 1 Moderate complexity item/ware allowed by the GM (no blueprint needed). Extra sets of limbs count as Minor ware. Simple shapes and mechanical designs are easy to create, but advanced electronics, complex designs, and specialized components are beyond the scope of this mod. Altering shape takes at minimum 1d6 minutes, and can take as long as 1d6 hours for substantial changes. This mod also allows the morph to change its features for disguise purposes; apply a +30 modifier to disguise-based Deceive or Exotic Skill: Disguise Tests.</p>",
+    "reference": "Eclipse Phase Second Edition p. 326",
+    "complexity": "major",
+    "restricted": false,
+    "quality": "average",
+    "concealable": false,
+    "fragile": false,
+    "singleUse": false,
+    "twoHanded": false,
+    "blueprint": {
+      "blueprintType": "",
+      "cracked": false,
+      "used": false
+    },
+    "state": {
+      "disabled": false,
+      "equipped": false,
+      "fabStartTime": 0,
+      "activated": false,
+      "embeddedEgos": [],
+      "onboardAliDeleted": false
+    },
+    "activatedEffects": [],
+    "deviceType": "",
+    "category": "Physical Augments",
+    "fabricator": "",
+    "activationAction": "automatic",
+    "passiveEffects": [
+      {
+        "type": "misc",
+        "unique": "",
+        "description": "Smart material composition, can create 2 Min or 1 Mod item/ware, more.",
+        "id": "xbu6qlz8nn"
+      }
+    ],
+    "activation": "none",
+    "resistEffectsCheck": "",
+    "usedEffectsDuration": 3000,
+    "onboardALI": false,
+    "firewallRating": 30,
+    "fabPrintDuration": 0,
+    "firewallHealth": {
+      "baseDurability": 30,
+      "rebootEndTime": -1,
+      "crashWounds": 0,
+      "damage": 0,
+      "log": [],
+      "wounds": 0
+    },
+    "meshHealth": {
+      "baseDurability": 20,
+      "damage": 0,
+      "wounds": 0,
+      "aidedHealTickStartTime": 0,
+      "ownHealTickStartTime": 0,
+      "damageRepair": {
+        "amount": "1d10",
+        "interval": 86400000
+      },
+      "woundRepair": {
+        "amount": 1,
+        "interval": 86400000
+      },
+      "log": [],
+      "rebootEndTime": -1,
+      "crashWounds": 0
+    },
+    "wareType": "hardware"
+  },
+  "flags": {},
+  "effects": [],
+  "_id": "dkiE5HVlxkXPyfL6",
+  "_key": "!items!dkiE5HVlxkXPyfL6"
+}

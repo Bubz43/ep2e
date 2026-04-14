@@ -1,0 +1,58 @@
+{
+  "name": "Standard Hardsuit",
+  "permission": {
+    "default": 0,
+    "qJl17WpEHiovQQBC": 3
+  },
+  "type": "armor",
+  "system": {
+    "description": "<p>This heavy-duty suit can almost be considered a miniature spaceship. It appears as a large metallic ovoid with jointed, servo-assisted arms and legs. It increases Vigor pool by 1 and inflicts an extra 1d10 damage in melee. Its miniature plasma thrusters are capable of delivering 0.01 g for 10 hours.</p>",
+    "reference": "Eclipse Phase Second Edition p. 351",
+    "complexity": "minor",
+    "restricted": false,
+    "quality": "average",
+    "blueprint": {
+      "blueprintType": "",
+      "cracked": false,
+      "used": false
+    },
+    "state": {
+      "disabled": false,
+      "equipped": false,
+      "activated": false
+    },
+    "activeArmor": {
+      "energy": 0,
+      "kinetic": 0,
+      "concealable": false,
+      "layerable": false
+    },
+    "armorValues": {
+      "energy": 20,
+      "kinetic": 18,
+      "concealable": false,
+      "layerable": false
+    },
+    "attackTraits": [],
+    "effects": [
+      {
+        "type": "pool",
+        "pool": "vigor",
+        "modifier": 1,
+        "usabilityModification": "",
+        "id": "fnl13206x3"
+      }
+    ],
+    "hasActiveState": false,
+    "fragile": false,
+    "singleUse": false,
+    "twoHanded": false,
+    "notes": "",
+    "wareType": ""
+  },
+  "flags": {},
+  "img": "icons/svg/mystery-man.svg",
+  "effects": [],
+  "_id": "W8cgXiqdgPFamQFS",
+  "_key": "!items!W8cgXiqdgPFamQFS"
+}

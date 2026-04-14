@@ -1,0 +1,40 @@
+{
+  "_id": "eCWoO60nqz2VK2gK",
+  "name": "Mental Disorder",
+  "permission": {
+    "default": 0,
+    "qHi89sFcK4gHlOPd": 3
+  },
+  "type": "trait",
+  "system": {
+    "description": "<p>You have a psychological disorder from a previous traumatic experience. Choose one of the disorders listed on ▶224. This trait may be taken multiple times for different disorders.</p>",
+    "reference": "Eclipse Phase Second Edition p. 79",
+    "restrictions": "",
+    "triggers": "",
+    "source": "ego",
+    "state": {
+      "level": 0,
+      "triggered": false
+    },
+    "levels": [
+      {
+        "cost": 2,
+        "effects": [
+          {
+            "type": "misc",
+            "unique": "",
+            "description": "You have a mental disorder (choose one)",
+            "id": "8gt3bi4mg8"
+          }
+        ],
+        "id": "vpnmgl4j2x"
+      }
+    ],
+    "subtype": "",
+    "traitType": "negative"
+  },
+  "flags": {},
+  "img": "icons/svg/mystery-man.svg",
+  "effects": [],
+  "_key": "!items!eCWoO60nqz2VK2gK"
+}

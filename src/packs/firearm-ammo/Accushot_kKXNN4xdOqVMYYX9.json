@@ -1,0 +1,43 @@
+{
+  "name": "Accushot",
+  "permission": {
+    "default": 0,
+    "qJl17WpEHiovQQBC": 3
+  },
+  "type": "firearmAmmo",
+  "system": {
+    "description": "<p>Accushot bullets change shape during flight to keep dead on course, countering the effects of wind, drag, and gravity over distance. Attacks made with Accushots ignore all range modifiers.</p>",
+    "reference": "Eclipse Phase Second Edition p. 211",
+    "complexity": "minor",
+    "restricted": true,
+    "quality": "average",
+    "blueprint": {
+      "blueprintType": "",
+      "cracked": false,
+      "used": false
+    },
+    "quantity": 100,
+    "state": {
+      "stashed": false
+    },
+    "ammoClass": "machineGun",
+    "carryPayload": false,
+    "roundsPerComplexity": 100,
+    "modes": [
+      {
+        "name": "Mode 1",
+        "armorPiercing": false,
+        "attackTraits": [],
+        "damageFormula": "",
+        "steady": true,
+        "damageModifierType": "formula",
+        "notes": "",
+        "id": "_defaultID"
+      }
+    ]
+  },
+  "flags": {},
+  "effects": [],
+  "_id": "kKXNN4xdOqVMYYX9",
+  "_key": "!items!kKXNN4xdOqVMYYX9"
+}

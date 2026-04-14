@@ -1,0 +1,82 @@
+{
+  "_id": "Q5QWIf51W6r1AVZF",
+  "name": "Addiction",
+  "permission": {
+    "default": 0,
+    "qHi89sFcK4gHlOPd": 3
+  },
+  "type": "trait",
+  "system": {
+    "description": "<p>You have a pathological reliance on a drug ▶330, stimulus (e.g., XP, VR), or activity (e.g., mesh use, dying) to a degree that impacts your physical or mental health. Addiction comes in two forms: mental (affecting the ego) and physical (affecting the biomorph). Work with your GM to choose an addiction that is appropriate for your game. You must indulge in your addiction at a regular frequency according to the level or go into withdrawal. Withdrawal inflicts a -10 modifier per level.</p><p>Level 1: Once per week. Your minor addiction is largely kept under control — it does not ruin your life, though it may create difficulties. You may not even recognize or admit you have a problem.</p><p>Level 2: Once per day. Your moderate addiction is in full swing and often causes you to neglect other aspects of your life.</p><p>Level 3: Once per 6 hours. You face major cravings, live for your next fix, and are on the road to ruin.</p><p>Addiction is triggered in the same way as disorders ▶224. Triggers include the presence of the addiction's focus, fear, frustration, helplessness, and violence.</p><p>Every addiction takes different forms, depending on the character and source. Long-term addiction may result in physical or mental damage (impairment modifiers or reductions to SOM Checks or WIL Checks) and may build up tolerance, requiring higher dosages. At the GM’s discretion, you may need to make WIL Checks to avoid raising the addiction level. Withdrawal may also inflict additional effects such as mood swings, compulsive behavior, or physical sickness.</p><p>You may kick the habit by staying clean for 1 week per level. Resisting the craving, however, requires a WIL Check every day, modified by the source’s addiction modifier. Once the addiction is kicked, however, there is always the possibility of a relapse. GMs may call for WIL Checks anytime you are directly tempted or undergo substantial stress or mental trauma.</p><p>If you upload, fork, or resleeve, any mental addictions persist with your ego/fork; physical addictions remain with the morph. This trait may be taken more than once for different addictions. The morph version of this trait only applies to biomorphs.</p>",
+    "reference": "Eclipse Phase Second Edition p. 76",
+    "restrictions": "",
+    "triggers": "",
+    "source": "ego",
+    "state": {
+      "level": 0,
+      "triggered": false
+    },
+    "levels": [
+      {
+        "cost": 1,
+        "effects": [
+          {
+            "type": "successTest",
+            "tags": [
+              {
+                "type": "allActions"
+              }
+            ],
+            "modifier": -10,
+            "toOpponent": false,
+            "requirement": "not indulged in: once per week",
+            "id": "zwodw7kc4m"
+          }
+        ],
+        "id": "kudczjf25w"
+      },
+      {
+        "cost": 2,
+        "effects": [
+          {
+            "type": "successTest",
+            "tags": [
+              {
+                "type": "allActions"
+              }
+            ],
+            "modifier": -20,
+            "toOpponent": false,
+            "requirement": "not indulged in: once per day",
+            "id": "7qjw27rmf8"
+          }
+        ],
+        "id": "46id7mjxaj"
+      },
+      {
+        "cost": 4,
+        "effects": [
+          {
+            "type": "successTest",
+            "tags": [
+              {
+                "type": "allActions"
+              }
+            ],
+            "modifier": -30,
+            "toOpponent": false,
+            "requirement": "not indulged in: once per 6 hours",
+            "id": "39flob92nq"
+          }
+        ],
+        "id": "1p8eljz4iq"
+      }
+    ],
+    "subtype": "",
+    "traitType": "negative"
+  },
+  "flags": {},
+  "img": "icons/svg/mystery-man.svg",
+  "effects": [],
+  "_key": "!items!Q5QWIf51W6r1AVZF"
+}

@@ -1,0 +1,58 @@
+{
+  "name": "Atlas Loader",
+  "permission": {
+    "default": 0,
+    "qJl17WpEHiovQQBC": 3
+  },
+  "type": "armor",
+  "system": {
+    "description": "<p>This common example of a heavy-use industrial exoskeleton is large (just over 3 meters tall) and designed for handling heavy/large objects. Though open frame, the wearer is partially protected by a meshed cage. Atlas&rsquo;s provide a +2 bonus to Vigor pool and increase melee damage by +2d10. Melee damage also becomes armor-piercing.</p>",
+    "reference": "Eclipse Phase Second Edition p. 350",
+    "complexity": "rare",
+    "restricted": false,
+    "quality": "average",
+    "blueprint": {
+      "blueprintType": "",
+      "cracked": false,
+      "used": false
+    },
+    "state": {
+      "disabled": false,
+      "equipped": false,
+      "activated": false
+    },
+    "activeArmor": {
+      "energy": 0,
+      "kinetic": 0,
+      "concealable": false,
+      "layerable": false
+    },
+    "armorValues": {
+      "energy": 10,
+      "kinetic": 12,
+      "concealable": false,
+      "layerable": true
+    },
+    "attackTraits": [],
+    "effects": [
+      {
+        "type": "pool",
+        "pool": "vigor",
+        "modifier": 2,
+        "usabilityModification": "",
+        "id": "ba7jw2qzpj"
+      }
+    ],
+    "hasActiveState": false,
+    "fragile": false,
+    "singleUse": false,
+    "twoHanded": false,
+    "notes": "needs 2d10 and a AP setting needs movement Ware: Access Jacks, Mesh Inserts, Puppet Sock, Radar",
+    "wareType": ""
+  },
+  "flags": {},
+  "img": "icons/svg/mystery-man.svg",
+  "effects": [],
+  "_id": "aiPKVeEUhnjnR1cz",
+  "_key": "!items!aiPKVeEUhnjnR1cz"
+}

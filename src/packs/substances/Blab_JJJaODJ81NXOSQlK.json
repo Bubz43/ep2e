@@ -1,0 +1,165 @@
+{
+  "name": "Blab",
+  "permission": {
+    "default": 0,
+    "qJl17WpEHiovQQBC": 3
+  },
+  "type": "substance",
+  "system": {
+    "description": "<p>Blab impedes your ability to lie or withhold information. You suffer a -30 SAV/WIL Check modifier against Persuade and Provoke Tests made to interrogate or extract information. You also suffer -30 to Deceive Tests. For the duration, you acquire the Neural Damage: Logorrhea trait, making you excessively talkative.</p>",
+    "reference": "Eclipse Phase Second Edition p. 334",
+    "complexity": "moderate",
+    "restricted": true,
+    "quality": "average",
+    "blueprint": {
+      "blueprintType": "",
+      "cracked": false,
+      "used": false
+    },
+    "quantity": 5,
+    "state": {
+      "stashed": false
+    },
+    "addiction": "",
+    "addictionMod": 0,
+    "hasSeverity": false,
+    "application": [
+      "dermal",
+      "inhalation",
+      "injection",
+      "oral"
+    ],
+    "base": {
+      "damage": {
+        "damageFormula": "",
+        "perTurn": false,
+        "armorPiercing": false,
+        "attackTraits": [],
+        "reduceAVbyDV": false,
+        "armorUsed": [],
+        "damageType": "physical"
+      },
+      "duration": 3600000,
+      "effects": [
+        {
+          "type": "successTest",
+          "tags": [
+            {
+              "type": "aptitudeCheck",
+              "aptitude": "sav"
+            },
+            {
+              "type": "aptitudeCheck",
+              "aptitude": "wil"
+            }
+          ],
+          "modifier": -30,
+          "toOpponent": false,
+          "requirement": "opposing Persuade and Provoke vs. interrogation",
+          "id": "h5lb4x7d0r"
+        },
+        {
+          "type": "successTest",
+          "tags": [
+            {
+              "type": "skill",
+              "skillType": "deceive"
+            }
+          ],
+          "modifier": -30,
+          "toOpponent": false,
+          "requirement": "",
+          "id": "c9lscthgtk"
+        }
+      ],
+      "wearOffStress": "",
+      "notes": ""
+    },
+    "category": "Social",
+    "classification": "biochem",
+    "consumeOnUse": true,
+    "substanceType": "drug",
+    "quantityPerCost": 5,
+    "severity": {
+      "check": "som",
+      "checkMod": 0,
+      "conditions": [],
+      "wearOffStress": "",
+      "damage": {
+        "damageFormula": "",
+        "perTurn": false,
+        "armorPiercing": false,
+        "attackTraits": [],
+        "reduceAVbyDV": false,
+        "armorUsed": [],
+        "damageType": "physical"
+      },
+      "duration": 3000,
+      "effects": [],
+      "notes": ""
+    }
+  },
+  "flags": {
+    "ep2e": {
+      "baseAppliedItems": [
+        {
+          "_id": "sd8Ua01dGKBjOZiT-base-zankfu8wh5",
+          "name": "Neural Damage",
+          "permission": {
+            "default": 0,
+            "qHi89sFcK4gHlOPd": 3
+          },
+          "type": "trait",
+          "system": {
+            "description": "<p>You use an excessive amount of words and sometimes can&rsquo;t stop talking.</p>\n<p>&nbsp;</p>\n<p>You suffered some type of neurological damage that cannot yet be cured. The affliction is part of your ego and remains even when resleeving. This damage may have been inherited, resulted from a poorly designed morph or implant, or inflicted by a nanovirus during the Fall. Work with your GM to agree on a specific disorder appropriate to your game. The GM may inflict impairment modifiers (usually &ndash;10) as appropriate, according to the affliction.<br />This trait may be taken multiple times, for different afflictions.</p>",
+            "reference": "Eclipse Phase Second Edition p. 79",
+            "restrictions": "",
+            "triggers": "",
+            "source": "ego",
+            "state": {
+              "level": 0,
+              "triggered": false
+            },
+            "levels": [
+              {
+                "cost": 2,
+                "effects": [
+                  {
+                    "type": "successTest",
+                    "tags": [
+                      {
+                        "type": "skill",
+                        "skillType": "persuade"
+                      },
+                      {
+                        "type": "skill",
+                        "skillType": "provoke"
+                      }
+                    ],
+                    "modifier": -10,
+                    "toOpponent": false,
+                    "requirement": "verbal",
+                    "id": "mru9avhya8"
+                  }
+                ],
+                "id": "_defaultLevel"
+              }
+            ],
+            "subtype": "Logorrhea",
+            "traitType": "positive"
+          },
+          "flags": {
+            "core": {
+              "sourceId": "Item.fNDiX4wH5sOogDSv"
+            }
+          },
+          "img": "icons/svg/mystery-man.svg",
+          "effects": []
+        }
+      ]
+    }
+  },
+  "effects": [],
+  "_id": "JJJaODJ81NXOSQlK",
+  "_key": "!items!JJJaODJ81NXOSQlK"
+}

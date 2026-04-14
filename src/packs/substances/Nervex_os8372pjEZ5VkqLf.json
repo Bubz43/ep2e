@@ -1,0 +1,97 @@
+{
+  "name": "Nervex",
+  "permission": {
+    "default": 0,
+    "qJl17WpEHiovQQBC": 3
+  },
+  "type": "substance",
+  "system": {
+    "description": "<p>Derived from deadly nerve agents like cyclosarin, VX, and novichok, this genetically modified toxin is deployed as a colorless, odorless gas that turns safely inert 10 minutes after deployment. It causes involuntary contraction of the muscles, seizures, and death by respiratory failure. You suffer a -20 modifier to all actions and must make a SOM Check or be incapacitated by seizures, paralysis, nausea, and vomiting. After 10 minutes, you will die unless an antidote (such as atropine ▶331) is applied.</p>",
+    "reference": "Eclipse Phase Second Edition p. 335",
+    "complexity": "major",
+    "restricted": true,
+    "quality": "average",
+    "blueprint": {
+      "blueprintType": "",
+      "cracked": false,
+      "used": false
+    },
+    "quantity": 5,
+    "state": {
+      "stashed": false
+    },
+    "addiction": "",
+    "addictionMod": 0,
+    "hasSeverity": true,
+    "application": [
+      "dermal",
+      "inhalation",
+      "injection",
+      "oral"
+    ],
+    "base": {
+      "damage": {
+        "damageFormula": "",
+        "perTurn": false,
+        "armorPiercing": false,
+        "attackTraits": [],
+        "reduceAVbyDV": false,
+        "armorUsed": [],
+        "damageType": "physical"
+      },
+      "duration": 600000,
+      "effects": [
+        {
+          "type": "successTest",
+          "tags": [
+            {
+              "type": "allActions"
+            }
+          ],
+          "modifier": -20,
+          "toOpponent": false,
+          "requirement": "",
+          "id": "yre9fgwpba"
+        }
+      ],
+      "wearOffStress": "",
+      "notes": ""
+    },
+    "category": "",
+    "classification": "biochem",
+    "consumeOnUse": true,
+    "substanceType": "toxin",
+    "quantityPerCost": 5,
+    "severity": {
+      "check": "som",
+      "checkMod": 0,
+      "conditions": [
+        "incapacitated"
+      ],
+      "wearOffStress": "",
+      "damage": {
+        "damageFormula": "",
+        "perTurn": false,
+        "armorPiercing": false,
+        "attackTraits": [],
+        "reduceAVbyDV": false,
+        "armorUsed": [],
+        "damageType": "physical"
+      },
+      "duration": 600000,
+      "effects": [
+        {
+          "type": "misc",
+          "unique": "",
+          "description": "After 10 minutes pass without \nan antidote, death",
+          "id": "laaahahbwd"
+        }
+      ],
+      "notes": ""
+    }
+  },
+  "flags": {},
+  "effects": [],
+  "_id": "os8372pjEZ5VkqLf",
+  "_key": "!items!os8372pjEZ5VkqLf"
+}

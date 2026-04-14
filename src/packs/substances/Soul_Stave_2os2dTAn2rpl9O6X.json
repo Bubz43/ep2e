@@ -1,0 +1,80 @@
+{
+  "name": "Soul Stave",
+  "permission": {
+    "default": 0,
+    "qJl17WpEHiovQQBC": 3
+  },
+  "type": "substance",
+  "system": {
+    "description": "<p>This petal discreetly copies forks of your ego. You find yourself in a magical realm, full of dangerous monsters and powerful magic items. The items are all possessed by intelligent spirits &mdash; embodied forks of other trippers. Strange ethereal creatures provide you with quests. Ultimately, you seek to acquire the items that contain your forks &mdash; and the ritual that will re-merge them. But one fork has fallen into the clutches of an evil wizard, whose dark staff consumes all spirits. Rumors suggest that there are many levels to this petal experience and that you can only defeat the wizard by learning their dark power and consuming spirits into yourself.</p>",
+    "reference": "Eclipse Phase Second Edition p. 333",
+    "complexity": "minor",
+    "restricted": true,
+    "quality": "average",
+    "blueprint": {
+      "blueprintType": "",
+      "cracked": false,
+      "used": false
+    },
+    "quantity": 5,
+    "state": {
+      "stashed": false
+    },
+    "addiction": "",
+    "addictionMod": 0,
+    "hasSeverity": false,
+    "application": [
+      "injection",
+      "oral"
+    ],
+    "base": {
+      "damage": {
+        "damageFormula": "",
+        "perTurn": false,
+        "armorPiercing": false,
+        "attackTraits": [],
+        "reduceAVbyDV": false,
+        "armorUsed": [],
+        "damageType": "physical"
+      },
+      "duration": 43200000,
+      "effects": [
+        {
+          "type": "misc",
+          "unique": "",
+          "description": "Narrative hallucinogen, find magic item forks",
+          "id": "fzihxnyy1v"
+        }
+      ],
+      "wearOffStress": "",
+      "notes": ""
+    },
+    "category": "Petal",
+    "classification": "nano",
+    "consumeOnUse": true,
+    "substanceType": "drug",
+    "quantityPerCost": 5,
+    "severity": {
+      "check": "som",
+      "checkMod": 0,
+      "conditions": [],
+      "wearOffStress": "",
+      "damage": {
+        "damageFormula": "",
+        "perTurn": false,
+        "armorPiercing": false,
+        "attackTraits": [],
+        "reduceAVbyDV": false,
+        "armorUsed": [],
+        "damageType": "physical"
+      },
+      "duration": 3000,
+      "effects": [],
+      "notes": ""
+    }
+  },
+  "flags": {},
+  "effects": [],
+  "_id": "2os2dTAn2rpl9O6X",
+  "_key": "!items!2os2dTAn2rpl9O6X"
+}

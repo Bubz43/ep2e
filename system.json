@@ -1,5 +1,5 @@
 {
-  "version": "1.3.2",
+  "version": "1.3.3",
   "id": "ep2e",
   "title": "Eclipse Phase 2e",
   "description": "Eclipse Phase 2e Game System.",
@@ -37,385 +37,385 @@
       "name": "premade-characters",
       "system": "ep2e",
       "label": "Premade Characters",
-      "path": "./packs/premade-characters.db",
+      "path": "./packs/premade-characters",
       "type": "Actor"
     },
     {
       "name": "uplift-biomorphs",
       "system": "ep2e",
       "label": "Uplift Biomorphs",
-      "path": "./packs/uplift-biomorphs.db",
+      "path": "./packs/uplift-biomorphs",
       "type": "Actor"
     },
     {
       "name": "biomorphs",
       "system": "ep2e",
       "label": "Biomorphs",
-      "path": "./packs/biomorphs.db",
+      "path": "./packs/biomorphs",
       "type": "Actor"
     },
     {
       "name": "pod-biomorphs",
       "system": "ep2e",
       "label": "Pod Biomorphs",
-      "path": "./packs/pod-biomorphs.db",
+      "path": "./packs/pod-biomorphs",
       "type": "Actor"
     },
     {
       "name": "synthmorphs",
       "system": "ep2e",
       "label": "Synthmorphs",
-      "path": "./packs/synthmorphs.db",
+      "path": "./packs/synthmorphs",
       "type": "Actor"
     },
     {
       "name": "infomorphs",
       "system": "ep2e",
       "label": "Infomorphs",
-      "path": "./packs/infomorphs.db",
+      "path": "./packs/infomorphs",
       "type": "Actor"
     },
     {
       "name": "robots",
       "system": "ep2e",
       "label": "Robots",
-      "path": "./packs/robots.db",
+      "path": "./packs/robots",
       "type": "Actor"
     },
     {
       "name": "vehicles",
       "system": "ep2e",
       "label": "Vehicles",
-      "path": "./packs/vehicles.db",
+      "path": "./packs/vehicles",
       "type": "Actor"
     },
     {
       "name": "exoskeletons-hardsuits",
       "system": "ep2e",
       "label": "Exoskeletons/Hardsuits",
-      "path": "./packs/exoskeletons-hardsuits.db",
+      "path": "./packs/exoskeletons-hardsuits",
       "type": "Actor"
     },
     {
       "name": "robot-vehicle-shells",
       "system": "ep2e",
       "label": "Robot/Vehicle Shells",
-      "path": "./packs/robot-vehicle-shells.db",
+      "path": "./packs/robot-vehicle-shells",
       "type": "Actor"
     },
     {
       "name": "creatures",
       "system": "ep2e",
       "label": "Creatures",
-      "path": "./packs/creatures.db",
+      "path": "./packs/creatures",
       "type": "Actor"
     },
     {
       "name": "traits",
       "system": "ep2e",
       "label": "Traits",
-      "path": "./packs/traits.db",
+      "path": "./packs/traits",
       "type": "Item"
     },
     {
       "name": "physical-services",
       "system": "ep2e",
       "label": "Physical Services",
-      "path": "./packs/physical-services.db",
+      "path": "./packs/physical-services",
       "type": "Item"
     },
     {
       "name": "substances",
       "system": "ep2e",
       "label": "Substances",
-      "path": "./packs/substances.db",
+      "path": "./packs/substances",
       "type": "Item"
     },
     {
       "name": "psi-sub-strains",
       "system": "ep2e",
       "label": "Psi Sub-Strains",
-      "path": "./packs/psi-sub-strains.db",
+      "path": "./packs/psi-sub-strains",
       "type": "Item"
     },
     {
       "name": "psi-chi-sleights",
       "system": "ep2e",
       "label": "Psi-Chi Sleights",
-      "path": "./packs/psi-chi-sleights.db",
+      "path": "./packs/psi-chi-sleights",
       "type": "Item"
     },
     {
       "name": "psi-gamma-sleights",
       "system": "ep2e",
       "label": "Psi-Gamma Sleights",
-      "path": "./packs/psi-gamma-sleights.db",
+      "path": "./packs/psi-gamma-sleights",
       "type": "Item"
     },
     {
       "name": "psi-epsilon-sleights",
       "system": "ep2e",
       "label": "Psi-Epsilon Sleights",
-      "path": "./packs/psi-epsilon-sleights.db",
+      "path": "./packs/psi-epsilon-sleights",
       "type": "Item"
     },
     {
       "name": "explosives",
       "system": "ep2e",
       "label": "Explosives",
-      "path": "./packs/explosives.db",
+      "path": "./packs/explosives",
       "type": "Item"
     },
     {
       "name": "railguns",
       "system": "ep2e",
       "label": "Railguns",
-      "path": "./packs/railguns.db",
+      "path": "./packs/railguns",
       "type": "Item"
     },
     {
       "name": "firearms",
       "system": "ep2e",
       "label": "Firearms",
-      "path": "./packs/firearms.db",
+      "path": "./packs/firearms",
       "type": "Item"
     },
     {
       "name": "firearm-ammo",
       "system": "ep2e",
       "label": "Firearm Ammo",
-      "path": "./packs/firearm-ammo.db",
+      "path": "./packs/firearm-ammo",
       "type": "Item"
     },
     {
       "name": "armor",
       "system": "ep2e",
       "label": "Armor",
-      "path": "./packs/armor.db",
+      "path": "./packs/armor",
       "type": "Item"
     },
     {
       "name": "melee-weapons",
       "system": "ep2e",
       "label": "Melee Weapons",
-      "path": "./packs/melee-weapons.db",
+      "path": "./packs/melee-weapons",
       "type": "Item"
     },
     {
       "name": "spray-weapons",
       "system": "ep2e",
       "label": "Spray Weapons",
-      "path": "./packs/spray-weapons.db",
+      "path": "./packs/spray-weapons",
       "type": "Item"
     },
     {
       "name": "seeker-weapons",
       "system": "ep2e",
       "label": "Seeker Weapons",
-      "path": "./packs/seeker-weapons.db",
+      "path": "./packs/seeker-weapons",
       "type": "Item"
     },
     {
       "name": "beam-weapons",
       "system": "ep2e",
       "label": "Beam Weapons",
-      "path": "./packs/beam-weapons.db",
+      "path": "./packs/beam-weapons",
       "type": "Item"
     },
     {
       "name": "communications-gear",
       "system": "ep2e",
       "label": "Communications Gear",
-      "path": "./packs/communications-gear.db",
+      "path": "./packs/communications-gear",
       "type": "Item"
     },
     {
       "name": "espionage-gear",
       "system": "ep2e",
       "label": "Espionage Gear",
-      "path": "./packs/espionage-gear.db",
+      "path": "./packs/espionage-gear",
       "type": "Item"
     },
     {
       "name": "nanotech-gear",
       "system": "ep2e",
       "label": "Nanotech Gear",
-      "path": "./packs/nanotech-gear.db",
+      "path": "./packs/nanotech-gear",
       "type": "Item"
     },
     {
       "name": "neutrino-comms-gear",
       "system": "ep2e",
       "label": "Neutrino Comms Gear",
-      "path": "./packs/neutrino-comms-gear.db",
+      "path": "./packs/neutrino-comms-gear",
       "type": "Item"
     },
     {
       "name": "qe-comms-gear",
       "system": "ep2e",
       "label": "QE Comms Gear",
-      "path": "./packs/qe-comms-gear.db",
+      "path": "./packs/qe-comms-gear",
       "type": "Item"
     },
     {
       "name": "quantum-farcasters",
       "system": "ep2e",
       "label": "Quantum Farcasters",
-      "path": "./packs/quantum-farcasters.db",
+      "path": "./packs/quantum-farcasters",
       "type": "Item"
     },
     {
       "name": "everyday-tech",
       "system": "ep2e",
       "label": "Everyday Tech",
-      "path": "./packs/everyday-tech.db",
+      "path": "./packs/everyday-tech",
       "type": "Item"
     },
     {
       "name": "exploration-tools",
       "system": "ep2e",
       "label": "Exploration Tools",
-      "path": "./packs/exploration-tools.db",
+      "path": "./packs/exploration-tools",
       "type": "Item"
     },
     {
       "name": "salvage-tools",
       "system": "ep2e",
       "label": "Salvage Tools",
-      "path": "./packs/salvage-tools.db",
+      "path": "./packs/salvage-tools",
       "type": "Item"
     },
     {
       "name": "science-tools",
       "system": "ep2e",
       "label": "Science Tools",
-      "path": "./packs/science-tools.db",
+      "path": "./packs/science-tools",
       "type": "Item"
     },
     {
       "name": "survival-tools",
       "system": "ep2e",
       "label": "Survival Tools",
-      "path": "./packs/survival-tools.db",
+      "path": "./packs/survival-tools",
       "type": "Item"
     },
     {
       "name": "specialized-fabbers",
       "system": "ep2e",
       "label": "Specialized Fabbers",
-      "path": "./packs/specialized-fabbers.db",
+      "path": "./packs/specialized-fabbers",
       "type": "Item"
     },
     {
       "name": "mesh-hardware",
       "system": "ep2e",
       "label": "Mesh Hardware",
-      "path": "./packs/mesh-hardware.db",
+      "path": "./packs/mesh-hardware",
       "type": "Item"
     },
     {
       "name": "nanofabricators",
       "system": "ep2e",
       "label": "Nanofabricators",
-      "path": "./packs/nanofabricators.db",
+      "path": "./packs/nanofabricators",
       "type": "Item"
     },
     {
       "name": "combat-augmentations",
       "system": "ep2e",
       "label": "Combat Augmentations",
-      "path": "./packs/combat-augmentations.db",
+      "path": "./packs/combat-augmentations",
       "type": "Item"
     },
     {
       "name": "mental-augmentations",
       "system": "ep2e",
       "label": "Mental Augmentations",
-      "path": "./packs/mental-augmentations.db",
+      "path": "./packs/mental-augmentations",
       "type": "Item"
     },
     {
       "name": "physical-augmentations",
       "system": "ep2e",
       "label": "Physical Augmentations",
-      "path": "./packs/physical-augmentations.db",
+      "path": "./packs/physical-augmentations",
       "type": "Item"
     },
     {
       "name": "sensory-augmentations",
       "system": "ep2e",
       "label": "Sensory Augmentations",
-      "path": "./packs/sensory-augmentations.db",
+      "path": "./packs/sensory-augmentations",
       "type": "Item"
     },
     {
       "name": "social-augmentations",
       "system": "ep2e",
       "label": "Social Augmentations",
-      "path": "./packs/social-augmentations.db",
+      "path": "./packs/social-augmentations",
       "type": "Item"
     },
     {
       "name": "standard-augmentations",
       "system": "ep2e",
       "label": "Standard Augmentations",
-      "path": "./packs/standard-augmentations.db",
+      "path": "./packs/standard-augmentations",
       "type": "Item"
     },
     {
       "name": "disorders",
       "system": "ep2e",
       "label": "Disorders",
-      "path": "./packs/disorders.db",
+      "path": "./packs/disorders",
       "type": "Item"
     },
     {
       "name": "apps",
       "system": "ep2e",
       "label": "Apps",
-      "path": "./packs/apps.db",
+      "path": "./packs/apps",
       "type": "Item"
     },
     {
       "name": "meshware",
       "system": "ep2e",
       "label": "Meshware",
-      "path": "./packs/meshware.db",
+      "path": "./packs/meshware",
       "type": "Item"
     },
     {
       "name": "software",
       "system": "ep2e",
       "label": "Software",
-      "path": "./packs/software.db",
+      "path": "./packs/software",
       "type": "Item"
     },
     {
       "name": "mesh-services",
       "system": "ep2e",
       "label": "Mesh Services",
-      "path": "./packs/mesh-services.db",
+      "path": "./packs/mesh-services",
       "type": "Item"
     },
     {
       "name": "tacnet",
       "system": "ep2e",
       "label": "TacNet",
-      "path": "./packs/tacnet.db",
+      "path": "./packs/tacnet",
       "type": "Item"
     },
     {
       "name": "scorchers",
       "system": "ep2e",
       "label": "Scorchers",
-      "path": "./packs/scorchers.db",
+      "path": "./packs/scorchers",
       "type": "Item"
     },
     {
       "name": "weapon-accessories",
       "system": "ep2e",
       "label": "Weapon Accessories",
-      "path": "./packs/weapon-accessories.db",
+      "path": "./packs/weapon-accessories",
       "type": "JournalEntry"
     }
   ]

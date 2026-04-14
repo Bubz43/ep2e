@@ -1,0 +1,40 @@
+{
+  "_id": "qsaFOxTh2SwaPKJQ",
+  "name": "Zoosemiotics",
+  "permission": {
+    "default": 0,
+    "qHi89sFcK4gHlOPd": 3
+  },
+  "type": "trait",
+  "system": {
+    "description": "<p>This trait is only available to characters possessing the Psi trait. You do not suffer modifiers when using psi sleights on non-sapient or partly sapient animal species.</p>",
+    "reference": "Eclipse Phase Second Edition p. 75",
+    "restrictions": "",
+    "triggers": "",
+    "source": "ego",
+    "state": {
+      "level": 0,
+      "triggered": false
+    },
+    "levels": [
+      {
+        "cost": 1,
+        "effects": [
+          {
+            "type": "misc",
+            "unique": "",
+            "description": "Your Psi skills suffer no modifiers when dealing with non-sapient or partly sapient animal species",
+            "id": "tf7wf9xtr8"
+          }
+        ],
+        "id": "ea1sh3nufo"
+      }
+    ],
+    "subtype": "",
+    "traitType": "positive"
+  },
+  "flags": {},
+  "img": "icons/svg/mystery-man.svg",
+  "effects": [],
+  "_key": "!items!qsaFOxTh2SwaPKJQ"
+}

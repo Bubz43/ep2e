@@ -1,0 +1,54 @@
+{
+  "name": "Aphasia",
+  "permission": {
+    "default": 0,
+    "qJl17WpEHiovQQBC": 3
+  },
+  "type": "sleight",
+  "system": {
+    "description": "<p>You create a temporary stroke-like effect within the target&rsquo;s brain that disrupts their speech and language centers. For WIL &divide; 5 minutes, they are incapable of speaking, communicating, reading, and understanding language.</p>",
+    "reference": "Eclipse Phase Second Edition p. 282",
+    "duration": "minutes",
+    "infectionMod": 6,
+    "sleightType": "gamma",
+    "action": "complex",
+    "timeframe": 0,
+    "effectsToSelf": [],
+    "effectsToTarget": [
+      {
+        "type": "misc",
+        "unique": "",
+        "description": "Target cannot speak, communicate, or read.",
+        "id": "o4j5ym9lmp"
+      }
+    ],
+    "scaleEffectsOnSuperior": false,
+    "attack": {
+      "useMentalArmor": false,
+      "attackTraits": [],
+      "damageFormula": "",
+      "damageType": "mental",
+      "notes": ""
+    },
+    "heal": {
+      "formula": "",
+      "healthType": "mental"
+    },
+    "mentalArmor": {
+      "apply": false,
+      "divisor": 3,
+      "formula": "1d6"
+    },
+    "status": {
+      "sustaining": false,
+      "pushDuration": 0,
+      "pushed": false,
+      "pushStartTime": 0,
+      "sustainingOn": []
+    }
+  },
+  "flags": {},
+  "effects": [],
+  "_id": "Hk21h9TMkakIFug8",
+  "_key": "!items!Hk21h9TMkakIFug8"
+}

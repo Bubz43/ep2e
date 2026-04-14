@@ -1,0 +1,54 @@
+{
+  "name": "Control Behavior",
+  "permission": {
+    "default": 0,
+    "qJl17WpEHiovQQBC": 3
+  },
+  "type": "sleight",
+  "system": {
+    "description": "<p>You can fine-tune your emotional state. Apply an Enhanced Behavior or Restricted Behavior (Level 2) trait ▶80 of your choice at will. You may not change it again until you have taken a recharge action. At the GM's discretion, this trait may apply a +/-10 modifier in some situations. Alternatively, use this to reduce an Enhanced/Restricted Behavior trait imposed on you by up to two levels. You can push this sleight to raise the effect to Level 3 (or three levels of reduction).</p>",
+    "reference": "Eclipse Phase Second Edition p. 280",
+    "duration": "actionTurns",
+    "infectionMod": 1,
+    "sleightType": "chi",
+    "action": "complex",
+    "timeframe": 0,
+    "effectsToSelf": [
+      {
+        "type": "misc",
+        "unique": "",
+        "description": "Apply/reduce an Enhanced Behavior or Restricted Behavior (Level 2) trait.",
+        "id": "7rblrr5n0p"
+      }
+    ],
+    "effectsToTarget": [],
+    "scaleEffectsOnSuperior": false,
+    "attack": {
+      "useMentalArmor": false,
+      "attackTraits": [],
+      "damageFormula": "",
+      "damageType": "mental",
+      "notes": ""
+    },
+    "heal": {
+      "formula": "",
+      "healthType": "mental"
+    },
+    "mentalArmor": {
+      "apply": false,
+      "divisor": 3,
+      "formula": "1d6"
+    },
+    "status": {
+      "sustaining": false,
+      "pushDuration": 0,
+      "pushed": false,
+      "pushStartTime": 0,
+      "sustainingOn": []
+    }
+  },
+  "flags": {},
+  "effects": [],
+  "_id": "HpMsFAo2yD8n6IMy",
+  "_key": "!items!HpMsFAo2yD8n6IMy"
+}

@@ -1,0 +1,43 @@
+{
+  "name": "Bug",
+  "permission": {
+    "default": 0,
+    "qJl17WpEHiovQQBC": 3
+  },
+  "type": "firearmAmmo",
+  "system": {
+    "description": "<p>Bug rounds are equipped with a microbug and medical sensor nanobots. They attempt to gather information on the target&rsquo;s location (via standard mesh tracking), health (querying the target&rsquo;s medichines), and surroundings (typically hindered by being inside the target&rsquo;s body). They will transmit status reports in a pre-programmed manner via the mesh or a pre-chosen frequency band either continuously or in pre-set intervals.</p>",
+    "reference": "Eclipse Phase Second Edition p. 211",
+    "complexity": "minor",
+    "restricted": true,
+    "quality": "average",
+    "blueprint": {
+      "blueprintType": "",
+      "cracked": false,
+      "used": false
+    },
+    "quantity": 100,
+    "state": {
+      "stashed": false
+    },
+    "ammoClass": "sniperRifle",
+    "carryPayload": false,
+    "roundsPerComplexity": 100,
+    "modes": [
+      {
+        "name": "",
+        "armorPiercing": false,
+        "attackTraits": [],
+        "damageFormula": "",
+        "steady": false,
+        "damageModifierType": "formula",
+        "notes": "Microbugs and medical sensor nanobots",
+        "id": "_defaultID"
+      }
+    ]
+  },
+  "flags": {},
+  "effects": [],
+  "_id": "5sCVUzMXDdHhaSXD",
+  "_key": "!items!5sCVUzMXDdHhaSXD"
+}

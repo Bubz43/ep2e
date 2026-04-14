@@ -1,0 +1,44 @@
+{
+  "name": "Fugue",
+  "permission": {
+    "default": 0,
+    "qJl17WpEHiovQQBC": 3
+  },
+  "type": "trait",
+  "system": {
+    "description": "<p>You enter a fugue state where you display little attention to external stimuli. You still function physiologically but refrain from speaking and stare of into the distance, unable to focus on events around you.</p>",
+    "reference": "Eclipse Phase Second Edition p. 224",
+    "restrictions": "",
+    "triggers": "Helplessness, the unkown, violence",
+    "source": "ego",
+    "state": {
+      "level": 0,
+      "triggered": false
+    },
+    "levels": [
+      {
+        "cost": 2,
+        "effects": [
+          {
+            "type": "misc",
+            "unique": "",
+            "description": "You are totally non-responsive to most stimuli. You will walk only if led by a helper. You will not even defend yourself if attacked, simply curling into a fetal position if physically assaulted.",
+            "id": "s0n0wts7zu"
+          }
+        ],
+        "id": "_defaultLevel"
+      }
+    ],
+    "subtype": "",
+    "traitType": "positive"
+  },
+  "flags": {
+    "core": {
+      "sourceId": "Item.Ri4FOaqxsl3hYaBh"
+    }
+  },
+  "img": "icons/svg/mystery-man.svg",
+  "effects": [],
+  "_id": "6fZdQiCVVPWo3b57",
+  "_key": "!items!6fZdQiCVVPWo3b57"
+}

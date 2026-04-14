@@ -1,0 +1,26 @@
+{
+  "name": "Space Travel",
+  "permission": {
+    "default": 0,
+    "qJl17WpEHiovQQBC": 3
+  },
+  "type": "physicalService",
+  "system": {
+    "description": "<p>Transport on a spacecraft.</p>\n<p>&nbsp;</p>\n<p>Space transport cost depends on a number of factors like distance, quality of lodgings, and how much cargo you&rsquo;re bringing with. At the low end, an intra-habitat shuttle trip within the same cluster, or a trip to or from a planetary body&rsquo;s surface and orbit, is not cheap but affordable. Just about anything else is progressively more costly.</p>",
+    "reference": "Eclipse Phase Second Edition p. 315",
+    "complexity": "moderate",
+    "restricted": false,
+    "quality": "average",
+    "serviceDuration": -1,
+    "reputations": [],
+    "serviceType": "generic",
+    "state": {
+      "serviceStartTime": 0,
+      "equipped": false
+    }
+  },
+  "flags": {},
+  "effects": [],
+  "_id": "SBmPaAF7wBm8956e",
+  "_key": "!items!SBmPaAF7wBm8956e"
+}

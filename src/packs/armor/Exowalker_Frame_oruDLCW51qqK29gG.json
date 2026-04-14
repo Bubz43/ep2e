@@ -1,0 +1,58 @@
+{
+  "name": "Exowalker Frame",
+  "permission": {
+    "default": 0,
+    "qJl17WpEHiovQQBC": 3
+  },
+  "type": "armor",
+  "system": {
+    "description": "<p>Exowalkers are minimal framework exoskeletons, primarily designed to bolster the wearer&rsquo;s strength and movement. They provide a +1 bonus to Vigor pool, increase melee damage by 1d6, increase your walker speed to 8/32 (fast), and double your jumping distance.</p>",
+    "reference": "Eclipse Phase Second Edition p. 350",
+    "complexity": "major",
+    "restricted": false,
+    "quality": "average",
+    "blueprint": {
+      "blueprintType": "",
+      "cracked": false,
+      "used": false
+    },
+    "state": {
+      "disabled": false,
+      "equipped": false,
+      "activated": false
+    },
+    "activeArmor": {
+      "energy": 0,
+      "kinetic": 0,
+      "concealable": false,
+      "layerable": false
+    },
+    "armorValues": {
+      "energy": 0,
+      "kinetic": 2,
+      "concealable": false,
+      "layerable": true
+    },
+    "attackTraits": [],
+    "effects": [
+      {
+        "type": "pool",
+        "pool": "vigor",
+        "modifier": 1,
+        "usabilityModification": "",
+        "id": "q79b9d2zx0"
+      }
+    ],
+    "hasActiveState": false,
+    "fragile": false,
+    "singleUse": false,
+    "twoHanded": false,
+    "notes": "Jumping distance doubled",
+    "wareType": ""
+  },
+  "flags": {},
+  "img": "icons/svg/mystery-man.svg",
+  "effects": [],
+  "_id": "oruDLCW51qqK29gG",
+  "_key": "!items!oruDLCW51qqK29gG"
+}

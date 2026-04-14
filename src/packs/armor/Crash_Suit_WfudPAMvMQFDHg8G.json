@@ -1,0 +1,50 @@
+{
+  "name": "Crash Suit",
+  "permission": {
+    "default": 0,
+    "qJl17WpEHiovQQBC": 3
+  },
+  "type": "armor",
+  "system": {
+    "description": "<p>Designed for industrial workplace safety and protection from accidental zero-g collisions, crash suits are also favored by sports enthusiasts and explorers. The basic jumpsuit offers comfortable protection, but in more hazardous circumstances the suit can be activated with an electronic signal, so that elastic polymers stiffen and form rigid impact protection for vital areas.</p>",
+    "reference": "Eclipse Phase Second Edition p. 215",
+    "complexity": "minor",
+    "restricted": false,
+    "quality": "average",
+    "blueprint": {
+      "blueprintType": "",
+      "cracked": false,
+      "used": false
+    },
+    "state": {
+      "disabled": false,
+      "equipped": false,
+      "activated": false
+    },
+    "activeArmor": {
+      "energy": 3,
+      "kinetic": 8,
+      "concealable": false,
+      "layerable": false
+    },
+    "armorValues": {
+      "energy": 3,
+      "kinetic": 2,
+      "concealable": true,
+      "layerable": false
+    },
+    "attackTraits": [],
+    "effects": [],
+    "hasActiveState": true,
+    "fragile": false,
+    "singleUse": false,
+    "twoHanded": false,
+    "notes": "",
+    "wareType": ""
+  },
+  "flags": {},
+  "img": "icons/svg/mystery-man.svg",
+  "effects": [],
+  "_id": "WfudPAMvMQFDHg8G",
+  "_key": "!items!WfudPAMvMQFDHg8G"
+}

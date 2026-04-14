@@ -1,0 +1,76 @@
+{
+  "name": "Stunner",
+  "permission": {
+    "default": 0,
+    "qJl17WpEHiovQQBC": 3
+  },
+  "type": "beamWeapon",
+  "system": {
+    "description": "<p>The stunner is an electrolaser that creates an electrically conductive plasma channel that transmits a powerful electric current, shocking the target. Stunners do not work in vacuum.</p>",
+    "reference": "Eclipse Phase Second Edition p. 208",
+    "complexity": "moderate",
+    "restricted": false,
+    "quality": "average",
+    "concealable": false,
+    "fragile": false,
+    "singleUse": false,
+    "twoHanded": false,
+    "blueprint": {
+      "blueprintType": "",
+      "cracked": false,
+      "used": false
+    },
+    "state": {
+      "disabled": false,
+      "equipped": false,
+      "braced": false,
+      "interface": false
+    },
+    "accessories": [
+      "smartlink",
+      "safetySystem"
+    ],
+    "battery": {
+      "charge": 12,
+      "max": 12,
+      "recharge": 4083750000
+    },
+    "primaryAttack": {
+      "armorPiercing": false,
+      "attackTraits": [
+        "shock"
+      ],
+      "damageFormula": "1d6",
+      "firingModes": [
+        "semiAuto"
+      ],
+      "label": "",
+      "notes": "",
+      "areaEffect": "",
+      "areaEffectRadius": 1
+    },
+    "hasSecondaryAttack": false,
+    "range": 50,
+    "secondaryAttack": {
+      "armorPiercing": false,
+      "attackTraits": [],
+      "damageFormula": "",
+      "firingModes": [
+        "semiAuto"
+      ],
+      "label": "",
+      "notes": "",
+      "areaEffect": "",
+      "areaEffectRadius": 1
+    },
+    "fixed": false,
+    "long": false,
+    "noClose": false,
+    "noPointBlank": false,
+    "wareType": ""
+  },
+  "flags": {},
+  "effects": [],
+  "_id": "xKsZAvX18oIbGkJV",
+  "_key": "!items!xKsZAvX18oIbGkJV"
+}

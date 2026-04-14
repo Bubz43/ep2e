@@ -1,0 +1,83 @@
+{
+  "name": "Grin",
+  "permission": {
+    "default": 0,
+    "qJl17WpEHiovQQBC": 3
+  },
+  "type": "substance",
+  "system": {
+    "description": "<p>Grin is an effective opiate and pain suppressant. You ignore the modifiers from 1 wound (cumulative with other pain negation mods, to a maximum of 3 wounds).</p>",
+    "reference": "Eclipse Phase Second Edition p. 331",
+    "complexity": "minor",
+    "restricted": false,
+    "quality": "average",
+    "blueprint": {
+      "blueprintType": "",
+      "cracked": false,
+      "used": false
+    },
+    "quantity": 5,
+    "state": {
+      "stashed": false
+    },
+    "addiction": "physical",
+    "addictionMod": -10,
+    "hasSeverity": false,
+    "application": [
+      "dermal",
+      "inhalation",
+      "injection",
+      "oral"
+    ],
+    "base": {
+      "damage": {
+        "damageFormula": "",
+        "perTurn": false,
+        "armorPiercing": false,
+        "attackTraits": [],
+        "reduceAVbyDV": false,
+        "armorUsed": [],
+        "damageType": "physical"
+      },
+      "duration": 10800000,
+      "effects": [
+        {
+          "type": "health",
+          "health": "physical",
+          "stat": "woundsIgnored",
+          "modifier": 1,
+          "id": "uf8v4eb17e"
+        }
+      ],
+      "wearOffStress": "",
+      "notes": ""
+    },
+    "category": "Combat",
+    "classification": "biochem",
+    "consumeOnUse": true,
+    "substanceType": "drug",
+    "quantityPerCost": 5,
+    "severity": {
+      "check": "som",
+      "checkMod": 0,
+      "conditions": [],
+      "wearOffStress": "",
+      "damage": {
+        "damageFormula": "",
+        "perTurn": false,
+        "armorPiercing": false,
+        "attackTraits": [],
+        "reduceAVbyDV": false,
+        "armorUsed": [],
+        "damageType": "physical"
+      },
+      "duration": 3000,
+      "effects": [],
+      "notes": ""
+    }
+  },
+  "flags": {},
+  "effects": [],
+  "_id": "tPJhek2P5iGh0izC",
+  "_key": "!items!tPJhek2P5iGh0izC"
+}

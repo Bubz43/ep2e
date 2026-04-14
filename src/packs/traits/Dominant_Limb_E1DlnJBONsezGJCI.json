@@ -1,0 +1,46 @@
+{
+  "_id": "E1DlnJBONsezGJCI",
+  "name": "Dominant Limb",
+  "permission": {
+    "default": 0,
+    "qHi89sFcK4gHlOPd": 3
+  },
+  "type": "trait",
+  "system": {
+    "description": "<p>Either due to genetics or a glitch, the morph is right-handed, left-handed, or has a similar dominant limb. You receive a -20 modifier to any actions made using non-dominant limbs.</p>",
+    "reference": "Eclipse Phase Second Edition p. 77",
+    "restrictions": "",
+    "triggers": "",
+    "source": "morph",
+    "state": {
+      "level": 0,
+      "triggered": false
+    },
+    "levels": [
+      {
+        "cost": 1,
+        "effects": [
+          {
+            "type": "successTest",
+            "tags": [
+              {
+                "type": "allActions"
+              }
+            ],
+            "modifier": -20,
+            "toOpponent": false,
+            "requirement": "using non-dominant limb",
+            "id": "l8bnv0gpyc"
+          }
+        ],
+        "id": "rca7nkm0qm"
+      }
+    ],
+    "subtype": "",
+    "traitType": "negative"
+  },
+  "flags": {},
+  "img": "icons/svg/mystery-man.svg",
+  "effects": [],
+  "_key": "!items!E1DlnJBONsezGJCI"
+}

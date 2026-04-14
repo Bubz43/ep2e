@@ -1,0 +1,47 @@
+{
+  "_id": "ybuPQnPD83ei43lM",
+  "name": "Direction Sense",
+  "permission": {
+    "default": 0,
+    "qHi89sFcK4gHlOPd": 3
+  },
+  "type": "trait",
+  "system": {
+    "description": "<p>You always know which way is up, north, spinward, etc., even when blinded. You receive a +10 modifier to navigation-based Survival Tests and other skills for figuring out complex directions, reading maps, remembering routes, and retracing paths you’ve taken.</p>",
+    "reference": "Eclipse Phase Second Edition p. 73",
+    "restrictions": "",
+    "triggers": "",
+    "source": "ego",
+    "state": {
+      "level": 0,
+      "triggered": false
+    },
+    "levels": [
+      {
+        "cost": 1,
+        "effects": [
+          {
+            "type": "successTest",
+            "tags": [
+              {
+                "type": "skill",
+                "skillType": "survival"
+              }
+            ],
+            "modifier": 10,
+            "toOpponent": false,
+            "requirement": "navigating",
+            "id": "bhwik85d82"
+          }
+        ],
+        "id": "0vekn0jqxq"
+      }
+    ],
+    "subtype": "",
+    "traitType": "positive"
+  },
+  "flags": {},
+  "img": "icons/svg/mystery-man.svg",
+  "effects": [],
+  "_key": "!items!ybuPQnPD83ei43lM"
+}

@@ -1,0 +1,59 @@
+{
+  "name": "Plasma Rifle",
+  "permission": {
+    "default": 0,
+    "qJl17WpEHiovQQBC": 3
+  },
+  "type": "sprayWeapon",
+  "system": {
+    "description": "<p>This bulky, heavy, two-handed weapon blasts a stream of nova-hot plasma at the target, inflicting severe burns and thermal damage, possibly melting or evaporating the target entirely. Plasma rifles are perhaps the deadliest man-portable weapons in use. A superior success sets the target on fire; they will continue to take DV 2d10 per action turn (armor does not apply) until extinguished. Plasma guns suffer from dangerous overheating in vacuum and require 1 full action turn of cool-down time after every 2 shots.</p>",
+    "reference": "Eclipse Phase Second Edition p. 209",
+    "complexity": "major",
+    "restricted": true,
+    "quality": "average",
+    "concealable": false,
+    "fragile": false,
+    "singleUse": false,
+    "twoHanded": true,
+    "blueprint": {
+      "blueprintType": "",
+      "cracked": false,
+      "used": false
+    },
+    "state": {
+      "disabled": false,
+      "equipped": false,
+      "braced": false,
+      "interface": false
+    },
+    "accessories": [
+      "safetySystem",
+      "smartlink"
+    ],
+    "ammo": {
+      "max": 6,
+      "value": 15
+    },
+    "dosesPerShot": 1,
+    "fixed": false,
+    "long": true,
+    "range": 25,
+    "payloadUse": "",
+    "primaryAttack": {
+      "armorPiercing": true,
+      "armorUsed": "energy",
+      "attackTraits": [],
+      "damageFormula": "4d10 + 10",
+      "firingModes": [
+        "semiAuto"
+      ],
+      "superiorSuccessDot": "2d10",
+      "notes": ""
+    },
+    "wareType": ""
+  },
+  "flags": {},
+  "effects": [],
+  "_id": "Q9eLarh7fuBp6LWb",
+  "_key": "!items!Q9eLarh7fuBp6LWb"
+}

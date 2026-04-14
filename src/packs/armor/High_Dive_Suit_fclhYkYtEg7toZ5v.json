@@ -1,0 +1,50 @@
+{
+  "name": "High-Dive Suit",
+  "permission": {
+    "default": 0,
+    "qJl17WpEHiovQQBC": 3
+  },
+  "type": "armor",
+  "system": {
+    "description": "<p>High-dive suits are personal spacesuits designed to withstand atmospheric re-entry. Wearing one of these, you can step out a spacecraft in orbit around a planet, enter the atmosphere without burning up, and safely land using both drogue and conventional parachutes. High-dive suits are meant for unpowered descent only; they do not possess the capability for flight.</p>",
+    "reference": "Eclipse Phase Second Edition p. 351",
+    "complexity": "major",
+    "restricted": false,
+    "quality": "average",
+    "blueprint": {
+      "blueprintType": "",
+      "cracked": false,
+      "used": false
+    },
+    "state": {
+      "disabled": false,
+      "equipped": false,
+      "activated": false
+    },
+    "activeArmor": {
+      "energy": 0,
+      "kinetic": 0,
+      "concealable": false,
+      "layerable": false
+    },
+    "armorValues": {
+      "energy": 25,
+      "kinetic": 8,
+      "concealable": false,
+      "layerable": false
+    },
+    "attackTraits": [],
+    "effects": [],
+    "hasActiveState": false,
+    "fragile": false,
+    "singleUse": false,
+    "twoHanded": false,
+    "notes": "",
+    "wareType": ""
+  },
+  "flags": {},
+  "img": "icons/svg/mystery-man.svg",
+  "effects": [],
+  "_id": "fclhYkYtEg7toZ5v",
+  "_key": "!items!fclhYkYtEg7toZ5v"
+}

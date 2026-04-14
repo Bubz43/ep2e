@@ -1,0 +1,78 @@
+{
+  "_id": "XkOUDVIZpNuXkISu",
+  "name": "Laser Pulser",
+  "permission": {
+    "default": 0,
+    "qJl17WpEHiovQQBC": 3
+  },
+  "type": "beamWeapon",
+  "system": {
+    "description": "<p>The pulser emits focused beams of light that burn into the target and cause its outer surface to vaporize and expand, creating an explosive effect. The beam is pulsed in order to bite into the target before it is diffused. When fired in stun mode, it shoots a pulse at the target to create a ball of plasma, quickly followed by a second pulse that strikes the plasma and creates a flash-bang shockwave to stun and disorient the target and anyone next to them. Pulsers are vulnerable to atmospheric effects like dust, mist, smoke, or rain, however &mdash; the GM should reduce their effective range as appropriate. Laser pulses are invisible, but they can be seen with enhanced vision in atmosphere (or in the visual spectrum in smoky/ polluted air) or in the shooter&rsquo;s entoptics.&nbsp;</p>",
+    "reference": "Eclipse Phase Second Edition p. 208",
+    "complexity": "moderate",
+    "restricted": true,
+    "quality": "average",
+    "concealable": false,
+    "fragile": false,
+    "singleUse": false,
+    "twoHanded": true,
+    "blueprint": {
+      "blueprintType": "",
+      "cracked": false,
+      "used": false
+    },
+    "state": {
+      "disabled": false,
+      "equipped": false,
+      "braced": false,
+      "interface": false
+    },
+    "accessories": [
+      "smartlink",
+      "safetySystem"
+    ],
+    "battery": {
+      "charge": 30,
+      "max": 30,
+      "recharge": 4083750000
+    },
+    "primaryAttack": {
+      "armorPiercing": false,
+      "attackTraits": [],
+      "damageFormula": "2d10 + 2",
+      "firingModes": [
+        "semiAuto",
+        "burstFire",
+        "fullAuto"
+      ],
+      "label": "Lethal",
+      "notes": "",
+      "areaEffect": "",
+      "areaEffectRadius": 1
+    },
+    "hasSecondaryAttack": true,
+    "range": 100,
+    "secondaryAttack": {
+      "armorPiercing": false,
+      "attackTraits": [
+        "shock"
+      ],
+      "damageFormula": "1d6",
+      "firingModes": [
+        "singleShot"
+      ],
+      "label": "Stun",
+      "notes": "",
+      "areaEffect": "uniform",
+      "areaEffectRadius": 1
+    },
+    "fixed": false,
+    "long": true,
+    "noClose": false,
+    "noPointBlank": false,
+    "wareType": ""
+  },
+  "flags": {},
+  "effects": [],
+  "_key": "!items!XkOUDVIZpNuXkISu"
+}

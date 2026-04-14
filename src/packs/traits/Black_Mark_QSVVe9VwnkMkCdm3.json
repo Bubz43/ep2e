@@ -1,0 +1,124 @@
+{
+  "_id": "QSVVe9VwnkMkCdm3",
+  "name": "Black Mark",
+  "permission": {
+    "default": 0,
+    "qHi89sFcK4gHlOPd": 3
+  },
+  "type": "trait",
+  "system": {
+    "description": "<p>You did something in your past to earn a black mark on your reputation with one particular faction that continues to haunt your interactions. Apply a -10 modifier per level to rep net interactions and social skill tests involving that faction. This trait may be taken more than once for different factions.</p>",
+    "reference": "Eclipse Phase Second Edition p. 77",
+    "restrictions": "",
+    "triggers": "",
+    "source": "ego",
+    "state": {
+      "level": 0,
+      "triggered": false
+    },
+    "levels": [
+      {
+        "cost": 1,
+        "effects": [
+          {
+            "type": "successTest",
+            "tags": [
+              {
+                "type": "rep",
+                "network": "@Rep"
+              }
+            ],
+            "modifier": -10,
+            "toOpponent": false,
+            "requirement": "",
+            "id": "nn3rr0p2up"
+          },
+          {
+            "type": "successTest",
+            "tags": [
+              {
+                "type": "skillCategory",
+                "category": "social"
+              }
+            ],
+            "modifier": -10,
+            "toOpponent": false,
+            "requirement": "interacting with relevant faction",
+            "id": "v4nx3vheol"
+          }
+        ],
+        "id": "t6u815xi1b"
+      },
+      {
+        "cost": 2,
+        "effects": [
+          {
+            "type": "successTest",
+            "tags": [
+              {
+                "type": "rep",
+                "network": "@Rep"
+              }
+            ],
+            "modifier": -20,
+            "toOpponent": false,
+            "requirement": "",
+            "id": "51tee9aksq"
+          },
+          {
+            "type": "successTest",
+            "tags": [
+              {
+                "type": "skillCategory",
+                "category": "social"
+              }
+            ],
+            "modifier": -20,
+            "toOpponent": false,
+            "requirement": "interacting with relevant faction",
+            "id": "qgomw4xvzv"
+          }
+        ],
+        "id": "exc8eww9ks"
+      },
+      {
+        "cost": 3,
+        "effects": [
+          {
+            "type": "successTest",
+            "tags": [
+              {
+                "type": "rep",
+                "network": "@Rep"
+              }
+            ],
+            "modifier": -30,
+            "toOpponent": false,
+            "requirement": "",
+            "id": "jw7a4go5wg"
+          },
+          {
+            "type": "successTest",
+            "tags": [
+              {
+                "type": "skillCategory",
+                "category": "social"
+              }
+            ],
+            "modifier": -30,
+            "toOpponent": false,
+            "requirement": "interacting with relevant faction",
+            "id": "id0kj0l11d"
+          }
+        ],
+        "id": "k45v7mawqj"
+      }
+    ],
+    "subtype": "",
+    "traitType": "negative"
+  },
+  "flags": {},
+  "img": "icons/svg/mystery-man.svg",
+  "effects": [],
+  "_key": "!items!QSVVe9VwnkMkCdm3"
+}

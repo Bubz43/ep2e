@@ -1,0 +1,76 @@
+{
+  "name": "Battle Laser",
+  "permission": {
+    "default": 0,
+    "qJl17WpEHiovQQBC": 3
+  },
+  "type": "beamWeapon",
+  "system": {
+    "description": "<p>This heavy laser pulser is typically mounted and used for battlefield support, firing more powerful beams than the standard laser pulser.</p>",
+    "reference": "Eclipse Phase Second Edition p. 208",
+    "complexity": "major",
+    "restricted": true,
+    "quality": "average",
+    "concealable": false,
+    "fragile": false,
+    "singleUse": false,
+    "twoHanded": false,
+    "blueprint": {
+      "blueprintType": "",
+      "cracked": false,
+      "used": false
+    },
+    "state": {
+      "disabled": false,
+      "equipped": false,
+      "braced": false,
+      "interface": false
+    },
+    "accessories": [
+      "smartlink",
+      "safetySystem"
+    ],
+    "battery": {
+      "charge": 50,
+      "max": 50,
+      "recharge": 4083750000
+    },
+    "primaryAttack": {
+      "armorPiercing": false,
+      "attackTraits": [],
+      "damageFormula": "3d10 + 4",
+      "firingModes": [
+        "semiAuto",
+        "burstFire",
+        "fullAuto"
+      ],
+      "label": "",
+      "notes": "",
+      "areaEffect": "",
+      "areaEffectRadius": 1
+    },
+    "hasSecondaryAttack": false,
+    "range": 150,
+    "secondaryAttack": {
+      "armorPiercing": false,
+      "attackTraits": [],
+      "damageFormula": "",
+      "firingModes": [
+        "semiAuto"
+      ],
+      "label": "",
+      "notes": "",
+      "areaEffect": "",
+      "areaEffectRadius": 1
+    },
+    "fixed": true,
+    "long": true,
+    "noClose": false,
+    "noPointBlank": false,
+    "wareType": ""
+  },
+  "flags": {},
+  "effects": [],
+  "_id": "LpIIDQtZjQIS2qse",
+  "_key": "!items!LpIIDQtZjQIS2qse"
+}

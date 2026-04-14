@@ -1,0 +1,85 @@
+{
+  "_id": "Pzq4AguHRNBWnfxo",
+  "name": "Poor Coordination",
+  "permission": {
+    "default": 0,
+    "qHi89sFcK4gHlOPd": 3
+  },
+  "type": "trait",
+  "system": {
+    "description": "<p>Either you or your morph are inherently clumsy. Suffer -5 per level to REF Checks.</p>",
+    "reference": "Eclipse Phase Second Edition p. 79",
+    "restrictions": "",
+    "triggers": "",
+    "source": "ego",
+    "state": {
+      "level": 0,
+      "triggered": false
+    },
+    "levels": [
+      {
+        "cost": 1,
+        "effects": [
+          {
+            "type": "successTest",
+            "tags": [
+              {
+                "type": "aptitudeCheck",
+                "aptitude": "ref"
+              }
+            ],
+            "modifier": -5,
+            "toOpponent": false,
+            "requirement": "",
+            "id": "26shkhv6nz"
+          }
+        ],
+        "id": "9naooru7eh"
+      },
+      {
+        "cost": 2,
+        "effects": [
+          {
+            "type": "successTest",
+            "tags": [
+              {
+                "type": "aptitudeCheck",
+                "aptitude": "ref"
+              }
+            ],
+            "modifier": -10,
+            "toOpponent": false,
+            "requirement": "",
+            "id": "26shkhv6nz"
+          }
+        ],
+        "id": "912sjwxjuz"
+      },
+      {
+        "cost": 3,
+        "effects": [
+          {
+            "type": "successTest",
+            "tags": [
+              {
+                "type": "aptitudeCheck",
+                "aptitude": "ref"
+              }
+            ],
+            "modifier": -15,
+            "toOpponent": false,
+            "requirement": "",
+            "id": "26shkhv6nz"
+          }
+        ],
+        "id": "ntyq7fyfn3"
+      }
+    ],
+    "subtype": "",
+    "traitType": "negative"
+  },
+  "flags": {},
+  "img": "icons/svg/mystery-man.svg",
+  "effects": [],
+  "_key": "!items!Pzq4AguHRNBWnfxo"
+}

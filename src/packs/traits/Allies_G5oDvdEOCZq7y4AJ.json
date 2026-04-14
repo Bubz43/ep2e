@@ -1,0 +1,40 @@
+{
+  "_id": "G5oDvdEOCZq7y4AJ",
+  "name": "Allies",
+  "permission": {
+    "default": 0,
+    "qHi89sFcK4gHlOPd": 3
+  },
+  "type": "trait",
+  "system": {
+    "description": "<p>You are either part of or have a relationship with a group that has your back. This could be your old gatecrashing crew, former research lab co-workers, a criminal gang, a mercenary squad, an elite social clique, or something similar. The group itself should be small — 5 to 20 members is best, and certainly no more than 50 — though it may be part of a larger organization (such as a cartel or hypercorp). It should also not be overly influential or powerful (no Ozma leaders, hypercorp boards, or secret league of oligarchs). Work with your GM to establish your history and relationship with this group and why you can call on them for aid.</p><p>Once per session, you may rely on this group for support. Treat this as analogous to an automatically successful moderate rep favor ▶308. Your connection with this group is a two-way street — you will be expected to perform duties for the group on occasion as well. GMs should take care that allies are not overused or abused and can use them as a source of plot hooks and side missions.</p>",
+    "reference": "Eclipse Phase Second Edition p. 72",
+    "restrictions": "",
+    "triggers": "",
+    "source": "ego",
+    "state": {
+      "level": 0,
+      "triggered": false
+    },
+    "levels": [
+      {
+        "cost": 4,
+        "effects": [
+          {
+            "type": "misc",
+            "unique": "",
+            "description": "Once per session: automatically succeed on a moderate rep favor involving this group",
+            "id": "upaf9yffa7"
+          }
+        ],
+        "id": "8nt281lxsm"
+      }
+    ],
+    "subtype": "",
+    "traitType": "positive"
+  },
+  "flags": {},
+  "img": "icons/svg/mystery-man.svg",
+  "effects": [],
+  "_key": "!items!G5oDvdEOCZq7y4AJ"
+}

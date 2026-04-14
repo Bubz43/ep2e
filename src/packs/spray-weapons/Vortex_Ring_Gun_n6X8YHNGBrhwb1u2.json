@@ -1,0 +1,62 @@
+{
+  "name": "Vortex Ring Gun",
+  "permission": {
+    "default": 0,
+    "qJl17WpEHiovQQBC": 3
+  },
+  "type": "sprayWeapon",
+  "system": {
+    "description": "<p>This less-lethal weapon detonates a blank cartridge and accelerates the explosive pressure down a widening barrel so that it develops into a high-speed vortex ring. This spinning, donut-shaped, concussive blast knocks down and stuns closerange targets. Drugs, chemicals, and similar agents can be loaded into the charge as well.</p>",
+    "reference": "Eclipse Phase Second Edition p. 209",
+    "complexity": "minor",
+    "restricted": false,
+    "quality": "average",
+    "concealable": false,
+    "fragile": false,
+    "singleUse": false,
+    "twoHanded": true,
+    "blueprint": {
+      "blueprintType": "",
+      "cracked": false,
+      "used": false
+    },
+    "state": {
+      "disabled": false,
+      "equipped": false,
+      "braced": false,
+      "interface": false
+    },
+    "accessories": [
+      "safetySystem",
+      "smartlink"
+    ],
+    "ammo": {
+      "max": 20,
+      "value": 20
+    },
+    "dosesPerShot": 1,
+    "fixed": false,
+    "long": true,
+    "range": 15,
+    "payloadUse": "coatAmmunition",
+    "primaryAttack": {
+      "armorPiercing": false,
+      "armorUsed": "energy",
+      "attackTraits": [
+        "knockdown",
+        "stun"
+      ],
+      "damageFormula": "1d6",
+      "firingModes": [
+        "semiAuto"
+      ],
+      "superiorSuccessDot": "",
+      "notes": ""
+    },
+    "wareType": ""
+  },
+  "flags": {},
+  "effects": [],
+  "_id": "n6X8YHNGBrhwb1u2",
+  "_key": "!items!n6X8YHNGBrhwb1u2"
+}

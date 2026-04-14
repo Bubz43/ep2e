@@ -1,0 +1,56 @@
+{
+  "name": "Seeker Pistol",
+  "permission": {
+    "default": 0,
+    "qJl17WpEHiovQQBC": 3
+  },
+  "type": "seekerWeapon",
+  "system": {
+    "description": "<p>This pistol-sized seeker fires micromissiles in semi-auto mode.</p>",
+    "reference": "Eclipse Phase Second Edition p. 212",
+    "complexity": "moderate",
+    "restricted": false,
+    "quality": "average",
+    "concealable": false,
+    "fragile": false,
+    "singleUse": false,
+    "twoHanded": false,
+    "blueprint": {
+      "blueprintType": "",
+      "cracked": false,
+      "used": false
+    },
+    "state": {
+      "disabled": false,
+      "equipped": false,
+      "braced": false,
+      "interface": false,
+      "homing": false
+    },
+    "accessories": [
+      "smartlink",
+      "safetySystem"
+    ],
+    "fixed": false,
+    "hasAlternativeAmmo": false,
+    "long": false,
+    "noClose": false,
+    "noPointBlank": true,
+    "wareType": "",
+    "firingMode": "semiAuto",
+    "primaryAmmo": {
+      "missileCapacity": 8,
+      "missileSize": "micro",
+      "range": 75
+    },
+    "alternativeAmmo": {
+      "missileCapacity": 1,
+      "missileSize": "mini",
+      "range": 75
+    }
+  },
+  "flags": {},
+  "effects": [],
+  "_id": "jKagafrMpUThQQbd",
+  "_key": "!items!jKagafrMpUThQQbd"
+}

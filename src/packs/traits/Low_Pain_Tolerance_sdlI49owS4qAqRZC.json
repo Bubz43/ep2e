@@ -1,0 +1,58 @@
+{
+  "_id": "sdlI49owS4qAqRZC",
+  "name": "Low Pain Tolerance",
+  "permission": {
+    "default": 0,
+    "qHi89sFcK4gHlOPd": 3
+  },
+  "type": "trait",
+  "system": {
+    "description": "<p>Pain is your enemy. You have a very low threshold for pain tolerance; increase the modifier for each wound taken by an additional -10 (so the character suffers -20 with one wound, -40 with a second, -60 with a third, etc.).</p><p>Additionally, you suffer a -30 modifier on both SOM Checks and other tests that involve pain resistance. The morph version of this trait is only available for biomorphs.</p>",
+    "reference": "Eclipse Phase Second Edition p. 78",
+    "restrictions": "",
+    "triggers": "",
+    "source": "morph",
+    "state": {
+      "level": 0,
+      "triggered": false
+    },
+    "levels": [
+      {
+        "cost": 4,
+        "effects": [
+          {
+            "type": "health",
+            "health": "physical",
+            "stat": "woundModifier",
+            "modifier": -10,
+            "id": "rhojfhjlpy"
+          },
+          {
+            "type": "successTest",
+            "tags": [
+              {
+                "type": "aptitudeCheck",
+                "aptitude": "som"
+              },
+              {
+                "type": "special",
+                "test": "painResistance"
+              }
+            ],
+            "modifier": -30,
+            "toOpponent": false,
+            "requirement": "",
+            "id": "5po69pudc2"
+          }
+        ],
+        "id": "abxyi9nvc6"
+      }
+    ],
+    "subtype": "",
+    "traitType": "negative"
+  },
+  "flags": {},
+  "img": "icons/svg/mystery-man.svg",
+  "effects": [],
+  "_key": "!items!sdlI49owS4qAqRZC"
+}

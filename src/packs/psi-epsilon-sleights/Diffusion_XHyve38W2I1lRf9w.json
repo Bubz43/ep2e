@@ -1,0 +1,54 @@
+{
+  "name": "Diffusion",
+  "permission": {
+    "default": 0,
+    "qJl17WpEHiovQQBC": 3
+  },
+  "type": "sleight",
+  "system": {
+    "description": "<p>This sleight diffuses light, laser, microwave, radio, and particle beams. This hinders communication (reduce range by half) and vision/sensors (-30). It also impairs beam weapons, reducing their DV by half (-25% per superior success) and negating other effects such as shock. Any light or beam passing within Close range (10 meters) is affected.</p>",
+    "reference": "Eclipse Phase Second Edition p. 387",
+    "duration": "sustained",
+    "infectionMod": 1,
+    "sleightType": "epsilon",
+    "action": "complex",
+    "timeframe": 0,
+    "effectsToSelf": [],
+    "effectsToTarget": [
+      {
+        "type": "misc",
+        "unique": "",
+        "description": "Diffuse light/radio within Close range, reduce range/DV by half.",
+        "id": "gsz029mnww"
+      }
+    ],
+    "scaleEffectsOnSuperior": false,
+    "attack": {
+      "useMentalArmor": false,
+      "attackTraits": [],
+      "damageFormula": "",
+      "damageType": "mental",
+      "notes": ""
+    },
+    "heal": {
+      "formula": "",
+      "healthType": "mental"
+    },
+    "mentalArmor": {
+      "apply": false,
+      "divisor": 3,
+      "formula": "1d6"
+    },
+    "status": {
+      "sustaining": false,
+      "pushDuration": 0,
+      "pushed": false,
+      "pushStartTime": 0,
+      "sustainingOn": []
+    }
+  },
+  "flags": {},
+  "effects": [],
+  "_id": "XHyve38W2I1lRf9w",
+  "_key": "!items!XHyve38W2I1lRf9w"
+}

@@ -1,0 +1,78 @@
+{
+  "_id": "K7UuE2rwLQV0NAl3",
+  "name": "Skill Artifact",
+  "permission": {
+    "default": 0,
+    "qHi89sFcK4gHlOPd": 3
+  },
+  "type": "trait",
+  "system": {
+    "description": "<p>The morph has latent skills stored in its muscle memory or as higher-level data that somehow does not get erased or overwritten. The GM chooses or randomly selects a skill; it is recommended to pick a skill linked to the morph’s highest pool. You receive a +10 modifier per level when using that skill. This trait may be purchased multiple times for different skills.</p>",
+    "reference": "Eclipse Phase Second Edition p. 75",
+    "restrictions": "",
+    "triggers": "",
+    "source": "morph",
+    "state": {
+      "level": 0,
+      "triggered": false
+    },
+    "levels": [
+      {
+        "cost": 1,
+        "effects": [
+          {
+            "type": "successTest",
+            "tags": [
+              {
+                "type": "skill",
+                "skillType": "athletics"
+              }
+            ],
+            "modifier": 10,
+            "toOpponent": false,
+            "requirement": "",
+            "id": "hukt0dbw9t"
+          },
+          {
+            "type": "misc",
+            "unique": "",
+            "description": "Needs player correction",
+            "id": "qphuh9c5f6"
+          }
+        ],
+        "id": "pir848wec2"
+      },
+      {
+        "cost": 2,
+        "effects": [
+          {
+            "type": "successTest",
+            "tags": [
+              {
+                "type": "skill",
+                "skillType": "athletics"
+              }
+            ],
+            "modifier": 20,
+            "toOpponent": false,
+            "requirement": "",
+            "id": "hukt0dbw9t"
+          },
+          {
+            "type": "misc",
+            "unique": "",
+            "description": "Needs player correction",
+            "id": "viaqut5chk"
+          }
+        ],
+        "id": "uwzh4r4iuq"
+      }
+    ],
+    "subtype": "",
+    "traitType": "positive"
+  },
+  "flags": {},
+  "img": "icons/svg/mystery-man.svg",
+  "effects": [],
+  "_key": "!items!K7UuE2rwLQV0NAl3"
+}

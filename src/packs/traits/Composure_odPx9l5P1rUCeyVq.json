@@ -1,0 +1,55 @@
+{
+  "_id": "odPx9l5P1rUCeyVq",
+  "name": "Composure",
+  "permission": {
+    "default": 0,
+    "qHi89sFcK4gHlOPd": 3
+  },
+  "type": "trait",
+  "system": {
+    "description": "<p>Your mental equilibrium is well tuned. You receive a +5 bonus to your Lucidity. This also affects derived stats based on Lucidity; increase your Trauma Threshold by 1 and your Insanity Rating by 10.</p>",
+    "reference": "Eclipse Phase Second Edition p. 73",
+    "restrictions": "",
+    "triggers": "",
+    "source": "ego",
+    "state": {
+      "level": 0,
+      "triggered": false
+    },
+    "levels": [
+      {
+        "cost": 2,
+        "effects": [
+          {
+            "type": "health",
+            "health": "mental",
+            "stat": "durability",
+            "modifier": 5,
+            "id": "ranmdgmcam"
+          },
+          {
+            "type": "health",
+            "health": "mental",
+            "stat": "woundThreshold",
+            "modifier": 1,
+            "id": "g7x9bdsmo2"
+          },
+          {
+            "type": "health",
+            "health": "mental",
+            "stat": "deathRating",
+            "modifier": 10,
+            "id": "li3swfaqfs"
+          }
+        ],
+        "id": "6a0gxqbc1q"
+      }
+    ],
+    "subtype": "",
+    "traitType": "positive"
+  },
+  "flags": {},
+  "img": "icons/svg/mystery-man.svg",
+  "effects": [],
+  "_key": "!items!odPx9l5P1rUCeyVq"
+}

@@ -1,0 +1,61 @@
+{
+  "name": "Animal Control",
+  "permission": {
+    "default": 0,
+    "qJl17WpEHiovQQBC": 3
+  },
+  "type": "sleight",
+  "system": {
+    "description": "<p>You take over the mind of a non-sapient animal. While sustained, you control the animal exactly like remotely operating a drone ▶346. You may switch between autonomous mode and jamming.</p>",
+    "reference": "Eclipse Phase Second Edition p. 282",
+    "duration": "sustained",
+    "infectionMod": 6,
+    "sleightType": "gamma",
+    "action": "complex",
+    "timeframe": 0,
+    "effectsToSelf": [
+      {
+        "type": "misc",
+        "unique": "",
+        "description": "Take over a non-sapient animal’s mind, teleoperate it like a drone.",
+        "id": "y05cjkyip5"
+      }
+    ],
+    "effectsToTarget": [
+      {
+        "type": "misc",
+        "unique": "",
+        "description": "Your body is being controlled by someone else.",
+        "id": "5kwxszhcgo"
+      }
+    ],
+    "scaleEffectsOnSuperior": false,
+    "attack": {
+      "useMentalArmor": false,
+      "attackTraits": [],
+      "damageFormula": "",
+      "damageType": "mental",
+      "notes": ""
+    },
+    "heal": {
+      "formula": "",
+      "healthType": "mental"
+    },
+    "mentalArmor": {
+      "apply": false,
+      "divisor": 3,
+      "formula": "1d6"
+    },
+    "status": {
+      "sustaining": false,
+      "pushDuration": 0,
+      "pushed": false,
+      "pushStartTime": 0,
+      "sustainingOn": []
+    }
+  },
+  "flags": {},
+  "effects": [],
+  "_id": "VxrUGoPHprbMyaes",
+  "_key": "!items!VxrUGoPHprbMyaes"
+}

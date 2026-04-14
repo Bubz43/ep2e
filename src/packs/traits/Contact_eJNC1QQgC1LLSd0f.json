@@ -1,0 +1,47 @@
+{
+  "_id": "eJNC1QQgC1LLSd0f",
+  "name": "Contact",
+  "permission": {
+    "default": 0,
+    "qHi89sFcK4gHlOPd": 3
+  },
+  "type": "trait",
+  "system": {
+    "description": "<p>You have a personal connection that you can rely on. This contact gives you a +10 modifier to tests with one particular rep network. You should work with your GM to establish the nature of this contact and why they help you. The GM ensures that a contact is not overused or abused and may have a contact occasionally call upon you for assistance as well. You may take this trait multiple times.</p>",
+    "reference": "Eclipse Phase Second Edition p. 73",
+    "restrictions": "",
+    "triggers": "",
+    "source": "ego",
+    "state": {
+      "level": 0,
+      "triggered": false
+    },
+    "levels": [
+      {
+        "cost": 1,
+        "effects": [
+          {
+            "type": "successTest",
+            "tags": [
+              {
+                "type": "rep",
+                "network": "@Rep"
+              }
+            ],
+            "modifier": 10,
+            "toOpponent": false,
+            "requirement": "",
+            "id": "kemtpal5y9"
+          }
+        ],
+        "id": "6kd2y61dsq"
+      }
+    ],
+    "subtype": "",
+    "traitType": "positive"
+  },
+  "flags": {},
+  "img": "icons/svg/mystery-man.svg",
+  "effects": [],
+  "_key": "!items!eJNC1QQgC1LLSd0f"
+}

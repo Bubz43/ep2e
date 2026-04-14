@@ -1,0 +1,104 @@
+{
+  "name": "Stress Control",
+  "permission": {
+    "default": 0,
+    "qJl17WpEHiovQQBC": 3
+  },
+  "type": "software",
+  "system": {
+    "description": "<p>Your morph&rsquo;s endocrine system (or its software simulation) has been modified to give you greater control over cortisol and similar hormones. This enables you to manage your stress levels and responses. Apply a +10 modifier to WIL Checks against stress or triggered disorders and raise your Trauma Threshold by 1. This does not impact your Lucidity or Insanity Rating.</p>",
+    "reference": "Eclipse Phase Second Edition p. 323",
+    "complexity": "moderate",
+    "restricted": false,
+    "quality": "average",
+    "softwareType": "meshware",
+    "activatedEffects": [],
+    "effects": [
+      {
+        "type": "misc",
+        "unique": "",
+        "description": "Manage stress levels",
+        "id": "h2xo1gbp0q"
+      },
+      {
+        "type": "successTest",
+        "tags": [
+          {
+            "type": "aptitudeCheck",
+            "aptitude": "wil"
+          }
+        ],
+        "modifier": 10,
+        "toOpponent": false,
+        "requirement": "against stress or disorder",
+        "id": "v4dvhzx4hs"
+      },
+      {
+        "type": "health",
+        "health": "mental",
+        "stat": "woundThreshold",
+        "modifier": 1,
+        "id": "bu8vj2ayw2"
+      }
+    ],
+    "category": "Combat Augments",
+    "serviceDuration": -1,
+    "skills": [],
+    "activation": "",
+    "meshAttacks": 0,
+    "meshHealth": {
+      "baseDurability": 10,
+      "damage": 0,
+      "log": [],
+      "wounds": 0,
+      "rebootEndTime": -1,
+      "crashWounds": 0
+    },
+    "state": {
+      "activated": false,
+      "equipped": false,
+      "serviceStartTime": 0,
+      "paused": false
+    },
+    "primaryAttack": {
+      "armorPiercing": false,
+      "attackTraits": [],
+      "damageFormula": "",
+      "damageType": "mesh",
+      "useMeshArmor": true,
+      "notes": "",
+      "aptitudeCheckInfo": {
+        "armorAsModifier": "",
+        "check": "",
+        "checkModifier": 0,
+        "checkFailure": [],
+        "checkSuccess": [],
+        "criticalCheckFailure": []
+      },
+      "label": "",
+      "reduceAVbyDV": false
+    },
+    "secondaryAttack": {
+      "armorPiercing": false,
+      "attackTraits": [],
+      "damageFormula": "",
+      "damageType": "mesh",
+      "useMeshArmor": true,
+      "notes": "",
+      "aptitudeCheckInfo": {
+        "armorAsModifier": "",
+        "check": "",
+        "checkModifier": 0,
+        "checkFailure": [],
+        "checkSuccess": [],
+        "criticalCheckFailure": []
+      },
+      "label": "",
+      "reduceAVbyDV": false
+    }
+  },
+  "flags": {},
+  "effects": [],
+  "_id": "ddGQMonMVZyHgZjm",
+  "_key": "!items!ddGQMonMVZyHgZjm"
+}

@@ -1,0 +1,82 @@
+{
+  "name": "Psi-Opener",
+  "permission": {
+    "default": 0,
+    "qJl17WpEHiovQQBC": 3
+  },
+  "type": "substance",
+  "system": {
+    "description": "<p>Psi-opener drugs are variants of the Watts-MacLeod strain with a temporary effect and that do not permanently alter the user&rsquo;s brain. Psi-opener temporarily gives you the effect of one particular psi-chi sleight; each type of psi-opener is customized for a particular sleight. However, users are frequently subject to hallucinations (GM discretion). When the drug wears off, suffer SV 1d6.</p>",
+    "reference": "Eclipse Phase Second Edition p. 334",
+    "complexity": "rare",
+    "restricted": false,
+    "quality": "average",
+    "blueprint": {
+      "blueprintType": "",
+      "cracked": false,
+      "used": false
+    },
+    "quantity": 5,
+    "state": {
+      "stashed": false
+    },
+    "addiction": "mental",
+    "addictionMod": -10,
+    "hasSeverity": false,
+    "application": [
+      "dermal",
+      "inhalation",
+      "injection",
+      "oral"
+    ],
+    "base": {
+      "damage": {
+        "damageFormula": "",
+        "perTurn": false,
+        "armorPiercing": false,
+        "attackTraits": [],
+        "reduceAVbyDV": false,
+        "armorUsed": [],
+        "damageType": "physical"
+      },
+      "duration": 3600000,
+      "effects": [
+        {
+          "type": "misc",
+          "unique": "",
+          "description": "Gain the effects of 1 specific psi-chi sleight",
+          "id": "nxj3ke8slj"
+        }
+      ],
+      "wearOffStress": "1d6",
+      "notes": ""
+    },
+    "category": "Psi",
+    "classification": "biochem",
+    "consumeOnUse": true,
+    "substanceType": "drug",
+    "quantityPerCost": 5,
+    "severity": {
+      "check": "som",
+      "checkMod": 0,
+      "conditions": [],
+      "wearOffStress": "",
+      "damage": {
+        "damageFormula": "",
+        "perTurn": false,
+        "armorPiercing": false,
+        "attackTraits": [],
+        "reduceAVbyDV": false,
+        "armorUsed": [],
+        "damageType": "physical"
+      },
+      "duration": 3000,
+      "effects": [],
+      "notes": ""
+    }
+  },
+  "flags": {},
+  "effects": [],
+  "_id": "BQfHIHdGqFdgwzsf",
+  "_key": "!items!BQfHIHdGqFdgwzsf"
+}

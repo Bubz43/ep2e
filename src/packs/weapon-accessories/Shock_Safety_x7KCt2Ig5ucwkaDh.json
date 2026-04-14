@@ -1,0 +1,18 @@
+{
+  "_id": "x7KCt2Ig5ucwkaDh",
+  "name": "Shock Safety",
+  "permission": {
+    "default": 0,
+    "qHi89sFcK4gHlOPd": 3
+  },
+  "folder": "",
+  "flags": {
+    "core": {
+      "sourceId": "JournalEntry.ADnH0tm9DMZYSbkd"
+    }
+  },
+  "content": "<p>Just like a safety system, except that an unauthorized user is zapped with an electric shock, inflicting DV 1d6 and a shock effect ▶219.</p>",
+  "pages": [],
+  "categories": [],
+  "_key": "!journal!x7KCt2Ig5ucwkaDh"
+}

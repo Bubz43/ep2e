@@ -1,0 +1,276 @@
+{
+  "name": "Haunter",
+  "permission": {
+    "default": 0,
+    "qJl17WpEHiovQQBC": 3
+  },
+  "type": "psi",
+  "system": {
+    "description": "<p><span class=\"fontstyle0\">The low-level dread of incomprehensible terror, flittering at the edge of perception, is your constant companion. Sometimes it is the crushing weight of the uncaring dark void that makes our extinction a near certainty, sometimes it is a more palpable, unnameable presence, an entity so beyond your ken that you are insignificant in comparison. You are plagued by unrest and unease, taunted by nightmares and a sense that reality is not always as grounded as you would like.</span></p>\n<p><span class=\"fontstyle0\"><br /></span><span class=\"fontstyle2\">Negative Trait (Choose one): </span><span class=\"fontstyle0\">Addiction or Mental Disorder (Cosmic Anxiety Disorder or Paranoia)<br /></span><span class=\"fontstyle2\">Free Sleight (Choose One): </span><span class=\"fontstyle0\">Heightened Awareness, Infectious Mind, or Nightmare</span> &nbsp;</p>\n<p><br style=\"font-style: normal; font-variant: normal; font-weight: normal; letter-spacing: normal; line-height: normal; orphans: 2; text-align: -webkit-auto; text-indent: 0px; text-transform: none; white-space: normal; widows: 2; word-spacing: 0px; -webkit-text-size-adjust: auto; -webkit-text-stroke-width: 0px;\" /><span class=\"fontstyle0\" style=\"background-color: rgba(0, 0, 0, 0.05);\">Other Potential Enhanced Behaviors:&nbsp;</span><span class=\"fontstyle1\" style=\"background-color: rgba(0, 0, 0, 0.05);\">Denial, Nihilism, Unsettling Mannerisms.<br /></span><span class=\"fontstyle0\" style=\"background-color: rgba(0, 0, 0, 0.05);\">Other Potential Restricted Behaviors:&nbsp;</span><span class=\"fontstyle1\" style=\"background-color: rgba(0, 0, 0, 0.05);\">Empathy.<br /></span><span class=\"fontstyle0\" style=\"background-color: rgba(0, 0, 0, 0.05);\">Other Potential Motivations:&nbsp;</span><span class=\"fontstyle1\" style=\"background-color: rgba(0, 0, 0, 0.05);\">+Crush Hope, +Expose Hidden Truths, +Release Others From Misery, +Shake Collective Confidence</span></p>",
+    "reference": "Eclipse Phase Second Edition p. 273, 279",
+    "level": 1,
+    "requireBioSubstrate": true,
+    "strain": "Watts-MacLeod",
+    "state": {
+      "freePush": "",
+      "infectionRating": 10,
+      "receded": false,
+      "checkoutTime": false,
+      "interference": false
+    }
+  },
+  "flags": {
+    "ep2e": {
+      "influences": [
+        {
+          "type": "physicalDamage",
+          "description": "",
+          "roll": 1,
+          "formula": "1d6",
+          "id": "82or8pt2qz"
+        },
+        {
+          "type": "motivation",
+          "description": "Relationshipss are pointelss at best, a detriment at worst. Better to rid yourself of excess baggage.",
+          "active": null,
+          "roll": 4,
+          "motivation": {
+            "cause": "Cut Ties",
+            "stance": "support",
+            "goals": []
+          },
+          "id": "rdxhbrxpfo"
+        },
+        {
+          "type": "motivation",
+          "description": "You are disgusted by the presence of others and called by the desire to embrace the void. You will seek to isolate yourself from others and meditate with the silent voices in the dark. You may even go so far as to barricade yourself in, hide where you cannot be found, or take a spacewalk to commune with the dark universe.",
+          "active": null,
+          "roll": 5,
+          "motivation": {
+            "cause": "Isolation",
+            "stance": "support",
+            "goals": []
+          },
+          "id": "8d0l9zk8t6"
+        },
+        {
+          "type": "unique",
+          "description": "Within the next 24 hours, you experience a  full-sensory hallucination. The GM describes a scene to you as if were real, and you respond accordingly. The hallucination may be as subtle as seeing something crawling under an NPC’s skin to as immersive as suddenly finding yourself in an alien environment, but it lasts no more than a few minutes. If you have cause to disbelieve the illusion, you may make an INT Check to spot the falsehood; even if successful, however, the hallucination will still play out. Some hallucinations may just provide unnerving or horrifying experiences, a sign that the universe is unraveling around you. Others may provide obfuscated insights, reveal hidden connections, or hint at things to come.",
+          "active": null,
+          "name": "Hallucination",
+          "roll": 6,
+          "duration": 86400000,
+          "effects": {
+            "items": [],
+            "interval": "actionTurns",
+            "durationFormula": "0"
+          },
+          "id": "3e7y92tge2"
+        },
+        {
+          "type": "trait",
+          "description": "",
+          "active": null,
+          "roll": 2,
+          "trait": {
+            "_id": "21u1txyoRP3Jmi3B",
+            "name": "Enhanced Behavior: Avoidance",
+            "permission": {
+              "default": 0,
+              "qHi89sFcK4gHlOPd": 3
+            },
+            "type": "trait",
+            "system": {
+              "description": "<p><span style=\"background-color: rgba(0, 0, 0, 0.05);\">You acquire an intolerance for a</span><span style=\"background-color: rgba(0, 0, 0, 0.05);\"> </span><span style=\"background-color: rgba(0, 0, 0, 0.05);\">specific type of sensory input: smells, sounds, light, darkness, etc.</span><span style=\"background-color: rgba(0, 0, 0, 0.05);\"> </span><span style=\"background-color: rgba(0, 0, 0, 0.05);\">You will go to great lengths to avoid</span></p>\n<p>&nbsp;</p>\n<p>Your conduct or moods are modified. This may be due to conditioning and reprogramming via time-accelerated psychosurgery ▶294, drugs, genetic tweaks, psi, or other factors. This may have been a deliberate choice or it may have been inflicted against your will. Work with your GM to define a specific emotion (e.g., happiness, contentment, love) or behavior (e.g., aggression, commitment, curiosity, orderliness, loyalty). Apply a -10 modifier per level to all actions when withheld from the behavior/emotion.</p>\n<p>Level 1: You are encouraged to pursue the behavior and associate it with positive feelings; emotions are boosted.</p>\n<p>Level 2: You are driven to engage in the specified behavior; emotions are exaggerated. Holding back requires a WIL Check.</p>\n<p>Level 3: The behavior is enforced; emotions are compulsory and ongoing. If restrained from the conduct or the emotion is suppressed, suffer SV 1d6.</p>\n<p>This trait may be taken more than once for different behaviors.</p>",
+              "reference": "Eclipse Phase Second Edition p. 78",
+              "restrictions": "",
+              "triggers": "",
+              "source": "ego",
+              "state": {
+                "level": 0,
+                "triggered": false
+              },
+              "levels": [
+                {
+                  "cost": 1,
+                  "effects": [
+                    {
+                      "type": "successTest",
+                      "tags": [
+                        {
+                          "type": "allActions"
+                        }
+                      ],
+                      "modifier": -10,
+                      "toOpponent": false,
+                      "requirement": "withheld from behavior/emotion",
+                      "id": "aqy1m46h1a"
+                    }
+                  ],
+                  "id": "unkeixdz2e"
+                },
+                {
+                  "cost": 2,
+                  "effects": [
+                    {
+                      "type": "successTest",
+                      "tags": [
+                        {
+                          "type": "allActions"
+                        }
+                      ],
+                      "modifier": -20,
+                      "toOpponent": false,
+                      "requirement": "withheld from behavior/emotion",
+                      "id": "j425rl53gv"
+                    },
+                    {
+                      "type": "misc",
+                      "unique": "",
+                      "description": "Holding back requires a WIL Check",
+                      "id": "bvrj3ruh2s"
+                    }
+                  ],
+                  "id": "f5ai6gh49s"
+                },
+                {
+                  "cost": 4,
+                  "effects": [
+                    {
+                      "type": "successTest",
+                      "tags": [
+                        {
+                          "type": "allActions"
+                        }
+                      ],
+                      "modifier": -30,
+                      "toOpponent": false,
+                      "requirement": "withheld from behavior/emotion",
+                      "id": "otqcabcezw"
+                    },
+                    {
+                      "type": "misc",
+                      "unique": "",
+                      "description": "If restrained from conduct or suppressing the emotion, suffer SV 1d6",
+                      "id": "aclz7eoaqu"
+                    }
+                  ],
+                  "id": "0cqtsrk172"
+                }
+              ],
+              "subtype": "",
+              "traitType": "negative"
+            },
+            "flags": {},
+            "img": "icons/svg/mystery-man.svg",
+            "effects": []
+          },
+          "id": "hdpormnnb9"
+        },
+        {
+          "type": "trait",
+          "description": "",
+          "active": null,
+          "roll": 3,
+          "trait": {
+            "_id": "21u1txyoRP3Jmi3B",
+            "name": "Enhanced Behavior: Mistrust",
+            "permission": {
+              "default": 0,
+              "qHi89sFcK4gHlOPd": 3
+            },
+            "type": "trait",
+            "system": {
+              "description": "<p><span class=\"fontstyle0\" style=\"background-color: rgba(0, 0, 0, 0.05);\">You are convinced that nothing is as it seems. The signs of conspiracy, of falsehood, of&nbsp;</span><span class=\"fontstyle1\" style=\"background-color: rgba(0, 0, 0, 0.05);\">wrongness </span><span class=\"fontstyle0\" style=\"background-color: rgba(0, 0, 0, 0.05);\">are everywhere. Your allies may be compromised without their knowledge. Everything is suspect.</span></p>\n<p>&nbsp;</p>\n<p>Your conduct or moods are modified. This may be due to conditioning and reprogramming via time-accelerated psychosurgery ▶294, drugs, genetic tweaks, psi, or other factors. This may have been a deliberate choice or it may have been inflicted against your will. Work with your GM to define a specific emotion (e.g., happiness, contentment, love) or behavior (e.g., aggression, commitment, curiosity, orderliness, loyalty). Apply a -10 modifier per level to all actions when withheld from the behavior/emotion.</p>\n<p>Level 1: You are encouraged to pursue the behavior and associate it with positive feelings; emotions are boosted.</p>\n<p>Level 2: You are driven to engage in the specified behavior; emotions are exaggerated. Holding back requires a WIL Check.</p>\n<p>Level 3: The behavior is enforced; emotions are compulsory and ongoing. If restrained from the conduct or the emotion is suppressed, suffer SV 1d6.</p>\n<p>This trait may be taken more than once for different behaviors.</p>",
+              "reference": "Eclipse Phase Second Edition p. 78",
+              "restrictions": "",
+              "triggers": "",
+              "source": "ego",
+              "state": {
+                "level": 0,
+                "triggered": false
+              },
+              "levels": [
+                {
+                  "cost": 1,
+                  "effects": [
+                    {
+                      "type": "successTest",
+                      "tags": [
+                        {
+                          "type": "allActions"
+                        }
+                      ],
+                      "modifier": -10,
+                      "toOpponent": false,
+                      "requirement": "withheld from behavior/emotion",
+                      "id": "aqy1m46h1a"
+                    }
+                  ],
+                  "id": "unkeixdz2e"
+                },
+                {
+                  "cost": 2,
+                  "effects": [
+                    {
+                      "type": "successTest",
+                      "tags": [
+                        {
+                          "type": "allActions"
+                        }
+                      ],
+                      "modifier": -20,
+                      "toOpponent": false,
+                      "requirement": "withheld from behavior/emotion",
+                      "id": "j425rl53gv"
+                    },
+                    {
+                      "type": "misc",
+                      "unique": "",
+                      "description": "Holding back requires a WIL Check",
+                      "id": "bvrj3ruh2s"
+                    }
+                  ],
+                  "id": "f5ai6gh49s"
+                },
+                {
+                  "cost": 4,
+                  "effects": [
+                    {
+                      "type": "successTest",
+                      "tags": [
+                        {
+                          "type": "allActions"
+                        }
+                      ],
+                      "modifier": -30,
+                      "toOpponent": false,
+                      "requirement": "withheld from behavior/emotion",
+                      "id": "otqcabcezw"
+                    },
+                    {
+                      "type": "misc",
+                      "unique": "",
+                      "description": "If restrained from conduct or suppressing the emotion, suffer SV 1d6",
+                      "id": "aclz7eoaqu"
+                    }
+                  ],
+                  "id": "0cqtsrk172"
+                }
+              ],
+              "subtype": "",
+              "traitType": "negative"
+            },
+            "flags": {},
+            "img": "icons/svg/mystery-man.svg",
+            "effects": []
+          },
+          "id": "vk9y9csino"
+        }
+      ]
+    }
+  },
+  "effects": [],
+  "_id": "bXZsGJKJar5WLSEA",
+  "_key": "!items!bXZsGJKJar5WLSEA"
+}

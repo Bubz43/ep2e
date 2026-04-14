@@ -1,0 +1,74 @@
+{
+  "_id": "fWFm0exfx2d5Vs3m",
+  "name": "Striking Looks",
+  "permission": {
+    "default": 0,
+    "qHi89sFcK4gHlOPd": 3
+  },
+  "type": "trait",
+  "system": {
+    "description": "<p>Sculpted good looks are cheap and commonplace, but this morph possesses a physical look that can only be described as striking, fascinating, and unusual — even the gorgeous and chiseled glitterati take notice. Apply a +10 modifier to Persuade and Provoke tests where your allure may have an impact. Level 1 of this trait only applies to uplifts and synthmorphs; Level 2 is for humanoid biomorphs.</p>",
+    "reference": "Eclipse Phase Second Edition p. 76",
+    "restrictions": "",
+    "triggers": "",
+    "source": "morph",
+    "state": {
+      "level": 0,
+      "triggered": false
+    },
+    "levels": [
+      {
+        "cost": 1,
+        "effects": [
+          {
+            "type": "successTest",
+            "tags": [
+              {
+                "type": "skill",
+                "skillType": "persuade"
+              },
+              {
+                "type": "skill",
+                "skillType": "provoke"
+              }
+            ],
+            "modifier": 10,
+            "toOpponent": false,
+            "requirement": "your allure may have an impact",
+            "id": "1im6277h03"
+          }
+        ],
+        "id": "8tgn0tunp5"
+      },
+      {
+        "cost": 2,
+        "effects": [
+          {
+            "type": "successTest",
+            "tags": [
+              {
+                "type": "skill",
+                "skillType": "persuade"
+              },
+              {
+                "type": "skill",
+                "skillType": "provoke"
+              }
+            ],
+            "modifier": 10,
+            "toOpponent": false,
+            "requirement": "your allure may have an impact",
+            "id": "1im6277h03"
+          }
+        ],
+        "id": "67v0w7q70t"
+      }
+    ],
+    "subtype": "",
+    "traitType": "positive"
+  },
+  "flags": {},
+  "img": "icons/svg/mystery-man.svg",
+  "effects": [],
+  "_key": "!items!fWFm0exfx2d5Vs3m"
+}

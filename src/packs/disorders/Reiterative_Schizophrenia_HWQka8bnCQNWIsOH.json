@@ -1,0 +1,56 @@
+{
+  "name": "Reiterative Schizophrenia",
+  "permission": {
+    "default": 0,
+    "qJl17WpEHiovQQBC": 3
+  },
+  "type": "trait",
+  "system": {
+    "description": "<p>Not to be confused with the genetic disorder, reiterative schizophrenia has similar symptoms but develops in egos that undergo frequent resleeving, possibly due to some sort of repetitive error in the download process. Schizophrenics lose their ability to discern reality from unreality. You experience delusions, hallucinations (often in support of the delusions), and fragmented or disorganized speech. You experience your behavior as perfectly normal, to the point of becoming paranoid that others are involved in a grand deception.</p>",
+    "reference": "Eclipse Phase Second Edition p. 225",
+    "restrictions": "",
+    "triggers": "Alienation, drug use, forking, the unknown",
+    "source": "ego",
+    "state": {
+      "level": 0,
+      "triggered": false
+    },
+    "levels": [
+      {
+        "cost": 2,
+        "effects": [
+          {
+            "type": "misc",
+            "unique": "",
+            "description": "You experience delusions and hallucinations as determined by the GM and are prone to conspiratorial thinking.",
+            "id": "y83gfm72t9"
+          },
+          {
+            "type": "successTest",
+            "tags": [
+              {
+                "type": "allActions"
+              }
+            ],
+            "modifier": -20,
+            "toOpponent": false,
+            "requirement": "the test requires coherent communication",
+            "id": "tuxtxp4tz1"
+          }
+        ],
+        "id": "_defaultLevel"
+      }
+    ],
+    "subtype": "",
+    "traitType": "positive"
+  },
+  "flags": {
+    "core": {
+      "sourceId": "Item.Ri4FOaqxsl3hYaBh"
+    }
+  },
+  "img": "icons/svg/mystery-man.svg",
+  "effects": [],
+  "_id": "HWQka8bnCQNWIsOH",
+  "_key": "!items!HWQka8bnCQNWIsOH"
+}

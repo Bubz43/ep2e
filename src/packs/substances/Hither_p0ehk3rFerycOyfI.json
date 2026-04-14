@@ -1,0 +1,187 @@
+{
+  "name": "Hither",
+  "permission": {
+    "default": 0,
+    "qJl17WpEHiovQQBC": 3
+  },
+  "type": "substance",
+  "system": {
+    "description": "<p>Want to ooze sexy like a pleasure morph on a hot tin habitat? For those desiring that slinky je-ne-sais-quoi, hither is the tool. Hither typically comes as a clear, slippery gel with a musky, floral scent that is applied to parts of the body with large concentrations of sweat glands. It is a mild euphoriant, imparting a feeling of confidence and you-know-you-want-it-ness to the user. It also stimulates abundant production of lust pheromones. You gain a +10 bonus on Provoke Tests to seduce against biomorphs of the same species who can smell you. You also gain the Enhanced Behavior: Aroused (Level 2) trait for the duration.</p>",
+    "reference": "Eclipse Phase Second Edition p. 334",
+    "complexity": "minor",
+    "restricted": false,
+    "quality": "average",
+    "blueprint": {
+      "blueprintType": "",
+      "cracked": false,
+      "used": false
+    },
+    "quantity": 5,
+    "state": {
+      "stashed": false
+    },
+    "addiction": "physical",
+    "addictionMod": -10,
+    "hasSeverity": false,
+    "application": [
+      "dermal",
+      "inhalation",
+      "injection",
+      "oral"
+    ],
+    "base": {
+      "damage": {
+        "damageFormula": "",
+        "perTurn": false,
+        "armorPiercing": false,
+        "attackTraits": [],
+        "reduceAVbyDV": false,
+        "armorUsed": [],
+        "damageType": "physical"
+      },
+      "duration": 28800000,
+      "effects": [
+        {
+          "type": "successTest",
+          "tags": [
+            {
+              "type": "skill",
+              "skillType": "provoke"
+            }
+          ],
+          "modifier": 10,
+          "toOpponent": false,
+          "requirement": "seducing biomorphs of the same species who can smell you",
+          "id": "vorwqb75kk"
+        }
+      ],
+      "wearOffStress": "",
+      "notes": ""
+    },
+    "category": "Social",
+    "classification": "biochem",
+    "consumeOnUse": true,
+    "substanceType": "drug",
+    "quantityPerCost": 5,
+    "severity": {
+      "check": "som",
+      "checkMod": 0,
+      "conditions": [],
+      "wearOffStress": "",
+      "damage": {
+        "damageFormula": "",
+        "perTurn": false,
+        "armorPiercing": false,
+        "attackTraits": [],
+        "reduceAVbyDV": false,
+        "armorUsed": [],
+        "damageType": "physical"
+      },
+      "duration": 3000,
+      "effects": [],
+      "notes": ""
+    }
+  },
+  "flags": {
+    "ep2e": {
+      "baseAppliedItems": [
+        {
+          "_id": "nWrojhv3EC7s8Y63-base-ltsptaukpd",
+          "name": "Enhanced Behavior: Aroused",
+          "permission": {
+            "default": 0,
+            "qHi89sFcK4gHlOPd": 3
+          },
+          "type": "trait",
+          "system": {
+            "description": "<p>Your conduct or moods are modified. This may be due to conditioning and reprogramming via time-accelerated psychosurgery ▶294, drugs, genetic tweaks, psi, or other factors. This may have been a deliberate choice or it may have been inflicted against your will. Work with your GM to define a specific emotion (e.g., happiness, contentment, love) or behavior (e.g., aggression, commitment, curiosity, orderliness, loyalty). Apply a -10 modifier per level to all actions when withheld from the behavior/emotion.</p><p>Level 1: You are encouraged to pursue the behavior and associate it with positive feelings; emotions are boosted.</p><p>Level 2: You are driven to engage in the specified behavior; emotions are exaggerated. Holding back requires a WIL Check.</p><p>Level 3: The behavior is enforced; emotions are compulsory and ongoing. If restrained from the conduct or the emotion is suppressed, suffer SV 1d6.</p><p>This trait may be taken more than once for different behaviors.</p>",
+            "reference": "Eclipse Phase Second Edition p. 78",
+            "restrictions": "",
+            "triggers": "",
+            "source": "morph",
+            "state": {
+              "level": 1,
+              "triggered": false
+            },
+            "levels": [
+              {
+                "cost": 1,
+                "effects": [
+                  {
+                    "type": "successTest",
+                    "tags": [
+                      {
+                        "type": "allActions"
+                      }
+                    ],
+                    "modifier": -10,
+                    "toOpponent": false,
+                    "requirement": "withheld from behavior/emotion",
+                    "id": "unpmong88t"
+                  }
+                ],
+                "id": "fngiund4yp"
+              },
+              {
+                "cost": 2,
+                "effects": [
+                  {
+                    "type": "successTest",
+                    "tags": [
+                      {
+                        "type": "allActions"
+                      }
+                    ],
+                    "modifier": -20,
+                    "toOpponent": false,
+                    "requirement": "withheld from behavior/emotion",
+                    "id": "cgx0t1h7ch"
+                  },
+                  {
+                    "type": "misc",
+                    "unique": "",
+                    "description": "Holding back requires a WIL Check",
+                    "id": "qcskn12n5u"
+                  }
+                ],
+                "id": "tgi795dt5c"
+              },
+              {
+                "cost": 4,
+                "effects": [
+                  {
+                    "type": "successTest",
+                    "tags": [
+                      {
+                        "type": "allActions"
+                      }
+                    ],
+                    "modifier": -30,
+                    "toOpponent": false,
+                    "requirement": "withheld from behavior/emotion",
+                    "id": "nsjss6h3ns"
+                  },
+                  {
+                    "type": "misc",
+                    "unique": "",
+                    "description": "If restrained from conduct or suppressing the emotion, suffer SV 1d6",
+                    "id": "yp1twi8nwr"
+                  }
+                ],
+                "id": "prw6g3i4gq"
+              }
+            ],
+            "subtype": "",
+            "traitType": "negative"
+          },
+          "flags": {},
+          "img": "icons/svg/mystery-man.svg",
+          "effects": []
+        }
+      ]
+    }
+  },
+  "effects": [],
+  "_id": "p0ehk3rFerycOyfI",
+  "_key": "!items!p0ehk3rFerycOyfI"
+}

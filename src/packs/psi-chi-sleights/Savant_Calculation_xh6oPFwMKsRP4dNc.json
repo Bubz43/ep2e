@@ -1,0 +1,54 @@
+{
+  "name": "Savant Calculation",
+  "permission": {
+    "default": 0,
+    "qJl17WpEHiovQQBC": 3
+  },
+  "type": "sleight",
+  "system": {
+    "description": "<p>You have an incredible faculty for intuitive mathematics involving complex, chaotic systems. You can calculate your odds when gambling, predict the outcome of stock market upheavals, and guesstimate the rubble distribution pattern from an explosion. You can also measure exact distances with a look, solve math problems faster than computers, and tell how many microbots make up a swarmanoid. This talent, however, is not conscious, it is intuitive. You do not know the equations you are solving, you simply know the solution. You may make COG Checks to calculate answers to complex mathematical questions.</p>",
+    "reference": "Eclipse Phase Second Edition p. 281",
+    "duration": "actionTurns",
+    "infectionMod": 1,
+    "sleightType": "chi",
+    "action": "complex",
+    "timeframe": 0,
+    "effectsToSelf": [
+      {
+        "type": "misc",
+        "unique": "",
+        "description": "May use COG Check to answer complex mathematical questions.",
+        "id": "sg8qqpy5we"
+      }
+    ],
+    "effectsToTarget": [],
+    "scaleEffectsOnSuperior": false,
+    "attack": {
+      "useMentalArmor": false,
+      "attackTraits": [],
+      "damageFormula": "",
+      "damageType": "mental",
+      "notes": ""
+    },
+    "heal": {
+      "formula": "",
+      "healthType": "mental"
+    },
+    "mentalArmor": {
+      "apply": false,
+      "divisor": 3,
+      "formula": "1d6"
+    },
+    "status": {
+      "sustaining": false,
+      "pushDuration": 0,
+      "pushed": false,
+      "pushStartTime": 0,
+      "sustainingOn": []
+    }
+  },
+  "flags": {},
+  "effects": [],
+  "_id": "xh6oPFwMKsRP4dNc",
+  "_key": "!items!xh6oPFwMKsRP4dNc"
+}
