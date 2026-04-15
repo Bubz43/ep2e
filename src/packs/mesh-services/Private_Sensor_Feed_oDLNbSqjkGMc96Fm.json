@@ -1,0 +1,91 @@
+{
+  "name": "Private Sensor Feed",
+  "permission": {
+    "default": 0,
+    "qJl17WpEHiovQQBC": 3
+  },
+  "type": "software",
+  "system": {
+    "description": "<p>Each private sensor feed covers an area equivalent to a neighborhood or small habitat. Using it provides a +10 bonus to Perceive Tests when surveiling that area.</p>",
+    "reference": "Eclipse Phase Second Edition p. 315",
+    "complexity": "minor",
+    "restricted": false,
+    "quality": "average",
+    "softwareType": "meshService",
+    "activatedEffects": [],
+    "effects": [
+      {
+        "type": "successTest",
+        "tags": [
+          {
+            "type": "skill",
+            "skillType": "perceive"
+          }
+        ],
+        "modifier": 10,
+        "toOpponent": false,
+        "requirement": "area is relevant",
+        "id": "z2sljst5b9"
+      }
+    ],
+    "category": "Mesh Service",
+    "serviceDuration": -1,
+    "skills": [],
+    "activation": "",
+    "meshAttacks": 0,
+    "meshHealth": {
+      "baseDurability": 10,
+      "damage": 0,
+      "log": [],
+      "wounds": 0,
+      "rebootEndTime": -1,
+      "crashWounds": 0
+    },
+    "state": {
+      "activated": false,
+      "equipped": false,
+      "serviceStartTime": 0,
+      "paused": false
+    },
+    "primaryAttack": {
+      "armorPiercing": false,
+      "attackTraits": [],
+      "damageFormula": "",
+      "damageType": "mesh",
+      "useMeshArmor": true,
+      "notes": "",
+      "aptitudeCheckInfo": {
+        "armorAsModifier": "",
+        "check": "",
+        "checkModifier": 0,
+        "checkFailure": [],
+        "checkSuccess": [],
+        "criticalCheckFailure": []
+      },
+      "label": "",
+      "reduceAVbyDV": false
+    },
+    "secondaryAttack": {
+      "armorPiercing": false,
+      "attackTraits": [],
+      "damageFormula": "",
+      "damageType": "mesh",
+      "useMeshArmor": true,
+      "notes": "",
+      "aptitudeCheckInfo": {
+        "armorAsModifier": "",
+        "check": "",
+        "checkModifier": 0,
+        "checkFailure": [],
+        "checkSuccess": [],
+        "criticalCheckFailure": []
+      },
+      "label": "",
+      "reduceAVbyDV": false
+    }
+  },
+  "flags": {},
+  "effects": [],
+  "_id": "oDLNbSqjkGMc96Fm",
+  "_key": "!items!oDLNbSqjkGMc96Fm"
+}

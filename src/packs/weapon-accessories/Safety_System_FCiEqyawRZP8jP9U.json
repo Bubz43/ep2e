@@ -1,0 +1,18 @@
+{
+  "_id": "FCiEqyawRZP8jP9U",
+  "name": "Safety System",
+  "permission": {
+    "default": 0,
+    "qHi89sFcK4gHlOPd": 3
+  },
+  "folder": "",
+  "flags": {
+    "core": {
+      "sourceId": "JournalEntry.Y7COJ5jUdJKXFCcX"
+    }
+  },
+  "content": "<p>This feature is automatically included in most weapons. A biometric (palmprint or voiceprint) or ego ID sensor is embedded in the weapon, disabling it if anyone other than an authorized user attempts to fire it.</p>",
+  "pages": [],
+  "categories": [],
+  "_key": "!journal!FCiEqyawRZP8jP9U"
+}

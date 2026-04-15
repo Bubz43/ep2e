@@ -1,0 +1,64 @@
+{
+  "_id": "de54rQiATkUVmM4b",
+  "name": "VR Vertigo",
+  "permission": {
+    "default": 0,
+    "qHi89sFcK4gHlOPd": 3
+  },
+  "type": "trait",
+  "system": {
+    "description": "<p>You experience intense vertigo and nausea when interfacing with any type of virtual reality or XP. Apply a -30 modifier to your actions when using VR or XP. If using VR/XP for a prolonged period (an hour+), you must make a SOM Check or be incapacitated for 10 minutes. Even augmented reality makes you dizzy; suffer a -10 modifier while interfacing with AR.</p>",
+    "reference": "Eclipse Phase Second Edition p. 80",
+    "restrictions": "",
+    "triggers": "",
+    "source": "ego",
+    "state": {
+      "level": 0,
+      "triggered": false
+    },
+    "levels": [
+      {
+        "cost": 2,
+        "effects": [
+          {
+            "type": "successTest",
+            "tags": [
+              {
+                "type": "allActions"
+              }
+            ],
+            "modifier": -30,
+            "toOpponent": false,
+            "requirement": "using VR or XP",
+            "id": "qm4vftdwdu"
+          },
+          {
+            "type": "successTest",
+            "tags": [
+              {
+                "type": "allActions"
+              }
+            ],
+            "modifier": -10,
+            "toOpponent": false,
+            "requirement": "when using AR",
+            "id": "uts3bd3jq7"
+          },
+          {
+            "type": "misc",
+            "unique": "",
+            "description": "If using VR/XP for more than an hour, make a SOM Check or be incapacitated for 10 minutes",
+            "id": "2hv71smn09"
+          }
+        ],
+        "id": "idamqt8ucx"
+      }
+    ],
+    "subtype": "",
+    "traitType": "negative"
+  },
+  "flags": {},
+  "img": "icons/svg/mystery-man.svg",
+  "effects": [],
+  "_key": "!items!de54rQiATkUVmM4b"
+}

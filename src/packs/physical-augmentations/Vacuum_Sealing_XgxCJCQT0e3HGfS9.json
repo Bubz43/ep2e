@@ -1,0 +1,82 @@
+{
+  "name": "Vacuum Sealing",
+  "permission": {
+    "default": 0,
+    "qJl17WpEHiovQQBC": 3
+  },
+  "type": "physicalTech",
+  "system": {
+    "description": "<p>Your morph is modified to survive the effects of vacuum. You can seal your mouth, nose, and other orifices to prevent the freezing of bodily fluids from evaporative cooling. A special membrane protects your eyes, enabling you to see in vacuum without distortion or damage. Your system is also protected from the effects of decompression sickness and hypoxia. You are still vulnerable to asphyxiation, radiation, and possibly heat (in sunlight) or heat loss (in shade), and so this mod is often coupled with oxygen reserve cyberware, respirocytes, and/or cold tolerance.</p>",
+    "reference": "Eclipse Phase Second Edition p. 326",
+    "complexity": "minor",
+    "restricted": false,
+    "quality": "average",
+    "concealable": false,
+    "fragile": false,
+    "singleUse": false,
+    "twoHanded": false,
+    "blueprint": {
+      "blueprintType": "",
+      "cracked": false,
+      "used": false
+    },
+    "state": {
+      "disabled": false,
+      "equipped": false,
+      "fabStartTime": 0,
+      "activated": false,
+      "embeddedEgos": [],
+      "onboardAliDeleted": false
+    },
+    "activatedEffects": [],
+    "deviceType": "",
+    "category": "Physical Augments",
+    "fabricator": "",
+    "activationAction": "automatic",
+    "passiveEffects": [
+      {
+        "type": "misc",
+        "unique": "",
+        "description": "Can survive exposure to vacuum.",
+        "id": "5tbdl27za8"
+      }
+    ],
+    "activation": "none",
+    "resistEffectsCheck": "",
+    "usedEffectsDuration": 3000,
+    "onboardALI": false,
+    "firewallRating": 30,
+    "fabPrintDuration": 0,
+    "firewallHealth": {
+      "baseDurability": 30,
+      "rebootEndTime": -1,
+      "crashWounds": 0,
+      "damage": 0,
+      "log": [],
+      "wounds": 0
+    },
+    "meshHealth": {
+      "baseDurability": 20,
+      "damage": 0,
+      "wounds": 0,
+      "aidedHealTickStartTime": 0,
+      "ownHealTickStartTime": 0,
+      "damageRepair": {
+        "amount": "1d10",
+        "interval": 86400000
+      },
+      "woundRepair": {
+        "amount": 1,
+        "interval": 86400000
+      },
+      "log": [],
+      "rebootEndTime": -1,
+      "crashWounds": 0
+    },
+    "wareType": "bioware"
+  },
+  "flags": {},
+  "effects": [],
+  "_id": "XgxCJCQT0e3HGfS9",
+  "_key": "!items!XgxCJCQT0e3HGfS9"
+}

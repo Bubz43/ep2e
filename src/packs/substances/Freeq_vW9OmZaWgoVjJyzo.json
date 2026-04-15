@@ -1,0 +1,80 @@
+{
+  "name": "Freeq",
+  "permission": {
+    "default": 0,
+    "qJl17WpEHiovQQBC": 3
+  },
+  "type": "substance",
+  "system": {
+    "description": "<p>Originally called frequency, this drug was designed as a tool for scientific visualization. It releases nanobots into your bloodstream that settle in the epidermis, where they act as sensors for electromagnetic radiation. This sensory input is then injected into your visual and tactile sensoria as a sequence of novel stimuli, typically a light show or weird tactile sensations. Aside from its recreational uses, freeq is good at picking up on localized field radiation, allowing you to spot motes, sensors, and hidden electronics with a Perceive Test, depending on their range and signal strength (GM discretion).</p>",
+    "reference": "Eclipse Phase Second Edition p. 332",
+    "complexity": "minor",
+    "restricted": false,
+    "quality": "average",
+    "blueprint": {
+      "blueprintType": "",
+      "cracked": false,
+      "used": false
+    },
+    "quantity": 5,
+    "state": {
+      "stashed": false
+    },
+    "addiction": "",
+    "addictionMod": 0,
+    "hasSeverity": false,
+    "application": [
+      "injection",
+      "oral"
+    ],
+    "base": {
+      "damage": {
+        "damageFormula": "",
+        "perTurn": false,
+        "armorPiercing": false,
+        "attackTraits": [],
+        "reduceAVbyDV": false,
+        "armorUsed": [],
+        "damageType": "physical"
+      },
+      "duration": 28800000,
+      "effects": [
+        {
+          "type": "misc",
+          "unique": "",
+          "description": "Use Perceive to detect near-field electromagnetic emissions",
+          "id": "230zrletme"
+        }
+      ],
+      "wearOffStress": "",
+      "notes": ""
+    },
+    "category": "Nanodrug",
+    "classification": "nano",
+    "consumeOnUse": true,
+    "substanceType": "drug",
+    "quantityPerCost": 5,
+    "severity": {
+      "check": "som",
+      "checkMod": 0,
+      "conditions": [],
+      "wearOffStress": "",
+      "damage": {
+        "damageFormula": "",
+        "perTurn": false,
+        "armorPiercing": false,
+        "attackTraits": [],
+        "reduceAVbyDV": false,
+        "armorUsed": [],
+        "damageType": "physical"
+      },
+      "duration": 3000,
+      "effects": [],
+      "notes": ""
+    }
+  },
+  "flags": {},
+  "effects": [],
+  "_id": "vW9OmZaWgoVjJyzo",
+  "_key": "!items!vW9OmZaWgoVjJyzo"
+}

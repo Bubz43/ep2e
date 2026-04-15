@@ -1,0 +1,89 @@
+{
+  "name": "Psike-Out",
+  "permission": {
+    "default": 0,
+    "qJl17WpEHiovQQBC": 3
+  },
+  "type": "substance",
+  "system": {
+    "description": "<p>Psike-out bolsters an async&rsquo;s psi abilities. Apply a +10 modifier to Psi skill tests for the drug&rsquo;s duration.</p>",
+    "reference": "Eclipse Phase Second Edition p. 334",
+    "complexity": "major",
+    "restricted": true,
+    "quality": "average",
+    "blueprint": {
+      "blueprintType": "",
+      "cracked": false,
+      "used": false
+    },
+    "quantity": 5,
+    "state": {
+      "stashed": false
+    },
+    "addiction": "mental",
+    "addictionMod": -10,
+    "hasSeverity": false,
+    "application": [
+      "dermal",
+      "inhalation",
+      "injection",
+      "oral"
+    ],
+    "base": {
+      "damage": {
+        "damageFormula": "",
+        "perTurn": false,
+        "armorPiercing": false,
+        "attackTraits": [],
+        "reduceAVbyDV": false,
+        "armorUsed": [],
+        "damageType": "physical"
+      },
+      "duration": 28800000,
+      "effects": [
+        {
+          "type": "successTest",
+          "tags": [
+            {
+              "type": "skill",
+              "skillType": "psi"
+            }
+          ],
+          "modifier": 10,
+          "toOpponent": false,
+          "requirement": "",
+          "id": "fwyr2f2s3x"
+        }
+      ],
+      "wearOffStress": "",
+      "notes": ""
+    },
+    "category": "Psi",
+    "classification": "biochem",
+    "consumeOnUse": true,
+    "substanceType": "drug",
+    "quantityPerCost": 5,
+    "severity": {
+      "check": "som",
+      "checkMod": 0,
+      "conditions": [],
+      "wearOffStress": "",
+      "damage": {
+        "damageFormula": "",
+        "perTurn": false,
+        "armorPiercing": false,
+        "attackTraits": [],
+        "reduceAVbyDV": false,
+        "armorUsed": [],
+        "damageType": "physical"
+      },
+      "duration": 3000,
+      "effects": [],
+      "notes": ""
+    }
+  },
+  "flags": {},
+  "effects": [],
+  "_id": "K46fdj5SIO2dgD4L",
+  "_key": "!items!K46fdj5SIO2dgD4L"
+}

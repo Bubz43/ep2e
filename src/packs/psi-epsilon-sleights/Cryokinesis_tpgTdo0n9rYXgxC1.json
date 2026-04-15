@@ -1,0 +1,54 @@
+{
+  "name": "Cryokinesis",
+  "permission": {
+    "default": 0,
+    "qJl17WpEHiovQQBC": 3
+  },
+  "type": "sleight",
+  "system": {
+    "description": "<p>The exsurgent drains all heat around a target object or person. The temperature drops 50 degrees K per action turn down to near absolute zero (usually taking ~6 action turns). At extremely low temperatures, gases turn to liquids, liquids freeze and turn to solids, and exotic states of matters appear, such as frictionless fluids. Some items become brittle or may burst and shatter. Electronics may fail (GM discretion). When exposed to such extreme cold, you take DV 4d10 per minute (halved with cryogenic protection, armor does not protect).</p>",
+    "reference": "Eclipse Phase Second Edition p. 387",
+    "duration": "sustained",
+    "infectionMod": 1,
+    "sleightType": "epsilon",
+    "action": "complex",
+    "timeframe": 0,
+    "effectsToSelf": [],
+    "effectsToTarget": [
+      {
+        "type": "misc",
+        "unique": "",
+        "description": "Drains heat around target. Takes damage per minute. Cryo protection halves damage",
+        "id": "d0tshs6fd9"
+      }
+    ],
+    "scaleEffectsOnSuperior": false,
+    "attack": {
+      "useMentalArmor": false,
+      "attackTraits": [],
+      "damageFormula": "4d10",
+      "damageType": "physical",
+      "notes": ""
+    },
+    "heal": {
+      "formula": "",
+      "healthType": "mental"
+    },
+    "mentalArmor": {
+      "apply": false,
+      "divisor": 3,
+      "formula": "1d6"
+    },
+    "status": {
+      "sustaining": false,
+      "pushDuration": 0,
+      "pushed": false,
+      "pushStartTime": 0,
+      "sustainingOn": []
+    }
+  },
+  "flags": {},
+  "effects": [],
+  "_id": "tpgTdo0n9rYXgxC1",
+  "_key": "!items!tpgTdo0n9rYXgxC1"
+}

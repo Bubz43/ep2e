@@ -1,0 +1,91 @@
+{
+  "name": "Neuromodulation",
+  "permission": {
+    "default": 0,
+    "qJl17WpEHiovQQBC": 3
+  },
+  "type": "software",
+  "system": {
+    "description": "<p>This nanoware system enables you to influence your brain&rsquo;s neurotransmitters. This gives you rough control over your emotional states (much like endocrine control), though to a lesser degree. Increase your Moxie pool by 1.</p>",
+    "reference": "Eclipse Phase Second Edition p. 321",
+    "complexity": "moderate",
+    "restricted": false,
+    "quality": "average",
+    "softwareType": "meshware",
+    "activatedEffects": [],
+    "effects": [
+      {
+        "type": "misc",
+        "unique": "",
+        "description": "Control over neurotransmitters and emotions",
+        "id": "g9oa3ge5c3"
+      },
+      {
+        "type": "pool",
+        "pool": "moxie",
+        "modifier": 1,
+        "usabilityModification": "",
+        "id": "3s56giqnbp"
+      }
+    ],
+    "category": "Social Augments",
+    "serviceDuration": -1,
+    "skills": [],
+    "activation": "",
+    "meshAttacks": 0,
+    "meshHealth": {
+      "baseDurability": 10,
+      "damage": 0,
+      "log": [],
+      "wounds": 0,
+      "rebootEndTime": -1,
+      "crashWounds": 0
+    },
+    "state": {
+      "activated": false,
+      "equipped": false,
+      "serviceStartTime": 0,
+      "paused": false
+    },
+    "primaryAttack": {
+      "armorPiercing": false,
+      "attackTraits": [],
+      "damageFormula": "",
+      "damageType": "mesh",
+      "useMeshArmor": true,
+      "notes": "",
+      "aptitudeCheckInfo": {
+        "armorAsModifier": "",
+        "check": "",
+        "checkModifier": 0,
+        "checkFailure": [],
+        "checkSuccess": [],
+        "criticalCheckFailure": []
+      },
+      "label": "",
+      "reduceAVbyDV": false
+    },
+    "secondaryAttack": {
+      "armorPiercing": false,
+      "attackTraits": [],
+      "damageFormula": "",
+      "damageType": "mesh",
+      "useMeshArmor": true,
+      "notes": "",
+      "aptitudeCheckInfo": {
+        "armorAsModifier": "",
+        "check": "",
+        "checkModifier": 0,
+        "checkFailure": [],
+        "checkSuccess": [],
+        "criticalCheckFailure": []
+      },
+      "label": "",
+      "reduceAVbyDV": false
+    }
+  },
+  "flags": {},
+  "effects": [],
+  "_id": "u9MBeL1CLL2cqjVd",
+  "_key": "!items!u9MBeL1CLL2cqjVd"
+}

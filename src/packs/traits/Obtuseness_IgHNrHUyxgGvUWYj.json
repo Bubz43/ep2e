@@ -1,0 +1,85 @@
+{
+  "_id": "IgHNrHUyxgGvUWYj",
+  "name": "Obtuseness",
+  "permission": {
+    "default": 0,
+    "qHi89sFcK4gHlOPd": 3
+  },
+  "type": "trait",
+  "system": {
+    "description": "<p>Not the brightest star in the sky. Apply -5 per level to COG Checks.</p>",
+    "reference": "Eclipse Phase Second Edition p. 79",
+    "restrictions": "",
+    "triggers": "",
+    "source": "morph",
+    "state": {
+      "level": 0,
+      "triggered": false
+    },
+    "levels": [
+      {
+        "cost": 1,
+        "effects": [
+          {
+            "type": "successTest",
+            "tags": [
+              {
+                "type": "aptitudeCheck",
+                "aptitude": "cog"
+              }
+            ],
+            "modifier": -5,
+            "toOpponent": false,
+            "requirement": "",
+            "id": "vzh577vdnv"
+          }
+        ],
+        "id": "60n01u1ibr"
+      },
+      {
+        "cost": 2,
+        "effects": [
+          {
+            "type": "successTest",
+            "tags": [
+              {
+                "type": "aptitudeCheck",
+                "aptitude": "cog"
+              }
+            ],
+            "modifier": -10,
+            "toOpponent": false,
+            "requirement": "",
+            "id": "vzh577vdnv"
+          }
+        ],
+        "id": "friwqczvkj"
+      },
+      {
+        "cost": 3,
+        "effects": [
+          {
+            "type": "successTest",
+            "tags": [
+              {
+                "type": "aptitudeCheck",
+                "aptitude": "cog"
+              }
+            ],
+            "modifier": -15,
+            "toOpponent": false,
+            "requirement": "",
+            "id": "vzh577vdnv"
+          }
+        ],
+        "id": "whz01vdnji"
+      }
+    ],
+    "subtype": "",
+    "traitType": "negative"
+  },
+  "flags": {},
+  "img": "icons/svg/mystery-man.svg",
+  "effects": [],
+  "_key": "!items!IgHNrHUyxgGvUWYj"
+}

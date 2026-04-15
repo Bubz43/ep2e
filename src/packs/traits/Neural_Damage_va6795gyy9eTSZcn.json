@@ -1,0 +1,40 @@
+{
+  "_id": "va6795gyy9eTSZcn",
+  "name": "Neural Damage",
+  "permission": {
+    "default": 0,
+    "qHi89sFcK4gHlOPd": 3
+  },
+  "type": "trait",
+  "system": {
+    "description": "<p>You suffered some type of neurological damage that cannot yet be cured. The affliction is part of your ego and remains even when resleeving. This damage may have been inherited, resulted from a poorly designed morph or implant, or inflicted by a nanovirus during the Fall. Work with your GM to agree on a specific disorder appropriate to your game. The GM may inflict impairment modifiers (usually -10) as appropriate, according to the affliction. Some possibilities are:</p><p>Amusica: You have an inability to make or understand music. Automatically fail music-related skill tests.</p><p>Color Blindness: You cannot distinguish color, only variations in brightness. -10 to visual Perceive Tests.</p><p>Lack Depth Perception: You have difficulty ascertaining distance. Double range modifiers.</p><p>Lack Face Recognition: You cannot distinguish faces. -10 to visual Perceive Tests involving person identification.</p><p>Logorrhea: You use an excessive amount of words and sometimes can’t stop talking. -10 to Persuade and verbal Provoke Tests.</p><p>Mood Swings: Your emotions shift quickly and dramatically. -10 to WIL Checks against Provoke.</p><p>Partial Aphasia: You sometimes have difficulty communicating or using words. -10 to Persuade and verbal Provoke Tests.</p><p>Repetitive Behavior: You unwillingly repeat your actions. You unwillingly repeat your actions. Make a COG Check to avoid repeating your actions when under pressure.</p><p>Synaesthesia: Some types of sensory input are conflated with other perceptual phenomena.</p><p>This trait may be taken multiple times, for different afflictions.</p>",
+    "reference": "Eclipse Phase Second Edition p. 79",
+    "restrictions": "",
+    "triggers": "",
+    "source": "ego",
+    "state": {
+      "level": 0,
+      "triggered": false
+    },
+    "levels": [
+      {
+        "cost": 2,
+        "effects": [
+          {
+            "type": "misc",
+            "unique": "",
+            "description": "You suffer from neurological damage and are afflicted with a disorder (choose one)",
+            "id": "yjdxjnzba7"
+          }
+        ],
+        "id": "gtuwfw4t4u"
+      }
+    ],
+    "subtype": "",
+    "traitType": "negative"
+  },
+  "flags": {},
+  "img": "icons/svg/mystery-man.svg",
+  "effects": [],
+  "_key": "!items!va6795gyy9eTSZcn"
+}

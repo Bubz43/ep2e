@@ -1,0 +1,263 @@
+{
+  "name": "Polygun Pistol",
+  "permission": {
+    "default": 0,
+    "qJl17WpEHiovQQBC": 3
+  },
+  "type": "firearm",
+  "system": {
+    "description": "<p>Polyguns are modular, shape-changing weapons that can switch between holdout, medium pistol, heavy pistol, and machine pistol forms. Each form requires separate ammunition. Switching forms takes 3 action turns.</p>",
+    "reference": "Eclipse Phase Second Edition p. 210",
+    "complexity": "moderate",
+    "restricted": true,
+    "quality": "average",
+    "concealable": false,
+    "fragile": false,
+    "singleUse": false,
+    "twoHanded": false,
+    "blueprint": {
+      "blueprintType": "",
+      "cracked": false,
+      "used": false
+    },
+    "state": {
+      "disabled": false,
+      "equipped": false,
+      "braced": false,
+      "interface": false
+    },
+    "fixed": false,
+    "long": false,
+    "shapeChanging": true,
+    "shapeName": "Medium Pistol",
+    "accessories": [
+      "smartlink",
+      "safetySystem"
+    ],
+    "ammo": {
+      "ammoClass": "mediumPistol",
+      "max": 15,
+      "value": 16,
+      "modeSettings": [],
+      "selectedModeIndex": 0
+    },
+    "primaryAttack": {
+      "damageFormula": "2d10",
+      "firingModes": [
+        "semiAuto",
+        "burstFire",
+        "fullAuto"
+      ],
+      "notes": ""
+    },
+    "range": 30,
+    "wareType": ""
+  },
+  "flags": {
+    "ep2e": {
+      "shapes": [
+        {
+          "name": "Holdout",
+          "permission": {
+            "default": 0,
+            "qJl17WpEHiovQQBC": 3
+          },
+          "type": "firearm",
+          "system": {
+            "description": "<p>Polyguns are modular, shape-changing weapons that can switch between holdout, medium pistol, heavy pistol, and machine pistol forms. Each form requires separate ammunition. Switching forms takes 3 action turns.</p>",
+            "reference": "Eclipse Phase Second Edition p. 210",
+            "complexity": "moderate",
+            "restricted": true,
+            "quality": "average",
+            "concealable": true,
+            "fragile": false,
+            "singleUse": false,
+            "twoHanded": false,
+            "blueprint": {
+              "blueprintType": "",
+              "cracked": false,
+              "used": false
+            },
+            "state": {
+              "disabled": false,
+              "equipped": false,
+              "braced": false,
+              "interface": false
+            },
+            "fixed": false,
+            "long": false,
+            "shapeChanging": true,
+            "shapeName": "Holdout",
+            "accessories": [
+              "smartlink",
+              "safetySystem"
+            ],
+            "ammo": {
+              "ammoClass": "holdoutPistol",
+              "max": 9,
+              "value": 10,
+              "modeSettings": [],
+              "selectedModeIndex": 0
+            },
+            "primaryAttack": {
+              "damageFormula": "1d10 + 1d6",
+              "firingModes": [
+                "semiAuto",
+                "burstFire"
+              ],
+              "notes": ""
+            },
+            "range": 25,
+            "wareType": ""
+          },
+          "folder": "jkqhTF38GYJaN5wo",
+          "sort": 100000,
+          "flags": {
+            "ep2e": {
+              "specialAmmo": null
+            }
+          },
+          "effects": [],
+          "_id": "7lhdqmhqt0",
+          "img": "icons/svg/mystery-man.svg"
+        },
+        {
+          "name": "Heavy Pistol",
+          "permission": {
+            "default": 0,
+            "qJl17WpEHiovQQBC": 3
+          },
+          "type": "firearm",
+          "system": {
+            "description": "<p>Polyguns are modular, shape-changing weapons that can switch between holdout, medium pistol, heavy pistol, and machine pistol forms. Each form requires separate ammunition. Switching forms takes 3 action turns.</p>",
+            "reference": "Eclipse Phase Second Edition p. 210",
+            "complexity": "moderate",
+            "restricted": true,
+            "quality": "average",
+            "concealable": false,
+            "fragile": false,
+            "singleUse": false,
+            "twoHanded": false,
+            "blueprint": {
+              "blueprintType": "",
+              "cracked": false,
+              "used": false
+            },
+            "state": {
+              "disabled": false,
+              "equipped": false,
+              "braced": false,
+              "interface": false
+            },
+            "fixed": false,
+            "long": false,
+            "shapeChanging": true,
+            "shapeName": "Heavy Pistol",
+            "accessories": [
+              "smartlink",
+              "safetySystem"
+            ],
+            "ammo": {
+              "ammoClass": "heavyPistol",
+              "max": 9,
+              "value": 10,
+              "modeSettings": [],
+              "selectedModeIndex": 0
+            },
+            "primaryAttack": {
+              "damageFormula": "2d10 + 2",
+              "firingModes": [
+                "semiAuto",
+                "burstFire",
+                "fullAuto"
+              ],
+              "notes": ""
+            },
+            "range": 35,
+            "wareType": ""
+          },
+          "folder": "jkqhTF38GYJaN5wo",
+          "sort": 300000,
+          "flags": {
+            "ep2e": {
+              "specialAmmo": null
+            }
+          },
+          "effects": [],
+          "_id": "ffyhhxkzsu",
+          "img": "icons/svg/mystery-man.svg"
+        },
+        {
+          "name": "Machine Pistol",
+          "permission": {
+            "default": 0,
+            "qJl17WpEHiovQQBC": 3
+          },
+          "type": "firearm",
+          "system": {
+            "description": "<p>Polyguns are modular, shape-changing weapons that can switch between holdout, medium pistol, heavy pistol, and machine pistol forms. Each form requires separate ammunition. Switching forms takes 3 action turns.</p>",
+            "reference": "Eclipse Phase Second Edition p. 210",
+            "complexity": "moderate",
+            "restricted": true,
+            "quality": "average",
+            "concealable": false,
+            "fragile": false,
+            "singleUse": false,
+            "twoHanded": false,
+            "blueprint": {
+              "blueprintType": "",
+              "cracked": false,
+              "used": false
+            },
+            "state": {
+              "disabled": false,
+              "equipped": false,
+              "braced": false,
+              "interface": false
+            },
+            "fixed": false,
+            "long": false,
+            "shapeChanging": true,
+            "shapeName": "Machine Pistol",
+            "accessories": [
+              "smartlink",
+              "safetySystem"
+            ],
+            "ammo": {
+              "ammoClass": "machinePistol",
+              "max": 30,
+              "value": 31,
+              "modeSettings": [],
+              "selectedModeIndex": 0
+            },
+            "primaryAttack": {
+              "damageFormula": "1d10 + 1d6",
+              "firingModes": [
+                "semiAuto",
+                "burstFire",
+                "fullAuto"
+              ],
+              "notes": ""
+            },
+            "range": 25,
+            "wareType": ""
+          },
+          "folder": "jkqhTF38GYJaN5wo",
+          "sort": 400000,
+          "flags": {
+            "ep2e": {
+              "specialAmmo": null
+            }
+          },
+          "effects": [],
+          "_id": "na4dy1zvz7",
+          "img": "icons/svg/mystery-man.svg"
+        }
+      ],
+      "specialAmmo": null
+    }
+  },
+  "effects": [],
+  "_id": "xpHRe7AfT6sVNekN",
+  "_key": "!items!xpHRe7AfT6sVNekN"
+}

@@ -1,0 +1,82 @@
+{
+  "name": "Ripper",
+  "permission": {
+    "default": 0,
+    "qJl17WpEHiovQQBC": 3
+  },
+  "type": "physicalTech",
+  "system": {
+    "description": "<p>When activated, this portable countersurveillance device generates an electromagnetic pulse every 5 action turns designed to damage the antennas of motes and nanoswarms. It is used to 'rip' the sensors in an area, destroying their ability to wirelessly communicate and creating dead zones ▶271. Rippers affect all motes/swarms within 20 meters. Motes must be repaired/replaced; nanoswarms and microswarms (including swarmanoids) suffer DV [[/r 3d10]] per pulse.</p>",
+    "reference": "Eclipse Phase Second Edition p. 339",
+    "complexity": "moderate",
+    "restricted": true,
+    "quality": "average",
+    "concealable": false,
+    "fragile": false,
+    "singleUse": false,
+    "twoHanded": false,
+    "blueprint": {
+      "blueprintType": "",
+      "cracked": false,
+      "used": false
+    },
+    "state": {
+      "disabled": false,
+      "equipped": false,
+      "fabStartTime": 0,
+      "activated": false,
+      "embeddedEgos": [],
+      "onboardAliDeleted": false
+    },
+    "activatedEffects": [
+      {
+        "type": "misc",
+        "unique": "",
+        "description": "EMP pulse every 5 turns, DV 3d10 to nanoswarms/microswarms.",
+        "id": "mfvlkybyje"
+      }
+    ],
+    "deviceType": "",
+    "category": "Espionage Gear",
+    "fabricator": "",
+    "activationAction": "automatic",
+    "passiveEffects": [],
+    "activation": "toggle",
+    "resistEffectsCheck": "",
+    "usedEffectsDuration": 3000,
+    "onboardALI": false,
+    "firewallRating": 30,
+    "fabPrintDuration": 0,
+    "firewallHealth": {
+      "baseDurability": 30,
+      "rebootEndTime": -1,
+      "crashWounds": 0,
+      "damage": 0,
+      "log": [],
+      "wounds": 0
+    },
+    "meshHealth": {
+      "baseDurability": 20,
+      "damage": 0,
+      "wounds": 0,
+      "aidedHealTickStartTime": 0,
+      "ownHealTickStartTime": 0,
+      "damageRepair": {
+        "amount": "1d10",
+        "interval": 86400000
+      },
+      "woundRepair": {
+        "amount": 1,
+        "interval": 86400000
+      },
+      "log": [],
+      "rebootEndTime": -1,
+      "crashWounds": 0
+    },
+    "wareType": ""
+  },
+  "flags": {},
+  "effects": [],
+  "_id": "8oM7RvVmNWzUCLy9",
+  "_key": "!items!8oM7RvVmNWzUCLy9"
+}

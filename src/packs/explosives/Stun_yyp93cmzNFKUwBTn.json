@@ -1,0 +1,64 @@
+{
+  "name": "Stun",
+  "permission": {
+    "default": 0,
+    "qJl17WpEHiovQQBC": 3
+  },
+  "type": "explosive",
+  "system": {
+    "description": "<p>These enhanced versions of flashbangs release a concussive blast and a cloud of rubber &ldquo;stingballs&rdquo; designed to stun targets and knock them off their feet. This blast also releases a blinding flash and a deafening thunderclap. Treat as a shock effect ▶219.</p>\n<p>Stun seekers/grenades can also be set into &ldquo;overload mode,&rdquo; inflicting an all-out sensory assault for a full minute. In addition to blinding glare, the device releases nausea-inducing malodorants and infrasonic frequencies that trigger unpleasant emotional responses (anxiety, uneasiness, extreme sorrow, revulsion, and fear).</p>",
+    "reference": "Eclipse Phase Second Edition p. 212",
+    "complexity": "moderate",
+    "restricted": false,
+    "quality": "average",
+    "blueprint": {
+      "blueprintType": "",
+      "cracked": false,
+      "used": false
+    },
+    "quantity": 3,
+    "state": {
+      "stashed": false
+    },
+    "areaEffect": "uniform",
+    "explosiveType": "grenade",
+    "useSubstance": "",
+    "areaEffectRadius": 20,
+    "size": "standard",
+    "sticky": true,
+    "unitsPerComplexity": 3,
+    "dosesPerUnit": 1,
+    "hasSecondaryMode": true,
+    "primaryAttack": {
+      "armorUsed": "kinetic",
+      "attackTraits": [
+        "blinding",
+        "knockdown",
+        "shock"
+      ],
+      "armorPiercing": false,
+      "damageFormula": "1d6 + 2",
+      "duration": 0,
+      "attackTraitNotes": "",
+      "label": "",
+      "notes": ""
+    },
+    "secondaryAttack": {
+      "armorUsed": "",
+      "attackTraits": [
+        "blinding",
+        "pain"
+      ],
+      "armorPiercing": false,
+      "damageFormula": "",
+      "duration": 60000,
+      "attackTraitNotes": "",
+      "label": "",
+      "notes": ""
+    }
+  },
+  "flags": {},
+  "effects": [],
+  "_id": "yyp93cmzNFKUwBTn",
+  "_key": "!items!yyp93cmzNFKUwBTn"
+}

@@ -1,0 +1,77 @@
+{
+  "name": "Paranoia",
+  "permission": {
+    "default": 0,
+    "qJl17WpEHiovQQBC": 3
+  },
+  "type": "trait",
+  "system": {
+    "description": "<p>You mistrust others. You are hypervigilant but also hypersensitive to perceived hostility and insults. You bear grudges for longer periods.</p>",
+    "reference": "Eclipse Phase Second Edition p. 225",
+    "restrictions": "",
+    "triggers": "Betrayal, conspiratorial behavior, the unknown, violence",
+    "source": "ego",
+    "state": {
+      "level": 0,
+      "triggered": false
+    },
+    "levels": [
+      {
+        "cost": 2,
+        "effects": [
+          {
+            "type": "successTest",
+            "tags": [
+              {
+                "type": "skill",
+                "skillType": "kinesics"
+              }
+            ],
+            "modifier": -10,
+            "toOpponent": false,
+            "requirement": "",
+            "id": "1lod709b70"
+          },
+          {
+            "type": "successTest",
+            "tags": [
+              {
+                "type": "aptitudeCheck",
+                "aptitude": "sav"
+              }
+            ],
+            "modifier": 20,
+            "toOpponent": false,
+            "requirement": "is an NPC and against Persuade",
+            "id": "wbkm1pdkce"
+          },
+          {
+            "type": "successTest",
+            "tags": [
+              {
+                "type": "aptitudeCheck",
+                "aptitude": "sav"
+              }
+            ],
+            "modifier": -20,
+            "toOpponent": false,
+            "requirement": "is an NPC and against hostile Provoke Tests",
+            "id": "ic2ybxsfmz"
+          }
+        ],
+        "id": "_defaultLevel"
+      }
+    ],
+    "subtype": "",
+    "traitType": "positive"
+  },
+  "flags": {
+    "core": {
+      "sourceId": "Item.Ri4FOaqxsl3hYaBh"
+    }
+  },
+  "img": "icons/svg/mystery-man.svg",
+  "effects": [],
+  "_id": "tvqTsb6DYfmr2YX6",
+  "_key": "!items!tvqTsb6DYfmr2YX6"
+}

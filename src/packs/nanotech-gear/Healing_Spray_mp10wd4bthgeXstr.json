@@ -1,0 +1,85 @@
+{
+  "_id": "mp10wd4bthgeXstr",
+  "name": "Healing Spray",
+  "permission": {
+    "default": 0,
+    "qJl17WpEHiovQQBC": 3
+  },
+  "type": "physicalTech",
+  "system": {
+    "description": "<p>This very small canister contains a single-use application of medical nanobots for healing biomorphs. You simply spray it on an open wound or inject it into a damaged area. It heals 1d10 [6] damage an hour (Recovery ▶221) for 12 hours.</p>",
+    "reference": "Eclipse Phase Second Edition p. 342",
+    "complexity": "minor",
+    "restricted": false,
+    "quality": "average",
+    "concealable": false,
+    "fragile": false,
+    "singleUse": true,
+    "twoHanded": false,
+    "blueprint": {
+      "blueprintType": "",
+      "cracked": false,
+      "used": false
+    },
+    "state": {
+      "disabled": false,
+      "equipped": false,
+      "fabStartTime": 0,
+      "activated": false,
+      "embeddedEgos": [],
+      "onboardAliDeleted": false
+    },
+    "activatedEffects": [
+      {
+        "type": "healthRecovery",
+        "damageAmount": "1d10",
+        "woundAmount": 1,
+        "interval": 3600000,
+        "stat": "damageRepair",
+        "technologicallyAided": true,
+        "id": "1m5bv4lpd5"
+      }
+    ],
+    "deviceType": "",
+    "category": "Nanotech Gear",
+    "fabricator": "",
+    "activationAction": "quick",
+    "passiveEffects": [],
+    "activation": "use",
+    "resistEffectsCheck": "",
+    "usedEffectsDuration": 43200000,
+    "onboardALI": false,
+    "firewallRating": 30,
+    "fabPrintDuration": 0,
+    "firewallHealth": {
+      "baseDurability": 30,
+      "rebootEndTime": -1,
+      "crashWounds": 0,
+      "damage": 0,
+      "log": [],
+      "wounds": 0
+    },
+    "meshHealth": {
+      "baseDurability": 20,
+      "damage": 0,
+      "wounds": 0,
+      "aidedHealTickStartTime": 0,
+      "ownHealTickStartTime": 0,
+      "damageRepair": {
+        "amount": "1d10",
+        "interval": 86400000
+      },
+      "woundRepair": {
+        "amount": 1,
+        "interval": 86400000
+      },
+      "log": [],
+      "rebootEndTime": -1,
+      "crashWounds": 0
+    },
+    "wareType": ""
+  },
+  "flags": {},
+  "effects": [],
+  "_key": "!items!mp10wd4bthgeXstr"
+}

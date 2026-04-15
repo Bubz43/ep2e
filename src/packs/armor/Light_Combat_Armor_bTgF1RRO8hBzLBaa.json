@@ -1,0 +1,50 @@
+{
+  "name": "Light Combat Armor",
+  "permission": {
+    "default": 0,
+    "qJl17WpEHiovQQBC": 3
+  },
+  "type": "armor",
+  "system": {
+    "description": "<p>This light plating is common for shells used in security and policing duties.</p>",
+    "reference": "Eclipse Phase Second Edition p. 214",
+    "complexity": "moderate",
+    "restricted": false,
+    "quality": "average",
+    "blueprint": {
+      "blueprintType": "",
+      "cracked": false,
+      "used": false
+    },
+    "state": {
+      "disabled": false,
+      "equipped": false,
+      "activated": false
+    },
+    "activeArmor": {
+      "energy": 0,
+      "kinetic": 0,
+      "concealable": false,
+      "layerable": false
+    },
+    "armorValues": {
+      "energy": 10,
+      "kinetic": 8,
+      "concealable": false,
+      "layerable": true
+    },
+    "attackTraits": [],
+    "effects": [],
+    "hasActiveState": false,
+    "fragile": false,
+    "singleUse": false,
+    "twoHanded": false,
+    "notes": "",
+    "wareType": "hardware"
+  },
+  "flags": {},
+  "img": "icons/svg/mystery-man.svg",
+  "effects": [],
+  "_id": "bTgF1RRO8hBzLBaa",
+  "_key": "!items!bTgF1RRO8hBzLBaa"
+}

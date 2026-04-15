@@ -1,0 +1,54 @@
+{
+  "name": "Influence",
+  "permission": {
+    "default": 0,
+    "qJl17WpEHiovQQBC": 3
+  },
+  "type": "sleight",
+  "system": {
+    "description": "<p>This is an offensive version of the Control Behavior sleight. You manipulate the target&rsquo;s cortices and emotions. Apply an Enhanced Behavior or Restricted Behavior (Level 2) trait ▶80. You may push this trait to Level 3.</p>",
+    "reference": "Eclipse Phase Second Edition p. 285",
+    "duration": "actionTurns",
+    "infectionMod": 4,
+    "sleightType": "gamma",
+    "action": "complex",
+    "timeframe": 0,
+    "effectsToSelf": [],
+    "effectsToTarget": [
+      {
+        "type": "misc",
+        "unique": "",
+        "description": "Apply an Enhanced Behavior or Restricted Behavior (Level 2) trait. Level 3 if pushed",
+        "id": "q71cmnro0y"
+      }
+    ],
+    "scaleEffectsOnSuperior": false,
+    "attack": {
+      "useMentalArmor": false,
+      "attackTraits": [],
+      "damageFormula": "",
+      "damageType": "mental",
+      "notes": ""
+    },
+    "heal": {
+      "formula": "",
+      "healthType": "mental"
+    },
+    "mentalArmor": {
+      "apply": false,
+      "divisor": 3,
+      "formula": "1d6"
+    },
+    "status": {
+      "sustaining": false,
+      "pushDuration": 0,
+      "pushed": false,
+      "pushStartTime": 0,
+      "sustainingOn": []
+    }
+  },
+  "flags": {},
+  "effects": [],
+  "_id": "h6tcRs0G2fGPF995",
+  "_key": "!items!h6tcRs0G2fGPF995"
+}

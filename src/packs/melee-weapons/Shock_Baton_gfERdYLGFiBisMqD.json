@@ -1,0 +1,56 @@
+{
+  "name": "Shock Baton",
+  "permission": {
+    "default": 0,
+    "qJl17WpEHiovQQBC": 3
+  },
+  "type": "meleeWeapon",
+  "system": {
+    "description": "<p>Used by police, these batons deliver an electric shock when activated.</p>",
+    "reference": "Eclipse Phase Second Edition p. 204",
+    "complexity": "minor",
+    "restricted": false,
+    "quality": "average",
+    "concealable": false,
+    "fragile": false,
+    "singleUse": false,
+    "twoHanded": false,
+    "blueprint": {
+      "blueprintType": "",
+      "cracked": false,
+      "used": false
+    },
+    "state": {
+      "disabled": false,
+      "equipped": false
+    },
+    "primaryAttack": {
+      "armorPiercing": false,
+      "attackTraits": [
+        "shock"
+      ],
+      "damageFormula": "1d10",
+      "label": "",
+      "notes": ""
+    },
+    "secondaryAttack": {
+      "armorPiercing": false,
+      "attackTraits": [],
+      "damageFormula": "",
+      "label": "",
+      "notes": ""
+    },
+    "hasSecondaryAttack": false,
+    "augmentUnarmed": false,
+    "acceptsPayload": false,
+    "reachBonus": 10,
+    "improvised": false,
+    "touchOnly": true,
+    "wareType": "",
+    "exoticSkill": ""
+  },
+  "flags": {},
+  "effects": [],
+  "_id": "gfERdYLGFiBisMqD",
+  "_key": "!items!gfERdYLGFiBisMqD"
+}

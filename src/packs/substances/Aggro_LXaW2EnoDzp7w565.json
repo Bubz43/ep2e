@@ -1,0 +1,106 @@
+{
+  "name": "Aggro",
+  "permission": {
+    "default": 0,
+    "qJl17WpEHiovQQBC": 3
+  },
+  "type": "substance",
+  "system": {
+    "description": "<p>This drug stimulates a massive burst of aggression pheromones. This provides a +20 modifier when using Provoke to intimidate or taunt (Social Attacks ▶228), but a -20 modifier to all other social skill tests. These modifiers are only effective when dealing with biomorphs of the same species who can smell you.</p>",
+    "reference": "Eclipse Phase Second Edition p. 331",
+    "complexity": "minor",
+    "restricted": false,
+    "quality": "average",
+    "blueprint": {
+      "blueprintType": "",
+      "cracked": false,
+      "used": false
+    },
+    "quantity": 5,
+    "state": {
+      "stashed": false
+    },
+    "addiction": "physical",
+    "addictionMod": 10,
+    "hasSeverity": false,
+    "application": [
+      "dermal",
+      "inhalation",
+      "injection",
+      "oral"
+    ],
+    "base": {
+      "damage": {
+        "damageFormula": "",
+        "perTurn": false,
+        "armorPiercing": false,
+        "attackTraits": [],
+        "reduceAVbyDV": false,
+        "armorUsed": [],
+        "damageType": "physical"
+      },
+      "duration": 900000,
+      "effects": [
+        {
+          "type": "successTest",
+          "tags": [
+            {
+              "type": "skill",
+              "skillType": "provoke"
+            }
+          ],
+          "modifier": 20,
+          "toOpponent": false,
+          "requirement": "intimitading or taunting biomorphs of the same species who can smell you",
+          "id": "mddblw7nxc"
+        },
+        {
+          "type": "successTest",
+          "tags": [
+            {
+              "type": "skill",
+              "skillType": "persuade"
+            },
+            {
+              "type": "skill",
+              "skillType": "deceive"
+            }
+          ],
+          "modifier": -20,
+          "toOpponent": false,
+          "requirement": "",
+          "id": "025ekv2lh8"
+        }
+      ],
+      "wearOffStress": "",
+      "notes": ""
+    },
+    "category": "Combat",
+    "classification": "biochem",
+    "consumeOnUse": true,
+    "substanceType": "drug",
+    "quantityPerCost": 5,
+    "severity": {
+      "check": "som",
+      "checkMod": 0,
+      "conditions": [],
+      "wearOffStress": "",
+      "damage": {
+        "damageFormula": "",
+        "perTurn": false,
+        "armorPiercing": false,
+        "attackTraits": [],
+        "reduceAVbyDV": false,
+        "armorUsed": [],
+        "damageType": "physical"
+      },
+      "duration": 3000,
+      "effects": [],
+      "notes": ""
+    }
+  },
+  "flags": {},
+  "effects": [],
+  "_id": "LXaW2EnoDzp7w565",
+  "_key": "!items!LXaW2EnoDzp7w565"
+}

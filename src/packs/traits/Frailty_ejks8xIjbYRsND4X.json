@@ -1,0 +1,54 @@
+{
+  "_id": "ejks8xIjbYRsND4X",
+  "name": "Frailty",
+  "permission": {
+    "default": 0,
+    "qHi89sFcK4gHlOPd": 3
+  },
+  "type": "trait",
+  "system": {
+    "description": "<p>The morph is not as resilient as similar models. Reduce Durability by 5. This will also decrease Wound Threshold (equal to DUR ÷ 5) and Death Rating (DUR × 1.5 for biomorphs, DUR × 2 for synthmorphs).</p>",
+    "reference": "Eclipse Phase Second Edition p. 78",
+    "restrictions": "",
+    "triggers": "",
+    "source": "morph",
+    "state": {
+      "level": 0,
+      "triggered": false
+    },
+    "levels": [
+      {
+        "cost": 2,
+        "effects": [
+          {
+            "type": "health",
+            "health": "physical",
+            "stat": "derived",
+            "modifier": -5,
+            "id": "yzyog2bq4a"
+          }
+        ],
+        "id": "6he2x7b7n8"
+      },
+      {
+        "cost": 4,
+        "effects": [
+          {
+            "type": "health",
+            "health": "physical",
+            "stat": "derived",
+            "modifier": -10,
+            "id": "5v4fbk5x76"
+          }
+        ],
+        "id": "rzmgjtf766"
+      }
+    ],
+    "subtype": "",
+    "traitType": "negative"
+  },
+  "flags": {},
+  "img": "icons/svg/mystery-man.svg",
+  "effects": [],
+  "_key": "!items!ejks8xIjbYRsND4X"
+}

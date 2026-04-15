@@ -1,0 +1,50 @@
+{
+  "name": "Vacsuit (Standard)",
+  "permission": {
+    "default": 0,
+    "qJl17WpEHiovQQBC": 3
+  },
+  "type": "armor",
+  "system": {
+    "description": "<p>Made from thicker and more durable materials, standard vacsuits provide 48 hours of air and incorporate an autocook capable of recycling all wastes and producing food and water indefinitely. Each suit is equipped with an ecto, a radio booster, specs, and atmospheric sensors. These suits have an Armor Value of 8/6 and protect you from temperatures from -175 to 140 C. They instantly seal any hole unless more than 30 points of damage are inflicted at once.</p>",
+    "reference": "Eclipse Phase Second Edition p. 341",
+    "complexity": "major",
+    "restricted": false,
+    "quality": "average",
+    "blueprint": {
+      "blueprintType": "",
+      "cracked": false,
+      "used": false
+    },
+    "state": {
+      "disabled": false,
+      "equipped": false,
+      "activated": false
+    },
+    "activeArmor": {
+      "energy": 0,
+      "kinetic": 0,
+      "concealable": false,
+      "layerable": false
+    },
+    "armorValues": {
+      "energy": 8,
+      "kinetic": 6,
+      "concealable": false,
+      "layerable": false
+    },
+    "attackTraits": [],
+    "effects": [],
+    "hasActiveState": false,
+    "fragile": false,
+    "singleUse": false,
+    "twoHanded": false,
+    "notes": "",
+    "wareType": ""
+  },
+  "flags": {},
+  "img": "icons/svg/mystery-man.svg",
+  "effects": [],
+  "_id": "RX6gaAttKw3pvSbb",
+  "_key": "!items!RX6gaAttKw3pvSbb"
+}

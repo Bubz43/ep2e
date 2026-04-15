@@ -1,0 +1,91 @@
+{
+  "name": "Archive",
+  "permission": {
+    "default": 0,
+    "qJl17WpEHiovQQBC": 3
+  },
+  "type": "software",
+  "system": {
+    "description": "<p>Each archive has a different focus (as Know skill fields). Using a relevant archive provides a +10 modifier to Research Tests involving that subject.</p>",
+    "reference": "Eclipse Phase Second Edition p. 315",
+    "complexity": "minor",
+    "restricted": false,
+    "quality": "average",
+    "softwareType": "meshService",
+    "activatedEffects": [],
+    "effects": [
+      {
+        "type": "successTest",
+        "tags": [
+          {
+            "type": "skill",
+            "skillType": "research"
+          }
+        ],
+        "modifier": 10,
+        "toOpponent": false,
+        "requirement": "related to one know skill",
+        "id": "eerzpy3rwa"
+      }
+    ],
+    "category": "Mesh Service",
+    "serviceDuration": -1,
+    "skills": [],
+    "activation": "",
+    "meshAttacks": 0,
+    "meshHealth": {
+      "baseDurability": 10,
+      "damage": 0,
+      "log": [],
+      "wounds": 0,
+      "rebootEndTime": -1,
+      "crashWounds": 0
+    },
+    "state": {
+      "activated": false,
+      "equipped": false,
+      "serviceStartTime": 0,
+      "paused": false
+    },
+    "primaryAttack": {
+      "armorPiercing": false,
+      "attackTraits": [],
+      "damageFormula": "",
+      "damageType": "mesh",
+      "useMeshArmor": true,
+      "notes": "",
+      "aptitudeCheckInfo": {
+        "armorAsModifier": "",
+        "check": "",
+        "checkModifier": 0,
+        "checkFailure": [],
+        "checkSuccess": [],
+        "criticalCheckFailure": []
+      },
+      "label": "",
+      "reduceAVbyDV": false
+    },
+    "secondaryAttack": {
+      "armorPiercing": false,
+      "attackTraits": [],
+      "damageFormula": "",
+      "damageType": "mesh",
+      "useMeshArmor": true,
+      "notes": "",
+      "aptitudeCheckInfo": {
+        "armorAsModifier": "",
+        "check": "",
+        "checkModifier": 0,
+        "checkFailure": [],
+        "checkSuccess": [],
+        "criticalCheckFailure": []
+      },
+      "label": "",
+      "reduceAVbyDV": false
+    }
+  },
+  "flags": {},
+  "effects": [],
+  "_id": "XAWVORBK7va0fqkg",
+  "_key": "!items!XAWVORBK7va0fqkg"
+}

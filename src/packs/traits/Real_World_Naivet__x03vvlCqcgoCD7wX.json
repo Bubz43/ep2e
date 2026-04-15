@@ -1,0 +1,40 @@
+{
+  "_id": "x03vvlCqcgoCD7wX",
+  "name": "Real World Naiveté",
+  "permission": {
+    "default": 0,
+    "qHi89sFcK4gHlOPd": 3
+  },
+  "type": "trait",
+  "system": {
+    "description": "<p>You either have very limited personal experience with the real (physical) world or have spent so much time in VR that your real-life functioning is impaired. You lack an understanding of many physical properties, social cues, and other factors that most people take for granted. This lack of common sense may lead you to misunderstand how a device works or misinterpret someone’s body language.</p><p>Once per game session, the GM may intentionally mislead you when providing a description about some thing or social interaction. This falsehood represents your misunderstanding of the situation and should be roleplayed appropriately, even when the player is aware of the character’s mistake.</p>",
+    "reference": "Eclipse Phase Second Edition p. 80",
+    "restrictions": "",
+    "triggers": "",
+    "source": "ego",
+    "state": {
+      "level": 0,
+      "triggered": false
+    },
+    "levels": [
+      {
+        "cost": 2,
+        "effects": [
+          {
+            "type": "misc",
+            "unique": "",
+            "description": "Once per session, the GM may mislead you when giving a description or in social interactions",
+            "id": "b2t3mxuijm"
+          }
+        ],
+        "id": "r247yy5zya"
+      }
+    ],
+    "subtype": "",
+    "traitType": "negative"
+  },
+  "flags": {},
+  "img": "icons/svg/mystery-man.svg",
+  "effects": [],
+  "_key": "!items!x03vvlCqcgoCD7wX"
+}

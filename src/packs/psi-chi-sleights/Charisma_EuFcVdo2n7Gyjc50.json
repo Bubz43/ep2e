@@ -1,0 +1,61 @@
+{
+  "name": "Charisma",
+  "permission": {
+    "default": 0,
+    "qJl17WpEHiovQQBC": 3
+  },
+  "type": "sleight",
+  "system": {
+    "description": "<p>Your inhibitions are lowered, social intuition expanded, and emotional intelligence augmented. This enhances your ability to navigate social situations and process emotional information. Increase Moxie pool by 1.</p>",
+    "reference": "Eclipse Phase Second Edition p. 280",
+    "duration": "actionTurns",
+    "infectionMod": 1,
+    "sleightType": "chi",
+    "action": "complex",
+    "timeframe": 0,
+    "effectsToSelf": [
+      {
+        "type": "pool",
+        "pool": "moxie",
+        "modifier": 1,
+        "usabilityModification": "",
+        "id": "378x504n9l"
+      },
+      {
+        "type": "misc",
+        "unique": "",
+        "description": "Lowers inhibitions, boosts charm.",
+        "id": "dkibyis2lf"
+      }
+    ],
+    "effectsToTarget": [],
+    "scaleEffectsOnSuperior": false,
+    "attack": {
+      "useMentalArmor": false,
+      "attackTraits": [],
+      "damageFormula": "",
+      "damageType": "mental",
+      "notes": ""
+    },
+    "heal": {
+      "formula": "",
+      "healthType": "mental"
+    },
+    "mentalArmor": {
+      "apply": false,
+      "divisor": 3,
+      "formula": "1d6"
+    },
+    "status": {
+      "sustaining": false,
+      "pushDuration": 0,
+      "pushed": false,
+      "pushStartTime": 0,
+      "sustainingOn": []
+    }
+  },
+  "flags": {},
+  "effects": [],
+  "_id": "EuFcVdo2n7Gyjc50",
+  "_key": "!items!EuFcVdo2n7Gyjc50"
+}

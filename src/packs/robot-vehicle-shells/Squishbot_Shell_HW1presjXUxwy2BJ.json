@@ -1,0 +1,712 @@
+{
+  "_id": "HW1presjXUxwy2BJ",
+  "name": "Squishbot Shell",
+  "permission": {
+    "default": 0,
+    "qJl17WpEHiovQQBC": 3
+  },
+  "type": "synthetic",
+  "system": {
+    "description": "<p>These small, amorphous bots are soft, with a smart-material liquid matrix interior and extensible skin. They can extrude tentacle-like limbs for walking and manipulating, roll as a ball, and squeeze through tight, confining spaces.</p>",
+    "reference": "Eclipse Phase Second Edition p. 347",
+    "movementRates": [
+      {
+        "type": "walker",
+        "base": 4,
+        "full": 12,
+        "id": "ggh6o2iqlg"
+      },
+      {
+        "type": "roller",
+        "base": 8,
+        "full": 40,
+        "id": "dy0vnn1ny4"
+      }
+    ],
+    "acquisition": {
+      "availability": 0,
+      "complexity": "minor",
+      "cost": 0,
+      "resource": "gearPoints",
+      "restricted": false
+    },
+    "pools": {
+      "insight": 0,
+      "moxie": 0,
+      "vigor": 0,
+      "flex": 0
+    },
+    "conditions": [],
+    "damagedArmor": [],
+    "passengers": 1,
+    "prehensileLimbs": 2,
+    "shellType": "bot",
+    "subtype": "exploration",
+    "unarmedDV": "0",
+    "isSwarm": false,
+    "painFilter": false,
+    "recoveryConditions": "normal",
+    "size": "small",
+    "reach": 0,
+    "brain": "",
+    "inherentArmor": {
+      "energy": 2,
+      "kinetic": 2,
+      "source": "Frame"
+    },
+    "physicalHealth": {
+      "baseDurability": 10,
+      "damage": 0,
+      "dots": [],
+      "aidedHealTickStartTime": 0,
+      "ownHealTickStartTime": 0,
+      "damageRepair": {
+        "amount": "",
+        "interval": 0
+      },
+      "woundRepair": {
+        "amount": 1,
+        "interval": 0
+      },
+      "log": [],
+      "wounds": 0
+    },
+    "firewallRating": 30,
+    "firewallHealth": {
+      "baseDurability": 30,
+      "rebootEndTime": -1,
+      "crashWounds": 0,
+      "damage": 0,
+      "log": [],
+      "wounds": 0
+    },
+    "meshHealth": {
+      "baseDurability": 20,
+      "damage": 0,
+      "aidedHealTickStartTime": 0,
+      "ownHealTickStartTime": 0,
+      "damageRepair": {
+        "amount": "1d10",
+        "interval": 86400000
+      },
+      "woundRepair": {
+        "amount": 1,
+        "interval": 86400000
+      },
+      "log": [],
+      "wounds": 0,
+      "rebootEndTime": -1,
+      "crashWounds": 0
+    }
+  },
+  "sort": 100001,
+  "flags": {},
+  "prototypeToken": {
+    "flags": {},
+    "name": "Squishbot Shell",
+    "displayName": 0,
+    "img": "icons/svg/mystery-man.svg",
+    "tint": null,
+    "width": 1,
+    "height": 1,
+    "scale": 1,
+    "lockRotation": false,
+    "rotation": 0,
+    "vision": false,
+    "dimSight": 0,
+    "brightSight": 0,
+    "dimLight": 0,
+    "brightLight": 0,
+    "sightAngle": 360,
+    "lightAngle": 360,
+    "lightAlpha": 1,
+    "lightAnimation": {
+      "speed": 5,
+      "intensity": 5
+    },
+    "actorId": "HW1presjXUxwy2BJ",
+    "actorLink": true,
+    "disposition": -1,
+    "displayBars": 0,
+    "bar1": {},
+    "bar2": {},
+    "randomImg": false
+  },
+  "items": [
+    {
+      "_id": "zX7nCrERbyLH9Inl",
+      "name": "360° Vision",
+      "type": "physicalTech",
+      "system": {
+        "description": "<p>The morph&rsquo;s eyes/visual sensors are situated for a 360-degree field of vision.</p>",
+        "reference": "Eclipse Phase Second Edition p. 318",
+        "complexity": "minor",
+        "restricted": false,
+        "quality": "average",
+        "concealable": false,
+        "fragile": false,
+        "singleUse": false,
+        "twoHanded": false,
+        "blueprint": {
+          "blueprintType": "",
+          "cracked": false,
+          "used": false
+        },
+        "state": {
+          "disabled": false,
+          "equipped": true,
+          "fabStartTime": 6471555000,
+          "activated": false,
+          "embeddedEgos": [],
+          "onboardAliDeleted": false
+        },
+        "activatedEffects": [],
+        "deviceType": "",
+        "category": "Sensory Augments",
+        "fabricator": "",
+        "activationAction": "automatic",
+        "passiveEffects": [
+          {
+            "type": "misc",
+            "unique": "",
+            "description": "See in all directions at once.",
+            "id": "028h5zy7g7"
+          }
+        ],
+        "activation": "none",
+        "resistEffectsCheck": "",
+        "usedEffectsDuration": 3000,
+        "onboardALI": false,
+        "firewallRating": 30,
+        "fabPrintDuration": 0,
+        "firewallHealth": {
+          "baseDurability": 30,
+          "rebootEndTime": -1,
+          "crashWounds": 0,
+          "damage": 0,
+          "log": [],
+          "wounds": 0
+        },
+        "meshHealth": {
+          "baseDurability": 20,
+          "damage": 0,
+          "wounds": 0,
+          "aidedHealTickStartTime": 0,
+          "ownHealTickStartTime": 0,
+          "damageRepair": {
+            "amount": "1d10",
+            "interval": 86400000
+          },
+          "woundRepair": {
+            "amount": 1,
+            "interval": 86400000
+          },
+          "log": [],
+          "rebootEndTime": -1,
+          "crashWounds": 0
+        },
+        "wareType": "hardware"
+      },
+      "sort": 100001,
+      "flags": {},
+      "img": "icons/svg/mystery-man.svg",
+      "effects": [],
+      "_key": "!actors.items!HW1presjXUxwy2BJ.zX7nCrERbyLH9Inl"
+    },
+    {
+      "_id": "O76DG259M7cRwTXC",
+      "name": "Access Jacks",
+      "type": "physicalTech",
+      "system": {
+        "description": "<p>Usually placed at the base of the skull, this external socket allows a direct neural interface with a cyberbrain or mesh inserts. A retractable fiberoptic cable enables you to plug into devices to access them directly, or to create a direct wired link to another person, allowing you to speak mind-to-mind and exchange data without fear of wireless sniffing. Access jacks are installed with all cyberbrains (and thus all pods and synthmorphs) by default.</p>",
+        "reference": "Eclipse Phase Second Edition p. 316",
+        "complexity": "minor",
+        "restricted": false,
+        "quality": "average",
+        "concealable": false,
+        "fragile": false,
+        "singleUse": false,
+        "twoHanded": false,
+        "blueprint": {
+          "blueprintType": "",
+          "cracked": false,
+          "used": false
+        },
+        "state": {
+          "disabled": false,
+          "equipped": true,
+          "fabStartTime": 6471555000,
+          "activated": false,
+          "embeddedEgos": [],
+          "onboardAliDeleted": false
+        },
+        "activatedEffects": [],
+        "deviceType": "",
+        "category": "Standard Augments",
+        "fabricator": "",
+        "activationAction": "automatic",
+        "passiveEffects": [
+          {
+            "type": "misc",
+            "unique": "",
+            "description": "External sockets for direct interface with mesh inserts/cyberbrains.",
+            "id": "g9t6cauoh4"
+          }
+        ],
+        "activation": "none",
+        "resistEffectsCheck": "",
+        "usedEffectsDuration": 3000,
+        "onboardALI": false,
+        "firewallRating": 30,
+        "fabPrintDuration": 0,
+        "firewallHealth": {
+          "baseDurability": 30,
+          "rebootEndTime": -1,
+          "crashWounds": 0,
+          "damage": 0,
+          "log": [],
+          "wounds": 0
+        },
+        "meshHealth": {
+          "baseDurability": 20,
+          "damage": 0,
+          "wounds": 0,
+          "aidedHealTickStartTime": 0,
+          "ownHealTickStartTime": 0,
+          "damageRepair": {
+            "amount": "1d10",
+            "interval": 86400000
+          },
+          "woundRepair": {
+            "amount": 1,
+            "interval": 86400000
+          },
+          "log": [],
+          "rebootEndTime": -1,
+          "crashWounds": 0
+        },
+        "wareType": "hardware"
+      },
+      "sort": 600000,
+      "flags": {},
+      "img": "icons/svg/mystery-man.svg",
+      "effects": [],
+      "_key": "!actors.items!HW1presjXUxwy2BJ.O76DG259M7cRwTXC"
+    },
+    {
+      "_id": "Del1AsDwNKRZho7i",
+      "name": "Lidar",
+      "type": "physicalTech",
+      "system": {
+        "description": "<p>This sensor scans the area with laser light and measures the reflections to judge range, speed, and image the target (Senses and Sensors ▶318). Lidar lasers are visible to enhanced vision, and are considered rude to continually emit in certain company.</p>",
+        "reference": "Eclipse Phase Second Edition p. 318",
+        "complexity": "minor",
+        "restricted": false,
+        "quality": "average",
+        "concealable": false,
+        "fragile": false,
+        "singleUse": false,
+        "twoHanded": false,
+        "blueprint": {
+          "blueprintType": "",
+          "cracked": false,
+          "used": false
+        },
+        "state": {
+          "disabled": false,
+          "equipped": true,
+          "fabStartTime": 6471555000,
+          "activated": false,
+          "embeddedEgos": [],
+          "onboardAliDeleted": false
+        },
+        "activatedEffects": [],
+        "deviceType": "",
+        "category": "Sensory Augments",
+        "fabricator": "",
+        "activationAction": "automatic",
+        "passiveEffects": [
+          {
+            "type": "misc",
+            "unique": "",
+            "description": "Use reflected laser light to image and judge range and speed.",
+            "id": "298fciew1b"
+          }
+        ],
+        "activation": "none",
+        "resistEffectsCheck": "",
+        "usedEffectsDuration": 3000,
+        "onboardALI": false,
+        "firewallRating": 30,
+        "fabPrintDuration": 0,
+        "firewallHealth": {
+          "baseDurability": 30,
+          "rebootEndTime": -1,
+          "crashWounds": 0,
+          "damage": 0,
+          "log": [],
+          "wounds": 0
+        },
+        "meshHealth": {
+          "baseDurability": 20,
+          "damage": 0,
+          "wounds": 0,
+          "aidedHealTickStartTime": 0,
+          "ownHealTickStartTime": 0,
+          "damageRepair": {
+            "amount": "1d10",
+            "interval": 86400000
+          },
+          "woundRepair": {
+            "amount": 1,
+            "interval": 86400000
+          },
+          "log": [],
+          "rebootEndTime": -1,
+          "crashWounds": 0
+        },
+        "wareType": "hardware"
+      },
+      "sort": 900001,
+      "flags": {},
+      "img": "icons/svg/mystery-man.svg",
+      "effects": [],
+      "_key": "!actors.items!HW1presjXUxwy2BJ.Del1AsDwNKRZho7i"
+    },
+    {
+      "_id": "5BCMgXqDIY4yGJMd",
+      "name": "Mesh Inserts",
+      "type": "physicalTech",
+      "system": {
+        "description": "<p>This network of implants is mandatory for people who want to use augmented reality and link wirelessly to the mesh. The various components include:</p>\n<ul>\n<li>Cranial Computer: This host serves as the hub for your personal area network and is home to your muse. It manages your augmented reality input and processes XP data, enabling you to share your sensorium with others in real-time. It is loaded with basic apps and provides all the functions you would expect from a mobile device: file storage, search engine, media player, mesh browser, address book, e-mail, messaging, and so forth.</li>\n<li>Medical/Diagnostic Sensors: This array monitors your health, including heart rate, respiration, blood pressure, temperature, neural activity, ware status, and more. In synthmorphs, this system monitors system reports and error logs, heat, stress faults, and similar hardware statuses.</li>\n<li>Radio Transceiver: This connects your headware with other mesh devices within range (5 km urban areas/50 km open areas).</li>\n<li>You can access any of these functions simply by thinking.</li>\n</ul>",
+        "reference": "Eclipse Phase Second Edition p. 316",
+        "complexity": "minor",
+        "restricted": false,
+        "quality": "average",
+        "concealable": false,
+        "fragile": false,
+        "singleUse": false,
+        "twoHanded": false,
+        "blueprint": {
+          "blueprintType": "",
+          "cracked": false,
+          "used": false
+        },
+        "state": {
+          "disabled": false,
+          "equipped": true,
+          "fabStartTime": 6471555000,
+          "activated": false,
+          "embeddedEgos": [],
+          "onboardAliDeleted": false
+        },
+        "activatedEffects": [],
+        "deviceType": "",
+        "category": "Standard Augments",
+        "fabricator": "",
+        "activationAction": "automatic",
+        "passiveEffects": [
+          {
+            "type": "misc",
+            "unique": "",
+            "description": "Cranial computer, wireless transceiver, muse home, and medical sensors.",
+            "id": "ntroeh8ug9"
+          }
+        ],
+        "activation": "none",
+        "resistEffectsCheck": "",
+        "usedEffectsDuration": 3000,
+        "onboardALI": false,
+        "firewallRating": 30,
+        "fabPrintDuration": 0,
+        "firewallHealth": {
+          "baseDurability": 30,
+          "rebootEndTime": -1,
+          "crashWounds": 0,
+          "damage": 0,
+          "log": [],
+          "wounds": 0
+        },
+        "meshHealth": {
+          "baseDurability": 20,
+          "damage": 0,
+          "wounds": 0,
+          "aidedHealTickStartTime": 0,
+          "ownHealTickStartTime": 0,
+          "damageRepair": {
+            "amount": "1d10",
+            "interval": 86400000
+          },
+          "woundRepair": {
+            "amount": 1,
+            "interval": 86400000
+          },
+          "log": [],
+          "rebootEndTime": -1,
+          "crashWounds": 0
+        },
+        "wareType": "hardware"
+      },
+      "sort": 300000,
+      "flags": {},
+      "img": "icons/svg/mystery-man.svg",
+      "effects": [],
+      "_key": "!actors.items!HW1presjXUxwy2BJ.5BCMgXqDIY4yGJMd"
+    },
+    {
+      "_id": "l0t0d66oWAZ18Xk2",
+      "name": "Puppet Sock",
+      "type": "physicalTech",
+      "system": {
+        "description": "<p>Puppet socks allow a morph to be remotely controlled, just like a drone (Remote Operations ▶346). While active, the puppet has no control over their body and is simply along for the ride. Too long in this situation can lead to stress from helplessness (Stressful Situations ▶229). Morphs with damage that reaches/exceeds their Durability cannot be puppeted.</p>",
+        "reference": "Eclipse Phase Second Edition p. 316",
+        "complexity": "moderate",
+        "restricted": false,
+        "quality": "average",
+        "concealable": false,
+        "fragile": false,
+        "singleUse": false,
+        "twoHanded": false,
+        "blueprint": {
+          "blueprintType": "",
+          "cracked": false,
+          "used": false
+        },
+        "state": {
+          "disabled": false,
+          "equipped": true,
+          "fabStartTime": 6471555000,
+          "activated": false,
+          "embeddedEgos": [],
+          "onboardAliDeleted": false
+        },
+        "activatedEffects": [],
+        "deviceType": "",
+        "category": "Standard Augments",
+        "fabricator": "",
+        "activationAction": "automatic",
+        "passiveEffects": [
+          {
+            "type": "misc",
+            "unique": "",
+            "description": "Allows morph to be remote controlled.",
+            "id": "w7w1ojregz"
+          }
+        ],
+        "activation": "none",
+        "resistEffectsCheck": "",
+        "usedEffectsDuration": 3000,
+        "onboardALI": false,
+        "firewallRating": 30,
+        "fabPrintDuration": 0,
+        "firewallHealth": {
+          "baseDurability": 30,
+          "rebootEndTime": -1,
+          "crashWounds": 0,
+          "damage": 0,
+          "log": [],
+          "wounds": 0
+        },
+        "meshHealth": {
+          "baseDurability": 20,
+          "damage": 0,
+          "wounds": 0,
+          "aidedHealTickStartTime": 0,
+          "ownHealTickStartTime": 0,
+          "damageRepair": {
+            "amount": "1d10",
+            "interval": 86400000
+          },
+          "woundRepair": {
+            "amount": 1,
+            "interval": 86400000
+          },
+          "log": [],
+          "rebootEndTime": -1,
+          "crashWounds": 0
+        },
+        "wareType": "hardware"
+      },
+      "sort": 1300000,
+      "flags": {},
+      "img": "icons/svg/mystery-man.svg",
+      "effects": [],
+      "_key": "!actors.items!HW1presjXUxwy2BJ.l0t0d66oWAZ18Xk2"
+    },
+    {
+      "_id": "tMtmWelkoOa5qnBF",
+      "name": "Retracting Limbs",
+      "type": "physicalTech",
+      "system": {
+        "description": "<p>Some or all of your limbs can retract completely inside your shell&rsquo;s frame. A limb can hold one very small item while retracted (small morphs can hold micro items, large morphs small items). Retracted limbs and the items they hold can not be targeted in combat. Retracted items are concealed (+30 Infiltrate). This mod cannot be combined with hidden compartment or telescoping limb.</p>",
+        "reference": "Eclipse Phase Second Edition p. 326",
+        "complexity": "minor",
+        "restricted": false,
+        "quality": "average",
+        "concealable": false,
+        "fragile": false,
+        "singleUse": false,
+        "twoHanded": false,
+        "blueprint": {
+          "blueprintType": "",
+          "cracked": false,
+          "used": false
+        },
+        "state": {
+          "disabled": false,
+          "equipped": true,
+          "fabStartTime": 6471555000,
+          "activated": false,
+          "embeddedEgos": [],
+          "onboardAliDeleted": false
+        },
+        "activatedEffects": [
+          {
+            "type": "misc",
+            "unique": "",
+            "description": "Limb retracts, can hold 1 small item",
+            "id": "ykzhtsu18x"
+          },
+          {
+            "type": "successTest",
+            "tags": [
+              {
+                "type": "skill",
+                "skillType": "infiltrate"
+              }
+            ],
+            "modifier": 30,
+            "toOpponent": false,
+            "requirement": "hiding an object",
+            "id": "sxdtgvqif8"
+          }
+        ],
+        "deviceType": "",
+        "category": "Physical Augments",
+        "fabricator": "",
+        "activationAction": "automatic",
+        "passiveEffects": [],
+        "activation": "toggle",
+        "resistEffectsCheck": "",
+        "usedEffectsDuration": 3000,
+        "onboardALI": false,
+        "firewallRating": 30,
+        "fabPrintDuration": 0,
+        "firewallHealth": {
+          "baseDurability": 30,
+          "rebootEndTime": -1,
+          "crashWounds": 0,
+          "damage": 0,
+          "log": [],
+          "wounds": 0
+        },
+        "meshHealth": {
+          "baseDurability": 20,
+          "damage": 0,
+          "wounds": 0,
+          "aidedHealTickStartTime": 0,
+          "ownHealTickStartTime": 0,
+          "damageRepair": {
+            "amount": "1d10",
+            "interval": 86400000
+          },
+          "woundRepair": {
+            "amount": 1,
+            "interval": 86400000
+          },
+          "log": [],
+          "rebootEndTime": -1,
+          "crashWounds": 0
+        },
+        "wareType": "hardware"
+      },
+      "sort": 2300000,
+      "flags": {},
+      "img": "icons/svg/mystery-man.svg",
+      "effects": [],
+      "_key": "!actors.items!HW1presjXUxwy2BJ.tMtmWelkoOa5qnBF"
+    },
+    {
+      "_id": "evvEQictnpeVYUQZ",
+      "name": "Shape Adjusting",
+      "type": "physicalTech",
+      "system": {
+        "description": "<p>This shell is made from smart materials that allow it to alter its shape, height, width, circumference, and external features, while retaining the same mass. The ability to change shape is not completely unlimited, due to the shell&rsquo;s internal components; work with the GM to establish what is possible. This mod is primarily used to reshape the morph into special pre-set configurations adapted to specific tasks (for example, lengthening to crawl through a tunnel, widening its base for stability, expanding to reach out and attach to multiple access points simultaneously, and so on). Shapechanging allows you to change your composition to function as any 2 Minor complexity items/ware or 1 Moderate complexity item/ware allowed by the GM (no blueprint needed). Extra sets of limbs count as Minor ware. Simple shapes and mechanical designs are easy to create, but advanced electronics, complex designs, and specialized components are beyond the scope of this mod. Altering shape takes at minimum 1d6 minutes, and can take as long as 1d6 hours for substantial changes. This mod also allows the morph to change its features for disguise purposes; apply a +30 modifier to disguise-based Deceive or Exotic Skill: Disguise Tests.</p>",
+        "reference": "Eclipse Phase Second Edition p. 326",
+        "complexity": "major",
+        "restricted": false,
+        "quality": "average",
+        "concealable": false,
+        "fragile": false,
+        "singleUse": false,
+        "twoHanded": false,
+        "blueprint": {
+          "blueprintType": "",
+          "cracked": false,
+          "used": false
+        },
+        "state": {
+          "disabled": false,
+          "equipped": true,
+          "fabStartTime": 6471555000,
+          "activated": false,
+          "embeddedEgos": [],
+          "onboardAliDeleted": false
+        },
+        "activatedEffects": [],
+        "deviceType": "",
+        "category": "Physical Augments",
+        "fabricator": "",
+        "activationAction": "automatic",
+        "passiveEffects": [
+          {
+            "type": "misc",
+            "unique": "",
+            "description": "Smart material composition, can create 2 Min or 1 Mod item/ware, more.",
+            "id": "xbu6qlz8nn"
+          }
+        ],
+        "activation": "none",
+        "resistEffectsCheck": "",
+        "usedEffectsDuration": 3000,
+        "onboardALI": false,
+        "firewallRating": 30,
+        "fabPrintDuration": 0,
+        "firewallHealth": {
+          "baseDurability": 30,
+          "rebootEndTime": -1,
+          "crashWounds": 0,
+          "damage": 0,
+          "log": [],
+          "wounds": 0
+        },
+        "meshHealth": {
+          "baseDurability": 20,
+          "damage": 0,
+          "wounds": 0,
+          "aidedHealTickStartTime": 0,
+          "ownHealTickStartTime": 0,
+          "damageRepair": {
+            "amount": "1d10",
+            "interval": 86400000
+          },
+          "woundRepair": {
+            "amount": 1,
+            "interval": 86400000
+          },
+          "log": [],
+          "rebootEndTime": -1,
+          "crashWounds": 0
+        },
+        "wareType": "hardware"
+      },
+      "sort": 2400000,
+      "flags": {},
+      "img": "icons/svg/mystery-man.svg",
+      "effects": [],
+      "_key": "!actors.items!HW1presjXUxwy2BJ.evvEQictnpeVYUQZ"
+    }
+  ],
+  "effects": [],
+  "_key": "!actors!HW1presjXUxwy2BJ"
+}

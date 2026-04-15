@@ -1,0 +1,73 @@
+{
+  "name": "Necrosis",
+  "permission": {
+    "default": 0,
+    "qJl17WpEHiovQQBC": 3
+  },
+  "type": "substance",
+  "system": {
+    "description": "<p>Necrosis nanobots attack the walls of cells inside the body, killing tissue. This nanotoxin inflicts DV 1d6 per action turn for one minute, after which the nanobots disable and flush from the body.</p>",
+    "reference": "Eclipse Phase Second Edition p. 335",
+    "complexity": "moderate",
+    "restricted": true,
+    "quality": "average",
+    "blueprint": {
+      "blueprintType": "",
+      "cracked": false,
+      "used": false
+    },
+    "quantity": 5,
+    "state": {
+      "stashed": false
+    },
+    "addiction": "",
+    "addictionMod": 0,
+    "hasSeverity": false,
+    "application": [
+      "injection",
+      "oral"
+    ],
+    "base": {
+      "damage": {
+        "damageFormula": "1d6",
+        "perTurn": true,
+        "armorPiercing": false,
+        "attackTraits": [],
+        "reduceAVbyDV": false,
+        "armorUsed": [],
+        "damageType": "physical"
+      },
+      "duration": 60000,
+      "effects": [],
+      "wearOffStress": "",
+      "notes": ""
+    },
+    "category": "",
+    "classification": "nano",
+    "consumeOnUse": true,
+    "substanceType": "toxin",
+    "quantityPerCost": 5,
+    "severity": {
+      "check": "som",
+      "checkMod": 0,
+      "conditions": [],
+      "wearOffStress": "",
+      "damage": {
+        "damageFormula": "",
+        "perTurn": false,
+        "armorPiercing": false,
+        "attackTraits": [],
+        "reduceAVbyDV": false,
+        "armorUsed": [],
+        "damageType": "physical"
+      },
+      "duration": 3000,
+      "effects": [],
+      "notes": ""
+    }
+  },
+  "flags": {},
+  "effects": [],
+  "_id": "Z6bSsvPBYQ2YI2Gy",
+  "_key": "!items!Z6bSsvPBYQ2YI2Gy"
+}

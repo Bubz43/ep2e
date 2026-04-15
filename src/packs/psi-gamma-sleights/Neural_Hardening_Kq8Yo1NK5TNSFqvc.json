@@ -1,0 +1,61 @@
+{
+  "name": "Neural Hardening",
+  "permission": {
+    "default": 0,
+    "qJl17WpEHiovQQBC": 3
+  },
+  "type": "sleight",
+  "system": {
+    "description": "<p>You harden the target&rsquo;s sensory input pathways and mechanisms. For WIL &divide; 5 minutes, they receive +10 to resist basilisk hacks, +10 per superior success.</p>",
+    "reference": "Eclipse Phase Second Edition p. 285",
+    "duration": "minutes",
+    "infectionMod": 4,
+    "sleightType": "gamma",
+    "action": "complex",
+    "timeframe": 0,
+    "effectsToSelf": [],
+    "effectsToTarget": [
+      {
+        "type": "successTest",
+        "tags": [
+          {
+            "type": "aptitudeCheck",
+            "aptitude": "int"
+          }
+        ],
+        "modifier": 10,
+        "toOpponent": false,
+        "requirement": "resisting Basilisk Hacks",
+        "id": "a6vs7o0i3o"
+      }
+    ],
+    "scaleEffectsOnSuperior": true,
+    "attack": {
+      "useMentalArmor": false,
+      "attackTraits": [],
+      "damageFormula": "",
+      "damageType": "mental",
+      "notes": ""
+    },
+    "heal": {
+      "formula": "",
+      "healthType": "mental"
+    },
+    "mentalArmor": {
+      "apply": false,
+      "divisor": 3,
+      "formula": "1d6"
+    },
+    "status": {
+      "sustaining": false,
+      "pushDuration": 0,
+      "pushed": false,
+      "pushStartTime": 0,
+      "sustainingOn": []
+    }
+  },
+  "flags": {},
+  "effects": [],
+  "_id": "Kq8Yo1NK5TNSFqvc",
+  "_key": "!items!Kq8Yo1NK5TNSFqvc"
+}

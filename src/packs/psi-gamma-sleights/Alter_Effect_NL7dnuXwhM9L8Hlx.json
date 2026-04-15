@@ -1,0 +1,54 @@
+{
+  "name": "Alter Effect",
+  "permission": {
+    "default": 0,
+    "qJl17WpEHiovQQBC": 3
+  },
+  "type": "sleight",
+  "system": {
+    "description": "<p>You trigger or ease a neurochemical response within the target, either decreasing or increasing the duration of a drug, chemical, or toxin by half.</p>",
+    "reference": "Eclipse Phase Second Edition p. 282",
+    "duration": "instant",
+    "infectionMod": 2,
+    "sleightType": "gamma",
+    "action": "complex",
+    "timeframe": 0,
+    "effectsToSelf": [],
+    "effectsToTarget": [
+      {
+        "type": "misc",
+        "unique": "",
+        "description": "Increase or reduce the duration of a drug or toxin affecting the target by half.",
+        "id": "msmfzev8z2"
+      }
+    ],
+    "scaleEffectsOnSuperior": false,
+    "attack": {
+      "useMentalArmor": false,
+      "attackTraits": [],
+      "damageFormula": "",
+      "damageType": "mental",
+      "notes": ""
+    },
+    "heal": {
+      "formula": "",
+      "healthType": "mental"
+    },
+    "mentalArmor": {
+      "apply": false,
+      "divisor": 3,
+      "formula": "1d6"
+    },
+    "status": {
+      "sustaining": false,
+      "pushDuration": 0,
+      "pushed": false,
+      "pushStartTime": 0,
+      "sustainingOn": []
+    }
+  },
+  "flags": {},
+  "effects": [],
+  "_id": "NL7dnuXwhM9L8Hlx",
+  "_key": "!items!NL7dnuXwhM9L8Hlx"
+}

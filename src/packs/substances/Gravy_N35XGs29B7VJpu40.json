@@ -1,0 +1,80 @@
+{
+  "name": "Gravy",
+  "permission": {
+    "default": 0,
+    "qJl17WpEHiovQQBC": 3
+  },
+  "type": "substance",
+  "system": {
+    "description": "<p>Gravy assists in acclimating to high-gravity environments. It is often added as a sauce to food and comes in a variety of flavors. For gravy to be 100% effective, you must begin using it at least 8 hours in advance. Reduce penalties for high-gravity acclimation by 20.</p>",
+    "reference": "Eclipse Phase Second Edition p. 332",
+    "complexity": "minor",
+    "restricted": false,
+    "quality": "average",
+    "blueprint": {
+      "blueprintType": "",
+      "cracked": false,
+      "used": false
+    },
+    "quantity": 5,
+    "state": {
+      "stashed": false
+    },
+    "addiction": "",
+    "addictionMod": 0,
+    "hasSeverity": false,
+    "application": [
+      "injection",
+      "oral"
+    ],
+    "base": {
+      "damage": {
+        "damageFormula": "",
+        "perTurn": false,
+        "armorPiercing": false,
+        "attackTraits": [],
+        "reduceAVbyDV": false,
+        "armorUsed": [],
+        "damageType": "physical"
+      },
+      "duration": 86400000,
+      "effects": [
+        {
+          "type": "misc",
+          "unique": "",
+          "description": "Reduce penalties for high-gravity acclimation by 20.",
+          "id": "ye2hp4vrlr"
+        }
+      ],
+      "wearOffStress": "",
+      "notes": ""
+    },
+    "category": "Nanodrug",
+    "classification": "nano",
+    "consumeOnUse": true,
+    "substanceType": "drug",
+    "quantityPerCost": 5,
+    "severity": {
+      "check": "som",
+      "checkMod": 0,
+      "conditions": [],
+      "wearOffStress": "",
+      "damage": {
+        "damageFormula": "",
+        "perTurn": false,
+        "armorPiercing": false,
+        "attackTraits": [],
+        "reduceAVbyDV": false,
+        "armorUsed": [],
+        "damageType": "physical"
+      },
+      "duration": 3000,
+      "effects": [],
+      "notes": ""
+    }
+  },
+  "flags": {},
+  "effects": [],
+  "_id": "N35XGs29B7VJpu40",
+  "_key": "!items!N35XGs29B7VJpu40"
+}

@@ -1,0 +1,40 @@
+{
+  "_id": "l12ee2txIMKxDdVw",
+  "name": "Memory Artifact",
+  "permission": {
+    "default": 0,
+    "qHi89sFcK4gHlOPd": 3
+  },
+  "type": "trait",
+  "system": {
+    "description": "<p>A previous ego&rsquo;s memories somehow survived the wiping process and linger on in this morph&rsquo;s brain/hardware. Once per session, a memory from this past occupant resurfaces in your mind. These memories are often emotionally charged and jarring; make a COG Check or suffer SV 1d6. These memories integrate into your own, though they may be erased with psychosurgery.</p>\n<p>Work with your GM to decide the specifics of the memories. GMs should use these recall incidents for plot purposes; they may reveal sensitive data, incriminating evidence, secrets hidden from the public, or details the previous ego does not want spread.</p>",
+    "reference": "Eclipse Phase Second Edition p. 78",
+    "restrictions": "",
+    "triggers": "",
+    "source": "morph",
+    "state": {
+      "level": 0,
+      "triggered": false
+    },
+    "levels": [
+      {
+        "cost": 1,
+        "effects": [
+          {
+            "type": "misc",
+            "unique": "",
+            "description": "Once per session: a memory from this morph's past occupant resurfaces in your mind.",
+            "id": "3or5w1zq3z"
+          }
+        ],
+        "id": "jklbinoiw9"
+      }
+    ],
+    "subtype": "",
+    "traitType": "negative"
+  },
+  "flags": {},
+  "img": "icons/svg/mystery-man.svg",
+  "effects": [],
+  "_key": "!items!l12ee2txIMKxDdVw"
+}

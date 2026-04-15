@@ -1,0 +1,54 @@
+{
+  "name": "Xeno-Empathy",
+  "permission": {
+    "default": 0,
+    "qJl17WpEHiovQQBC": 3
+  },
+  "type": "sleight",
+  "system": {
+    "description": "<p>You have an intuitive understanding of non-human, non-terrestrial organisms (animal analogues). You can make a SAV Check to acquire insight into the creature&rsquo;s ecological niche, motivations, needs, and likely behavioral responses (if non-sapient) or mental/ emotional state (if sapient).</p>",
+    "reference": "Eclipse Phase Second Edition p. 281",
+    "duration": "actionTurns",
+    "infectionMod": 1,
+    "sleightType": "chi",
+    "action": "complex",
+    "timeframe": 0,
+    "effectsToSelf": [
+      {
+        "type": "misc",
+        "unique": "",
+        "description": "May use SAV Check to gain understanding of non-terrestrial life.",
+        "id": "vwkxw8q02k"
+      }
+    ],
+    "effectsToTarget": [],
+    "scaleEffectsOnSuperior": false,
+    "attack": {
+      "useMentalArmor": false,
+      "attackTraits": [],
+      "damageFormula": "",
+      "damageType": "mental",
+      "notes": ""
+    },
+    "heal": {
+      "formula": "",
+      "healthType": "mental"
+    },
+    "mentalArmor": {
+      "apply": false,
+      "divisor": 3,
+      "formula": "1d6"
+    },
+    "status": {
+      "sustaining": false,
+      "pushDuration": 0,
+      "pushed": false,
+      "pushStartTime": 0,
+      "sustainingOn": []
+    }
+  },
+  "flags": {},
+  "effects": [],
+  "_id": "LND15f20RvfCm6O0",
+  "_key": "!items!LND15f20RvfCm6O0"
+}

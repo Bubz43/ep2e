@@ -1,0 +1,55 @@
+{
+  "name": "Superthermite Charge",
+  "permission": {
+    "default": 0,
+    "qJl17WpEHiovQQBC": 3
+  },
+  "type": "explosive",
+  "system": {
+    "description": "<p>These powerful and highly stable demolition charges are made from a combination of nanometals and metal oxides. A single charge can be used to create an explosive blast inflicting DV 6d10 + 10 [43] when set with Hardware: Demolitions. A charge can be shaped with a successful Hardware: Demolitions Test, focusing the blast in a particular 90-degree direction (for example, to blow through a door). This triples the damage of the blast in the focused direction; in all other directions, the damage is reduced to 1/3rd. Multiple charges apply a cumulative effect.</p>",
+    "reference": "Eclipse Phase Second Edition p. 340",
+    "complexity": "major",
+    "restricted": true,
+    "quality": "average",
+    "blueprint": {
+      "blueprintType": "",
+      "cracked": false,
+      "used": false
+    },
+    "quantity": 5,
+    "state": {
+      "stashed": false
+    },
+    "areaEffect": "",
+    "explosiveType": "generic",
+    "useSubstance": "",
+    "areaEffectRadius": 10,
+    "size": "mini",
+    "sticky": true,
+    "unitsPerComplexity": 5,
+    "dosesPerUnit": 1,
+    "hasSecondaryMode": false,
+    "primaryAttack": {
+      "armorUsed": "kinetic",
+      "attackTraits": [],
+      "armorPiercing": false,
+      "damageFormula": "6d10 + 10",
+      "duration": 0,
+      "label": "",
+      "notes": ""
+    },
+    "secondaryAttack": {
+      "armorUsed": "",
+      "attackTraits": [],
+      "armorPiercing": false,
+      "damageFormula": "",
+      "duration": 0,
+      "label": "",
+      "notes": ""
+    }
+  },
+  "flags": {},
+  "effects": [],
+  "_id": "tdtmchZCVgtoPIWN",
+  "_key": "!items!tdtmchZCVgtoPIWN"
+}

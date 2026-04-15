@@ -1,0 +1,66 @@
+{
+  "_id": "p4c4I3g6qZKK5sur",
+  "name": "Improved Immune System",
+  "permission": {
+    "default": 0,
+    "qHi89sFcK4gHlOPd": 3
+  },
+  "type": "trait",
+  "system": {
+    "description": "<p>This trait is only available to biomorphs. Your immune system is robust. Apply a +10 modifier per level to resist the effects of chemicals, diseases, drugs, and toxins.</p>",
+    "reference": "Eclipse Phase Second Edition p. 74",
+    "restrictions": "",
+    "triggers": "",
+    "source": "morph",
+    "state": {
+      "level": 0,
+      "triggered": false
+    },
+    "levels": [
+      {
+        "cost": 1,
+        "effects": [
+          {
+            "type": "successTest",
+            "tags": [
+              {
+                "type": "special",
+                "test": "resistSubstanceOrDisease"
+              }
+            ],
+            "modifier": 10,
+            "toOpponent": false,
+            "requirement": "",
+            "id": "ktfxxvkgbf"
+          }
+        ],
+        "id": "7tpwyafihd"
+      },
+      {
+        "cost": 2,
+        "effects": [
+          {
+            "type": "successTest",
+            "tags": [
+              {
+                "type": "special",
+                "test": "resistSubstanceOrDisease"
+              }
+            ],
+            "modifier": 20,
+            "toOpponent": false,
+            "requirement": "",
+            "id": "ktfxxvkgbf"
+          }
+        ],
+        "id": "yidfoin4xl"
+      }
+    ],
+    "subtype": "",
+    "traitType": "positive"
+  },
+  "flags": {},
+  "img": "icons/svg/mystery-man.svg",
+  "effects": [],
+  "_key": "!items!p4c4I3g6qZKK5sur"
+}

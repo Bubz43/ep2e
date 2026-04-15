@@ -1,0 +1,68 @@
+{
+  "_id": "lLlfizNcVwaxnNyY",
+  "name": "Non-Human Biochemistry",
+  "permission": {
+    "default": 0,
+    "qHi89sFcK4gHlOPd": 3
+  },
+  "type": "trait",
+  "system": {
+    "description": "<p>This trait is only available to biomorphs. This morph has substantial physiological and genetic differences from human morphs. Level 1 applies to non-human morphs. Level 2 applies to non-mammalian morphs. Apply a -10 modifier per level to Medicine Tests. Certain drugs, toxin, chemicals, or medical procedures may not work or may have a different effect (GM discretion). This trait may not be applied to morphs that do not come with it.</p>",
+    "reference": "Eclipse Phase Second Edition p. 79",
+    "restrictions": "",
+    "triggers": "",
+    "source": "morph",
+    "state": {
+      "level": 0,
+      "triggered": false
+    },
+    "levels": [
+      {
+        "cost": 2,
+        "effects": [
+          {
+            "type": "successTest",
+            "tags": [
+              {
+                "type": "fieldSkill",
+                "fieldSkill": "medicine",
+                "field": ""
+              }
+            ],
+            "modifier": -10,
+            "toOpponent": false,
+            "requirement": "working on this morph",
+            "id": "4hpg27idjb"
+          }
+        ],
+        "id": "9jdoqitzoh"
+      },
+      {
+        "cost": 4,
+        "effects": [
+          {
+            "type": "successTest",
+            "tags": [
+              {
+                "type": "fieldSkill",
+                "fieldSkill": "medicine",
+                "field": ""
+              }
+            ],
+            "modifier": -20,
+            "toOpponent": false,
+            "requirement": "working on this morph",
+            "id": "4hpg27idjb"
+          }
+        ],
+        "id": "c2habh6yun"
+      }
+    ],
+    "subtype": "",
+    "traitType": "negative"
+  },
+  "flags": {},
+  "img": "icons/svg/mystery-man.svg",
+  "effects": [],
+  "_key": "!items!lLlfizNcVwaxnNyY"
+}

@@ -1,0 +1,85 @@
+{
+  "_id": "dyuq26Omtyz3jaDu",
+  "name": "Acumen",
+  "permission": {
+    "default": 0,
+    "qHi89sFcK4gHlOPd": 3
+  },
+  "type": "trait",
+  "system": {
+    "description": "<p>You have a keen intellect. Add +5 per level to your COG Checks.</p>",
+    "reference": "Eclipse Phase Second Edition p. 72",
+    "restrictions": "",
+    "triggers": "",
+    "source": "morph",
+    "state": {
+      "level": 0,
+      "triggered": false
+    },
+    "levels": [
+      {
+        "cost": 1,
+        "effects": [
+          {
+            "type": "successTest",
+            "tags": [
+              {
+                "type": "aptitudeCheck",
+                "aptitude": "cog"
+              }
+            ],
+            "modifier": 5,
+            "toOpponent": false,
+            "requirement": "",
+            "id": "m8cunom0rh"
+          }
+        ],
+        "id": "8tztovv47z"
+      },
+      {
+        "cost": 2,
+        "effects": [
+          {
+            "type": "successTest",
+            "tags": [
+              {
+                "type": "aptitudeCheck",
+                "aptitude": "cog"
+              }
+            ],
+            "modifier": 10,
+            "toOpponent": false,
+            "requirement": "",
+            "id": "eewr7rq0vs"
+          }
+        ],
+        "id": "z4owpeqjyp"
+      },
+      {
+        "cost": 3,
+        "effects": [
+          {
+            "type": "successTest",
+            "tags": [
+              {
+                "type": "aptitudeCheck",
+                "aptitude": "cog"
+              }
+            ],
+            "modifier": 15,
+            "toOpponent": false,
+            "requirement": "",
+            "id": "vtwqb144mr"
+          }
+        ],
+        "id": "5aaxgg9f1t"
+      }
+    ],
+    "subtype": "",
+    "traitType": "positive"
+  },
+  "flags": {},
+  "img": "icons/svg/mystery-man.svg",
+  "effects": [],
+  "_key": "!items!dyuq26Omtyz3jaDu"
+}

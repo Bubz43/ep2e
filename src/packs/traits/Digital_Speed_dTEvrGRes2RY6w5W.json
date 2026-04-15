@@ -1,0 +1,42 @@
+{
+  "_id": "dTEvrGRes2RY6w5W",
+  "name": "Digital Speed",
+  "permission": {
+    "default": 0,
+    "qHi89sFcK4gHlOPd": 3
+  },
+  "type": "trait",
+  "system": {
+    "description": "<p>This trait is only available to infomorphs. Unfettered by the physical, you reduce timeframes for mesh-based task actions by 25%; this is cumulative with reduced time from superior successes.</p>",
+    "reference": "Eclipse Phase Second Edition p. 73",
+    "restrictions": "",
+    "triggers": "",
+    "source": "morph",
+    "state": {
+      "level": 0,
+      "triggered": false
+    },
+    "levels": [
+      {
+        "cost": 1,
+        "effects": [
+          {
+            "type": "duration",
+            "subtype": "taskActionTimeframe",
+            "modifier": -25,
+            "taskType": "mesh",
+            "halve": false,
+            "id": "3yzgi529mc"
+          }
+        ],
+        "id": "6omy0sihml"
+      }
+    ],
+    "subtype": "",
+    "traitType": "positive"
+  },
+  "flags": {},
+  "img": "icons/svg/mystery-man.svg",
+  "effects": [],
+  "_key": "!items!dTEvrGRes2RY6w5W"
+}

@@ -1,0 +1,61 @@
+{
+  "name": "Static",
+  "permission": {
+    "default": 0,
+    "qJl17WpEHiovQQBC": 3
+  },
+  "type": "sleight",
+  "system": {
+    "description": "<p>You generate an anti-psi jamming field, impeding the use of ranged sleights within Close range by -30. This sleight has no effect on self or Touch-range sleights.</p>",
+    "reference": "Eclipse Phase Second Edition p. 285",
+    "duration": "sustained",
+    "infectionMod": 4,
+    "sleightType": "gamma",
+    "action": "complex",
+    "timeframe": 0,
+    "effectsToSelf": [],
+    "effectsToTarget": [
+      {
+        "type": "successTest",
+        "tags": [
+          {
+            "type": "skill",
+            "skillType": "psi"
+          }
+        ],
+        "modifier": -30,
+        "toOpponent": false,
+        "requirement": "using a ranged sleight in close range",
+        "id": "tz8ecjd4if"
+      }
+    ],
+    "scaleEffectsOnSuperior": false,
+    "attack": {
+      "useMentalArmor": false,
+      "attackTraits": [],
+      "damageFormula": "",
+      "damageType": "mental",
+      "notes": ""
+    },
+    "heal": {
+      "formula": "",
+      "healthType": "mental"
+    },
+    "mentalArmor": {
+      "apply": false,
+      "divisor": 3,
+      "formula": "1d6"
+    },
+    "status": {
+      "sustaining": false,
+      "pushDuration": 0,
+      "pushed": false,
+      "pushStartTime": 0,
+      "sustainingOn": []
+    }
+  },
+  "flags": {},
+  "effects": [],
+  "_id": "UFDflG6rxj7TZETL",
+  "_key": "!items!UFDflG6rxj7TZETL"
+}

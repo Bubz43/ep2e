@@ -1,0 +1,54 @@
+{
+  "name": "Anti-Electronics Field",
+  "permission": {
+    "default": 0,
+    "qJl17WpEHiovQQBC": 3
+  },
+  "type": "sleight",
+  "system": {
+    "description": "<p>All electronics within Close range (10 meters) of the exsurgent mysteriously fail as if electrical power is drained away. This effectively disables synthmorphs and pods and leaves you without access to your devices or implants.</p>",
+    "reference": "Eclipse Phase Second Edition p. 386",
+    "duration": "sustained",
+    "infectionMod": 1,
+    "sleightType": "epsilon",
+    "action": "complex",
+    "timeframe": 0,
+    "effectsToSelf": [],
+    "effectsToTarget": [
+      {
+        "type": "misc",
+        "unique": "",
+        "description": "All electronics within Close range lose power.",
+        "id": "h24qpdiamn"
+      }
+    ],
+    "scaleEffectsOnSuperior": false,
+    "attack": {
+      "useMentalArmor": false,
+      "attackTraits": [],
+      "damageFormula": "",
+      "damageType": "mental",
+      "notes": ""
+    },
+    "heal": {
+      "formula": "",
+      "healthType": "mental"
+    },
+    "mentalArmor": {
+      "apply": false,
+      "divisor": 3,
+      "formula": "1d6"
+    },
+    "status": {
+      "sustaining": false,
+      "pushDuration": 0,
+      "pushed": false,
+      "pushStartTime": 0,
+      "sustainingOn": []
+    }
+  },
+  "flags": {},
+  "effects": [],
+  "_id": "AbBiFDIHgJu5lNi3",
+  "_key": "!items!AbBiFDIHgJu5lNi3"
+}

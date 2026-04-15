@@ -1,0 +1,47 @@
+{
+  "name": "Psychic Stab",
+  "permission": {
+    "default": 0,
+    "qJl17WpEHiovQQBC": 3
+  },
+  "type": "sleight",
+  "system": {
+    "description": "<p>You trigger dangerous neurochemical impulses and biofeedback in the target&rsquo;s brain and nervous system. You inflict 2d10 DV, +1d6 per superior success, reduced by mental armor.</p>",
+    "reference": "Eclipse Phase Second Edition p. 285",
+    "duration": "instant",
+    "infectionMod": 6,
+    "sleightType": "gamma",
+    "action": "complex",
+    "timeframe": 0,
+    "effectsToSelf": [],
+    "effectsToTarget": [],
+    "scaleEffectsOnSuperior": false,
+    "attack": {
+      "useMentalArmor": true,
+      "attackTraits": [],
+      "damageFormula": "2d10",
+      "damageType": "physical",
+      "notes": ""
+    },
+    "heal": {
+      "formula": "",
+      "healthType": "mental"
+    },
+    "mentalArmor": {
+      "apply": false,
+      "divisor": 3,
+      "formula": "1d6"
+    },
+    "status": {
+      "sustaining": false,
+      "pushDuration": 0,
+      "pushed": false,
+      "pushStartTime": 0,
+      "sustainingOn": []
+    }
+  },
+  "flags": {},
+  "effects": [],
+  "_id": "X6zZRCURQazD8rFA",
+  "_key": "!items!X6zZRCURQazD8rFA"
+}

@@ -1,0 +1,74 @@
+{
+  "_id": "1R0ZnnbHUgCbRABy",
+  "name": "Adaptability",
+  "permission": {
+    "default": 0,
+    "qHi89sFcK4gHlOPd": 3
+  },
+  "type": "trait",
+  "system": {
+    "description": "<p>You adjust to new morphs quickly. Apply a +10 modifier per level for Integration and Resleeving Stress Tests ▶288.</p>",
+    "reference": "Eclipse Phase Second Edition p. 72",
+    "restrictions": "",
+    "triggers": "",
+    "source": "ego",
+    "state": {
+      "level": 0,
+      "triggered": false
+    },
+    "levels": [
+      {
+        "cost": 2,
+        "effects": [
+          {
+            "type": "successTest",
+            "tags": [
+              {
+                "type": "special",
+                "test": "integration"
+              },
+              {
+                "type": "special",
+                "test": "resleevingStress"
+              }
+            ],
+            "modifier": 10,
+            "toOpponent": false,
+            "requirement": "",
+            "id": "2e7az42zp4"
+          }
+        ],
+        "id": "dhw0x9xzue"
+      },
+      {
+        "cost": 4,
+        "effects": [
+          {
+            "type": "successTest",
+            "tags": [
+              {
+                "type": "special",
+                "test": "integration"
+              },
+              {
+                "type": "special",
+                "test": "resleevingStress"
+              }
+            ],
+            "modifier": 20,
+            "toOpponent": false,
+            "requirement": "",
+            "id": "2e7az42zp4"
+          }
+        ],
+        "id": "14vc6jb1sz"
+      }
+    ],
+    "subtype": "",
+    "traitType": "positive"
+  },
+  "flags": {},
+  "img": "icons/svg/mystery-man.svg",
+  "effects": [],
+  "_key": "!items!1R0ZnnbHUgCbRABy"
+}

@@ -1,0 +1,60 @@
+{
+  "name": "Machine Pistol",
+  "permission": {
+    "default": 0,
+    "qJl17WpEHiovQQBC": 3
+  },
+  "type": "firearm",
+  "system": {
+    "description": "<p>Holdout pistols sacrifice penetrating ability for concealability. Heavy pistols focus on stopping power, with medium pistols occupying a middle ground. Machine pistols use smaller caliber rounds but provide larger magazines for automatic firing.</p>",
+    "reference": "Eclipse Phase Second Edition p. 210",
+    "complexity": "minor",
+    "restricted": true,
+    "quality": "average",
+    "concealable": false,
+    "fragile": false,
+    "singleUse": false,
+    "twoHanded": false,
+    "blueprint": {
+      "blueprintType": "",
+      "cracked": false,
+      "used": false
+    },
+    "state": {
+      "disabled": false,
+      "equipped": false,
+      "braced": false,
+      "interface": false
+    },
+    "fixed": false,
+    "long": false,
+    "shapeChanging": false,
+    "shapeName": "",
+    "accessories": [
+      "smartlink",
+      "safetySystem"
+    ],
+    "ammo": {
+      "ammoClass": "machinePistol",
+      "max": 30,
+      "value": 31,
+      "modeSettings": [],
+      "selectedModeIndex": 0
+    },
+    "primaryAttack": {
+      "damageFormula": "1d10 + 1d6",
+      "firingModes": [
+        "semiAuto",
+        "burstFire",
+        "fullAuto"
+      ],
+      "notes": ""
+    },
+    "range": 25,
+    "wareType": ""
+  },
+  "flags": {},
+  "effects": [],
+  "_id": "W3hpeiAGTi7woTVA",
+  "_key": "!items!W3hpeiAGTi7woTVA"
+}

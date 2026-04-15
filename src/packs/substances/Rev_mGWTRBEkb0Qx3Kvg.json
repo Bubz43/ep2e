@@ -1,0 +1,82 @@
+{
+  "name": "Rev",
+  "permission": {
+    "default": 0,
+    "qJl17WpEHiovQQBC": 3
+  },
+  "type": "substance",
+  "system": {
+    "description": "<p>This stimulant boosts your endurance. You can take a short recharge with a complex action, rather than 10 minutes.</p>",
+    "reference": "Eclipse Phase Second Edition p. 332",
+    "complexity": "moderate",
+    "restricted": false,
+    "quality": "average",
+    "blueprint": {
+      "blueprintType": "",
+      "cracked": false,
+      "used": false
+    },
+    "quantity": 5,
+    "state": {
+      "stashed": false
+    },
+    "addiction": "physical",
+    "addictionMod": -20,
+    "hasSeverity": false,
+    "application": [
+      "dermal",
+      "inhalation",
+      "injection",
+      "oral"
+    ],
+    "base": {
+      "damage": {
+        "damageFormula": "",
+        "perTurn": false,
+        "armorPiercing": false,
+        "attackTraits": [],
+        "reduceAVbyDV": false,
+        "armorUsed": [],
+        "damageType": "physical"
+      },
+      "duration": 3600000,
+      "effects": [
+        {
+          "type": "misc",
+          "unique": "",
+          "description": "Short recharge takes only a complex action",
+          "id": "8mkxixlcd5"
+        }
+      ],
+      "wearOffStress": "",
+      "notes": ""
+    },
+    "category": "Combat",
+    "classification": "biochem",
+    "consumeOnUse": true,
+    "substanceType": "drug",
+    "quantityPerCost": 5,
+    "severity": {
+      "check": "som",
+      "checkMod": 0,
+      "conditions": [],
+      "wearOffStress": "",
+      "damage": {
+        "damageFormula": "",
+        "perTurn": false,
+        "armorPiercing": false,
+        "attackTraits": [],
+        "reduceAVbyDV": false,
+        "armorUsed": [],
+        "damageType": "physical"
+      },
+      "duration": 3000,
+      "effects": [],
+      "notes": ""
+    }
+  },
+  "flags": {},
+  "effects": [],
+  "_id": "mGWTRBEkb0Qx3Kvg",
+  "_key": "!items!mGWTRBEkb0Qx3Kvg"
+}

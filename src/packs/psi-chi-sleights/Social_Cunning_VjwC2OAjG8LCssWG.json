@@ -1,0 +1,65 @@
+{
+  "name": "Social Cunning",
+  "permission": {
+    "default": 0,
+    "qJl17WpEHiovQQBC": 3
+  },
+  "type": "sleight",
+  "system": {
+    "description": "<p>Your emotional intelligence is sharpened and focused, making you more manipulative and exploitive of weaknesses. +10 to Persuade and Provoke Tests.</p>",
+    "reference": "Eclipse Phase Second Edition p. 281",
+    "duration": "actionTurns",
+    "infectionMod": 1,
+    "sleightType": "chi",
+    "action": "complex",
+    "timeframe": 0,
+    "effectsToSelf": [
+      {
+        "type": "successTest",
+        "tags": [
+          {
+            "type": "skill",
+            "skillType": "persuade"
+          },
+          {
+            "type": "skill",
+            "skillType": "provoke"
+          }
+        ],
+        "modifier": 10,
+        "toOpponent": false,
+        "requirement": "",
+        "id": "4coc0d35ij"
+      }
+    ],
+    "effectsToTarget": [],
+    "scaleEffectsOnSuperior": false,
+    "attack": {
+      "useMentalArmor": false,
+      "attackTraits": [],
+      "damageFormula": "",
+      "damageType": "mental",
+      "notes": ""
+    },
+    "heal": {
+      "formula": "",
+      "healthType": "mental"
+    },
+    "mentalArmor": {
+      "apply": false,
+      "divisor": 3,
+      "formula": "1d6"
+    },
+    "status": {
+      "sustaining": false,
+      "pushDuration": 0,
+      "pushed": false,
+      "pushStartTime": 0,
+      "sustainingOn": []
+    }
+  },
+  "flags": {},
+  "effects": [],
+  "_id": "VjwC2OAjG8LCssWG",
+  "_key": "!items!VjwC2OAjG8LCssWG"
+}

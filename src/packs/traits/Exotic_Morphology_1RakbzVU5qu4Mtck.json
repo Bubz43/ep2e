@@ -1,0 +1,85 @@
+{
+  "_id": "1RakbzVU5qu4Mtck",
+  "name": "Exotic Morphology",
+  "permission": {
+    "default": 0,
+    "qHi89sFcK4gHlOPd": 3
+  },
+  "type": "trait",
+  "system": {
+    "description": "<p>This morph is substantially physiologically (and possibly neurologically) different from the baseline humanoid forms most transhumans are accustomed to sleeving. You receive a -10 modifier per level on Integration Tests ▶288 when sleeving into this morph. This modifier does not apply to the original morph of uplift or infolife characters. This trait may not be applied to morphs that don’t come with it.</p>",
+    "reference": "Eclipse Phase Second Edition p. 78",
+    "restrictions": "",
+    "triggers": "",
+    "source": "morph",
+    "state": {
+      "level": 0,
+      "triggered": false
+    },
+    "levels": [
+      {
+        "cost": 2,
+        "effects": [
+          {
+            "type": "successTest",
+            "tags": [
+              {
+                "type": "special",
+                "test": "integration"
+              }
+            ],
+            "modifier": -10,
+            "toOpponent": false,
+            "requirement": "",
+            "id": "8tiuasyl7d"
+          }
+        ],
+        "id": "6ats1e5arj"
+      },
+      {
+        "cost": 4,
+        "effects": [
+          {
+            "type": "successTest",
+            "tags": [
+              {
+                "type": "special",
+                "test": "integration"
+              }
+            ],
+            "modifier": -20,
+            "toOpponent": false,
+            "requirement": "",
+            "id": "jcdfnnbn9i"
+          }
+        ],
+        "id": "suw2tir7s8"
+      },
+      {
+        "cost": 6,
+        "effects": [
+          {
+            "type": "successTest",
+            "tags": [
+              {
+                "type": "special",
+                "test": "integration"
+              }
+            ],
+            "modifier": -30,
+            "toOpponent": false,
+            "requirement": "",
+            "id": "mznptjs9ra"
+          }
+        ],
+        "id": "pmr5ydgicz"
+      }
+    ],
+    "subtype": "",
+    "traitType": "negative"
+  },
+  "flags": {},
+  "img": "icons/svg/mystery-man.svg",
+  "effects": [],
+  "_key": "!items!1RakbzVU5qu4Mtck"
+}

@@ -1,0 +1,54 @@
+{
+  "name": "Diamond Axe",
+  "permission": {
+    "default": 0,
+    "qJl17WpEHiovQQBC": 3
+  },
+  "type": "meleeWeapon",
+  "system": {
+    "description": "<p>Common in many habitats for fire and emergency purposes, axes require two hands to wield. Their blades are diamond-coated for superior cutting ability.</p>",
+    "reference": "Eclipse Phase Second Edition p. 204",
+    "complexity": "minor",
+    "restricted": false,
+    "quality": "average",
+    "concealable": false,
+    "fragile": false,
+    "singleUse": false,
+    "twoHanded": true,
+    "blueprint": {
+      "blueprintType": "",
+      "cracked": false,
+      "used": false
+    },
+    "state": {
+      "disabled": false,
+      "equipped": false
+    },
+    "primaryAttack": {
+      "armorPiercing": true,
+      "attackTraits": [],
+      "damageFormula": "2d10 + 3",
+      "label": "",
+      "notes": ""
+    },
+    "secondaryAttack": {
+      "armorPiercing": false,
+      "attackTraits": [],
+      "damageFormula": "",
+      "label": "",
+      "notes": ""
+    },
+    "hasSecondaryAttack": false,
+    "augmentUnarmed": false,
+    "acceptsPayload": false,
+    "reachBonus": 10,
+    "improvised": false,
+    "touchOnly": false,
+    "wareType": "",
+    "exoticSkill": ""
+  },
+  "flags": {},
+  "effects": [],
+  "_id": "Fz41fmGnK7ZOzfgF",
+  "_key": "!items!Fz41fmGnK7ZOzfgF"
+}

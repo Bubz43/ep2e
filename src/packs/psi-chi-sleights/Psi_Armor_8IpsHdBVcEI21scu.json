@@ -1,0 +1,47 @@
+{
+  "name": "Psi Armor",
+  "permission": {
+    "default": 0,
+    "qJl17WpEHiovQQBC": 3
+  },
+  "type": "sleight",
+  "system": {
+    "description": "<p>Your mind&rsquo;s defenses are solidified. You gain mental armor equal to your WIL &divide; 3 against psi attacks.</p>",
+    "reference": "Eclipse Phase Second Edition p. 281",
+    "duration": "actionTurns",
+    "infectionMod": 1,
+    "sleightType": "chi",
+    "action": "complex",
+    "timeframe": 0,
+    "effectsToSelf": [],
+    "effectsToTarget": [],
+    "scaleEffectsOnSuperior": false,
+    "attack": {
+      "useMentalArmor": false,
+      "attackTraits": [],
+      "damageFormula": "",
+      "damageType": "mental",
+      "notes": ""
+    },
+    "heal": {
+      "formula": "",
+      "healthType": "mental"
+    },
+    "mentalArmor": {
+      "apply": true,
+      "divisor": 3,
+      "formula": "1d6"
+    },
+    "status": {
+      "sustaining": false,
+      "pushDuration": 0,
+      "pushed": false,
+      "pushStartTime": 0,
+      "sustainingOn": []
+    }
+  },
+  "flags": {},
+  "effects": [],
+  "_id": "8IpsHdBVcEI21scu",
+  "_key": "!items!8IpsHdBVcEI21scu"
+}

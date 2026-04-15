@@ -1,0 +1,44 @@
+{
+  "name": "Impulse Control Disorder",
+  "permission": {
+    "default": 0,
+    "qJl17WpEHiovQQBC": 3
+  },
+  "type": "trait",
+  "system": {
+    "description": "<p>You must engage in one specific activity that dominates your thoughts: compulsive shopping, explosive aggressiveness, kleptomania, mesh addiction, pyromania, sexual exhibitionism, etc. You feel a sense of building anxiety when prevented from engaging in this behavior for an extended period (usually several times a day to weekly, depending on the impulse) and will often engage in this behavior at inconvenient or inappropriate times.</p>",
+    "reference": "Eclipse Phase Second Edition p. 225",
+    "restrictions": "",
+    "triggers": "Helplessness, impulse focus, the unkown, violence",
+    "source": "ego",
+    "state": {
+      "level": 0,
+      "triggered": false
+    },
+    "levels": [
+      {
+        "cost": 2,
+        "effects": [
+          {
+            "type": "misc",
+            "unique": "",
+            "description": "You must make a WIL Check not to engage in the impulsive activity. If denied the activity for too long, you suffer modifirs between –10 and –30.",
+            "id": "4ii3hlyly4"
+          }
+        ],
+        "id": "_defaultLevel"
+      }
+    ],
+    "subtype": "",
+    "traitType": "positive"
+  },
+  "flags": {
+    "core": {
+      "sourceId": "Item.Ri4FOaqxsl3hYaBh"
+    }
+  },
+  "img": "icons/svg/mystery-man.svg",
+  "effects": [],
+  "_id": "evAjbeZyarFnOnjD",
+  "_key": "!items!evAjbeZyarFnOnjD"
+}

@@ -1,0 +1,95 @@
+{
+  "name": "Mono No Aware",
+  "permission": {
+    "default": 0,
+    "qJl17WpEHiovQQBC": 3
+  },
+  "type": "substance",
+  "system": {
+    "description": "<p>Named for the Japanese term for sadness at the ephemerality of worldly things, this drug, typically ingested as a tea, is a depressant that induces a meditative state. Mono no aware provides a +10 modifier to Art skills. With frequent use, mono no aware reacts with pigments in the skin to create a pallor with a slight bluish tinge, even in darker-skinned morphs.</p>",
+    "reference": "Eclipse Phase Second Edition p. 334",
+    "complexity": "minor",
+    "restricted": false,
+    "quality": "average",
+    "blueprint": {
+      "blueprintType": "",
+      "cracked": false,
+      "used": false
+    },
+    "quantity": 5,
+    "state": {
+      "stashed": false
+    },
+    "addiction": "mental",
+    "addictionMod": -10,
+    "hasSeverity": false,
+    "application": [
+      "dermal",
+      "inhalation",
+      "injection",
+      "oral"
+    ],
+    "base": {
+      "damage": {
+        "damageFormula": "",
+        "perTurn": false,
+        "armorPiercing": false,
+        "attackTraits": [],
+        "reduceAVbyDV": false,
+        "armorUsed": [],
+        "damageType": "physical"
+      },
+      "duration": 28800000,
+      "effects": [
+        {
+          "type": "successTest",
+          "tags": [
+            {
+              "type": "skillCategory",
+              "category": "arts"
+            }
+          ],
+          "modifier": 10,
+          "toOpponent": false,
+          "requirement": "",
+          "id": "0q2klhbokw"
+        },
+        {
+          "type": "misc",
+          "unique": "",
+          "description": "Meditative state",
+          "id": "9ei4ol9fk0"
+        }
+      ],
+      "wearOffStress": "",
+      "notes": ""
+    },
+    "category": "Recreational",
+    "classification": "biochem",
+    "consumeOnUse": true,
+    "substanceType": "drug",
+    "quantityPerCost": 5,
+    "severity": {
+      "check": "som",
+      "checkMod": 0,
+      "conditions": [],
+      "wearOffStress": "",
+      "damage": {
+        "damageFormula": "",
+        "perTurn": false,
+        "armorPiercing": false,
+        "attackTraits": [],
+        "reduceAVbyDV": false,
+        "armorUsed": [],
+        "damageType": "physical"
+      },
+      "duration": 3000,
+      "effects": [],
+      "notes": ""
+    }
+  },
+  "flags": {},
+  "effects": [],
+  "_id": "oiEcVSnNmeuJLIPF",
+  "_key": "!items!oiEcVSnNmeuJLIPF"
+}

@@ -1,0 +1,40 @@
+{
+  "_id": "t18CsOdw5O2cFI97",
+  "name": "Patron",
+  "permission": {
+    "default": 0,
+    "qHi89sFcK4gHlOPd": 3
+  },
+  "type": "trait",
+  "system": {
+    "description": "<p>There is an influential person in your life who can be relied on for occasional support. This could be a wealthy hyperelite family member, a high-ranking triad boss, or an anarchist networker with an unbeatable reputation. When called upon, this patron can pull strings, supply resources, make introductions, or bail you out of trouble. Work with your GM to define this NPC, your relationship, and why they support you (familial obligation? childhood buddies? you saved their life once?).</p><p>The patron provides one free major favor ▶308 per story arc, no test necessary. GMs should be careful that this trait does not get abused. Smaller favors are beneath the patron’s concern. If the character asks for too much, too often, the patron’s support may dry up. On occasion, the patron may call upon the character for favors as well.</p>",
+    "reference": "Eclipse Phase Second Edition p. 74",
+    "restrictions": "",
+    "triggers": "",
+    "source": "ego",
+    "state": {
+      "level": 0,
+      "triggered": false
+    },
+    "levels": [
+      {
+        "cost": 6,
+        "effects": [
+          {
+            "type": "misc",
+            "unique": "",
+            "description": "One free major favor per story arc, no test necessary",
+            "id": "w6q8p8fjs8"
+          }
+        ],
+        "id": "ka2850j8x5"
+      }
+    ],
+    "subtype": "",
+    "traitType": "positive"
+  },
+  "flags": {},
+  "img": "icons/svg/mystery-man.svg",
+  "effects": [],
+  "_key": "!items!t18CsOdw5O2cFI97"
+}

@@ -1,0 +1,55 @@
+{
+  "name": "Qualia",
+  "permission": {
+    "default": 0,
+    "qJl17WpEHiovQQBC": 3
+  },
+  "type": "sleight",
+  "system": {
+    "description": "<p>You have a more intuitive grasp on the world around you. +1 Insight pool.</p>",
+    "reference": "Eclipse Phase Second Edition p. 281",
+    "duration": "actionTurns",
+    "infectionMod": 1,
+    "sleightType": "chi",
+    "action": "complex",
+    "timeframe": 0,
+    "effectsToSelf": [
+      {
+        "type": "pool",
+        "pool": "insight",
+        "modifier": 1,
+        "usabilityModification": "",
+        "id": "ylpnhqsoih"
+      }
+    ],
+    "effectsToTarget": [],
+    "scaleEffectsOnSuperior": false,
+    "attack": {
+      "useMentalArmor": false,
+      "attackTraits": [],
+      "damageFormula": "",
+      "damageType": "mental",
+      "notes": ""
+    },
+    "heal": {
+      "formula": "",
+      "healthType": "mental"
+    },
+    "mentalArmor": {
+      "apply": false,
+      "divisor": 3,
+      "formula": "1d6"
+    },
+    "status": {
+      "sustaining": false,
+      "pushDuration": 0,
+      "pushed": false,
+      "pushStartTime": 0,
+      "sustainingOn": []
+    }
+  },
+  "flags": {},
+  "effects": [],
+  "_id": "e39VH8KJfoSU4Kus",
+  "_key": "!items!e39VH8KJfoSU4Kus"
+}

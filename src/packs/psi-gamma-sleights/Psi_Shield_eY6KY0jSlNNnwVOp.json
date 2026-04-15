@@ -1,0 +1,47 @@
+{
+  "name": "Psi Shield",
+  "permission": {
+    "default": 0,
+    "qJl17WpEHiovQQBC": 3
+  },
+  "type": "sleight",
+  "system": {
+    "description": "<p>You rally the mind&rsquo;s defenses against psychic attacks. Increase mental armor by 1d6, +1d6 per superior success.</p>",
+    "reference": "Eclipse Phase Second Edition p. 285",
+    "duration": "sustained",
+    "infectionMod": 2,
+    "sleightType": "gamma",
+    "action": "complex",
+    "timeframe": 0,
+    "effectsToSelf": [],
+    "effectsToTarget": [],
+    "scaleEffectsOnSuperior": true,
+    "attack": {
+      "useMentalArmor": false,
+      "attackTraits": [],
+      "damageFormula": "",
+      "damageType": "mental",
+      "notes": ""
+    },
+    "heal": {
+      "formula": "",
+      "healthType": "mental"
+    },
+    "mentalArmor": {
+      "apply": true,
+      "divisor": 3,
+      "formula": "1d6"
+    },
+    "status": {
+      "sustaining": false,
+      "pushDuration": 0,
+      "pushed": false,
+      "pushStartTime": 0,
+      "sustainingOn": []
+    }
+  },
+  "flags": {},
+  "effects": [],
+  "_id": "eY6KY0jSlNNnwVOp",
+  "_key": "!items!eY6KY0jSlNNnwVOp"
+}

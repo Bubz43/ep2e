@@ -1,0 +1,61 @@
+{
+  "name": "Shard Pistol",
+  "permission": {
+    "default": 0,
+    "qJl17WpEHiovQQBC": 3
+  },
+  "type": "sprayWeapon",
+  "system": {
+    "description": "<p>This weapon fires a stream of diamondoid shards at high velocities with each shot. A blast of these micro-flechettes is very traumatic to flesh, but their armor-piercing capabilities are offset by their low mass. Shard pistols are ideal for close-quarters habitats, as the shards tend to shatter rather than ricochet. Shard ammunition is sometimes coated with drugs or toxins for extra efficiency.</p>",
+    "reference": "Eclipse Phase Second Edition p. 209",
+    "complexity": "minor",
+    "restricted": true,
+    "quality": "average",
+    "concealable": true,
+    "fragile": false,
+    "singleUse": false,
+    "twoHanded": false,
+    "blueprint": {
+      "blueprintType": "",
+      "cracked": false,
+      "used": false
+    },
+    "state": {
+      "disabled": false,
+      "equipped": false,
+      "braced": false,
+      "interface": false
+    },
+    "accessories": [
+      "safetySystem",
+      "smartlink"
+    ],
+    "ammo": {
+      "max": 100,
+      "value": 100
+    },
+    "dosesPerShot": 1,
+    "fixed": false,
+    "long": false,
+    "range": 15,
+    "payloadUse": "coatAmmunition",
+    "primaryAttack": {
+      "armorPiercing": false,
+      "armorUsed": "kinetic",
+      "attackTraits": [],
+      "damageFormula": "2d6 + 6",
+      "firingModes": [
+        "semiAuto",
+        "burstFire",
+        "fullAuto"
+      ],
+      "superiorSuccessDot": "",
+      "notes": ""
+    },
+    "wareType": ""
+  },
+  "flags": {},
+  "effects": [],
+  "_id": "WnruuIuVMvvcl964",
+  "_key": "!items!WnruuIuVMvvcl964"
+}

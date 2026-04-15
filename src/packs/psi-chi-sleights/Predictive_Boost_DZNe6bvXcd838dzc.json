@@ -1,0 +1,53 @@
+{
+  "name": "Predictive Boost",
+  "permission": {
+    "default": 0,
+    "qJl17WpEHiovQQBC": 3
+  },
+  "type": "sleight",
+  "system": {
+    "description": "<p>Your brain&rsquo;s bayesian probability functions are accelerated, enhancing your ability to estimate and predict the outcomes of events as they unfold in real-time around you. In effect, you have an intuitive sense for the most likely outcomes. +2 Initiative.</p>",
+    "reference": "Eclipse Phase Second Edition p. 281",
+    "duration": "actionTurns",
+    "infectionMod": 1,
+    "sleightType": "chi",
+    "action": "complex",
+    "timeframe": 0,
+    "effectsToSelf": [
+      {
+        "type": "initiative",
+        "modifier": 2,
+        "id": "v3hq4iciih"
+      }
+    ],
+    "effectsToTarget": [],
+    "scaleEffectsOnSuperior": false,
+    "attack": {
+      "useMentalArmor": false,
+      "attackTraits": [],
+      "damageFormula": "",
+      "damageType": "mental",
+      "notes": ""
+    },
+    "heal": {
+      "formula": "",
+      "healthType": "mental"
+    },
+    "mentalArmor": {
+      "apply": false,
+      "divisor": 3,
+      "formula": "1d6"
+    },
+    "status": {
+      "sustaining": false,
+      "pushDuration": 0,
+      "pushed": false,
+      "pushStartTime": 0,
+      "sustainingOn": []
+    }
+  },
+  "flags": {},
+  "effects": [],
+  "_id": "DZNe6bvXcd838dzc",
+  "_key": "!items!DZNe6bvXcd838dzc"
+}

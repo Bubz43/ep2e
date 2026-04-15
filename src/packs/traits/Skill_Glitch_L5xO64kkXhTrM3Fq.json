@@ -1,0 +1,78 @@
+{
+  "_id": "L5xO64kkXhTrM3Fq",
+  "name": "Skill Glitch",
+  "permission": {
+    "default": 0,
+    "qHi89sFcK4gHlOPd": 3
+  },
+  "type": "trait",
+  "system": {
+    "description": "<p>Some unfixable glitch in the morph’s hardware or brain structure impedes the use of one particular skill, chosen or randomly selected by the GM. Apply a -10 modifier per level to that skill’s use.</p>",
+    "reference": "Eclipse Phase Second Edition p. 80",
+    "restrictions": "",
+    "triggers": "",
+    "source": "morph",
+    "state": {
+      "level": 0,
+      "triggered": false
+    },
+    "levels": [
+      {
+        "cost": 1,
+        "effects": [
+          {
+            "type": "successTest",
+            "tags": [
+              {
+                "type": "skill",
+                "skillType": "athletics"
+              }
+            ],
+            "modifier": -10,
+            "toOpponent": false,
+            "requirement": "",
+            "id": "z987zw9fcg"
+          },
+          {
+            "type": "misc",
+            "unique": "",
+            "description": "Needs player correction",
+            "id": "rlzt08wm32"
+          }
+        ],
+        "id": "awjsfnldt9"
+      },
+      {
+        "cost": 2,
+        "effects": [
+          {
+            "type": "successTest",
+            "tags": [
+              {
+                "type": "skill",
+                "skillType": "athletics"
+              }
+            ],
+            "modifier": -20,
+            "toOpponent": false,
+            "requirement": "",
+            "id": "z987zw9fcg"
+          },
+          {
+            "type": "misc",
+            "unique": "",
+            "description": "Needs player correction",
+            "id": "4wmz11irl1"
+          }
+        ],
+        "id": "9tmpeh722f"
+      }
+    ],
+    "subtype": "",
+    "traitType": "negative"
+  },
+  "flags": {},
+  "img": "icons/svg/mystery-man.svg",
+  "effects": [],
+  "_key": "!items!L5xO64kkXhTrM3Fq"
+}

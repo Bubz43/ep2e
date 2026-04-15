@@ -1,0 +1,40 @@
+{
+  "_id": "kVtL336ksL9JJFsm",
+  "name": "Innocuous Looks",
+  "permission": {
+    "default": 0,
+    "qHi89sFcK4gHlOPd": 3
+  },
+  "type": "trait",
+  "system": {
+    "description": "<p>Thanks to mass-produced designs and sculpted media-star composite visages, your cookie-cutter looks are so mundane as to be indistinguishable. It is difficult to pick your common-place face out of the crowd, describe its appearance, or otherwise remember physical details. Apply a -10 modifier to tests made to spot, describe, or remember you; this does not apply to psi or mesh searches. This trait may not be applied to any morph with an Availability lower than 50.</p>",
+    "reference": "Eclipse Phase Second Edition p. 74",
+    "restrictions": "",
+    "triggers": "",
+    "source": "morph",
+    "state": {
+      "level": 0,
+      "triggered": false
+    },
+    "levels": [
+      {
+        "cost": 1,
+        "effects": [
+          {
+            "type": "misc",
+            "unique": "",
+            "description": "-10 modifier to spot, describe, or remember you",
+            "id": "r6f60msf25"
+          }
+        ],
+        "id": "c8m4xxeao1"
+      }
+    ],
+    "subtype": "",
+    "traitType": "positive"
+  },
+  "flags": {},
+  "img": "icons/svg/mystery-man.svg",
+  "effects": [],
+  "_key": "!items!kVtL336ksL9JJFsm"
+}

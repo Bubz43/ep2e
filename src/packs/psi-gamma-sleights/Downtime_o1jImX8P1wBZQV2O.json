@@ -1,0 +1,61 @@
+{
+  "name": "Downtime",
+  "permission": {
+    "default": 0,
+    "qJl17WpEHiovQQBC": 3
+  },
+  "type": "sleight",
+  "system": {
+    "description": "<p>You slip the target&rsquo;s mind into a fugue-state regenerative downtime, to repair their psyche. You must sustain this sleight for 4 hours during which you may take no other complex actions. Downtime cannot be concurrent with a long recharge. This process heals 1d6 stress, +1d6 per superior success. Traumas and disorders are unaffected by this sleight. If interrupted, no stress is healed. For all sensory purposes, you and the target are catatonic during downtime, completely oblivious to the outside world. Only severe disturbances or physical shock (such as being wounded or hit by a shock weapon) will bring you or the target out of it. Any target of this sleight other than yourself must make a WIL Check; if they fail, sometime within the next 24 hours they will be subject to one of your influence effects ▶278.</p>",
+    "reference": "Eclipse Phase Second Edition p. 284",
+    "duration": "sustained",
+    "infectionMod": 2,
+    "sleightType": "gamma",
+    "action": "task",
+    "timeframe": 14400000,
+    "effectsToSelf": [
+      {
+        "type": "misc",
+        "unique": "",
+        "description": "You're repairing your target's psyche.",
+        "id": "vvhzwdtqbn"
+      }
+    ],
+    "effectsToTarget": [
+      {
+        "type": "misc",
+        "unique": "",
+        "description": "Your psyche is being repaired.",
+        "id": "82e28hmvby"
+      }
+    ],
+    "scaleEffectsOnSuperior": false,
+    "attack": {
+      "useMentalArmor": false,
+      "attackTraits": [],
+      "damageFormula": "",
+      "damageType": "mental",
+      "notes": ""
+    },
+    "heal": {
+      "formula": "1d6",
+      "healthType": "mental"
+    },
+    "mentalArmor": {
+      "apply": false,
+      "divisor": 3,
+      "formula": "1d6"
+    },
+    "status": {
+      "sustaining": false,
+      "pushDuration": 0,
+      "pushed": false,
+      "pushStartTime": 0,
+      "sustainingOn": []
+    }
+  },
+  "flags": {},
+  "effects": [],
+  "_id": "o1jImX8P1wBZQV2O",
+  "_key": "!items!o1jImX8P1wBZQV2O"
+}

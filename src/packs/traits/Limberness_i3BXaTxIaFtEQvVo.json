@@ -1,0 +1,64 @@
+{
+  "_id": "i3BXaTxIaFtEQvVo",
+  "name": "Limberness",
+  "permission": {
+    "default": 0,
+    "qHi89sFcK4gHlOPd": 3
+  },
+  "type": "trait",
+  "system": {
+    "description": "<p>The morph is especially flexible and supple, capable of graceful contortions and interesting positions. At Level 1 , you can do the splits, smoke with your toes, and squeeze into small, cramped spaces. At Level 2, you are a double-jointed escape artist. Apply a +10 modifier per level to escape bonds, fit into small spaces, contort, or otherwise rely on flexibility.</p>",
+    "reference": "Eclipse Phase Second Edition p. 74",
+    "restrictions": "",
+    "triggers": "",
+    "source": "morph",
+    "state": {
+      "level": 0,
+      "triggered": false
+    },
+    "levels": [
+      {
+        "cost": 1,
+        "effects": [
+          {
+            "type": "successTest",
+            "tags": [
+              {
+                "type": "allActions"
+              }
+            ],
+            "modifier": 10,
+            "toOpponent": false,
+            "requirement": "escaping bonds, fitting into small spaces, contorting, or otherwise relying on flexibility.",
+            "id": "6eo3gq4h8y"
+          }
+        ],
+        "id": "9hdc4cclwf"
+      },
+      {
+        "cost": 2,
+        "effects": [
+          {
+            "type": "successTest",
+            "tags": [
+              {
+                "type": "allActions"
+              }
+            ],
+            "modifier": 20,
+            "toOpponent": false,
+            "requirement": "escaping bonds, fitting into small spaces, contorting, or otherwise relying on flexibility.",
+            "id": "6eo3gq4h8y"
+          }
+        ],
+        "id": "oaf2mka0bv"
+      }
+    ],
+    "subtype": "",
+    "traitType": "positive"
+  },
+  "flags": {},
+  "img": "icons/svg/mystery-man.svg",
+  "effects": [],
+  "_key": "!items!i3BXaTxIaFtEQvVo"
+}

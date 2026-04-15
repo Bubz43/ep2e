@@ -1,0 +1,98 @@
+{
+  "name": "Persistence",
+  "permission": {
+    "default": 0,
+    "qJl17WpEHiovQQBC": 3
+  },
+  "type": "software",
+  "system": {
+    "description": "<p>This meshware uses rootkit techniques to keep the digital mind active despite attempts to crash it. Increase the infomorph&rsquo;s Durability by 10 and Wound Threshold by 2.</p>",
+    "reference": "Eclipse Phase Second Edition p. 326",
+    "complexity": "moderate",
+    "restricted": false,
+    "quality": "average",
+    "softwareType": "meshware",
+    "activatedEffects": [],
+    "effects": [
+      {
+        "type": "health",
+        "health": "mesh",
+        "stat": "durability",
+        "modifier": 10,
+        "id": "3m4yh8knt4"
+      },
+      {
+        "type": "health",
+        "health": "mesh",
+        "stat": "woundThreshold",
+        "modifier": 2,
+        "id": "etkcoqwfz8"
+      },
+      {
+        "type": "misc",
+        "unique": "",
+        "description": "Keeps infomorph running",
+        "id": "h7zj64eo9y"
+      }
+    ],
+    "category": "Meshware",
+    "serviceDuration": -1,
+    "skills": [],
+    "activation": "",
+    "meshAttacks": 0,
+    "meshHealth": {
+      "baseDurability": 10,
+      "damage": 0,
+      "log": [],
+      "wounds": 0,
+      "rebootEndTime": -1,
+      "crashWounds": 0
+    },
+    "state": {
+      "activated": false,
+      "equipped": false,
+      "serviceStartTime": 0,
+      "paused": false
+    },
+    "primaryAttack": {
+      "armorPiercing": false,
+      "attackTraits": [],
+      "damageFormula": "",
+      "damageType": "mesh",
+      "useMeshArmor": true,
+      "notes": "",
+      "aptitudeCheckInfo": {
+        "armorAsModifier": "",
+        "check": "",
+        "checkModifier": 0,
+        "checkFailure": [],
+        "checkSuccess": [],
+        "criticalCheckFailure": []
+      },
+      "label": "",
+      "reduceAVbyDV": false
+    },
+    "secondaryAttack": {
+      "armorPiercing": false,
+      "attackTraits": [],
+      "damageFormula": "",
+      "damageType": "mesh",
+      "useMeshArmor": true,
+      "notes": "",
+      "aptitudeCheckInfo": {
+        "armorAsModifier": "",
+        "check": "",
+        "checkModifier": 0,
+        "checkFailure": [],
+        "checkSuccess": [],
+        "criticalCheckFailure": []
+      },
+      "label": "",
+      "reduceAVbyDV": false
+    }
+  },
+  "flags": {},
+  "effects": [],
+  "_id": "8a4K1FxOfXKQpQf0",
+  "_key": "!items!8a4K1FxOfXKQpQf0"
+}

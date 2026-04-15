@@ -1,0 +1,64 @@
+{
+  "_id": "401qvHKctDypiokr",
+  "name": "Severe Allergy",
+  "permission": {
+    "default": 0,
+    "qHi89sFcK4gHlOPd": 3
+  },
+  "type": "trait",
+  "system": {
+    "description": "<p>This trait is only available to biomorphs.The morph’s biochemistry suffers a severe allergic reaction (anaphylaxis) when it comes into contact (touched, inhaled, or ingested) with a specific allergen. At Level 1, the allergen may be uncommon (certain drugs, insect stings). At Level 2, it must be common (dust, dander, plant pollen, certain foods, nanoswarms, latex). Work with your GM to select an allergen that fits the game. If exposed to the allergen, you break into hives, have difficulty to breathing (-30 impairment modifier while exposed plus 10 minutes afterward), and must make a SOM Check or go into anaphylactic shock (incapacitation, will die of respiratory failure in 2d10 minutes unless medical care in the form of a successful Medicine: Paramedic Test is applied).</p>",
+    "reference": "Eclipse Phase Second Edition p. 80",
+    "restrictions": "",
+    "triggers": "",
+    "source": "morph",
+    "state": {
+      "level": 0,
+      "triggered": false
+    },
+    "levels": [
+      {
+        "cost": 2,
+        "effects": [
+          {
+            "type": "successTest",
+            "tags": [
+              {
+                "type": "allActions"
+              }
+            ],
+            "modifier": -30,
+            "toOpponent": false,
+            "requirement": "exposed to allergen",
+            "id": "lihircdne2"
+          }
+        ],
+        "id": "f8xsc9aaey"
+      },
+      {
+        "cost": 4,
+        "effects": [
+          {
+            "type": "successTest",
+            "tags": [
+              {
+                "type": "allActions"
+              }
+            ],
+            "modifier": -30,
+            "toOpponent": false,
+            "requirement": "exposed to allergen",
+            "id": "lihircdne2"
+          }
+        ],
+        "id": "jynf0tjx8p"
+      }
+    ],
+    "subtype": "",
+    "traitType": "negative"
+  },
+  "flags": {},
+  "img": "icons/svg/mystery-man.svg",
+  "effects": [],
+  "_key": "!items!401qvHKctDypiokr"
+}

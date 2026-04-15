@@ -1,0 +1,44 @@
+{
+  "name": "Anxiety",
+  "permission": {
+    "default": 0,
+    "qJl17WpEHiovQQBC": 3
+  },
+  "type": "trait",
+  "system": {
+    "description": "<p>With general anxiety disorder, you are overcome with worry about nearly everything. Even simple tasks represent the potential for failure on a catastrophic scale and should be avoided or minimized. Negative outcomes are always assumed to be the only possibility.</p>",
+    "reference": "Eclipse Phase Second Edition p. 224",
+    "restrictions": "",
+    "triggers": "Bad news, boredom, helplessness, the unkown, violence",
+    "source": "ego",
+    "state": {
+      "level": 0,
+      "triggered": false
+    },
+    "levels": [
+      {
+        "cost": 2,
+        "effects": [
+          {
+            "type": "misc",
+            "unique": "",
+            "description": "You must be convinced with a Persuade or Provoke Test to do almost anything, and even then will self-sabotage or give up after a short time.",
+            "id": "3bwe0bs9aw"
+          }
+        ],
+        "id": "_defaultLevel"
+      }
+    ],
+    "subtype": "",
+    "traitType": "positive"
+  },
+  "flags": {
+    "core": {
+      "sourceId": "Item.ikPQVGv3PoEKNsVo"
+    }
+  },
+  "img": "icons/svg/mystery-man.svg",
+  "effects": [],
+  "_id": "2mzr3RJg79AhS9P1",
+  "_key": "!items!2mzr3RJg79AhS9P1"
+}

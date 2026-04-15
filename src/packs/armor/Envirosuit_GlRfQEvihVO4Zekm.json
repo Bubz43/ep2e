@@ -1,0 +1,50 @@
+{
+  "name": "Envirosuit",
+  "permission": {
+    "default": 0,
+    "qJl17WpEHiovQQBC": 3
+  },
+  "type": "armor",
+  "system": {
+    "description": "<p>These shells feature both increased radiation shielding and thermal regulation systems to withstand extreme environments such as deep undersea and the surfaces of Mercury and Venus. They can withstand temperatures from -270 to 1,000 C.</p>",
+    "reference": "Eclipse Phase Second Edition p. 351",
+    "complexity": "major",
+    "restricted": false,
+    "quality": "average",
+    "blueprint": {
+      "blueprintType": "",
+      "cracked": false,
+      "used": false
+    },
+    "state": {
+      "disabled": false,
+      "equipped": false,
+      "activated": false
+    },
+    "activeArmor": {
+      "energy": 0,
+      "kinetic": 0,
+      "concealable": false,
+      "layerable": false
+    },
+    "armorValues": {
+      "energy": 25,
+      "kinetic": 16,
+      "concealable": false,
+      "layerable": false
+    },
+    "attackTraits": [],
+    "effects": [],
+    "hasActiveState": false,
+    "fragile": false,
+    "singleUse": false,
+    "twoHanded": false,
+    "notes": "",
+    "wareType": ""
+  },
+  "flags": {},
+  "img": "icons/svg/mystery-man.svg",
+  "effects": [],
+  "_id": "GlRfQEvihVO4Zekm",
+  "_key": "!items!GlRfQEvihVO4Zekm"
+}

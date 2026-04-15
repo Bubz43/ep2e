@@ -1,0 +1,82 @@
+{
+  "name": "Data Module",
+  "permission": {
+    "default": 0,
+    "qJl17WpEHiovQQBC": 3
+  },
+  "type": "physicalTech",
+  "system": {
+    "description": "<p>This is an encrypted data storage device, used for carrying confidential information that shouldn't be mesh-transmitted. You may install multiple modules.</p>",
+    "reference": "Eclipse Phase Second Edition p. 320",
+    "complexity": "minor",
+    "restricted": false,
+    "quality": "average",
+    "concealable": false,
+    "fragile": false,
+    "singleUse": false,
+    "twoHanded": false,
+    "blueprint": {
+      "blueprintType": "",
+      "cracked": false,
+      "used": false
+    },
+    "state": {
+      "disabled": false,
+      "equipped": false,
+      "fabStartTime": 0,
+      "activated": false,
+      "embeddedEgos": [],
+      "onboardAliDeleted": false
+    },
+    "activatedEffects": [],
+    "deviceType": "",
+    "category": "Mental Augments",
+    "fabricator": "",
+    "activationAction": "automatic",
+    "passiveEffects": [
+      {
+        "type": "misc",
+        "unique": "",
+        "description": "Encrypted data storage.",
+        "id": "i7k15crp52"
+      }
+    ],
+    "activation": "none",
+    "resistEffectsCheck": "",
+    "usedEffectsDuration": 3000,
+    "onboardALI": false,
+    "firewallRating": 30,
+    "fabPrintDuration": 0,
+    "firewallHealth": {
+      "baseDurability": 30,
+      "rebootEndTime": -1,
+      "crashWounds": 0,
+      "damage": 0,
+      "log": [],
+      "wounds": 0
+    },
+    "meshHealth": {
+      "baseDurability": 20,
+      "damage": 0,
+      "wounds": 0,
+      "aidedHealTickStartTime": 0,
+      "ownHealTickStartTime": 0,
+      "damageRepair": {
+        "amount": "1d10",
+        "interval": 86400000
+      },
+      "woundRepair": {
+        "amount": 1,
+        "interval": 86400000
+      },
+      "log": [],
+      "rebootEndTime": -1,
+      "crashWounds": 0
+    },
+    "wareType": "cyberware"
+  },
+  "flags": {},
+  "effects": [],
+  "_id": "XPVWcKDJ73GQAwGq",
+  "_key": "!items!XPVWcKDJ73GQAwGq"
+}

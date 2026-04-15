@@ -1,0 +1,50 @@
+{
+  "name": "Combat Armor",
+  "permission": {
+    "default": 0,
+    "qJl17WpEHiovQQBC": 3
+  },
+  "type": "armor",
+  "system": {
+    "description": "<p>A tougher version of body armor worn by soldiers, this suit is environmentally sealed with climate control to protect the wearer from hostile environments and chemicals with 1 hour of air.</p>",
+    "reference": "Eclipse Phase Second Edition p. 215",
+    "complexity": "major",
+    "restricted": true,
+    "quality": "average",
+    "blueprint": {
+      "blueprintType": "",
+      "cracked": false,
+      "used": false
+    },
+    "state": {
+      "disabled": false,
+      "equipped": false,
+      "activated": false
+    },
+    "activeArmor": {
+      "energy": 0,
+      "kinetic": 0,
+      "concealable": false,
+      "layerable": false
+    },
+    "armorValues": {
+      "energy": 12,
+      "kinetic": 16,
+      "concealable": false,
+      "layerable": false
+    },
+    "attackTraits": [],
+    "effects": [],
+    "hasActiveState": false,
+    "fragile": false,
+    "singleUse": false,
+    "twoHanded": false,
+    "notes": "Includes 1 hour of air",
+    "wareType": ""
+  },
+  "flags": {},
+  "img": "icons/svg/mystery-man.svg",
+  "effects": [],
+  "_id": "CJ1wzQYTCg5yjfEE",
+  "_key": "!items!CJ1wzQYTCg5yjfEE"
+}

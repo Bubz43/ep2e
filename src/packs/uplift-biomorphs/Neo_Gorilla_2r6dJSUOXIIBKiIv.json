@@ -1,0 +1,692 @@
+{
+  "_id": "2r6dJSUOXIIBKiIv",
+  "name": "Neo-Gorilla",
+  "permission": {
+    "default": 0,
+    "qJl17WpEHiovQQBC": 3
+  },
+  "type": "biological",
+  "system": {
+    "description": "<p>Neo-gorillas benefit from enhanced cognition and upright stances like other neo-hominids, though they are not as adept at climbing. They stand roughly as tall as humans and have stronger and larger frames.</p>",
+    "reference": "Eclipse Phase Second Edition p. 60",
+    "movementRates": [
+      {
+        "type": "walker",
+        "base": 4,
+        "full": 12,
+        "id": "vy27vm9zac"
+      }
+    ],
+    "acquisition": {
+      "availability": 40,
+      "complexity": "minor",
+      "cost": 3,
+      "resource": "morphPoints",
+      "restricted": false
+    },
+    "pools": {
+      "insight": 0,
+      "moxie": 0,
+      "vigor": 3,
+      "flex": 1
+    },
+    "conditions": [],
+    "damagedArmor": [],
+    "prehensileLimbs": 2,
+    "sex": "",
+    "subtype": "Uplift Biomorph",
+    "unarmedDV": "1d6",
+    "isSwarm": false,
+    "brain": "",
+    "recoveryConditions": "normal",
+    "size": "medium",
+    "reach": 0,
+    "physicalHealth": {
+      "baseDurability": 45,
+      "bleedingOut": false,
+      "damage": 0,
+      "dots": [],
+      "aidedHealTickStartTime": 0,
+      "ownHealTickStartTime": 0,
+      "damageRepair": {
+        "amount": "1d10",
+        "interval": 86400000
+      },
+      "woundRepair": {
+        "amount": 1,
+        "interval": 604800000
+      },
+      "log": [],
+      "wounds": 0
+    }
+  },
+  "sort": 100001,
+  "flags": {},
+  "prototypeToken": {
+    "flags": {},
+    "name": "Neo-Gorilla",
+    "displayName": 0,
+    "img": "icons/svg/mystery-man.svg",
+    "tint": null,
+    "width": 1,
+    "height": 1,
+    "scale": 1,
+    "lockRotation": false,
+    "rotation": 0,
+    "vision": false,
+    "dimSight": 0,
+    "brightSight": 0,
+    "dimLight": 0,
+    "brightLight": 0,
+    "sightAngle": 360,
+    "lightAngle": 360,
+    "lightAlpha": 1,
+    "lightAnimation": {
+      "speed": 5,
+      "intensity": 5
+    },
+    "actorId": "2r6dJSUOXIIBKiIv",
+    "actorLink": true,
+    "disposition": -1,
+    "displayBars": 0,
+    "bar1": {},
+    "bar2": {},
+    "randomImg": false
+  },
+  "items": [
+    {
+      "_id": "MPkeQ2fxabUNyPvf",
+      "name": "Non-Human Biochemistry",
+      "type": "trait",
+      "system": {
+        "description": "<p>This trait is only available to biomorphs. This morph has substantial physiological and genetic differences from human morphs. Level 1 applies to non-human morphs. Level 2 applies to non-mammalian morphs. Apply a -10 modifier per level to Medicine Tests. Certain drugs, toxin, chemicals, or medical procedures may not work or may have a different effect (GM discretion). This trait may not be applied to morphs that do not come with it.</p>",
+        "reference": "Eclipse Phase Second Edition p. 79",
+        "restrictions": "",
+        "triggers": "",
+        "source": "morph",
+        "state": {
+          "level": 0,
+          "triggered": false
+        },
+        "levels": [
+          {
+            "cost": 2,
+            "effects": [
+              {
+                "type": "successTest",
+                "tags": [
+                  {
+                    "type": "fieldSkill",
+                    "fieldSkill": "medicine",
+                    "field": ""
+                  }
+                ],
+                "modifier": -10,
+                "toOpponent": false,
+                "requirement": "working on this morph",
+                "id": "4hpg27idjb"
+              }
+            ],
+            "id": "9jdoqitzoh"
+          },
+          {
+            "cost": 4,
+            "effects": [
+              {
+                "type": "successTest",
+                "tags": [
+                  {
+                    "type": "fieldSkill",
+                    "fieldSkill": "medicine",
+                    "field": ""
+                  }
+                ],
+                "modifier": -20,
+                "toOpponent": false,
+                "requirement": "working on this morph",
+                "id": "4hpg27idjb"
+              }
+            ],
+            "id": "c2habh6yun"
+          }
+        ],
+        "subtype": "",
+        "traitType": "negative"
+      },
+      "sort": 100000,
+      "flags": {},
+      "img": "icons/svg/mystery-man.svg",
+      "effects": [],
+      "_key": "!actors.items!2r6dJSUOXIIBKiIv.MPkeQ2fxabUNyPvf"
+    },
+    {
+      "_id": "gjpvrocZgg57lQ6S",
+      "name": "Exotic Morphology",
+      "type": "trait",
+      "system": {
+        "description": "<p>This morph is substantially physiologically (and possibly neurologically) different from the baseline humanoid forms most transhumans are accustomed to sleeving. You receive a -10 modifier per level on Integration Tests ▶288 when sleeving into this morph. This modifier does not apply to the original morph of uplift or infolife characters. This trait may not be applied to morphs that don’t come with it.</p>",
+        "reference": "Eclipse Phase Second Edition p. 78",
+        "restrictions": "",
+        "triggers": "",
+        "source": "morph",
+        "state": {
+          "level": 0,
+          "triggered": false
+        },
+        "levels": [
+          {
+            "cost": 2,
+            "effects": [
+              {
+                "type": "successTest",
+                "tags": [
+                  {
+                    "type": "special",
+                    "test": "integration"
+                  }
+                ],
+                "modifier": -10,
+                "toOpponent": false,
+                "requirement": "",
+                "id": "8tiuasyl7d"
+              }
+            ],
+            "id": "6ats1e5arj"
+          },
+          {
+            "cost": 4,
+            "effects": [
+              {
+                "type": "successTest",
+                "tags": [
+                  {
+                    "type": "special",
+                    "test": "integration"
+                  }
+                ],
+                "modifier": -20,
+                "toOpponent": false,
+                "requirement": "",
+                "id": "jcdfnnbn9i"
+              }
+            ],
+            "id": "suw2tir7s8"
+          },
+          {
+            "cost": 6,
+            "effects": [
+              {
+                "type": "successTest",
+                "tags": [
+                  {
+                    "type": "special",
+                    "test": "integration"
+                  }
+                ],
+                "modifier": -30,
+                "toOpponent": false,
+                "requirement": "",
+                "id": "mznptjs9ra"
+              }
+            ],
+            "id": "pmr5ydgicz"
+          }
+        ],
+        "subtype": "",
+        "traitType": "negative"
+      },
+      "sort": 200000,
+      "flags": {},
+      "img": "icons/svg/mystery-man.svg",
+      "effects": [],
+      "_key": "!actors.items!2r6dJSUOXIIBKiIv.gjpvrocZgg57lQ6S"
+    },
+    {
+      "_id": "oh0It2OxPGSbU3SX",
+      "name": "Cortical Stack",
+      "type": "physicalTech",
+      "system": {
+        "description": "<p>This diamond memory module is implanted at the base of the skull, where the brain stem and spinal cord connect (or in similar locations on synthmorphs). It is linked to a neural lace network of nanobots saturating the brain that monitor synaptic connections, brain architecture, and chemical levels. It effectively takes a snapshot of your brain every second, making a digital backup of your ego, right up until the moment you die. It also backs up your muse. If you are killed, this stack can be used to retrieve a backup of your ego ▶287 so that you can be re-instantiated. Cortical stacks do not have external or wireless access (for security purposes), they must be surgically removed.</p>",
+        "reference": "Eclipse Phase Second Edition p. 316",
+        "complexity": "minor",
+        "restricted": false,
+        "quality": "average",
+        "concealable": false,
+        "fragile": false,
+        "singleUse": false,
+        "twoHanded": false,
+        "blueprint": {
+          "blueprintType": "",
+          "cracked": false,
+          "used": false
+        },
+        "state": {
+          "disabled": false,
+          "equipped": true,
+          "fabStartTime": 4083750000,
+          "activated": false,
+          "embeddedEgos": [],
+          "onboardAliDeleted": false
+        },
+        "activatedEffects": [],
+        "deviceType": "",
+        "category": "Standard Augments",
+        "fabricator": "",
+        "activationAction": "automatic",
+        "passiveEffects": [
+          {
+            "type": "misc",
+            "unique": "",
+            "description": "Memory diamond storage unit for ego backups.",
+            "id": "p46c2wxgta"
+          }
+        ],
+        "activation": "none",
+        "resistEffectsCheck": "",
+        "usedEffectsDuration": 3000,
+        "onboardALI": false,
+        "firewallRating": 30,
+        "fabPrintDuration": 0,
+        "firewallHealth": {
+          "baseDurability": 30,
+          "rebootEndTime": -1,
+          "crashWounds": 0,
+          "damage": 0,
+          "log": [],
+          "wounds": 0
+        },
+        "meshHealth": {
+          "baseDurability": 20,
+          "damage": 0,
+          "wounds": 0,
+          "aidedHealTickStartTime": 0,
+          "ownHealTickStartTime": 0,
+          "damageRepair": {
+            "amount": "1d10",
+            "interval": 86400000
+          },
+          "woundRepair": {
+            "amount": 1,
+            "interval": 86400000
+          },
+          "log": [],
+          "rebootEndTime": -1,
+          "crashWounds": 0
+        },
+        "wareType": "cyberware"
+      },
+      "sort": 500000,
+      "flags": {},
+      "img": "icons/svg/mystery-man.svg",
+      "effects": [],
+      "_key": "!actors.items!2r6dJSUOXIIBKiIv.oh0It2OxPGSbU3SX"
+    },
+    {
+      "_id": "VaLzya7aIOIA9KCY",
+      "name": "Enhanced Smell",
+      "type": "physicalTech",
+      "system": {
+        "description": "<p>The morph&rsquo;s sense of smell is equal to that of a bloodhound. You can identify both chemicals and individuals by smell and can track people and chemically reactive objects by odor as long as the trail was made within the last several hours and has not been obscured. Apply a +10 to smell-based Perceive Tests. You can also gain a general sense of the emotions and health of biological characters within point-blank range (+10 to Kinesics Tests).</p>",
+        "reference": "Eclipse Phase Second Edition p. 318",
+        "complexity": "minor",
+        "restricted": false,
+        "quality": "average",
+        "concealable": false,
+        "fragile": false,
+        "singleUse": false,
+        "twoHanded": false,
+        "blueprint": {
+          "blueprintType": "",
+          "cracked": false,
+          "used": false
+        },
+        "state": {
+          "disabled": false,
+          "equipped": true,
+          "fabStartTime": 4083750000,
+          "activated": false,
+          "embeddedEgos": [],
+          "onboardAliDeleted": false
+        },
+        "activatedEffects": [],
+        "deviceType": "",
+        "category": "Sensory Augments",
+        "fabricator": "",
+        "activationAction": "automatic",
+        "passiveEffects": [
+          {
+            "type": "successTest",
+            "tags": [
+              {
+                "type": "skill",
+                "skillType": "perceive"
+              }
+            ],
+            "modifier": 10,
+            "toOpponent": false,
+            "requirement": "smell related",
+            "id": "pmneakt8pa"
+          },
+          {
+            "type": "successTest",
+            "tags": [
+              {
+                "type": "skill",
+                "skillType": "kinesics"
+              }
+            ],
+            "modifier": 10,
+            "toOpponent": false,
+            "requirement": "point-blank with biomorphs",
+            "id": "fezhc6e4dj"
+          }
+        ],
+        "activation": "none",
+        "resistEffectsCheck": "",
+        "usedEffectsDuration": 3000,
+        "onboardALI": false,
+        "firewallRating": 30,
+        "fabPrintDuration": 0,
+        "firewallHealth": {
+          "baseDurability": 30,
+          "rebootEndTime": -1,
+          "crashWounds": 0,
+          "damage": 0,
+          "log": [],
+          "wounds": 0
+        },
+        "meshHealth": {
+          "baseDurability": 20,
+          "damage": 0,
+          "wounds": 0,
+          "aidedHealTickStartTime": 0,
+          "ownHealTickStartTime": 0,
+          "damageRepair": {
+            "amount": "1d10",
+            "interval": 86400000
+          },
+          "woundRepair": {
+            "amount": 1,
+            "interval": 86400000
+          },
+          "log": [],
+          "rebootEndTime": -1,
+          "crashWounds": 0
+        },
+        "wareType": "bioware"
+      },
+      "sort": 700001,
+      "flags": {},
+      "img": "icons/svg/mystery-man.svg",
+      "effects": [],
+      "_key": "!actors.items!2r6dJSUOXIIBKiIv.VaLzya7aIOIA9KCY"
+    },
+    {
+      "_id": "CKBZ0zN0WAbFPTZK",
+      "name": "Mesh Inserts",
+      "type": "physicalTech",
+      "system": {
+        "description": "<p>This network of implants is mandatory for people who want to use augmented reality and link wirelessly to the mesh. The various components include:</p>\n<ul>\n<li>Cranial Computer: This host serves as the hub for your personal area network and is home to your muse. It manages your augmented reality input and processes XP data, enabling you to share your sensorium with others in real-time. It is loaded with basic apps and provides all the functions you would expect from a mobile device: file storage, search engine, media player, mesh browser, address book, e-mail, messaging, and so forth.</li>\n<li>Medical/Diagnostic Sensors: This array monitors your health, including heart rate, respiration, blood pressure, temperature, neural activity, ware status, and more. In synthmorphs, this system monitors system reports and error logs, heat, stress faults, and similar hardware statuses.</li>\n<li>Radio Transceiver: This connects your headware with other mesh devices within range (5 km urban areas/50 km open areas).</li>\n<li>You can access any of these functions simply by thinking.</li>\n</ul>",
+        "reference": "Eclipse Phase Second Edition p. 316",
+        "complexity": "minor",
+        "restricted": false,
+        "quality": "average",
+        "concealable": false,
+        "fragile": false,
+        "singleUse": false,
+        "twoHanded": false,
+        "blueprint": {
+          "blueprintType": "",
+          "cracked": false,
+          "used": false
+        },
+        "state": {
+          "disabled": false,
+          "equipped": true,
+          "fabStartTime": 4083750000,
+          "activated": false,
+          "embeddedEgos": [],
+          "onboardAliDeleted": false
+        },
+        "activatedEffects": [],
+        "deviceType": "",
+        "category": "Standard Augments",
+        "fabricator": "",
+        "activationAction": "automatic",
+        "passiveEffects": [
+          {
+            "type": "misc",
+            "unique": "",
+            "description": "Cranial computer, wireless transceiver, muse home, and medical sensors.",
+            "id": "ntroeh8ug9"
+          }
+        ],
+        "activation": "none",
+        "resistEffectsCheck": "",
+        "usedEffectsDuration": 3000,
+        "onboardALI": false,
+        "firewallRating": 30,
+        "fabPrintDuration": 0,
+        "firewallHealth": {
+          "baseDurability": 30,
+          "rebootEndTime": -1,
+          "crashWounds": 0,
+          "damage": 0,
+          "log": [],
+          "wounds": 0
+        },
+        "meshHealth": {
+          "baseDurability": 20,
+          "damage": 0,
+          "wounds": 0,
+          "aidedHealTickStartTime": 0,
+          "ownHealTickStartTime": 0,
+          "damageRepair": {
+            "amount": "1d10",
+            "interval": 86400000
+          },
+          "woundRepair": {
+            "amount": 1,
+            "interval": 86400000
+          },
+          "log": [],
+          "rebootEndTime": -1,
+          "crashWounds": 0
+        },
+        "wareType": "cyberware"
+      },
+      "sort": 1250000,
+      "flags": {},
+      "img": "icons/svg/mystery-man.svg",
+      "effects": [],
+      "_key": "!actors.items!2r6dJSUOXIIBKiIv.CKBZ0zN0WAbFPTZK"
+    },
+    {
+      "_id": "Ofygnxox6xBgmzDJ",
+      "name": "Prehensile Feet",
+      "type": "physicalTech",
+      "system": {
+        "description": "<p>You can use your feet like hands. Your feet and leg joints are altered so that your toes are longer and more dexterous. The big toe is transformed into an opposable thumb. Physically, your morph&rsquo;s feet resemble a longer, narrower hand or a foot with finger-like toes. You can walk normally but must wear specially designed shoes. However, you run slightly slower than a morph with unmodified feet (-8 to your full movement). Your hips are also modified for greater mobility and flexibility. In a properly constructed chair, or floating in zero g, you can use both your hands and feet to manipulate the same object. This mod is common among belters, brinkers, and others living in microgravity.</p>",
+        "reference": "Eclipse Phase Second Edition p. 325",
+        "complexity": "minor",
+        "restricted": false,
+        "quality": "average",
+        "concealable": false,
+        "fragile": false,
+        "singleUse": false,
+        "twoHanded": false,
+        "blueprint": {
+          "blueprintType": "",
+          "cracked": false,
+          "used": false
+        },
+        "state": {
+          "disabled": false,
+          "equipped": true,
+          "fabStartTime": 4083750000,
+          "activated": false,
+          "embeddedEgos": [],
+          "onboardAliDeleted": false
+        },
+        "activatedEffects": [],
+        "deviceType": "",
+        "category": "Physical Augments",
+        "fabricator": "",
+        "activationAction": "automatic",
+        "passiveEffects": [
+          {
+            "type": "misc",
+            "unique": "",
+            "description": "Can use feet as hands. -8 full move",
+            "id": "p50kphtegx"
+          }
+        ],
+        "activation": "none",
+        "resistEffectsCheck": "",
+        "usedEffectsDuration": 3000,
+        "onboardALI": false,
+        "firewallRating": 30,
+        "fabPrintDuration": 0,
+        "firewallHealth": {
+          "baseDurability": 30,
+          "rebootEndTime": -1,
+          "crashWounds": 0,
+          "damage": 0,
+          "log": [],
+          "wounds": 0
+        },
+        "meshHealth": {
+          "baseDurability": 20,
+          "damage": 0,
+          "wounds": 0,
+          "aidedHealTickStartTime": 0,
+          "ownHealTickStartTime": 0,
+          "damageRepair": {
+            "amount": "1d10",
+            "interval": 86400000
+          },
+          "woundRepair": {
+            "amount": 1,
+            "interval": 86400000
+          },
+          "log": [],
+          "rebootEndTime": -1,
+          "crashWounds": 0
+        },
+        "wareType": "bioware"
+      },
+      "sort": 2000000,
+      "flags": {},
+      "img": "icons/svg/mystery-man.svg",
+      "effects": [],
+      "_key": "!actors.items!2r6dJSUOXIIBKiIv.Ofygnxox6xBgmzDJ"
+    },
+    {
+      "_id": "lvrh4yvc6GG8fE6B",
+      "name": "Biomods",
+      "type": "physicalTech",
+      "system": {
+        "description": "<p><span style=\"background-color: rgba(0, 0, 0, 0.05);\">T</span>hese genetic tweaks and tailored viruses and bacteria provide many of the health benefits of being transhuman. With it, you heal faster and regenerate lost body parts over time. You are immune to aging and most diseases, from cancer to the flu. You require only 4 hours of sleep a night. You can trigger contraception at will. You also do not suffer shock reactions after being injured or the negative effects from long-term exposure to low or zero gravity. You are also ambidextrous and can use left and right limbs equally well. These mods are universal to most biomorphs; some habitats will not allow biomorphs without them, considering them a threat to public health.</p>",
+        "reference": "Eclipse Phase Second Edition p. 316",
+        "complexity": "minor",
+        "restricted": false,
+        "quality": "average",
+        "concealable": false,
+        "fragile": false,
+        "singleUse": false,
+        "twoHanded": false,
+        "blueprint": {
+          "blueprintType": "",
+          "cracked": false,
+          "used": false
+        },
+        "state": {
+          "disabled": false,
+          "equipped": true,
+          "fabStartTime": 6471582000,
+          "activated": false,
+          "embeddedEgos": [],
+          "onboardAliDeleted": false
+        },
+        "activatedEffects": [],
+        "deviceType": "",
+        "category": "Standard Augments",
+        "fabricator": "",
+        "activationAction": "automatic",
+        "passiveEffects": [
+          {
+            "type": "misc",
+            "unique": "",
+            "description": "Genetic tweaks for health, faster healing, immunities, and more.",
+            "id": "xfx1pt4x8t"
+          },
+          {
+            "type": "healthRecovery",
+            "damageAmount": "1d10",
+            "woundAmount": 1,
+            "interval": 43200000,
+            "stat": "damageRepair",
+            "technologicallyAided": false,
+            "id": "itzzxtts5c"
+          },
+          {
+            "type": "healthRecovery",
+            "damageAmount": "1d10",
+            "woundAmount": 1,
+            "interval": 259200000,
+            "stat": "woundRepair",
+            "technologicallyAided": false,
+            "id": "upc14u6jvj"
+          },
+          {
+            "type": "recharge",
+            "recharge": "longRecharge",
+            "stat": "duration",
+            "modifier": 14400000,
+            "id": "m0s92fi7xs"
+          }
+        ],
+        "activation": "none",
+        "resistEffectsCheck": "",
+        "usedEffectsDuration": 3000,
+        "onboardALI": false,
+        "firewallRating": 30,
+        "fabPrintDuration": 0,
+        "firewallHealth": {
+          "baseDurability": 30,
+          "rebootEndTime": -1,
+          "crashWounds": 0,
+          "damage": 0,
+          "log": [],
+          "wounds": 0
+        },
+        "meshHealth": {
+          "baseDurability": 20,
+          "damage": 0,
+          "wounds": 0,
+          "aidedHealTickStartTime": 0,
+          "ownHealTickStartTime": 0,
+          "damageRepair": {
+            "amount": "1d10",
+            "interval": 86400000
+          },
+          "woundRepair": {
+            "amount": 1,
+            "interval": 86400000
+          },
+          "log": [],
+          "rebootEndTime": -1,
+          "crashWounds": 0
+        },
+        "wareType": "bioware"
+      },
+      "sort": 2100000,
+      "flags": {},
+      "img": "icons/svg/mystery-man.svg",
+      "effects": [],
+      "_key": "!actors.items!2r6dJSUOXIIBKiIv.lvrh4yvc6GG8fE6B"
+    }
+  ],
+  "effects": [],
+  "_key": "!actors!2r6dJSUOXIIBKiIv"
+}

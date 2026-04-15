@@ -1,0 +1,50 @@
+{
+  "name": "Heavy Combat Armor",
+  "permission": {
+    "default": 0,
+    "qJl17WpEHiovQQBC": 3
+  },
+  "type": "armor",
+  "system": {
+    "description": "<p>These bulky and noticeable armor plates protect against heavy weaponry for serious combat operations. The shell’s mobility systems and power output are also modified to handle the extra mass.</p>",
+    "reference": "Eclipse Phase Second Edition p. 214",
+    "complexity": "major",
+    "restricted": false,
+    "quality": "average",
+    "blueprint": {
+      "blueprintType": "",
+      "cracked": false,
+      "used": false
+    },
+    "state": {
+      "disabled": false,
+      "equipped": false,
+      "activated": false
+    },
+    "activeArmor": {
+      "energy": 0,
+      "kinetic": 0,
+      "concealable": false,
+      "layerable": false
+    },
+    "armorValues": {
+      "energy": 16,
+      "kinetic": 14,
+      "concealable": false,
+      "layerable": true
+    },
+    "attackTraits": [],
+    "effects": [],
+    "hasActiveState": false,
+    "fragile": false,
+    "singleUse": false,
+    "twoHanded": false,
+    "notes": "",
+    "wareType": "hardware"
+  },
+  "flags": {},
+  "img": "icons/svg/mystery-man.svg",
+  "effects": [],
+  "_id": "RR1uyonqLjTYLTOH",
+  "_key": "!items!RR1uyonqLjTYLTOH"
+}

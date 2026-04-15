@@ -1,0 +1,59 @@
+{
+  "name": "HEAP",
+  "permission": {
+    "default": 0,
+    "qJl17WpEHiovQQBC": 3
+  },
+  "type": "explosive",
+  "system": {
+    "description": "<p>High-Explosive Armor-Piercing, a design only available for seekers (not grenades), HEAP warheads use high explosives to blast a path for a penetrating tungsten-alloy round. HEAP rounds have no blast radius, but are very effective at penetrating armor.</p>",
+    "reference": "Eclipse Phase Second Edition p. 212",
+    "complexity": "major",
+    "restricted": true,
+    "quality": "average",
+    "blueprint": {
+      "blueprintType": "",
+      "cracked": false,
+      "used": false
+    },
+    "quantity": 1,
+    "state": {
+      "stashed": false
+    },
+    "areaEffect": "",
+    "explosiveType": "missile",
+    "useSubstance": "",
+    "areaEffectRadius": 4,
+    "size": "standard",
+    "sticky": true,
+    "unitsPerComplexity": 1,
+    "dosesPerUnit": 1,
+    "hasSecondaryMode": false,
+    "primaryAttack": {
+      "armorUsed": "kinetic",
+      "attackTraits": [
+        "knockdown"
+      ],
+      "armorPiercing": true,
+      "damageFormula": "6d10 + 24",
+      "duration": 0,
+      "attackTraitNotes": "",
+      "label": "",
+      "notes": ""
+    },
+    "secondaryAttack": {
+      "armorUsed": "",
+      "attackTraits": [],
+      "armorPiercing": false,
+      "damageFormula": "",
+      "duration": 0,
+      "attackTraitNotes": "",
+      "label": "",
+      "notes": ""
+    }
+  },
+  "flags": {},
+  "effects": [],
+  "_id": "A0XyugbzQRVIYbUm",
+  "_key": "!items!A0XyugbzQRVIYbUm"
+}

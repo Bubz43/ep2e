@@ -1,0 +1,82 @@
+{
+  "name": "Breadcrumb System",
+  "permission": {
+    "default": 0,
+    "qJl17WpEHiovQQBC": 3
+  },
+  "type": "physicalTech",
+  "system": {
+    "description": "<p>This worn device leaves micro-sized &ldquo;breadcrumb&rdquo; motes behind as you move, roughly every 25 meters. These devices mesh with each other and other devices, allowing you to map your position in relation to the breadcrumb trail, and creating a mesh connection all the way back to the trail&rsquo;s source. This is for tracking your movement, finding your way back, and keeping meshed with your camp or ship in derelict habitats, wilderness, and other areas where there is no local functioning mesh.</p>",
+    "reference": "Eclipse Phase Second Edition p. 336",
+    "complexity": "minor",
+    "restricted": false,
+    "quality": "average",
+    "concealable": false,
+    "fragile": false,
+    "singleUse": false,
+    "twoHanded": false,
+    "blueprint": {
+      "blueprintType": "",
+      "cracked": false,
+      "used": false
+    },
+    "state": {
+      "disabled": false,
+      "equipped": false,
+      "fabStartTime": 0,
+      "activated": false,
+      "embeddedEgos": [],
+      "onboardAliDeleted": false
+    },
+    "activatedEffects": [],
+    "deviceType": "",
+    "category": "Communication Gear",
+    "fabricator": "",
+    "activationAction": "automatic",
+    "passiveEffects": [
+      {
+        "type": "misc",
+        "unique": "",
+        "description": "Leaves mote trail for meshing/positioning.",
+        "id": "ayirhh5vhn"
+      }
+    ],
+    "activation": "none",
+    "resistEffectsCheck": "",
+    "usedEffectsDuration": 3000,
+    "onboardALI": false,
+    "firewallRating": 30,
+    "fabPrintDuration": 0,
+    "firewallHealth": {
+      "baseDurability": 30,
+      "rebootEndTime": -1,
+      "crashWounds": 0,
+      "damage": 0,
+      "log": [],
+      "wounds": 0
+    },
+    "meshHealth": {
+      "baseDurability": 20,
+      "damage": 0,
+      "wounds": 0,
+      "aidedHealTickStartTime": 0,
+      "ownHealTickStartTime": 0,
+      "damageRepair": {
+        "amount": "1d10",
+        "interval": 86400000
+      },
+      "woundRepair": {
+        "amount": 1,
+        "interval": 86400000
+      },
+      "log": [],
+      "rebootEndTime": -1,
+      "crashWounds": 0
+    },
+    "wareType": ""
+  },
+  "flags": {},
+  "effects": [],
+  "_id": "5uDKXNaoSvhsPUl2",
+  "_key": "!items!5uDKXNaoSvhsPUl2"
+}

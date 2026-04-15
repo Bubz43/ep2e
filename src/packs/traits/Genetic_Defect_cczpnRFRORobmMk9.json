@@ -1,0 +1,76 @@
+{
+  "_id": "cczpnRFRORobmMk9",
+  "name": "Genetic Defect",
+  "permission": {
+    "default": 0,
+    "qHi89sFcK4gHlOPd": 3
+  },
+  "type": "trait",
+  "system": {
+    "description": "<p>This trait is only available for flats. The morph is not genefixed and suffers from a genetic disorder or other impairing mutation. Work with your GM to agree on a defect appropriate to your game. Some possibilities include: heart disease, diabetes, cystic fibrosis, sickle- cell disease, hypertension, hemophilia, or color blindness. Level 1 applies to genetic disorders that create minor complications and/ or occasional health problems (apply a -10 impairment modifier in certain circumstances). Level 2 is for defects that significantly impair functioning or inflict chronic health problems (an ongoing -10 impairment modifier or occasional -20). The GM determines the exact effects of the disorder on gameplay.</p>",
+    "reference": "Eclipse Phase Second Edition p. 78",
+    "restrictions": "",
+    "triggers": "",
+    "source": "morph",
+    "state": {
+      "level": 0,
+      "triggered": false
+    },
+    "levels": [
+      {
+        "cost": 1,
+        "effects": [
+          {
+            "type": "successTest",
+            "tags": [
+              {
+                "type": "allActions"
+              }
+            ],
+            "modifier": -10,
+            "toOpponent": false,
+            "requirement": "defect is relevant",
+            "id": "x7wlsxksl3"
+          }
+        ],
+        "id": "3u1o6a4x0v"
+      },
+      {
+        "cost": 2,
+        "effects": [
+          {
+            "type": "successTest",
+            "tags": [
+              {
+                "type": "allActions"
+              }
+            ],
+            "modifier": -10,
+            "toOpponent": false,
+            "requirement": "",
+            "id": "zxc3kquitv"
+          },
+          {
+            "type": "successTest",
+            "tags": [
+              {
+                "type": "allActions"
+              }
+            ],
+            "modifier": -20,
+            "toOpponent": false,
+            "requirement": "when defect is relevant",
+            "id": "7y2criycxe"
+          }
+        ],
+        "id": "autyx3yix8"
+      }
+    ],
+    "subtype": "",
+    "traitType": "negative"
+  },
+  "flags": {},
+  "img": "icons/svg/mystery-man.svg",
+  "effects": [],
+  "_key": "!items!cczpnRFRORobmMk9"
+}

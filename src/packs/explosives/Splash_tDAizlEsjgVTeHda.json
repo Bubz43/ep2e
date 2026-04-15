@@ -1,0 +1,57 @@
+{
+  "name": "Splash",
+  "permission": {
+    "default": 0,
+    "qJl17WpEHiovQQBC": 3
+  },
+  "type": "explosive",
+  "system": {
+    "description": "<p>Splash devices spread a contained substance (a drug, chemical, nanoswarm, paint, etc.) over a 10-meter blast radius when they detonate. Each contains 5 doses of a toxin/drug (targets are affected by 1 dose) or 1 nanoswarm.</p>",
+    "reference": "Eclipse Phase Second Edition p. 212",
+    "complexity": "minor",
+    "restricted": false,
+    "quality": "average",
+    "blueprint": {
+      "blueprintType": "",
+      "cracked": false,
+      "used": false
+    },
+    "quantity": 3,
+    "state": {
+      "stashed": false
+    },
+    "areaEffect": "uniform",
+    "explosiveType": "grenade",
+    "useSubstance": "dermal",
+    "areaEffectRadius": 20,
+    "size": "standard",
+    "sticky": true,
+    "unitsPerComplexity": 3,
+    "dosesPerUnit": 1,
+    "hasSecondaryMode": false,
+    "primaryAttack": {
+      "armorUsed": "",
+      "attackTraits": [],
+      "armorPiercing": false,
+      "damageFormula": "",
+      "duration": 0,
+      "attackTraitNotes": "",
+      "label": "",
+      "notes": ""
+    },
+    "secondaryAttack": {
+      "armorUsed": "",
+      "attackTraits": [],
+      "armorPiercing": false,
+      "damageFormula": "",
+      "duration": 0,
+      "attackTraitNotes": "",
+      "label": "",
+      "notes": ""
+    }
+  },
+  "flags": {},
+  "effects": [],
+  "_id": "tDAizlEsjgVTeHda",
+  "_key": "!items!tDAizlEsjgVTeHda"
+}

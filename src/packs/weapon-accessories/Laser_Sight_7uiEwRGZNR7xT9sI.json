@@ -1,0 +1,18 @@
+{
+  "_id": "7uiEwRGZNR7xT9sI",
+  "name": "Laser Sight",
+  "permission": {
+    "default": 0,
+    "qHi89sFcK4gHlOPd": 3
+  },
+  "folder": "",
+  "flags": {
+    "core": {
+      "sourceId": "JournalEntry.nLC2PvDcyHHcEfo6"
+    }
+  },
+  "content": "<p>This underbarrel laser emits a beam that places a glowing red dot on the target to assist targeting (negating the -10 modifier for not using a smartlink or laser sight). Laser sights can also be used to paint a target for laser-guided smart ammo or seekers. Infrared and ultraviolet lasers are also available, so that the dot is only visible to characters with enhanced vision.</p>",
+  "pages": [],
+  "categories": [],
+  "_key": "!journal!7uiEwRGZNR7xT9sI"
+}

@@ -1,0 +1,50 @@
+{
+  "name": "Vacsuit (Light)",
+  "permission": {
+    "default": 0,
+    "qJl17WpEHiovQQBC": 3
+  },
+  "type": "armor",
+  "system": {
+    "description": "<p>Both smart-fabric and legacy light vacsuit models are ideal for less harsh environments such as Mars, the Venusian clouds, or exoplanets with moderate but unbreathable atmospheres. Their rebreathers provide 8 hours of air. All models include a headlight, an ecto, and atmospheric sensors. They protect you from temperatures from -75 to 100 C. These vacuum suits also provide an Armor Value of 5/2 and instantly self-seal breaches unless more than 20 points of damage are inflicted at once.</p>",
+    "reference": "Eclipse Phase Second Edition p. 341",
+    "complexity": "moderate",
+    "restricted": false,
+    "quality": "average",
+    "blueprint": {
+      "blueprintType": "",
+      "cracked": false,
+      "used": false
+    },
+    "state": {
+      "disabled": false,
+      "equipped": false,
+      "activated": false
+    },
+    "activeArmor": {
+      "energy": 0,
+      "kinetic": 0,
+      "concealable": false,
+      "layerable": false
+    },
+    "armorValues": {
+      "energy": 5,
+      "kinetic": 2,
+      "concealable": false,
+      "layerable": false
+    },
+    "attackTraits": [],
+    "effects": [],
+    "hasActiveState": false,
+    "fragile": false,
+    "singleUse": false,
+    "twoHanded": false,
+    "notes": "",
+    "wareType": ""
+  },
+  "flags": {},
+  "img": "icons/svg/mystery-man.svg",
+  "effects": [],
+  "_id": "H4VfCZUtnGqRqGlW",
+  "_key": "!items!H4VfCZUtnGqRqGlW"
+}

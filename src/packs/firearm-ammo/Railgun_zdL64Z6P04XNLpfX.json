@@ -1,0 +1,43 @@
+{
+  "name": "Railgun",
+  "permission": {
+    "default": 0,
+    "qJl17WpEHiovQQBC": 3
+  },
+  "type": "firearmAmmo",
+  "system": {
+    "description": "<p>Non-Explosive conductive tungsten slug.</p>",
+    "reference": "Eclipse Phase Second Edition p. 211",
+    "complexity": "minor",
+    "restricted": true,
+    "quality": "average",
+    "blueprint": {
+      "blueprintType": "",
+      "cracked": false,
+      "used": false
+    },
+    "quantity": 100,
+    "state": {
+      "stashed": false
+    },
+    "ammoClass": "machinePistol",
+    "carryPayload": false,
+    "roundsPerComplexity": 100,
+    "modes": [
+      {
+        "name": "",
+        "armorPiercing": false,
+        "attackTraits": [],
+        "damageFormula": "",
+        "steady": false,
+        "damageModifierType": "formula",
+        "notes": "",
+        "id": "_defaultID"
+      }
+    ]
+  },
+  "flags": {},
+  "effects": [],
+  "_id": "zdL64Z6P04XNLpfX",
+  "_key": "!items!zdL64Z6P04XNLpfX"
+}

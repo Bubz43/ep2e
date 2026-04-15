@@ -1,0 +1,54 @@
+{
+  "name": "Tranqulity",
+  "permission": {
+    "default": 0,
+    "qJl17WpEHiovQQBC": 3
+  },
+  "type": "sleight",
+  "system": {
+    "description": "<p>You calm the target, relieving stress and anxiety. The target is relieved of the effects of an acute stress response ▶222 or triggered disorder for WIL &divide; 5 minutes. You may not use this sleight on yourself.</p>",
+    "reference": "Eclipse Phase Second Edition p. 285",
+    "duration": "minutes",
+    "infectionMod": 4,
+    "sleightType": "gamma",
+    "action": "complex",
+    "timeframe": 0,
+    "effectsToSelf": [],
+    "effectsToTarget": [
+      {
+        "type": "misc",
+        "unique": "",
+        "description": "Target relieved from an acute stress response or triggered disorder. May not be used on self.",
+        "id": "11v2saielj"
+      }
+    ],
+    "scaleEffectsOnSuperior": false,
+    "attack": {
+      "useMentalArmor": false,
+      "attackTraits": [],
+      "damageFormula": "",
+      "damageType": "mental",
+      "notes": ""
+    },
+    "heal": {
+      "formula": "",
+      "healthType": "mental"
+    },
+    "mentalArmor": {
+      "apply": false,
+      "divisor": 3,
+      "formula": "1d6"
+    },
+    "status": {
+      "sustaining": false,
+      "pushDuration": 0,
+      "pushed": false,
+      "pushStartTime": 0,
+      "sustainingOn": []
+    }
+  },
+  "flags": {},
+  "effects": [],
+  "_id": "TolCS7iiRJQHhu66",
+  "_key": "!items!TolCS7iiRJQHhu66"
+}

@@ -1,0 +1,44 @@
+{
+  "name": "Phobia",
+  "permission": {
+    "default": 0,
+    "qJl17WpEHiovQQBC": 3
+  },
+  "type": "trait",
+  "system": {
+    "description": "<p>You have an irrational fear of a particular place, situation, or thing. Common phobias include AIs, microgravity, pandora gates, muses, robots, enclosed spaces, open spaces, and death.</p>",
+    "reference": "Eclipse Phase Second Edition p. 225",
+    "restrictions": "",
+    "triggers": "Helplessness, phobia focus",
+    "source": "ego",
+    "state": {
+      "level": 0,
+      "triggered": false
+    },
+    "levels": [
+      {
+        "cost": 2,
+        "effects": [
+          {
+            "type": "misc",
+            "unique": "",
+            "description": "Make a WIL Check to enter the proximity of the phobia’s focus. If exposed to the focus, make a WIL Check or flee. Suffer –10 to –30 in the focus’s presence.",
+            "id": "9r3tqy5sji"
+          }
+        ],
+        "id": "_defaultLevel"
+      }
+    ],
+    "subtype": "",
+    "traitType": "positive"
+  },
+  "flags": {
+    "core": {
+      "sourceId": "Item.Ri4FOaqxsl3hYaBh"
+    }
+  },
+  "img": "icons/svg/mystery-man.svg",
+  "effects": [],
+  "_id": "oWIjaq0qdJcz4WU9",
+  "_key": "!items!oWIjaq0qdJcz4WU9"
+}

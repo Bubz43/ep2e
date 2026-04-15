@@ -1,0 +1,26 @@
+{
+  "name": "Privacy Suite",
+  "permission": {
+    "default": 0,
+    "qJl17WpEHiovQQBC": 3
+  },
+  "type": "physicalService",
+  "system": {
+    "description": "<p>Use of a surveillance-free room for 1 hour.</p>\n<p>&nbsp;</p>\n<p>Per hour privacy suite services are offered by many restaurants, night clubs, hotels, and similar businesses who frequently have client&egrave;le that desire a private space for meetings or other functions.</p>",
+    "reference": "Eclipse Phase Second Edition p. 315",
+    "complexity": "minor",
+    "restricted": false,
+    "quality": "average",
+    "serviceDuration": 3600000,
+    "reputations": [],
+    "serviceType": "generic",
+    "state": {
+      "serviceStartTime": 0,
+      "equipped": false
+    }
+  },
+  "flags": {},
+  "effects": [],
+  "_id": "9LKj38lPiBOuZ1Ck",
+  "_key": "!items!9LKj38lPiBOuZ1Ck"
+}

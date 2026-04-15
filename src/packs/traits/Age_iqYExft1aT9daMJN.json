@@ -1,0 +1,47 @@
+{
+  "_id": "iqYExft1aT9daMJN",
+  "name": "Age",
+  "permission": {
+    "default": 0,
+    "qHi89sFcK4gHlOPd": 3
+  },
+  "type": "trait",
+  "system": {
+    "description": "<p>This trait may only be applied to flat and splicer morphs. The morph is physically aged and has not been rejuvenated. Old morphs are increasingly uncommon, though some people adopt them hoping to gain an air of seniority and respectability. Apply a -10 modifier on all physical actions.</p>",
+    "reference": "Eclipse Phase Second Edition p. 76",
+    "restrictions": "",
+    "triggers": "",
+    "source": "morph",
+    "state": {
+      "level": 0,
+      "triggered": false
+    },
+    "levels": [
+      {
+        "cost": 4,
+        "effects": [
+          {
+            "type": "successTest",
+            "tags": [
+              {
+                "type": "action",
+                "subtype": "physical"
+              }
+            ],
+            "modifier": -10,
+            "toOpponent": false,
+            "requirement": "",
+            "id": "fzq9262w8n"
+          }
+        ],
+        "id": "vnzaemvkye"
+      }
+    ],
+    "subtype": "",
+    "traitType": "negative"
+  },
+  "flags": {},
+  "img": "icons/svg/mystery-man.svg",
+  "effects": [],
+  "_key": "!items!iqYExft1aT9daMJN"
+}

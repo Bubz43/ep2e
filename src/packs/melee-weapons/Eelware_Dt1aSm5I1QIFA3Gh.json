@@ -1,0 +1,56 @@
+{
+  "name": "Eelware",
+  "permission": {
+    "default": 0,
+    "qJl17WpEHiovQQBC": 3
+  },
+  "type": "meleeWeapon",
+  "system": {
+    "description": "<p>A combination of electric eel genetics and bioconductors in the hands/feet/limbs (bioware) or electrified panel placement (hardware) allow you to stun with a shocking touch. Eelware can be used to recharge standard batteries or power specially modified devices by touch (treat as a standard battery).</p>",
+    "reference": "Eclipse Phase Second Edition p. 204",
+    "complexity": "minor",
+    "restricted": false,
+    "quality": "average",
+    "concealable": false,
+    "fragile": false,
+    "singleUse": false,
+    "twoHanded": false,
+    "blueprint": {
+      "blueprintType": "",
+      "cracked": false,
+      "used": false
+    },
+    "state": {
+      "disabled": false,
+      "equipped": false
+    },
+    "primaryAttack": {
+      "armorPiercing": false,
+      "attackTraits": [
+        "shock"
+      ],
+      "damageFormula": "",
+      "label": "",
+      "notes": ""
+    },
+    "secondaryAttack": {
+      "armorPiercing": false,
+      "attackTraits": [],
+      "damageFormula": "",
+      "label": "",
+      "notes": ""
+    },
+    "hasSecondaryAttack": false,
+    "augmentUnarmed": true,
+    "acceptsPayload": false,
+    "reachBonus": 0,
+    "improvised": false,
+    "touchOnly": true,
+    "wareType": "cyberware",
+    "exoticSkill": ""
+  },
+  "flags": {},
+  "effects": [],
+  "_id": "Dt1aSm5I1QIFA3Gh",
+  "_key": "!items!Dt1aSm5I1QIFA3Gh"
+}

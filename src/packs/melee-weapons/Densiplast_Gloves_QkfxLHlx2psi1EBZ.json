@@ -1,0 +1,54 @@
+{
+  "name": "Densiplast Gloves",
+  "permission": {
+    "default": 0,
+    "qJl17WpEHiovQQBC": 3
+  },
+  "type": "meleeWeapon",
+  "system": {
+    "description": "<p>These gloves extra-harden when activated, for extra punch. A set of gloves on each hand counts as a single weapon.</p>",
+    "reference": "Eclipse Phase Second Edition p. 204",
+    "complexity": "minor",
+    "restricted": false,
+    "quality": "average",
+    "concealable": true,
+    "fragile": false,
+    "singleUse": false,
+    "twoHanded": false,
+    "blueprint": {
+      "blueprintType": "",
+      "cracked": false,
+      "used": false
+    },
+    "state": {
+      "disabled": false,
+      "equipped": false
+    },
+    "primaryAttack": {
+      "armorPiercing": false,
+      "attackTraits": [],
+      "damageFormula": "2",
+      "label": "",
+      "notes": ""
+    },
+    "secondaryAttack": {
+      "armorPiercing": false,
+      "attackTraits": [],
+      "damageFormula": "",
+      "label": "",
+      "notes": ""
+    },
+    "hasSecondaryAttack": false,
+    "augmentUnarmed": true,
+    "acceptsPayload": false,
+    "reachBonus": 0,
+    "improvised": false,
+    "touchOnly": false,
+    "wareType": "",
+    "exoticSkill": ""
+  },
+  "flags": {},
+  "effects": [],
+  "_id": "QkfxLHlx2psi1EBZ",
+  "_key": "!items!QkfxLHlx2psi1EBZ"
+}

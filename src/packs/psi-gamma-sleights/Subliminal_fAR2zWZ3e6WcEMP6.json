@@ -1,0 +1,54 @@
+{
+  "name": "Subliminal",
+  "permission": {
+    "default": 0,
+    "qJl17WpEHiovQQBC": 3
+  },
+  "type": "sleight",
+  "system": {
+    "description": "<p>You implant a single post-hypnotic suggestion into the target&rsquo;s mind which they will carry out as if it was their own idea. Implanted suggestions must be short and simple; the GM may require suggestions be encompassed in a short sentence (for example: &ldquo;open the airlock&rdquo; or &ldquo;hand over the weapon&rdquo;). Suggestions may include a short trigger condition (&ldquo;when the alarm goes off, ignore it&rdquo;). The target receives a WIL Check to resist any suggestion that is immediately life threatening (&ldquo;jump off the bridge&rdquo;) or that violates their motivations or personal strictures.</p>",
+    "reference": "Eclipse Phase Second Edition p. 285",
+    "duration": "hours",
+    "infectionMod": 10,
+    "sleightType": "gamma",
+    "action": "complex",
+    "timeframe": 0,
+    "effectsToSelf": [],
+    "effectsToTarget": [
+      {
+        "type": "misc",
+        "unique": "",
+        "description": "Implant suggested action in target’s mind that they must carry through.",
+        "id": "z4ajww1lke"
+      }
+    ],
+    "scaleEffectsOnSuperior": false,
+    "attack": {
+      "useMentalArmor": false,
+      "attackTraits": [],
+      "damageFormula": "",
+      "damageType": "mental",
+      "notes": ""
+    },
+    "heal": {
+      "formula": "",
+      "healthType": "mental"
+    },
+    "mentalArmor": {
+      "apply": false,
+      "divisor": 3,
+      "formula": "1d6"
+    },
+    "status": {
+      "sustaining": false,
+      "pushDuration": 0,
+      "pushed": false,
+      "pushStartTime": 0,
+      "sustainingOn": []
+    }
+  },
+  "flags": {},
+  "effects": [],
+  "_id": "fAR2zWZ3e6WcEMP6",
+  "_key": "!items!fAR2zWZ3e6WcEMP6"
+}

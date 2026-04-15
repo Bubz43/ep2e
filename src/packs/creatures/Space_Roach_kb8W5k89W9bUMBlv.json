@@ -1,0 +1,624 @@
+{
+  "_id": "kb8W5k89W9bUMBlv",
+  "name": "Space Roach",
+  "type": "character",
+  "sort": 100001,
+  "flags": {
+    "ep2e": {
+      "biological": {
+        "name": "Space Roach",
+        "permission": {
+          "default": 0,
+          "qJl17WpEHiovQQBC": 3
+        },
+        "type": "biological",
+        "folder": "c14Gbxurusgb9xVz",
+        "sort": 400001,
+        "flags": {},
+        "prototypeToken": {
+          "flags": {},
+          "name": "Space Roach",
+          "displayName": 0,
+          "img": "icons/svg/mystery-man.svg",
+          "tint": null,
+          "width": 1,
+          "height": 1,
+          "scale": 1,
+          "lockRotation": false,
+          "rotation": 0,
+          "vision": false,
+          "dimSight": 0,
+          "brightSight": 0,
+          "dimLight": 0,
+          "brightLight": 0,
+          "sightAngle": 360,
+          "lightAngle": 360,
+          "lightAlpha": 1,
+          "lightAnimation": {
+            "speed": 5,
+            "intensity": 5
+          },
+          "actorId": "SJJsd3g7cw6OiXph",
+          "actorLink": true,
+          "disposition": -1,
+          "displayBars": 0,
+          "bar1": {},
+          "bar2": {},
+          "randomImg": false
+        },
+        "items": [
+          {
+            "_id": "wL7WQVRCUTOjoysr",
+            "name": "Grip Pads",
+            "type": "physicalTech",
+            "system": {
+              "description": "<p>You have specialized pads imitating the pads of gecko feet on your palms, lower arms, shins, and the bottoms of your feet. These pads adhere to any surface not made of a material designed to resist this augmentation. You can climb and support yourself on any surface that can support your weight. Apply a +30 modifier to Athletics Tests for climbing. You can also climb at a rate equal to your full move. The pads must be free to touch the surface (no shoes or gloves). The pads are obvious, but do not impair your manual dexterity or sense of touch.</p>",
+              "reference": "Eclipse Phase Second Edition p. 325",
+              "complexity": "minor",
+              "restricted": false,
+              "quality": "average",
+              "concealable": false,
+              "fragile": false,
+              "singleUse": false,
+              "twoHanded": false,
+              "blueprint": {
+                "blueprintType": "",
+                "cracked": false,
+                "used": false
+              },
+              "state": {
+                "disabled": false,
+                "equipped": true,
+                "fabStartTime": 6471555000,
+                "activated": false,
+                "embeddedEgos": [],
+                "onboardAliDeleted": false
+              },
+              "activatedEffects": [],
+              "deviceType": "",
+              "category": "Physical Augments",
+              "fabricator": "",
+              "activationAction": "automatic",
+              "passiveEffects": [
+                {
+                  "type": "successTest",
+                  "tags": [
+                    {
+                      "type": "skill",
+                      "skillType": "athletics"
+                    }
+                  ],
+                  "modifier": 30,
+                  "toOpponent": false,
+                  "requirement": "climbing",
+                  "id": "nig36iqyfv"
+                }
+              ],
+              "activation": "none",
+              "resistEffectsCheck": "",
+              "usedEffectsDuration": 3000,
+              "onboardALI": false,
+              "firewallRating": 30,
+              "fabPrintDuration": 0,
+              "firewallHealth": {
+                "baseDurability": 30,
+                "rebootEndTime": -1,
+                "crashWounds": 0,
+                "damage": 0,
+                "log": [],
+                "wounds": 0
+              },
+              "meshHealth": {
+                "baseDurability": 20,
+                "damage": 0,
+                "wounds": 0,
+                "aidedHealTickStartTime": 0,
+                "ownHealTickStartTime": 0,
+                "damageRepair": {
+                  "amount": "1d10",
+                  "interval": 86400000
+                },
+                "woundRepair": {
+                  "amount": 1,
+                  "interval": 86400000
+                },
+                "log": [],
+                "rebootEndTime": -1,
+                "crashWounds": 0
+              },
+              "wareType": "bioware"
+            },
+            "sort": 200000,
+            "flags": {},
+            "img": "icons/svg/mystery-man.svg",
+            "effects": []
+          }
+        ],
+        "effects": [],
+        "_id": "SJJsd3g7cw6OiXph",
+        "img": "icons/svg/mystery-man.svg",
+        "system": {
+          "description": "<p>Grown to the size of a small dog, these insects are often biosculpted for bright colors and patterns. They are favored as pets and useful for minor janitorial duties.</p>",
+          "reference": "Eclipse Phase Second Edition p. 328",
+          "movementRates": [
+            {
+              "type": "walker",
+              "base": 4,
+              "full": 12,
+              "id": "e1vbu5ipqg"
+            }
+          ],
+          "acquisition": {
+            "availability": 0,
+            "complexity": "minor",
+            "cost": 0,
+            "resource": "gearPoints",
+            "restricted": false
+          },
+          "pools": {
+            "insight": 0,
+            "moxie": 0,
+            "vigor": 0,
+            "flex": 0
+          },
+          "conditions": [],
+          "damagedArmor": [],
+          "prehensileLimbs": 2,
+          "sex": "",
+          "subtype": "GMO",
+          "unarmedDV": "1d6",
+          "isSwarm": false,
+          "brain": "",
+          "recoveryConditions": "normal",
+          "size": "small",
+          "reach": 0,
+          "physicalHealth": {
+            "baseDurability": 5,
+            "bleedingOut": false,
+            "damage": 0,
+            "dots": [],
+            "aidedHealTickStartTime": 0,
+            "ownHealTickStartTime": 0,
+            "damageRepair": {
+              "amount": "1d10",
+              "interval": 86400000
+            },
+            "woundRepair": {
+              "amount": 1,
+              "interval": 604800000
+            },
+            "log": [],
+            "wounds": 0
+          }
+        }
+      }
+    }
+  },
+  "items": [
+    {
+      "_id": "hXJUK3itPcfWjPto",
+      "name": "Grip Pads",
+      "type": "physicalTech",
+      "sort": 200000,
+      "flags": {},
+      "img": "icons/svg/mystery-man.svg",
+      "effects": [],
+      "system": {
+        "description": "<p>You have specialized pads imitating the pads of gecko feet on your palms, lower arms, shins, and the bottoms of your feet. These pads adhere to any surface not made of a material designed to resist this augmentation. You can climb and support yourself on any surface that can support your weight. Apply a +30 modifier to Athletics Tests for climbing. You can also climb at a rate equal to your full move. The pads must be free to touch the surface (no shoes or gloves). The pads are obvious, but do not impair your manual dexterity or sense of touch.</p>",
+        "reference": "Eclipse Phase Second Edition p. 325",
+        "complexity": "minor",
+        "restricted": false,
+        "quality": "average",
+        "concealable": false,
+        "fragile": false,
+        "singleUse": false,
+        "twoHanded": false,
+        "blueprint": {
+          "blueprintType": "",
+          "cracked": false,
+          "used": false
+        },
+        "state": {
+          "disabled": false,
+          "equipped": true,
+          "fabStartTime": 6471555000,
+          "activated": false,
+          "embeddedEgos": [],
+          "onboardAliDeleted": false
+        },
+        "activatedEffects": [],
+        "deviceType": "",
+        "category": "Physical Augments",
+        "fabricator": "",
+        "activationAction": "automatic",
+        "passiveEffects": [
+          {
+            "type": "successTest",
+            "tags": [
+              {
+                "type": "skill",
+                "skillType": "athletics"
+              }
+            ],
+            "modifier": 30,
+            "toOpponent": false,
+            "requirement": "climbing",
+            "id": "nig36iqyfv"
+          }
+        ],
+        "activation": "none",
+        "resistEffectsCheck": "",
+        "usedEffectsDuration": 3000,
+        "onboardALI": false,
+        "firewallRating": 30,
+        "fabPrintDuration": 0,
+        "firewallHealth": {
+          "baseDurability": 30,
+          "rebootEndTime": -1,
+          "crashWounds": 0,
+          "damage": 0,
+          "log": [],
+          "wounds": 0
+        },
+        "meshHealth": {
+          "baseDurability": 20,
+          "damage": 0,
+          "wounds": 0,
+          "aidedHealTickStartTime": 0,
+          "ownHealTickStartTime": 0,
+          "damageRepair": {
+            "amount": "1d10",
+            "interval": 86400000
+          },
+          "woundRepair": {
+            "amount": 1,
+            "interval": 86400000
+          },
+          "log": [],
+          "rebootEndTime": -1,
+          "crashWounds": 0
+        },
+        "wareType": "bioware"
+      },
+      "folder": null,
+      "ownership": {
+        "default": 0
+      },
+      "_stats": {
+        "systemId": null,
+        "systemVersion": null,
+        "coreVersion": null,
+        "createdTime": null,
+        "modifiedTime": null,
+        "lastModifiedBy": null
+      },
+      "_key": "!actors.items!kb8W5k89W9bUMBlv.hXJUK3itPcfWjPto"
+    }
+  ],
+  "effects": [],
+  "system": {
+    "description": "",
+    "reference": "Eclipse Phase Second Edition p. 328",
+    "fakeId": "",
+    "aptitudes": {
+      "cog": 1,
+      "int": 10,
+      "ref": 15,
+      "sav": 5,
+      "som": 5,
+      "wil": 5
+    },
+    "temporary": [],
+    "favoriteItems": [],
+    "purchaseLog": [],
+    "fieldSkills": {
+      "exotic": [],
+      "hardware": [],
+      "know": [],
+      "medicine": [],
+      "pilot": []
+    },
+    "homeDevice": {
+      "actorId": "",
+      "itemId": ""
+    },
+    "network": {
+      "masterDeviceId": "",
+      "systemDefenders": [],
+      "unslavedDevices": []
+    },
+    "assets": [],
+    "settings": {
+      "canDefault": false,
+      "trackMentalHealth": true,
+      "useThreat": false,
+      "characterDetails": true,
+      "threatDetails": false,
+      "trackPoints": false,
+      "trackReputations": false,
+      "ignoreOverburdened": false
+    },
+    "shortRecharge": {
+      "refreshStartTime": 0,
+      "taken": 0
+    },
+    "longRecharge": {
+      "refreshStartTime": 0,
+      "taken": 0
+    },
+    "motivations": [],
+    "points": {
+      "customization": 0,
+      "gear": 0,
+      "morph": 0,
+      "rez": 0,
+      "credits": 0
+    },
+    "accumulatedTimeStart": 0,
+    "tasks": [],
+    "reps": {
+      "@Rep": {
+        "major": 0,
+        "minor": 0,
+        "moderate": 0,
+        "refreshStartTime": 0,
+        "score": 0,
+        "track": false
+      },
+      "cRep": {
+        "major": 0,
+        "minor": 0,
+        "moderate": 0,
+        "refreshStartTime": 0,
+        "score": 0,
+        "track": false
+      },
+      "fRep": {
+        "major": 0,
+        "minor": 0,
+        "moderate": 0,
+        "refreshStartTime": 0,
+        "score": 0,
+        "track": false
+      },
+      "gRep": {
+        "major": 0,
+        "minor": 0,
+        "moderate": 0,
+        "refreshStartTime": 0,
+        "score": 0,
+        "track": false
+      },
+      "iRep": {
+        "major": 0,
+        "minor": 0,
+        "moderate": 0,
+        "refreshStartTime": 0,
+        "score": 0,
+        "track": false
+      },
+      "rRep": {
+        "major": 0,
+        "minor": 0,
+        "moderate": 0,
+        "refreshStartTime": 0,
+        "score": 0,
+        "track": false
+      },
+      "xRep": {
+        "major": 0,
+        "minor": 0,
+        "moderate": 0,
+        "refreshStartTime": 0,
+        "score": 0,
+        "track": false
+      }
+    },
+    "skills": {
+      "athletics": {
+        "points": 25,
+        "specialization": ""
+      },
+      "deceive": {
+        "points": 0,
+        "specialization": ""
+      },
+      "fray": {
+        "points": 0,
+        "specialization": ""
+      },
+      "freeFall": {
+        "points": 25,
+        "specialization": ""
+      },
+      "guns": {
+        "points": 0,
+        "specialization": ""
+      },
+      "infiltrate": {
+        "points": 35,
+        "specialization": ""
+      },
+      "infosec": {
+        "points": 0,
+        "specialization": ""
+      },
+      "interface": {
+        "points": 0,
+        "specialization": ""
+      },
+      "kinesics": {
+        "points": 0,
+        "specialization": ""
+      },
+      "melee": {
+        "points": 0,
+        "specialization": ""
+      },
+      "perceive": {
+        "points": 0,
+        "specialization": ""
+      },
+      "persuade": {
+        "points": 0,
+        "specialization": ""
+      },
+      "program": {
+        "points": 0,
+        "specialization": ""
+      },
+      "provoke": {
+        "points": 0,
+        "specialization": ""
+      },
+      "psi": {
+        "points": 0,
+        "specialization": ""
+      },
+      "research": {
+        "points": 0,
+        "specialization": ""
+      },
+      "survival": {
+        "points": 0,
+        "specialization": ""
+      }
+    },
+    "spentPools": {
+      "flex": 0,
+      "insight": 0,
+      "moxie": 0,
+      "threat": 0,
+      "vigor": 0
+    },
+    "flex": 0,
+    "threat": 0,
+    "characterDetails": {
+      "age": "",
+      "aliases": "",
+      "background": "",
+      "career": "",
+      "faction": "",
+      "gender": "",
+      "interest": "",
+      "languages": ""
+    },
+    "egoType": "GMO",
+    "forkType": "",
+    "threatDetails": {
+      "level": "yellow",
+      "niche": "",
+      "numbers": "",
+      "stress": {
+        "sv": "",
+        "minSV": 1,
+        "minStressOption": "none",
+        "notes": ""
+      }
+    },
+    "combatState": {
+      "complexAim": false,
+      "fullDefense": "",
+      "aggressive": false
+    },
+    "mentalHealth": {
+      "alienation": 0,
+      "damage": 0,
+      "helplessness": 0,
+      "log": [],
+      "naturalHealAttempts": [],
+      "violence": 0,
+      "wounds": 0,
+      "lastGainedStressTime": 0,
+      "aidedHealTickStartTime": -1,
+      "damageRepair": {
+        "amount": "",
+        "interval": 0
+      },
+      "ownHealTickStartTime": -1,
+      "woundRepair": {
+        "interval": 0,
+        "amount": 0
+      }
+    }
+  },
+  "ownership": {
+    "default": 0,
+    "qJl17WpEHiovQQBC": 3
+  },
+  "prototypeToken": {
+    "flags": {},
+    "name": "Space Roach",
+    "displayName": 0,
+    "width": 1,
+    "height": 1,
+    "lockRotation": false,
+    "rotation": 0,
+    "actorLink": true,
+    "disposition": -1,
+    "displayBars": 0,
+    "bar1": {
+      "attribute": null
+    },
+    "bar2": {
+      "attribute": null
+    },
+    "randomImg": false,
+    "light": {
+      "dim": 0,
+      "bright": 0,
+      "angle": 360,
+      "alpha": 1,
+      "animation": {
+        "speed": 5,
+        "intensity": 5,
+        "type": null,
+        "reverse": false
+      },
+      "color": null,
+      "coloration": 1,
+      "attenuation": 0.5,
+      "luminosity": 0.5,
+      "saturation": 0,
+      "contrast": 0,
+      "shadows": 0,
+      "darkness": {
+        "min": 0,
+        "max": 1
+      }
+    },
+    "texture": {
+      "src": "icons/svg/mystery-man.svg",
+      "tint": null,
+      "scaleX": 1,
+      "scaleY": 1,
+      "offsetX": 0,
+      "offsetY": 0,
+      "rotation": 0
+    },
+    "sight": {
+      "angle": 360,
+      "enabled": false,
+      "range": 0,
+      "brightness": 1,
+      "visionMode": "basic",
+      "color": null,
+      "attenuation": 0.1,
+      "saturation": 0,
+      "contrast": 0
+    },
+    "alpha": 1,
+    "detectionModes": []
+  },
+  "img": "icons/svg/mystery-man.svg",
+  "folder": null,
+  "_stats": {
+    "systemId": "ep2e",
+    "systemVersion": "1.0",
+    "coreVersion": "10.279",
+    "createdTime": null,
+    "modifiedTime": 1661875708332,
+    "lastModifiedBy": "insS7Tc4tz1EbXlo"
+  },
+  "_key": "!actors!kb8W5k89W9bUMBlv"
+}

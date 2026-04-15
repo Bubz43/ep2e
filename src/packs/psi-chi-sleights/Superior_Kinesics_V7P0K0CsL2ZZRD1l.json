@@ -1,0 +1,65 @@
+{
+  "name": "Superior Kinesics",
+  "permission": {
+    "default": 0,
+    "qJl17WpEHiovQQBC": 3
+  },
+  "type": "sleight",
+  "system": {
+    "description": "<p>You haver finer control over your emotive signals, body language, and micro-expressions and are more capable at interpreting the same in others. +10 to Deceive and Kinesics Tests.</p>",
+    "reference": "Eclipse Phase Second Edition p. 281",
+    "duration": "actionTurns",
+    "infectionMod": 1,
+    "sleightType": "chi",
+    "action": "complex",
+    "timeframe": 0,
+    "effectsToSelf": [
+      {
+        "type": "successTest",
+        "tags": [
+          {
+            "type": "skill",
+            "skillType": "deceive"
+          },
+          {
+            "type": "skill",
+            "skillType": "kinesics"
+          }
+        ],
+        "modifier": 10,
+        "toOpponent": false,
+        "requirement": "",
+        "id": "mjqdxv45c0"
+      }
+    ],
+    "effectsToTarget": [],
+    "scaleEffectsOnSuperior": false,
+    "attack": {
+      "useMentalArmor": false,
+      "attackTraits": [],
+      "damageFormula": "",
+      "damageType": "mental",
+      "notes": ""
+    },
+    "heal": {
+      "formula": "",
+      "healthType": "mental"
+    },
+    "mentalArmor": {
+      "apply": false,
+      "divisor": 3,
+      "formula": "1d6"
+    },
+    "status": {
+      "sustaining": false,
+      "pushDuration": 0,
+      "pushed": false,
+      "pushStartTime": 0,
+      "sustainingOn": []
+    }
+  },
+  "flags": {},
+  "effects": [],
+  "_id": "V7P0K0CsL2ZZRD1l",
+  "_key": "!items!V7P0K0CsL2ZZRD1l"
+}

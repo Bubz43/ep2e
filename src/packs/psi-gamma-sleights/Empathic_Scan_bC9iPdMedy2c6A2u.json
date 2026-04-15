@@ -1,0 +1,61 @@
+{
+  "name": "Empathic Scan",
+  "permission": {
+    "default": 0,
+    "qJl17WpEHiovQQBC": 3
+  },
+  "type": "sleight",
+  "system": {
+    "description": "<p>You sense the target&rsquo;s emotional state for WIL &divide; 5 action turns. This provides you with a +10 modifier for social skill tests against the target, +10 per superior success. This sleight will not automatically detect deceit, but it will pick up on nervousness, doubt, anxiety, etc. and provide a bonus to Kinesics Tests against Deceive.</p>",
+    "reference": "Eclipse Phase Second Edition p. 284",
+    "duration": "actionTurns",
+    "infectionMod": 4,
+    "sleightType": "gamma",
+    "action": "complex",
+    "timeframe": 0,
+    "effectsToSelf": [],
+    "effectsToTarget": [
+      {
+        "type": "successTest",
+        "tags": [
+          {
+            "type": "skillCategory",
+            "category": "social"
+          }
+        ],
+        "modifier": 10,
+        "toOpponent": true,
+        "requirement": "targeted by Empathetic Scan user",
+        "id": "lmyoccednv"
+      }
+    ],
+    "scaleEffectsOnSuperior": true,
+    "attack": {
+      "useMentalArmor": false,
+      "attackTraits": [],
+      "damageFormula": "",
+      "damageType": "mental",
+      "notes": ""
+    },
+    "heal": {
+      "formula": "",
+      "healthType": "mental"
+    },
+    "mentalArmor": {
+      "apply": false,
+      "divisor": 3,
+      "formula": "1d6"
+    },
+    "status": {
+      "sustaining": false,
+      "pushDuration": 0,
+      "pushed": false,
+      "pushStartTime": 0,
+      "sustainingOn": []
+    }
+  },
+  "flags": {},
+  "effects": [],
+  "_id": "bC9iPdMedy2c6A2u",
+  "_key": "!items!bC9iPdMedy2c6A2u"
+}

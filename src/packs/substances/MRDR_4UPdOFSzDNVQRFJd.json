@@ -1,0 +1,207 @@
+{
+  "name": "MRDR",
+  "permission": {
+    "default": 0,
+    "qJl17WpEHiovQQBC": 3
+  },
+  "type": "substance",
+  "system": {
+    "description": "<p>MRDR is a brutal amphetamine that increases your pain tolerance, speed, and strength. Increase your Vigor pool by 2 and ignore one wound (cumulative with other pain negation mods, to a maximum of 3 wounds) for 1 hour. While under MRDR&rsquo;s influence, you are twitchy and react in a jumpy, cat-like fashion to sudden or unexpected stimuli. Make a WIL Check or react without thinking to unexpected noises or other surprises. This drug also makes you a raging asshole; acquire the Enhanced Behavior: Aggression (Level 2) trait for the duration and suffer a -20 modifier to social skill tests.</p>",
+    "reference": "Eclipse Phase Second Edition p. 332",
+    "complexity": "major",
+    "restricted": true,
+    "quality": "average",
+    "blueprint": {
+      "blueprintType": "",
+      "cracked": false,
+      "used": false
+    },
+    "quantity": 5,
+    "state": {
+      "stashed": false
+    },
+    "addiction": "physical",
+    "addictionMod": -20,
+    "hasSeverity": false,
+    "application": [
+      "dermal",
+      "inhalation",
+      "injection",
+      "oral"
+    ],
+    "base": {
+      "damage": {
+        "damageFormula": "",
+        "perTurn": false,
+        "armorPiercing": false,
+        "attackTraits": [],
+        "reduceAVbyDV": false,
+        "armorUsed": [],
+        "damageType": "physical"
+      },
+      "duration": 3600000,
+      "effects": [
+        {
+          "type": "pool",
+          "pool": "vigor",
+          "modifier": 2,
+          "usabilityModification": "",
+          "id": "8dkg4y9wtz"
+        },
+        {
+          "type": "health",
+          "health": "physical",
+          "stat": "woundsIgnored",
+          "modifier": 1,
+          "id": "3161z680kj"
+        },
+        {
+          "type": "successTest",
+          "tags": [
+            {
+              "type": "skillCategory",
+              "category": "social"
+            }
+          ],
+          "modifier": -20,
+          "toOpponent": false,
+          "requirement": "",
+          "id": "hif3ff771m"
+        },
+        {
+          "type": "misc",
+          "unique": "",
+          "description": "Make a WIL Check or react without thinking to unexpected noises or other surprises",
+          "id": "x8snh2npa2"
+        }
+      ],
+      "wearOffStress": "",
+      "notes": ""
+    },
+    "category": "Combat",
+    "classification": "biochem",
+    "consumeOnUse": true,
+    "substanceType": "drug",
+    "quantityPerCost": 5,
+    "severity": {
+      "check": "som",
+      "checkMod": 0,
+      "conditions": [],
+      "wearOffStress": "",
+      "damage": {
+        "damageFormula": "",
+        "perTurn": false,
+        "armorPiercing": false,
+        "attackTraits": [],
+        "reduceAVbyDV": false,
+        "armorUsed": [],
+        "damageType": "physical"
+      },
+      "duration": 3000,
+      "effects": [],
+      "notes": ""
+    }
+  },
+  "flags": {
+    "ep2e": {
+      "baseAppliedItems": [
+        {
+          "_id": "B2AqhqhwLNkotv11-base-qg8vikfevn",
+          "name": "Enhanced Behavior: Aggression",
+          "permission": {
+            "default": 0,
+            "qHi89sFcK4gHlOPd": 3
+          },
+          "type": "trait",
+          "system": {
+            "description": "<p>Your conduct or moods are modified. This may be due to conditioning and reprogramming via time-accelerated psychosurgery ▶294, drugs, genetic tweaks, psi, or other factors. This may have been a deliberate choice or it may have been inflicted against your will. Work with your GM to define a specific emotion (e.g., happiness, contentment, love) or behavior (e.g., aggression, commitment, curiosity, orderliness, loyalty). Apply a -10 modifier per level to all actions when withheld from the behavior/emotion.</p><p>Level 1: You are encouraged to pursue the behavior and associate it with positive feelings; emotions are boosted.</p><p>Level 2: You are driven to engage in the specified behavior; emotions are exaggerated. Holding back requires a WIL Check.</p><p>Level 3: The behavior is enforced; emotions are compulsory and ongoing. If restrained from the conduct or the emotion is suppressed, suffer SV 1d6.</p><p>This trait may be taken more than once for different behaviors.</p>",
+            "reference": "Eclipse Phase Second Edition p. 78",
+            "restrictions": "",
+            "triggers": "",
+            "source": "morph",
+            "state": {
+              "level": 1,
+              "triggered": false
+            },
+            "levels": [
+              {
+                "cost": 1,
+                "effects": [
+                  {
+                    "type": "successTest",
+                    "tags": [
+                      {
+                        "type": "allActions"
+                      }
+                    ],
+                    "modifier": -10,
+                    "toOpponent": false,
+                    "requirement": "withheld from behavior/emotion",
+                    "id": "unpmong88t"
+                  }
+                ],
+                "id": "fngiund4yp"
+              },
+              {
+                "cost": 2,
+                "effects": [
+                  {
+                    "type": "successTest",
+                    "tags": [
+                      {
+                        "type": "allActions"
+                      }
+                    ],
+                    "modifier": -20,
+                    "toOpponent": false,
+                    "requirement": "withheld from behavior/emotion",
+                    "id": "cgx0t1h7ch"
+                  },
+                  {
+                    "type": "misc",
+                    "unique": "",
+                    "description": "Holding back requires a WIL Check",
+                    "id": "qcskn12n5u"
+                  }
+                ],
+                "id": "tgi795dt5c"
+              },
+              {
+                "cost": 4,
+                "effects": [
+                  {
+                    "type": "successTest",
+                    "tags": [
+                      {
+                        "type": "allActions"
+                      }
+                    ],
+                    "modifier": -30,
+                    "toOpponent": false,
+                    "requirement": "withheld from behavior/emotion",
+                    "id": "nsjss6h3ns"
+                  },
+                  {
+                    "type": "misc",
+                    "unique": "",
+                    "description": "If restrained from conduct or suppressing the emotion, suffer SV 1d6",
+                    "id": "yp1twi8nwr"
+                  }
+                ],
+                "id": "prw6g3i4gq"
+              }
+            ],
+            "subtype": "",
+            "traitType": "negative"
+          },
+          "flags": {},
+          "img": "icons/svg/mystery-man.svg",
+          "effects": []
+        }
+      ]
+    }
+  },
+  "effects": [],
+  "_id": "4UPdOFSzDNVQRFJd",
+  "_key": "!items!4UPdOFSzDNVQRFJd"
+}

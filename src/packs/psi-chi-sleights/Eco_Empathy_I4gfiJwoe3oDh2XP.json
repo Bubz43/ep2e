@@ -1,0 +1,54 @@
+{
+  "name": "Eco-Empathy",
+  "permission": {
+    "default": 0,
+    "qJl17WpEHiovQQBC": 3
+  },
+  "type": "sleight",
+  "system": {
+    "description": "<p>With a successful COG Check, you acquire an intuitive understanding of non-sentient, non-terrestrial organisms occupying a producer niche in the local ecosystem (e.g., alien plant and fungus analogues). The information you gain is of a general and qualitative nature, and doesn&rsquo;t include data you would normally acquire from chemical or genetic analysis. For example, you could determine if a plant thrives only in riparian zones, if it relies on insect analogs for pollination, or if it produces tubers that are edible to transhumans when cooked.</p>",
+    "reference": "Eclipse Phase Second Edition p. 280",
+    "duration": "actionTurns",
+    "infectionMod": 1,
+    "sleightType": "chi",
+    "action": "complex",
+    "timeframe": 0,
+    "effectsToSelf": [
+      {
+        "type": "misc",
+        "unique": "",
+        "description": "May use COG Check to understand alien plant and fungus analogues.",
+        "id": "4obdl8hsa4"
+      }
+    ],
+    "effectsToTarget": [],
+    "scaleEffectsOnSuperior": false,
+    "attack": {
+      "useMentalArmor": false,
+      "attackTraits": [],
+      "damageFormula": "",
+      "damageType": "mental",
+      "notes": ""
+    },
+    "heal": {
+      "formula": "",
+      "healthType": "mental"
+    },
+    "mentalArmor": {
+      "apply": false,
+      "divisor": 3,
+      "formula": "1d6"
+    },
+    "status": {
+      "sustaining": false,
+      "pushDuration": 0,
+      "pushed": false,
+      "pushStartTime": 0,
+      "sustainingOn": []
+    }
+  },
+  "flags": {},
+  "effects": [],
+  "_id": "I4gfiJwoe3oDh2XP",
+  "_key": "!items!I4gfiJwoe3oDh2XP"
+}

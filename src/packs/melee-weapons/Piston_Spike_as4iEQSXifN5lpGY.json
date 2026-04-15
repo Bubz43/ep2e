@@ -1,0 +1,54 @@
+{
+  "name": "Piston Spike",
+  "permission": {
+    "default": 0,
+    "qJl17WpEHiovQQBC": 3
+  },
+  "type": "meleeWeapon",
+  "system": {
+    "description": "<p>This pneumatic-driven spike is triggered with an impact (usually a punch) and designed to pierce modern armor and synthetic frames. Most are designed for repeated use, though an alternative single-use model delivers a minigrenade (this grenade attack bypasses armor).</p>",
+    "reference": "Eclipse Phase Second Edition p. 204",
+    "complexity": "minor",
+    "restricted": false,
+    "quality": "average",
+    "concealable": true,
+    "fragile": false,
+    "singleUse": false,
+    "twoHanded": false,
+    "blueprint": {
+      "blueprintType": "",
+      "cracked": false,
+      "used": false
+    },
+    "state": {
+      "disabled": false,
+      "equipped": false
+    },
+    "primaryAttack": {
+      "armorPiercing": true,
+      "attackTraits": [],
+      "damageFormula": "2d10",
+      "label": "",
+      "notes": ""
+    },
+    "secondaryAttack": {
+      "armorPiercing": false,
+      "attackTraits": [],
+      "damageFormula": "",
+      "label": "",
+      "notes": ""
+    },
+    "hasSecondaryAttack": false,
+    "augmentUnarmed": false,
+    "acceptsPayload": false,
+    "reachBonus": 0,
+    "improvised": false,
+    "touchOnly": false,
+    "wareType": "hardware",
+    "exoticSkill": ""
+  },
+  "flags": {},
+  "effects": [],
+  "_id": "as4iEQSXifN5lpGY",
+  "_key": "!items!as4iEQSXifN5lpGY"
+}

@@ -1,0 +1,26 @@
+{
+  "name": "Dead Zone Map",
+  "permission": {
+    "default": 0,
+    "qJl17WpEHiovQQBC": 3
+  },
+  "type": "physicalService",
+  "system": {
+    "description": "<p>Map of areas lacking surveillance coverage.</p>\n<p>&nbsp;</p>\n<p>This map shows areas in a neighborhood or small habitat that lack public and/or private surveillance coverage.</p>",
+    "reference": "Eclipse Phase Second Edition p. 315",
+    "complexity": "minor",
+    "restricted": false,
+    "quality": "average",
+    "serviceDuration": -1,
+    "reputations": [],
+    "serviceType": "generic",
+    "state": {
+      "serviceStartTime": 0,
+      "equipped": false
+    }
+  },
+  "flags": {},
+  "effects": [],
+  "_id": "CMSUnTAMj4QpWnwn",
+  "_key": "!items!CMSUnTAMj4QpWnwn"
+}

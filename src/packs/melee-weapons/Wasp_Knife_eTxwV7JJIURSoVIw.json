@@ -1,0 +1,117 @@
+{
+  "name": "Wasp Knife",
+  "permission": {
+    "default": 0,
+    "qJl17WpEHiovQQBC": 3
+  },
+  "type": "meleeWeapon",
+  "system": {
+    "description": "<p>Wasp knives are equipped with a single-use compressed-air canister in their handle. When stabbing a target in vacuum or a pressurized environment (like underwater), you can trigger the gas to release so that it bursts out of the victim&rsquo;s body cavity, inflicting +2d10 DV. Wasp knives may also be loaded with chemicals, drugs, or nanobots. The target must be damaged for the canister&rsquo;s contents to affect them.</p>",
+    "reference": "Eclipse Phase Second Edition p. 205",
+    "complexity": "minor",
+    "restricted": true,
+    "quality": "average",
+    "concealable": false,
+    "fragile": false,
+    "singleUse": false,
+    "twoHanded": false,
+    "blueprint": {
+      "blueprintType": "",
+      "cracked": false,
+      "used": false
+    },
+    "state": {
+      "disabled": false,
+      "equipped": false
+    },
+    "primaryAttack": {
+      "armorPiercing": false,
+      "attackTraits": [],
+      "damageFormula": "1d10 + 2",
+      "label": "",
+      "notes": ""
+    },
+    "secondaryAttack": {
+      "armorPiercing": false,
+      "attackTraits": [],
+      "damageFormula": "",
+      "label": "",
+      "notes": ""
+    },
+    "hasSecondaryAttack": false,
+    "augmentUnarmed": false,
+    "acceptsPayload": true,
+    "reachBonus": 0,
+    "improvised": false,
+    "touchOnly": false,
+    "wareType": "",
+    "exoticSkill": ""
+  },
+  "flags": {
+    "ep2e": {
+      "payload": [
+        {
+          "name": "Compressed - Air Canister",
+          "permission": {
+            "default": 0,
+            "qJl17WpEHiovQQBC": 3
+          },
+          "type": "explosive",
+          "system": {
+            "description": "<p>A standard single-use compressed-air canister meant to be used in a Wasp Knife</p>",
+            "reference": "Eclipse Phase Second Edition p. 205",
+            "complexity": "minor",
+            "restricted": false,
+            "quality": "average",
+            "blueprint": {
+              "blueprintType": "",
+              "cracked": false,
+              "used": false
+            },
+            "quantity": 5,
+            "state": {
+              "stashed": false
+            },
+            "areaEffect": "",
+            "explosiveType": "generic",
+            "useSubstance": "dermal",
+            "areaEffectRadius": 10,
+            "size": "mini",
+            "sticky": true,
+            "unitsPerComplexity": 5,
+            "dosesPerUnit": 1,
+            "hasSecondaryMode": false,
+            "primaryAttack": {
+              "armorUsed": "",
+              "attackTraits": [],
+              "armorPiercing": false,
+              "damageFormula": "2d10",
+              "duration": 0,
+              "label": "",
+              "notes": ""
+            },
+            "secondaryAttack": {
+              "armorUsed": "",
+              "attackTraits": [],
+              "armorPiercing": false,
+              "damageFormula": "",
+              "duration": 0,
+              "label": "",
+              "notes": ""
+            }
+          },
+          "folder": "QnibYw3aiHiVtpmW",
+          "sort": 400000,
+          "flags": {},
+          "effects": [],
+          "_id": "gB84tgdWrRRT4y5T",
+          "img": "icons/svg/mystery-man.svg"
+        }
+      ],
+      "coating": null
+    }
+  },
+  "effects": [],
+  "_id": "eTxwV7JJIURSoVIw",
+  "_key": "!items!eTxwV7JJIURSoVIw"
+}

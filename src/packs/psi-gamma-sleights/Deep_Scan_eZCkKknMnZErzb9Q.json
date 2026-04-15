@@ -1,0 +1,61 @@
+{
+  "name": "Deep Scan",
+  "permission": {
+    "default": 0,
+    "qJl17WpEHiovQQBC": 3
+  },
+  "type": "sleight",
+  "system": {
+    "description": "<p>Deep Scan is a more intrusive version of Browse Thoughts ▶283. You telepathically invade the target&rsquo;s mind and probe it for information. You extract two pieces of information (i.e., a name, image, passcode, description or summary a few sentences long, or a memory of less than a minute) plus two for each superior success. Each item takes one full action turn to retrieve, during which the sleight must be sustained.</p>",
+    "reference": "Eclipse Phase Second Edition p. 283",
+    "duration": "sustained",
+    "infectionMod": 6,
+    "sleightType": "gamma",
+    "action": "complex",
+    "timeframe": 0,
+    "effectsToSelf": [
+      {
+        "type": "misc",
+        "unique": "",
+        "description": "Retrieve 2 items from target’s mind",
+        "id": "dx2r6wl89p"
+      }
+    ],
+    "effectsToTarget": [
+      {
+        "type": "misc",
+        "unique": "",
+        "description": "Your mind is being probed.",
+        "id": "nehrd4ik6w"
+      }
+    ],
+    "scaleEffectsOnSuperior": true,
+    "attack": {
+      "useMentalArmor": false,
+      "attackTraits": [],
+      "damageFormula": "",
+      "damageType": "mental",
+      "notes": ""
+    },
+    "heal": {
+      "formula": "",
+      "healthType": "mental"
+    },
+    "mentalArmor": {
+      "apply": false,
+      "divisor": 3,
+      "formula": "1d6"
+    },
+    "status": {
+      "sustaining": false,
+      "pushDuration": 0,
+      "pushed": false,
+      "pushStartTime": 0,
+      "sustainingOn": []
+    }
+  },
+  "flags": {},
+  "effects": [],
+  "_id": "eZCkKknMnZErzb9Q",
+  "_key": "!items!eZCkKknMnZErzb9Q"
+}

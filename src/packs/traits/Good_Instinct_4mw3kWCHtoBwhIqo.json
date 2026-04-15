@@ -1,0 +1,85 @@
+{
+  "_id": "4mw3kWCHtoBwhIqo",
+  "name": "Good Instinct",
+  "permission": {
+    "default": 0,
+    "qHi89sFcK4gHlOPd": 3
+  },
+  "type": "trait",
+  "system": {
+    "description": "<p>Your gut feelings are on target. You get +5 per level to INT Checks.</p>",
+    "reference": "Eclipse Phase Second Edition p. 74",
+    "restrictions": "",
+    "triggers": "",
+    "source": "morph",
+    "state": {
+      "level": 0,
+      "triggered": false
+    },
+    "levels": [
+      {
+        "cost": 1,
+        "effects": [
+          {
+            "type": "successTest",
+            "tags": [
+              {
+                "type": "aptitudeCheck",
+                "aptitude": "int"
+              }
+            ],
+            "modifier": 5,
+            "toOpponent": false,
+            "requirement": "",
+            "id": "s0dmndyalt"
+          }
+        ],
+        "id": "a8eviylz8i"
+      },
+      {
+        "cost": 2,
+        "effects": [
+          {
+            "type": "successTest",
+            "tags": [
+              {
+                "type": "aptitudeCheck",
+                "aptitude": "int"
+              }
+            ],
+            "modifier": 10,
+            "toOpponent": false,
+            "requirement": "",
+            "id": "mejt35yf78"
+          }
+        ],
+        "id": "4vbyvn4mk9"
+      },
+      {
+        "cost": 3,
+        "effects": [
+          {
+            "type": "successTest",
+            "tags": [
+              {
+                "type": "aptitudeCheck",
+                "aptitude": "int"
+              }
+            ],
+            "modifier": 15,
+            "toOpponent": false,
+            "requirement": "",
+            "id": "fccy2wv848"
+          }
+        ],
+        "id": "heh5wg93fp"
+      }
+    ],
+    "subtype": "",
+    "traitType": "positive"
+  },
+  "flags": {},
+  "img": "icons/svg/mystery-man.svg",
+  "effects": [],
+  "_key": "!items!4mw3kWCHtoBwhIqo"
+}

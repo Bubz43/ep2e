@@ -1,0 +1,18 @@
+{
+  "_id": "i6jRBYXXHO436Snp",
+  "name": "Imaging Scope",
+  "permission": {
+    "default": 0,
+    "qHi89sFcK4gHlOPd": 3
+  },
+  "folder": "",
+  "flags": {
+    "core": {
+      "sourceId": "JournalEntry.CCFauHZzuVbzyoIh"
+    }
+  },
+  "content": "<p>Imaging scopes attach to the top of the weapon and act like specs ▶317. Scopes also bend like a periscope, allowing you to point the weapon and target around corners withoutleaving cover.</p>",
+  "pages": [],
+  "categories": [],
+  "_key": "!journal!i6jRBYXXHO436Snp"
+}

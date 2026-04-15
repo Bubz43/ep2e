@@ -1,0 +1,26 @@
+{
+  "name": "Psychosurgery",
+  "permission": {
+    "default": 0,
+    "qJl17WpEHiovQQBC": 3
+  },
+  "type": "physicalService",
+  "system": {
+    "description": "<p>Psychosurgical therapy for 1 hour.</p>\n<p>&nbsp;</p>\n<p>An hour long (subjectively longer with time acceleration) psychosurgery session in an immersive high-fidelity simulspace can help you recover from mental stress and trauma (Mental Healing &amp; Psychosurgery ▶223).</p>",
+    "reference": "Eclipse Phase Second Edition p. 315",
+    "complexity": "minor",
+    "restricted": false,
+    "quality": "average",
+    "serviceDuration": 3600000,
+    "reputations": [],
+    "serviceType": "generic",
+    "state": {
+      "serviceStartTime": 0,
+      "equipped": false
+    }
+  },
+  "flags": {},
+  "effects": [],
+  "_id": "tY0WsdVJwHSok2H5",
+  "_key": "!items!tY0WsdVJwHSok2H5"
+}

@@ -1,0 +1,90 @@
+{
+  "name": "Twitch",
+  "permission": {
+    "default": 0,
+    "qJl17WpEHiovQQBC": 3
+  },
+  "type": "substance",
+  "system": {
+    "description": "<p>Twitch is a convulsive agent, a nonlethal nerve gas. Apply a -20 modifier to all actions and make a SOM Check or become incapacitated with severe muscle tremors for 10 minutes.</p>",
+    "reference": "Eclipse Phase Second Edition p. 335",
+    "complexity": "minor",
+    "restricted": true,
+    "quality": "average",
+    "blueprint": {
+      "blueprintType": "",
+      "cracked": false,
+      "used": false
+    },
+    "quantity": 5,
+    "state": {
+      "stashed": false
+    },
+    "addiction": "",
+    "addictionMod": 0,
+    "hasSeverity": true,
+    "application": [
+      "dermal",
+      "inhalation",
+      "injection",
+      "oral"
+    ],
+    "base": {
+      "damage": {
+        "damageFormula": "",
+        "perTurn": false,
+        "armorPiercing": false,
+        "attackTraits": [],
+        "reduceAVbyDV": false,
+        "armorUsed": [],
+        "damageType": "physical"
+      },
+      "duration": 600000,
+      "effects": [
+        {
+          "type": "successTest",
+          "tags": [
+            {
+              "type": "allActions"
+            }
+          ],
+          "modifier": -20,
+          "toOpponent": false,
+          "requirement": "",
+          "id": "ko7bztpfh1"
+        }
+      ],
+      "wearOffStress": "",
+      "notes": ""
+    },
+    "category": "",
+    "classification": "biochem",
+    "consumeOnUse": true,
+    "substanceType": "toxin",
+    "quantityPerCost": 5,
+    "severity": {
+      "check": "som",
+      "checkMod": 0,
+      "conditions": [
+        "incapacitated"
+      ],
+      "wearOffStress": "",
+      "damage": {
+        "damageFormula": "",
+        "perTurn": false,
+        "armorPiercing": false,
+        "attackTraits": [],
+        "reduceAVbyDV": false,
+        "armorUsed": [],
+        "damageType": "physical"
+      },
+      "duration": 600000,
+      "effects": [],
+      "notes": ""
+    }
+  },
+  "flags": {},
+  "effects": [],
+  "_id": "B7I4zaPcYZNDYIWM",
+  "_key": "!items!B7I4zaPcYZNDYIWM"
+}

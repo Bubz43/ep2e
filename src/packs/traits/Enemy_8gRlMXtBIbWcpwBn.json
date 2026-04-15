@@ -1,0 +1,40 @@
+{
+  "_id": "8gRlMXtBIbWcpwBn",
+  "name": "Enemy",
+  "permission": {
+    "default": 0,
+    "qHi89sFcK4gHlOPd": 3
+  },
+  "type": "trait",
+  "system": {
+    "description": "<p>An enemy from your past continues to haunt you. Work with your GM to establish the details of this enmity. The GM should use this enemy as an occasional threat, surprise, and hindrance.</p>",
+    "reference": "Eclipse Phase Second Edition p. 77",
+    "restrictions": "",
+    "triggers": "",
+    "source": "ego",
+    "state": {
+      "level": 0,
+      "triggered": false
+    },
+    "levels": [
+      {
+        "cost": 2,
+        "effects": [
+          {
+            "type": "misc",
+            "unique": "",
+            "description": "An enemy from your past continues to haunt you",
+            "id": "4d4z3uvelj"
+          }
+        ],
+        "id": "aowwb8ptpo"
+      }
+    ],
+    "subtype": "",
+    "traitType": "negative"
+  },
+  "flags": {},
+  "img": "icons/svg/mystery-man.svg",
+  "effects": [],
+  "_key": "!items!8gRlMXtBIbWcpwBn"
+}

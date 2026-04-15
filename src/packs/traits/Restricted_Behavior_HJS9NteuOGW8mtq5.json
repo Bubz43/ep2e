@@ -1,0 +1,94 @@
+{
+  "_id": "HJS9NteuOGW8mtq5",
+  "name": "Restricted Behavior",
+  "permission": {
+    "default": 0,
+    "qHi89sFcK4gHlOPd": 3
+  },
+  "type": "trait",
+  "system": {
+    "description": "<p>Your conduct or moods are modified. This may be due to conditioning and reprogramming via time-accelerated psychosurgery ▶294, drugs, genetic tweaks, psi, or other factors. This may have been a deliberate choice or it may have been inflicted against your will. Work with your GM to define a specific emotion (e.g., sadness, anxiety, anger, inhibitions) or behavior (e.g., aggression, stealing, eating, lying, using a specific drug). Apply a -10 modifier per level to all actions when the behavior/emotion is not avoided.</p><p>Level 1: You are compelled to avoid the behavior and associate it with negative feelings; emotions are limited.</p><p>Level 2: You are blocked from the specified behavior; emotions are suppressed. Pursuing it requires a WIL Check.</p><p>Level 3: You are incapable of pursuing the behavior; emotions are expunged. If forced to engage in the conduct or to experience the emotion, suffer SV 1d6.</p><p>This trait may be taken more than once for different behaviors.</p>",
+    "reference": "Eclipse Phase Second Edition p. 80",
+    "restrictions": "",
+    "triggers": "",
+    "source": "morph",
+    "state": {
+      "level": 0,
+      "triggered": false
+    },
+    "levels": [
+      {
+        "cost": 1,
+        "effects": [
+          {
+            "type": "successTest",
+            "tags": [
+              {
+                "type": "allActions"
+              }
+            ],
+            "modifier": -10,
+            "toOpponent": false,
+            "requirement": "engaging in behavior/emotion",
+            "id": "4mgdtncr0l"
+          }
+        ],
+        "id": "fgax6mspi5"
+      },
+      {
+        "cost": 2,
+        "effects": [
+          {
+            "type": "successTest",
+            "tags": [
+              {
+                "type": "allActions"
+              }
+            ],
+            "modifier": -20,
+            "toOpponent": false,
+            "requirement": "engaging in behavior/emotion",
+            "id": "4mgdtncr0l"
+          },
+          {
+            "type": "misc",
+            "unique": "",
+            "description": "Engaging in it requires a WIL Check",
+            "id": "99wzcjkomk"
+          }
+        ],
+        "id": "ne411snydx"
+      },
+      {
+        "cost": 4,
+        "effects": [
+          {
+            "type": "successTest",
+            "tags": [
+              {
+                "type": "allActions"
+              }
+            ],
+            "modifier": -30,
+            "toOpponent": false,
+            "requirement": "engaging in behavior/emotion",
+            "id": "4mgdtncr0l"
+          },
+          {
+            "type": "misc",
+            "unique": "",
+            "description": "If forced to engage in conduct or experiencing emotion, suffer SV 1d6",
+            "id": "ka6xwqgew1"
+          }
+        ],
+        "id": "zgp7f8u62o"
+      }
+    ],
+    "subtype": "",
+    "traitType": "negative"
+  },
+  "flags": {},
+  "img": "icons/svg/mystery-man.svg",
+  "effects": [],
+  "_key": "!items!HJS9NteuOGW8mtq5"
+}

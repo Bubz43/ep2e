@@ -1,0 +1,44 @@
+{
+  "name": "Paramnesia",
+  "permission": {
+    "default": 0,
+    "qJl17WpEHiovQQBC": 3
+  },
+  "type": "trait",
+  "system": {
+    "description": "<p>You have trouble distinguishing between real memories and fake ones &mdash;or ones that do not belong to you. Ths disorder has grown more common thanks to resleeving and the potential integration of memory artifacts in a morph&rsquo;s brain from a previous user to a later one. Some asyncs recall memories that are not transhuman.</p>",
+    "reference": "Eclipse Phase Second Edition p. 225",
+    "restrictions": "",
+    "triggers": "Alienation, immersion in water/vacuum, sex, the unknown",
+    "source": "ego",
+    "state": {
+      "level": 0,
+      "triggered": false
+    },
+    "levels": [
+      {
+        "cost": 2,
+        "effects": [
+          {
+            "type": "misc",
+            "unique": "",
+            "description": "You recall memories that are not real or not your own, or you may be confused about who, what, or where you are. Any superior failure on a skill test will result in you confusing important details.",
+            "id": "0zyge7dnuw"
+          }
+        ],
+        "id": "_defaultLevel"
+      }
+    ],
+    "subtype": "",
+    "traitType": "positive"
+  },
+  "flags": {
+    "core": {
+      "sourceId": "Item.Ri4FOaqxsl3hYaBh"
+    }
+  },
+  "img": "icons/svg/mystery-man.svg",
+  "effects": [],
+  "_id": "OHymZBhed8NaXdHv",
+  "_key": "!items!OHymZBhed8NaXdHv"
+}

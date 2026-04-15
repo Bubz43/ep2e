@@ -1,0 +1,196 @@
+{
+  "name": "Polygun Rifle",
+  "permission": {
+    "default": 0,
+    "qJl17WpEHiovQQBC": 3
+  },
+  "type": "firearm",
+  "system": {
+    "description": "<p>This carbine functions like the polygun pistol, except that it can switch between SMG, assault rifle, and sniper rifle as needed.</p>",
+    "reference": "Eclipse Phase Second Edition p. 210",
+    "complexity": "major",
+    "restricted": true,
+    "quality": "average",
+    "concealable": false,
+    "fragile": false,
+    "singleUse": false,
+    "twoHanded": true,
+    "blueprint": {
+      "blueprintType": "",
+      "cracked": false,
+      "used": false
+    },
+    "state": {
+      "disabled": false,
+      "equipped": false,
+      "braced": false,
+      "interface": false
+    },
+    "fixed": false,
+    "long": true,
+    "shapeChanging": true,
+    "shapeName": "Assault Rifle",
+    "accessories": [
+      "smartlink",
+      "safetySystem"
+    ],
+    "ammo": {
+      "ammoClass": "assaultRifle",
+      "max": 45,
+      "value": 46,
+      "modeSettings": [],
+      "selectedModeIndex": 0
+    },
+    "primaryAttack": {
+      "damageFormula": "2d10 + 2",
+      "firingModes": [
+        "semiAuto",
+        "burstFire",
+        "fullAuto"
+      ],
+      "notes": ""
+    },
+    "range": 100,
+    "wareType": ""
+  },
+  "flags": {
+    "ep2e": {
+      "shapes": [
+        {
+          "name": "Submachine Gun",
+          "permission": {
+            "default": 0,
+            "qJl17WpEHiovQQBC": 3
+          },
+          "type": "firearm",
+          "system": {
+            "description": "<p>This carbine functions like the polygun pistol, except that it can switch between SMG, assault rifle, and sniper rifle as needed.</p>",
+            "reference": "Eclipse Phase Second Edition p. 210",
+            "complexity": "major",
+            "restricted": true,
+            "quality": "average",
+            "concealable": false,
+            "fragile": false,
+            "singleUse": false,
+            "twoHanded": true,
+            "blueprint": {
+              "blueprintType": "",
+              "cracked": false,
+              "used": false
+            },
+            "state": {
+              "disabled": false,
+              "equipped": false,
+              "braced": false,
+              "interface": false
+            },
+            "fixed": false,
+            "long": false,
+            "shapeChanging": true,
+            "shapeName": "Submachine Gun",
+            "accessories": [
+              "smartlink",
+              "safetySystem"
+            ],
+            "ammo": {
+              "ammoClass": "submachineGun",
+              "max": 30,
+              "value": 31,
+              "modeSettings": [],
+              "selectedModeIndex": 0
+            },
+            "primaryAttack": {
+              "damageFormula": "2d10",
+              "firingModes": [
+                "semiAuto",
+                "burstFire",
+                "fullAuto"
+              ],
+              "notes": ""
+            },
+            "range": 50,
+            "wareType": ""
+          },
+          "folder": "jkqhTF38GYJaN5wo",
+          "sort": 500000,
+          "flags": {
+            "ep2e": {
+              "specialAmmo": null
+            }
+          },
+          "effects": [],
+          "_id": "529bo5j3az",
+          "img": "icons/svg/mystery-man.svg"
+        },
+        {
+          "name": "Sniper Rifle",
+          "permission": {
+            "default": 0,
+            "qJl17WpEHiovQQBC": 3
+          },
+          "type": "firearm",
+          "system": {
+            "description": "<p>This carbine functions like the polygun pistol, except that it can switch between SMG, assault rifle, and sniper rifle as needed.</p>",
+            "reference": "Eclipse Phase Second Edition p. 210",
+            "complexity": "major",
+            "restricted": true,
+            "quality": "average",
+            "concealable": false,
+            "fragile": false,
+            "singleUse": false,
+            "twoHanded": false,
+            "blueprint": {
+              "blueprintType": "",
+              "cracked": false,
+              "used": false
+            },
+            "state": {
+              "disabled": false,
+              "equipped": false,
+              "braced": false,
+              "interface": false
+            },
+            "fixed": true,
+            "long": true,
+            "shapeChanging": true,
+            "shapeName": "Sniper Rifle",
+            "accessories": [
+              "smartlink",
+              "safetySystem"
+            ],
+            "ammo": {
+              "ammoClass": "sniperRifle",
+              "max": 9,
+              "value": 10,
+              "modeSettings": [],
+              "selectedModeIndex": 0
+            },
+            "primaryAttack": {
+              "damageFormula": "3d10 + 10",
+              "firingModes": [
+                "semiAuto"
+              ],
+              "notes": ""
+            },
+            "range": 500,
+            "wareType": ""
+          },
+          "folder": "jkqhTF38GYJaN5wo",
+          "sort": 900000,
+          "flags": {
+            "ep2e": {
+              "specialAmmo": null
+            }
+          },
+          "effects": [],
+          "_id": "is5dxflr1s",
+          "img": "icons/svg/mystery-man.svg"
+        }
+      ],
+      "specialAmmo": null
+    }
+  },
+  "effects": [],
+  "_id": "kQBLRZfEuMQxKjlD",
+  "_key": "!items!kQBLRZfEuMQxKjlD"
+}

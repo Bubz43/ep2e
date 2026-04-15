@@ -1,0 +1,83 @@
+{
+  "name": "Drive",
+  "permission": {
+    "default": 0,
+    "qJl17WpEHiovQQBC": 3
+  },
+  "type": "substance",
+  "system": {
+    "description": "<p>This nootropic speeds up left-right brain hemisphere communication, stimulates idea production, and improves concentration. +1 Insight pool for 8 hours.</p>",
+    "reference": "Eclipse Phase Second Edition p. 331",
+    "complexity": "moderate",
+    "restricted": false,
+    "quality": "average",
+    "blueprint": {
+      "blueprintType": "",
+      "cracked": false,
+      "used": false
+    },
+    "quantity": 5,
+    "state": {
+      "stashed": false
+    },
+    "addiction": "mental",
+    "addictionMod": -10,
+    "hasSeverity": false,
+    "application": [
+      "dermal",
+      "inhalation",
+      "injection",
+      "oral"
+    ],
+    "base": {
+      "damage": {
+        "damageFormula": "",
+        "perTurn": false,
+        "armorPiercing": false,
+        "attackTraits": [],
+        "reduceAVbyDV": false,
+        "armorUsed": [],
+        "damageType": "physical"
+      },
+      "duration": 28800000,
+      "effects": [
+        {
+          "type": "pool",
+          "pool": "insight",
+          "modifier": 1,
+          "usabilityModification": "",
+          "id": "1nllvhf7kr"
+        }
+      ],
+      "wearOffStress": "",
+      "notes": ""
+    },
+    "category": "Cognitive",
+    "classification": "biochem",
+    "consumeOnUse": true,
+    "substanceType": "drug",
+    "quantityPerCost": 5,
+    "severity": {
+      "check": "som",
+      "checkMod": 0,
+      "conditions": [],
+      "wearOffStress": "",
+      "damage": {
+        "damageFormula": "",
+        "perTurn": false,
+        "armorPiercing": false,
+        "attackTraits": [],
+        "reduceAVbyDV": false,
+        "armorUsed": [],
+        "damageType": "physical"
+      },
+      "duration": 3000,
+      "effects": [],
+      "notes": ""
+    }
+  },
+  "flags": {},
+  "effects": [],
+  "_id": "YTL5rDDSk3DN6G8J",
+  "_key": "!items!YTL5rDDSk3DN6G8J"
+}

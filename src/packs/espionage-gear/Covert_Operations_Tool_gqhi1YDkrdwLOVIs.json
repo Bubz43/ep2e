@@ -1,0 +1,101 @@
+{
+  "name": "Covert Operations Tool",
+  "permission": {
+    "default": 0,
+    "qJl17WpEHiovQQBC": 3
+  },
+  "type": "physicalTech",
+  "system": {
+    "description": "<p>This handheld device is the ultimate in infiltration technology. It contains smart matter micromanipulators, cutting tools, and an advanced nanotechnology generator capable of producing nanobots that can bore or cut through almost any material and infiltrate the inner workings of electronic locks to disable or open them.</p>\n<p>Cutting out a lock/bolt or boring a 10-centimeter-diameter hole in a wall with a COT requires (Wound Threshold &divide; 5) action turns. The COT&rsquo;s nanobots can repair this damage so that it is invisible to any but the most careful and detailed examination. Cutting out a larger, 1-meter diameter hole in a wall requires (Wound Threshold &divide; 10) minutes and cannot be repaired.</p>\n<p>A COT can easily open any old-fashioned mechanical lock simply by analyzing it and shaping an appropriate key, though this takes a full action turn.</p>\n<p>The tool&rsquo;s nanobots can also circumvent the security of electronic locks. Make a test using the COT&rsquo;s Hardware: Electronics 60. This is a task action with a timeframe of 4 action turns, whether opening or disabling the lock. On a superior/critical failure, an alarm is triggered. On a critical success, the opening is not logged. If the electronic lock is protected by a guardian nanoswarm, the COT has a 60% chance of opening the lock before its nanobots are disabled.</p>",
+    "reference": "Eclipse Phase Second Edition p. 338",
+    "complexity": "major",
+    "restricted": true,
+    "quality": "average",
+    "concealable": false,
+    "fragile": false,
+    "singleUse": false,
+    "twoHanded": false,
+    "blueprint": {
+      "blueprintType": "",
+      "cracked": false,
+      "used": false
+    },
+    "state": {
+      "disabled": false,
+      "equipped": false,
+      "fabStartTime": 0,
+      "activated": false,
+      "embeddedEgos": [],
+      "onboardAliDeleted": false
+    },
+    "activatedEffects": [],
+    "deviceType": "mote",
+    "category": "Espionage Gear",
+    "fabricator": "",
+    "activationAction": "automatic",
+    "passiveEffects": [
+      {
+        "type": "misc",
+        "unique": "",
+        "description": "Bypasses locks, cuts/repairs holes, Hardware: Electronics 60 vs. electronic locks, more.",
+        "id": "5fnub38e5x"
+      }
+    ],
+    "activation": "none",
+    "resistEffectsCheck": "",
+    "usedEffectsDuration": 3000,
+    "onboardALI": true,
+    "firewallRating": 30,
+    "fabPrintDuration": 0,
+    "firewallHealth": {
+      "baseDurability": 30,
+      "rebootEndTime": -1,
+      "crashWounds": 0,
+      "damage": 0,
+      "log": [],
+      "wounds": 0
+    },
+    "meshHealth": {
+      "baseDurability": 20,
+      "damage": 0,
+      "wounds": 0,
+      "aidedHealTickStartTime": 0,
+      "ownHealTickStartTime": 0,
+      "damageRepair": {
+        "amount": "1d10",
+        "interval": 86400000
+      },
+      "woundRepair": {
+        "amount": 1,
+        "interval": 86400000
+      },
+      "log": [],
+      "rebootEndTime": -1,
+      "crashWounds": 0
+    },
+    "wareType": ""
+  },
+  "flags": {
+    "ep2e": {
+      "onboardALI": {
+        "system": {
+          "fieldSkills": {
+            "hardware": [
+              {
+                "points": 50,
+                "specialization": "",
+                "field": "Electronics",
+                "linkedAptitude": "cog",
+                "category": "technical",
+                "id": "n4wuvkf4u8"
+              }
+            ]
+          }
+        }
+      }
+    }
+  },
+  "effects": [],
+  "_id": "gqhi1YDkrdwLOVIs",
+  "_key": "!items!gqhi1YDkrdwLOVIs"
+}

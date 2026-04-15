@@ -1,0 +1,44 @@
+{
+  "name": "Post Traumatic Stress Disorder (PTSD)",
+  "permission": {
+    "default": 0,
+    "qJl17WpEHiovQQBC": 3
+  },
+  "type": "trait",
+  "system": {
+    "description": "<p>PTSD results from life-threatening incidents. You develop an acute fixation on what happened, obsessively reliving the past, losing sleep, suffering anxiety and depression, and becoming easily angered or irritated. PTSD survivors will avoid painful memories and suffer extreme anxiety if forced into similar circumstances.</p>",
+    "reference": "Eclipse Phase Second Edition p. 225",
+    "restrictions": "",
+    "triggers": "Frustration, helplessness, pain, specific memories, the unknown, violence",
+    "source": "ego",
+    "state": {
+      "level": 0,
+      "triggered": false
+    },
+    "levels": [
+      {
+        "cost": 2,
+        "effects": [
+          {
+            "type": "misc",
+            "unique": "",
+            "description": "WIL Check to avoid responding to imagined threats based on the traumatic experience with violence. Otherwise treat as anxiety, depression, or phobia as appropriate.",
+            "id": "5591hzwmlr"
+          }
+        ],
+        "id": "_defaultLevel"
+      }
+    ],
+    "subtype": "",
+    "traitType": "positive"
+  },
+  "flags": {
+    "core": {
+      "sourceId": "Item.Ri4FOaqxsl3hYaBh"
+    }
+  },
+  "img": "icons/svg/mystery-man.svg",
+  "effects": [],
+  "_id": "f0Srg1EIgM6CyeJA",
+  "_key": "!items!f0Srg1EIgM6CyeJA"
+}

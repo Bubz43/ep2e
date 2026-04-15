@@ -1,0 +1,54 @@
+{
+  "name": "Strip Memory",
+  "permission": {
+    "default": 0,
+    "qJl17WpEHiovQQBC": 3
+  },
+  "type": "sleight",
+  "system": {
+    "description": "<p>The exsurgent suppresses certain memories in your mind. This can be used to block memories of certain events (up to ~WIL hours) or of specific concepts or things (GM discretion). For example, it could be used to wipe your memory of an important clandestine meeting or to make you forget everything you have learned about a TITAN artifact, including even hearing about it in the first place. The process is not exact, and so the memories may not be fully suppressed and/or related memories may also be blocked.</p>",
+    "reference": "Eclipse Phase Second Edition p. 387",
+    "duration": "sustained",
+    "infectionMod": 1,
+    "sleightType": "epsilon",
+    "action": "complex",
+    "timeframe": 0,
+    "effectsToSelf": [],
+    "effectsToTarget": [
+      {
+        "type": "misc",
+        "unique": "",
+        "description": "Removes target memories.",
+        "id": "4wn8ewqaat"
+      }
+    ],
+    "scaleEffectsOnSuperior": false,
+    "attack": {
+      "useMentalArmor": false,
+      "attackTraits": [],
+      "damageFormula": "",
+      "damageType": "mental",
+      "notes": ""
+    },
+    "heal": {
+      "formula": "",
+      "healthType": "mental"
+    },
+    "mentalArmor": {
+      "apply": false,
+      "divisor": 3,
+      "formula": "1d6"
+    },
+    "status": {
+      "sustaining": false,
+      "pushDuration": 0,
+      "pushed": false,
+      "pushStartTime": 0,
+      "sustainingOn": []
+    }
+  },
+  "flags": {},
+  "effects": [],
+  "_id": "PPkC3A0U0y8SSloE",
+  "_key": "!items!PPkC3A0U0y8SSloE"
+}

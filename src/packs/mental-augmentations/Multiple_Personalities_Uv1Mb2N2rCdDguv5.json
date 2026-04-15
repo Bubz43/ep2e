@@ -1,0 +1,84 @@
+{
+  "name": "Multiple Personalities",
+  "permission": {
+    "default": 0,
+    "qJl17WpEHiovQQBC": 3
+  },
+  "type": "software",
+  "system": {
+    "description": "<p>Your brain is intentionally partitioned to accommodate an extra personality. This multiplicity is not viewed as a disorder, but as a cognitive tool to help people deal with their hypercomplex environments. This extra personality can be a separate character (in ego form only), an NPC run by the GM, or the downloaded fork of another character. For all intents and purposes, the extra personality is treated as a separate ego (i.e., it may backup and fork separately), except that both personalities are backed up in the same cortical stack and if downloaded they must be placed in separate morphs or in another morph with this implant.</p>\n<p>Only one ego can be in control of the morph at a time. The other resides in the background, still active, but not on a surface level. Subsumed egos may still act while the other is dominant, but can only take mental/mesh actions. Each ego is completely aware of what the other is doing, thinking, etc. If for some reason the subsumed personality wants to come to the fore, but the other personality won&rsquo;t relinquish control, make an opposed WIL Check. Each ego has its own Lucidity, Trauma Threshold, and Insanity Rating, and they track stress and trauma separately. The morph's pools are shared. Psi sleights or social/mental influences only affect the personality at the fore.</p>\n<p>You can take this augmentation more than once (to a maximum of 3 times) to incorporate multiple egos into the same mind.</p>",
+    "reference": "Eclipse Phase Second Edition p. 320",
+    "complexity": "major",
+    "restricted": false,
+    "quality": "average",
+    "softwareType": "meshware",
+    "activatedEffects": [],
+    "effects": [
+      {
+        "type": "misc",
+        "unique": "",
+        "description": "Brain holds multiple egos.",
+        "id": "9bfgcgkwhl"
+      }
+    ],
+    "category": "Mental Augments",
+    "serviceDuration": -1,
+    "skills": [],
+    "activation": "",
+    "meshAttacks": 0,
+    "meshHealth": {
+      "baseDurability": 10,
+      "damage": 0,
+      "log": [],
+      "wounds": 0,
+      "rebootEndTime": -1,
+      "crashWounds": 0
+    },
+    "state": {
+      "activated": false,
+      "equipped": false,
+      "serviceStartTime": 0,
+      "paused": false
+    },
+    "primaryAttack": {
+      "armorPiercing": false,
+      "attackTraits": [],
+      "damageFormula": "",
+      "damageType": "mesh",
+      "useMeshArmor": true,
+      "notes": "",
+      "aptitudeCheckInfo": {
+        "armorAsModifier": "",
+        "check": "",
+        "checkModifier": 0,
+        "checkFailure": [],
+        "checkSuccess": [],
+        "criticalCheckFailure": []
+      },
+      "label": "",
+      "reduceAVbyDV": false
+    },
+    "secondaryAttack": {
+      "armorPiercing": false,
+      "attackTraits": [],
+      "damageFormula": "",
+      "damageType": "mesh",
+      "useMeshArmor": true,
+      "notes": "",
+      "aptitudeCheckInfo": {
+        "armorAsModifier": "",
+        "check": "",
+        "checkModifier": 0,
+        "checkFailure": [],
+        "checkSuccess": [],
+        "criticalCheckFailure": []
+      },
+      "label": "",
+      "reduceAVbyDV": false
+    }
+  },
+  "flags": {},
+  "effects": [],
+  "_id": "Uv1Mb2N2rCdDguv5",
+  "_key": "!items!Uv1Mb2N2rCdDguv5"
+}

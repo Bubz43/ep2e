@@ -1,0 +1,44 @@
+{
+  "name": "Alien Behavior Disorder",
+  "permission": {
+    "default": 0,
+    "qJl17WpEHiovQQBC": 3
+  },
+  "type": "trait",
+  "system": {
+    "description": "<p>Ths disorder primarily affects asyncs. You experience strange urges to behave in an alien fashion or to use phantom appendages or other body parts that don&rsquo;t map to your transhuman form.<br /><br /></p>",
+    "reference": "Eclipse Phase Second Edition p. 224",
+    "restrictions": "",
+    "triggers": "Alienation, exsurgents, the unknown",
+    "source": "ego",
+    "state": {
+      "level": 0,
+      "triggered": false
+    },
+    "levels": [
+      {
+        "cost": 2,
+        "effects": [
+          {
+            "type": "misc",
+            "unique": "",
+            "description": "You must make a WIL Check or be compelled to exhibit alien behavior. The compulsion examples listed on the Inflence Effect tables ▶278 provide a number of possibilities.",
+            "id": "sdidpcnmo9"
+          }
+        ],
+        "id": "_defaultLevel"
+      }
+    ],
+    "subtype": "",
+    "traitType": "positive"
+  },
+  "flags": {
+    "core": {
+      "sourceId": "Item.LaYIo7Zt4VdcFSYd"
+    }
+  },
+  "img": "icons/svg/mystery-man.svg",
+  "effects": [],
+  "_id": "jPVM8JvE0NLw3cZ1",
+  "_key": "!items!jPVM8JvE0NLw3cZ1"
+}

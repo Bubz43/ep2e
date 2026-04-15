@@ -1,0 +1,84 @@
+{
+  "name": "Skillware",
+  "permission": {
+    "default": 0,
+    "qJl17WpEHiovQQBC": 3
+  },
+  "type": "software",
+  "system": {
+    "description": "<p>Your brain is laced with a network of artificial neurons that can be formatted with information. This allows you to download skillsofts ▶below into your brain, gaining the use of those programmed skills until the skillsoft is erased or replaced. Skillware systems are only capable of handling 120 total skill points worth of skillsofts at a time. Switching out a skillsoft is a complex action.</p>",
+    "reference": "Eclipse Phase Second Edition p. 320",
+    "complexity": "major",
+    "restricted": false,
+    "quality": "average",
+    "softwareType": "meshware",
+    "activatedEffects": [],
+    "effects": [
+      {
+        "type": "misc",
+        "unique": "",
+        "description": "Can use 120 points of skillsofts.",
+        "id": "wkll3r7y7x"
+      }
+    ],
+    "category": "Mental Augments",
+    "serviceDuration": -1,
+    "skills": [],
+    "activation": "",
+    "meshAttacks": 0,
+    "meshHealth": {
+      "baseDurability": 10,
+      "damage": 0,
+      "log": [],
+      "wounds": 0,
+      "rebootEndTime": -1,
+      "crashWounds": 0
+    },
+    "state": {
+      "activated": false,
+      "equipped": false,
+      "serviceStartTime": 0,
+      "paused": false
+    },
+    "primaryAttack": {
+      "armorPiercing": false,
+      "attackTraits": [],
+      "damageFormula": "",
+      "damageType": "mesh",
+      "useMeshArmor": true,
+      "notes": "",
+      "aptitudeCheckInfo": {
+        "armorAsModifier": "",
+        "check": "",
+        "checkModifier": 0,
+        "checkFailure": [],
+        "checkSuccess": [],
+        "criticalCheckFailure": []
+      },
+      "label": "",
+      "reduceAVbyDV": false
+    },
+    "secondaryAttack": {
+      "armorPiercing": false,
+      "attackTraits": [],
+      "damageFormula": "",
+      "damageType": "mesh",
+      "useMeshArmor": true,
+      "notes": "",
+      "aptitudeCheckInfo": {
+        "armorAsModifier": "",
+        "check": "",
+        "checkModifier": 0,
+        "checkFailure": [],
+        "checkSuccess": [],
+        "criticalCheckFailure": []
+      },
+      "label": "",
+      "reduceAVbyDV": false
+    }
+  },
+  "flags": {},
+  "effects": [],
+  "_id": "b5z7ebtWNun02Dln",
+  "_key": "!items!b5z7ebtWNun02Dln"
+}

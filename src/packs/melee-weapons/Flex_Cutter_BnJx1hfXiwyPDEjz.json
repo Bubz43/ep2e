@@ -1,0 +1,54 @@
+{
+  "name": "Flex Cutter",
+  "permission": {
+    "default": 0,
+    "qJl17WpEHiovQQBC": 3
+  },
+  "type": "meleeWeapon",
+  "system": {
+    "description": "<p>The blade of this machete-like weapon is made of a memory polymer. When deactivated, the blade is limp and flexible and can be rolled up or otherwise easily concealed. When activated, the blade stiffens and sharpens into a vicious slashing weapon.</p>",
+    "reference": "Eclipse Phase Second Edition p. 204",
+    "complexity": "minor",
+    "restricted": false,
+    "quality": "average",
+    "concealable": true,
+    "fragile": false,
+    "singleUse": false,
+    "twoHanded": false,
+    "blueprint": {
+      "blueprintType": "",
+      "cracked": false,
+      "used": false
+    },
+    "state": {
+      "disabled": false,
+      "equipped": false
+    },
+    "primaryAttack": {
+      "armorPiercing": false,
+      "attackTraits": [],
+      "damageFormula": "1d10 + 3",
+      "label": "",
+      "notes": ""
+    },
+    "secondaryAttack": {
+      "armorPiercing": false,
+      "attackTraits": [],
+      "damageFormula": "",
+      "label": "",
+      "notes": ""
+    },
+    "hasSecondaryAttack": false,
+    "augmentUnarmed": false,
+    "acceptsPayload": false,
+    "reachBonus": 0,
+    "improvised": false,
+    "touchOnly": false,
+    "wareType": "",
+    "exoticSkill": ""
+  },
+  "flags": {},
+  "effects": [],
+  "_id": "BnJx1hfXiwyPDEjz",
+  "_key": "!items!BnJx1hfXiwyPDEjz"
+}

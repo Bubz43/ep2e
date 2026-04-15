@@ -1,0 +1,97 @@
+{
+  "name": "Oracles",
+  "permission": {
+    "default": 0,
+    "qJl17WpEHiovQQBC": 3
+  },
+  "type": "software",
+  "system": {
+    "description": "<p>This neural macrosensing processor helps you pay attention to sensory input you are not focusing on, alerting you to important things you might otherwise overlook. Oracles provide a +10 bonus to Perceive and negate the distraction modifier for Perceive Tests.</p>",
+    "reference": "Eclipse Phase Second Edition p. 318",
+    "complexity": "moderate",
+    "restricted": false,
+    "quality": "average",
+    "softwareType": "meshware",
+    "activatedEffects": [],
+    "effects": [
+      {
+        "type": "successTest",
+        "tags": [
+          {
+            "type": "skill",
+            "skillType": "perceive"
+          }
+        ],
+        "modifier": 10,
+        "toOpponent": false,
+        "requirement": "",
+        "id": "811iq4pgca"
+      },
+      {
+        "type": "misc",
+        "unique": "",
+        "description": "Negate distraction modifiers",
+        "id": "fqtd3ky9if"
+      }
+    ],
+    "category": "Sensory Augments",
+    "serviceDuration": -1,
+    "skills": [],
+    "activation": "",
+    "meshAttacks": 0,
+    "meshHealth": {
+      "baseDurability": 10,
+      "damage": 0,
+      "log": [],
+      "wounds": 0,
+      "rebootEndTime": -1,
+      "crashWounds": 0
+    },
+    "state": {
+      "activated": false,
+      "equipped": false,
+      "serviceStartTime": 0,
+      "paused": false
+    },
+    "primaryAttack": {
+      "armorPiercing": false,
+      "attackTraits": [],
+      "damageFormula": "",
+      "damageType": "mesh",
+      "useMeshArmor": true,
+      "notes": "",
+      "aptitudeCheckInfo": {
+        "armorAsModifier": "",
+        "check": "",
+        "checkModifier": 0,
+        "checkFailure": [],
+        "checkSuccess": [],
+        "criticalCheckFailure": []
+      },
+      "label": "",
+      "reduceAVbyDV": false
+    },
+    "secondaryAttack": {
+      "armorPiercing": false,
+      "attackTraits": [],
+      "damageFormula": "",
+      "damageType": "mesh",
+      "useMeshArmor": true,
+      "notes": "",
+      "aptitudeCheckInfo": {
+        "armorAsModifier": "",
+        "check": "",
+        "checkModifier": 0,
+        "checkFailure": [],
+        "checkSuccess": [],
+        "criticalCheckFailure": []
+      },
+      "label": "",
+      "reduceAVbyDV": false
+    }
+  },
+  "flags": {},
+  "effects": [],
+  "_id": "4IV51vr1T2JdpQJc",
+  "_key": "!items!4IV51vr1T2JdpQJc"
+}

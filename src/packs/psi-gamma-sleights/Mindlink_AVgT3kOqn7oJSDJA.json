@@ -1,0 +1,61 @@
+{
+  "name": "Mindlink",
+  "permission": {
+    "default": 0,
+    "qJl17WpEHiovQQBC": 3
+  },
+  "type": "sleight",
+  "system": {
+    "description": "<p>You establish two-way mental communication with the target. If mindlinked with more than one target simultaneously, you may act as a telepathic server so that everyone mindlinked with you can also telepathically communicate with each other (though you will overhear everything). Language is still a factor in mindlinked communications, but this barrier may be overcome by transmitting sounds, images, emotions, and other sensations.</p>",
+    "reference": "Eclipse Phase Second Edition p. 285",
+    "duration": "sustained",
+    "infectionMod": 2,
+    "sleightType": "gamma",
+    "action": "quick",
+    "timeframe": 0,
+    "effectsToSelf": [
+      {
+        "type": "misc",
+        "unique": "",
+        "description": "Telepathy.",
+        "id": "tyd1xo1u8l"
+      }
+    ],
+    "effectsToTarget": [
+      {
+        "type": "misc",
+        "unique": "",
+        "description": "Telepathy.",
+        "id": "n9thcggqa8"
+      }
+    ],
+    "scaleEffectsOnSuperior": false,
+    "attack": {
+      "useMentalArmor": false,
+      "attackTraits": [],
+      "damageFormula": "",
+      "damageType": "mental",
+      "notes": ""
+    },
+    "heal": {
+      "formula": "",
+      "healthType": "mental"
+    },
+    "mentalArmor": {
+      "apply": false,
+      "divisor": 3,
+      "formula": "1d6"
+    },
+    "status": {
+      "sustaining": false,
+      "pushDuration": 0,
+      "pushed": false,
+      "pushStartTime": 0,
+      "sustainingOn": []
+    }
+  },
+  "flags": {},
+  "effects": [],
+  "_id": "AVgT3kOqn7oJSDJA",
+  "_key": "!items!AVgT3kOqn7oJSDJA"
+}

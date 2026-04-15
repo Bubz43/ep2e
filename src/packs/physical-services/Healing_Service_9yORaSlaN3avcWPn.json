@@ -1,0 +1,26 @@
+{
+  "name": "Healing Service",
+  "permission": {
+    "default": 0,
+    "qJl17WpEHiovQQBC": 3
+  },
+  "type": "physicalService",
+  "system": {
+    "description": "<p>A day in a healing vat.</p>\n<p>&nbsp;</p>\n<p>A day in a healing vat can be used for wound recovery or elective surgery (Healing &amp; Repair ▶221).</p>",
+    "reference": "Eclipse Phase Second Edition p. 315",
+    "complexity": "minor",
+    "restricted": false,
+    "quality": "average",
+    "serviceDuration": 86400000,
+    "reputations": [],
+    "serviceType": "generic",
+    "state": {
+      "serviceStartTime": 0,
+      "equipped": false
+    }
+  },
+  "flags": {},
+  "effects": [],
+  "_id": "9yORaSlaN3avcWPn",
+  "_key": "!items!9yORaSlaN3avcWPn"
+}

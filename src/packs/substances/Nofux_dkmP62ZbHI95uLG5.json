@@ -1,0 +1,83 @@
+{
+  "name": "Nofux",
+  "permission": {
+    "default": 0,
+    "qJl17WpEHiovQQBC": 3
+  },
+  "type": "substance",
+  "system": {
+    "description": "<p>This drug lowers inhibitions and heightens determination. Nofux users know what they want and are resolved to get their way. Gain 1 Moxie pool for the duration.</p>",
+    "reference": "Eclipse Phase Second Edition p. 335",
+    "complexity": "moderate",
+    "restricted": false,
+    "quality": "average",
+    "blueprint": {
+      "blueprintType": "",
+      "cracked": false,
+      "used": false
+    },
+    "quantity": 5,
+    "state": {
+      "stashed": false
+    },
+    "addiction": "mental",
+    "addictionMod": -10,
+    "hasSeverity": false,
+    "application": [
+      "dermal",
+      "inhalation",
+      "injection",
+      "oral"
+    ],
+    "base": {
+      "damage": {
+        "damageFormula": "",
+        "perTurn": false,
+        "armorPiercing": false,
+        "attackTraits": [],
+        "reduceAVbyDV": false,
+        "armorUsed": [],
+        "damageType": "physical"
+      },
+      "duration": 28800000,
+      "effects": [
+        {
+          "type": "pool",
+          "pool": "moxie",
+          "modifier": 1,
+          "usabilityModification": "",
+          "id": "ckpmbe076d"
+        }
+      ],
+      "wearOffStress": "",
+      "notes": ""
+    },
+    "category": "Social",
+    "classification": "biochem",
+    "consumeOnUse": true,
+    "substanceType": "drug",
+    "quantityPerCost": 5,
+    "severity": {
+      "check": "som",
+      "checkMod": 0,
+      "conditions": [],
+      "wearOffStress": "",
+      "damage": {
+        "damageFormula": "",
+        "perTurn": false,
+        "armorPiercing": false,
+        "attackTraits": [],
+        "reduceAVbyDV": false,
+        "armorUsed": [],
+        "damageType": "physical"
+      },
+      "duration": 3000,
+      "effects": [],
+      "notes": ""
+    }
+  },
+  "flags": {},
+  "effects": [],
+  "_id": "dkmP62ZbHI95uLG5",
+  "_key": "!items!dkmP62ZbHI95uLG5"
+}

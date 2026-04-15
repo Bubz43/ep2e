@@ -1,0 +1,96 @@
+{
+  "name": "DDR",
+  "permission": {
+    "default": 0,
+    "qJl17WpEHiovQQBC": 3
+  },
+  "type": "substance",
+  "system": {
+    "description": "<p>Originally distributed as a bot-targeting virus by prankster hackers, DDR (&ldquo;Dance Dance Robot&rdquo;) triggers impulses in your motor control circuits. The effect makes your shell &ldquo;dance&rdquo; in jerky, automated movements. Pleasure receptors are also activated so that dancing &mdash; and movement of any kind &mdash; feels fantastic. Variants invoke different motions and styles. While dancing, you suffer a -20 modifier to other actions. You can override the dancing with a WIL Check. Non-embodied infomorphs feel the need to dance, but are otherwise unaffected.</p>",
+    "reference": "Eclipse Phase Second Edition p. 333",
+    "complexity": "minor",
+    "restricted": false,
+    "quality": "average",
+    "blueprint": {
+      "blueprintType": "",
+      "cracked": false,
+      "used": false
+    },
+    "quantity": 5,
+    "state": {
+      "stashed": false
+    },
+    "addiction": "mental",
+    "addictionMod": 0,
+    "hasSeverity": false,
+    "application": [
+      "dermal",
+      "inhalation",
+      "injection",
+      "oral"
+    ],
+    "base": {
+      "damage": {
+        "damageFormula": "",
+        "perTurn": false,
+        "armorPiercing": false,
+        "attackTraits": [],
+        "reduceAVbyDV": false,
+        "armorUsed": [],
+        "damageType": "physical"
+      },
+      "duration": 3600000,
+      "effects": [
+        {
+          "type": "misc",
+          "unique": "",
+          "description": "You're doing the robot. You can override the dancing with a WIL Check",
+          "id": "szfew1u01h"
+        },
+        {
+          "type": "successTest",
+          "tags": [
+            {
+              "type": "action",
+              "action": "",
+              "subtype": ""
+            }
+          ],
+          "modifier": -20,
+          "toOpponent": false,
+          "requirement": "dancing",
+          "id": "16fjshzdfy"
+        }
+      ],
+      "wearOffStress": "",
+      "notes": ""
+    },
+    "category": "Narcoalgorithm",
+    "classification": "electronic",
+    "consumeOnUse": true,
+    "substanceType": "drug",
+    "quantityPerCost": 5,
+    "severity": {
+      "check": "som",
+      "checkMod": 0,
+      "conditions": [],
+      "wearOffStress": "",
+      "damage": {
+        "damageFormula": "",
+        "perTurn": false,
+        "armorPiercing": false,
+        "attackTraits": [],
+        "reduceAVbyDV": false,
+        "armorUsed": [],
+        "damageType": "physical"
+      },
+      "duration": 3000,
+      "effects": [],
+      "notes": ""
+    }
+  },
+  "flags": {},
+  "effects": [],
+  "_id": "v4lGNlDMbPRnxJa5",
+  "_key": "!items!v4lGNlDMbPRnxJa5"
+}

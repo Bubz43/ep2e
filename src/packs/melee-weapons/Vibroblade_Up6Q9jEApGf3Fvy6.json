@@ -1,0 +1,54 @@
+{
+  "name": "Vibroblade",
+  "permission": {
+    "default": 0,
+    "qJl17WpEHiovQQBC": 3
+  },
+  "type": "meleeWeapon",
+  "system": {
+    "description": "<p>These buzzing electronic blades vibrate at a high frequency for extra cutting ability. This has little extra effect when stabbing or slashing, but can pierce armor when carefully sawing through something.</p>",
+    "reference": "Eclipse Phase Second Edition p. 205",
+    "complexity": "minor",
+    "restricted": false,
+    "quality": "average",
+    "concealable": false,
+    "fragile": false,
+    "singleUse": false,
+    "twoHanded": false,
+    "blueprint": {
+      "blueprintType": "",
+      "cracked": false,
+      "used": false
+    },
+    "state": {
+      "disabled": false,
+      "equipped": false
+    },
+    "primaryAttack": {
+      "armorPiercing": false,
+      "attackTraits": [],
+      "damageFormula": "1d10 + 1d6",
+      "label": "",
+      "notes": ""
+    },
+    "secondaryAttack": {
+      "armorPiercing": true,
+      "attackTraits": [],
+      "damageFormula": "3d10 + 1d6",
+      "label": "Sawing",
+      "notes": ""
+    },
+    "hasSecondaryAttack": true,
+    "augmentUnarmed": false,
+    "acceptsPayload": false,
+    "reachBonus": 0,
+    "improvised": false,
+    "touchOnly": false,
+    "wareType": "",
+    "exoticSkill": ""
+  },
+  "flags": {},
+  "effects": [],
+  "_id": "Up6Q9jEApGf3Fvy6",
+  "_key": "!items!Up6Q9jEApGf3Fvy6"
+}

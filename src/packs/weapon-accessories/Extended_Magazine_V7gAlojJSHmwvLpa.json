@@ -1,0 +1,18 @@
+{
+  "_id": "V7gAlojJSHmwvLpa",
+  "name": "Extended Magazine",
+  "permission": {
+    "default": 0,
+    "qHi89sFcK4gHlOPd": 3
+  },
+  "folder": "",
+  "flags": {
+    "core": {
+      "sourceId": "JournalEntry.REhmLDP342r3aECd"
+    }
+  },
+  "content": "<p>This ammunition case has an enhanced capacity. Increase the weapon’s ammo capacity by +50%. This is only available for firearms and seekers.</p>",
+  "pages": [],
+  "categories": [],
+  "_key": "!journal!V7gAlojJSHmwvLpa"
+}

@@ -1,0 +1,97 @@
+{
+  "name": "Comfurt",
+  "permission": {
+    "default": 0,
+    "qJl17WpEHiovQQBC": 3
+  },
+  "type": "substance",
+  "system": {
+    "description": "<p>Commonly served as a tasty yogurt treat, comfurt blocks stress hormones, stabilizes mood, and relieves anxiety. Temporarily boost Lucidity by 5, Trauma Threshold by 1, and Insanity Rating by 5. Excessive use of comfurt can lead to chronic itchiness caused by histamine release.</p>",
+    "reference": "Eclipse Phase Second Edition p. 332",
+    "complexity": "minor",
+    "restricted": false,
+    "quality": "average",
+    "blueprint": {
+      "blueprintType": "",
+      "cracked": false,
+      "used": false
+    },
+    "quantity": 5,
+    "state": {
+      "stashed": false
+    },
+    "addiction": "mental",
+    "addictionMod": -10,
+    "hasSeverity": false,
+    "application": [
+      "dermal",
+      "inhalation",
+      "injection",
+      "oral"
+    ],
+    "base": {
+      "damage": {
+        "damageFormula": "",
+        "perTurn": false,
+        "armorPiercing": false,
+        "attackTraits": [],
+        "reduceAVbyDV": false,
+        "armorUsed": [],
+        "damageType": "physical"
+      },
+      "duration": 43200000,
+      "effects": [
+        {
+          "type": "health",
+          "health": "mental",
+          "stat": "durability",
+          "modifier": 5,
+          "id": "2nqgzgjs3h"
+        },
+        {
+          "type": "health",
+          "health": "mental",
+          "stat": "woundThreshold",
+          "modifier": 1,
+          "id": "udr55tb9sx"
+        },
+        {
+          "type": "health",
+          "health": "mental",
+          "stat": "deathRating",
+          "modifier": 5,
+          "id": "trsc68zbzi"
+        }
+      ],
+      "wearOffStress": "",
+      "notes": ""
+    },
+    "category": "Health",
+    "classification": "biochem",
+    "consumeOnUse": true,
+    "substanceType": "drug",
+    "quantityPerCost": 5,
+    "severity": {
+      "check": "som",
+      "checkMod": 0,
+      "conditions": [],
+      "wearOffStress": "",
+      "damage": {
+        "damageFormula": "",
+        "perTurn": false,
+        "armorPiercing": false,
+        "attackTraits": [],
+        "reduceAVbyDV": false,
+        "armorUsed": [],
+        "damageType": "physical"
+      },
+      "duration": 3000,
+      "effects": [],
+      "notes": ""
+    }
+  },
+  "flags": {},
+  "effects": [],
+  "_id": "JpObmhm30YeOtwKC",
+  "_key": "!items!JpObmhm30YeOtwKC"
+}

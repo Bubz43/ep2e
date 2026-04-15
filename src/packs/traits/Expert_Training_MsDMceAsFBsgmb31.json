@@ -1,0 +1,40 @@
+{
+  "_id": "MsDMceAsFBsgmb31",
+  "name": "Expert Training",
+  "permission": {
+    "default": 0,
+    "qHi89sFcK4gHlOPd": 3
+  },
+  "type": "trait",
+  "system": {
+    "description": "<p>You have received extensive training in one particular subject. You may raise one skill over 80, to a maximum of 90, during character creation. This trait does not actually increase the skill, it just raises the maximum.</p>",
+    "reference": "Eclipse Phase Second Edition p. 74",
+    "restrictions": "",
+    "triggers": "",
+    "source": "ego",
+    "state": {
+      "level": 0,
+      "triggered": false
+    },
+    "levels": [
+      {
+        "cost": 2,
+        "effects": [
+          {
+            "type": "misc",
+            "unique": "",
+            "description": "You may raise one skill over to a maximum of 90 during character creation",
+            "id": "fwspblet98"
+          }
+        ],
+        "id": "v64w445u94"
+      }
+    ],
+    "subtype": "",
+    "traitType": "positive"
+  },
+  "flags": {},
+  "img": "icons/svg/mystery-man.svg",
+  "effects": [],
+  "_key": "!items!MsDMceAsFBsgmb31"
+}

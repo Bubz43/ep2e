@@ -1,0 +1,60 @@
+{
+  "name": "Assault Rifle",
+  "permission": {
+    "default": 0,
+    "qJl17WpEHiovQQBC": 3
+  },
+  "type": "firearm",
+  "system": {
+    "description": "<p>Automatic rifles use rifle ammunition and have greater range and penetration than SMGs.</p>",
+    "reference": "Eclipse Phase Second Edition p. 210",
+    "complexity": "moderate",
+    "restricted": true,
+    "quality": "average",
+    "concealable": false,
+    "fragile": false,
+    "singleUse": false,
+    "twoHanded": true,
+    "blueprint": {
+      "blueprintType": "",
+      "cracked": false,
+      "used": false
+    },
+    "state": {
+      "disabled": false,
+      "equipped": false,
+      "braced": false,
+      "interface": false
+    },
+    "fixed": false,
+    "long": true,
+    "shapeChanging": false,
+    "shapeName": "",
+    "accessories": [
+      "smartlink",
+      "safetySystem"
+    ],
+    "ammo": {
+      "ammoClass": "assaultRifle",
+      "max": 45,
+      "value": 46,
+      "modeSettings": [],
+      "selectedModeIndex": 0
+    },
+    "primaryAttack": {
+      "damageFormula": "2d10 + 2",
+      "firingModes": [
+        "semiAuto",
+        "burstFire",
+        "fullAuto"
+      ],
+      "notes": ""
+    },
+    "range": 100,
+    "wareType": ""
+  },
+  "flags": {},
+  "effects": [],
+  "_id": "V1qoswWFJv6StNdf",
+  "_key": "!items!V1qoswWFJv6StNdf"
+}

@@ -1,0 +1,54 @@
+{
+  "name": "Puppeteer",
+  "permission": {
+    "default": 0,
+    "qJl17WpEHiovQQBC": 3
+  },
+  "type": "sleight",
+  "system": {
+    "description": "<p>The exsurgent seizes control of your body, operating it like a jammed drone ▶346. You are helpless while the exsurgent maintains control, possibly triggering a Stress Test ▶229. The exsurgent does not have access to your memories or skills.</p>",
+    "reference": "Eclipse Phase Second Edition p. 387",
+    "duration": "sustained",
+    "infectionMod": 1,
+    "sleightType": "epsilon",
+    "action": "complex",
+    "timeframe": 0,
+    "effectsToSelf": [],
+    "effectsToTarget": [
+      {
+        "type": "misc",
+        "unique": "",
+        "description": "Control target like jammed drone.",
+        "id": "2o09djth1i"
+      }
+    ],
+    "scaleEffectsOnSuperior": false,
+    "attack": {
+      "useMentalArmor": false,
+      "attackTraits": [],
+      "damageFormula": "",
+      "damageType": "mental",
+      "notes": ""
+    },
+    "heal": {
+      "formula": "",
+      "healthType": "mental"
+    },
+    "mentalArmor": {
+      "apply": false,
+      "divisor": 3,
+      "formula": "1d6"
+    },
+    "status": {
+      "sustaining": false,
+      "pushDuration": 0,
+      "pushed": false,
+      "pushStartTime": 0,
+      "sustainingOn": []
+    }
+  },
+  "flags": {},
+  "effects": [],
+  "_id": "20iVENQJleLNvFDk",
+  "_key": "!items!20iVENQJleLNvFDk"
+}

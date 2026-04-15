@@ -1,0 +1,26 @@
+{
+  "name": "Professional Service",
+  "permission": {
+    "default": 0,
+    "qJl17WpEHiovQQBC": 3
+  },
+  "type": "physicalService",
+  "system": {
+    "description": "<p>Help from a skilled professional.</p>\n<p>&nbsp;</p>\n<p>You may need to seek the services of a skilled professional. This can include anything from weapons repair, bodyguarding, or scientific analysis to ripping a surveillance dead zone or hacking a database.</p>",
+    "reference": "Eclipse Phase Second Edition p. 315",
+    "complexity": "moderate",
+    "restricted": false,
+    "quality": "average",
+    "serviceDuration": -1,
+    "reputations": [],
+    "serviceType": "generic",
+    "state": {
+      "serviceStartTime": 0,
+      "equipped": false
+    }
+  },
+  "flags": {},
+  "effects": [],
+  "_id": "a8yAcVomnQung7YF",
+  "_key": "!items!a8yAcVomnQung7YF"
+}

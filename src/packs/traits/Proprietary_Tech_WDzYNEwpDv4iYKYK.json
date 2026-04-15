@@ -1,0 +1,54 @@
+{
+  "_id": "WDzYNEwpDv4iYKYK",
+  "name": "Proprietary Tech",
+  "permission": {
+    "default": 0,
+    "qHi89sFcK4gHlOPd": 3
+  },
+  "type": "trait",
+  "system": {
+    "description": "<p>This trait is only available to synthmorphs. This morph was built with non-standard specifications, making most modern tools and software incompatible. This is a conscious design decision to make the user dependent upon the manufacturer for repairs and updates. Fixer nanoswarms will not work on this morph and Hardware: Robotics Tests suffer a -20 modifier.</p>",
+    "reference": "Eclipse Phase Second Edition p. 80",
+    "restrictions": "",
+    "triggers": "",
+    "source": "morph",
+    "state": {
+      "level": 0,
+      "triggered": false
+    },
+    "levels": [
+      {
+        "cost": 2,
+        "effects": [
+          {
+            "type": "successTest",
+            "tags": [
+              {
+                "type": "fieldSkill",
+                "fieldSkill": "hardware",
+                "field": "Robotics"
+              }
+            ],
+            "modifier": -20,
+            "toOpponent": false,
+            "requirement": "working on this morph",
+            "id": "893l49x1gz"
+          },
+          {
+            "type": "misc",
+            "unique": "",
+            "description": "Fixer and nanoswarms will not work on this morph",
+            "id": "6qhgz8xyo1"
+          }
+        ],
+        "id": "c5y7ffnmzd"
+      }
+    ],
+    "subtype": "",
+    "traitType": "negative"
+  },
+  "flags": {},
+  "img": "icons/svg/mystery-man.svg",
+  "effects": [],
+  "_key": "!items!WDzYNEwpDv4iYKYK"
+}

@@ -1,0 +1,43 @@
+{
+  "name": "Standard",
+  "permission": {
+    "default": 0,
+    "qJl17WpEHiovQQBC": 3
+  },
+  "type": "firearmAmmo",
+  "system": {
+    "description": "<p>This basic metal projectile is designed to put holes into morphs and other objects.</p>",
+    "reference": "Eclipse Phase Second Edition p. 211",
+    "complexity": "minor",
+    "restricted": true,
+    "quality": "average",
+    "blueprint": {
+      "blueprintType": "",
+      "cracked": false,
+      "used": false
+    },
+    "quantity": 100,
+    "state": {
+      "stashed": false
+    },
+    "ammoClass": "holdoutPistol",
+    "carryPayload": false,
+    "roundsPerComplexity": 100,
+    "modes": [
+      {
+        "name": "",
+        "armorPiercing": false,
+        "attackTraits": [],
+        "damageFormula": "",
+        "steady": false,
+        "damageModifierType": "formula",
+        "notes": "",
+        "id": "_defaultID"
+      }
+    ]
+  },
+  "flags": {},
+  "effects": [],
+  "_id": "OkkfJ6WRxkV0ZlUf",
+  "_key": "!items!OkkfJ6WRxkV0ZlUf"
+}

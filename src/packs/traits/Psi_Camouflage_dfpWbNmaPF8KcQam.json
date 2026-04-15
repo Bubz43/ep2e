@@ -1,0 +1,66 @@
+{
+  "_id": "dfpWbNmaPF8KcQam",
+  "name": "Psi Camouflage",
+  "permission": {
+    "default": 0,
+    "qHi89sFcK4gHlOPd": 3
+  },
+  "type": "trait",
+  "system": {
+    "description": "<p>You are more difficult to detect with psi sensing. Apply a -10 modifier per level to any attempts to locate or detect you via psi sleights. The morph trait may only be taken by morphs with biological brains.</p>",
+    "reference": "Eclipse Phase Second Edition p. 75",
+    "restrictions": "",
+    "triggers": "",
+    "source": "morph",
+    "state": {
+      "level": 0,
+      "triggered": false
+    },
+    "levels": [
+      {
+        "cost": 1,
+        "effects": [
+          {
+            "type": "successTest",
+            "tags": [
+              {
+                "type": "skill",
+                "skillType": "psi"
+              }
+            ],
+            "modifier": -10,
+            "toOpponent": true,
+            "requirement": "trying to locate you",
+            "id": "xbdr1od4vm"
+          }
+        ],
+        "id": "wiqz43oysh"
+      },
+      {
+        "cost": 2,
+        "effects": [
+          {
+            "type": "successTest",
+            "tags": [
+              {
+                "type": "skill",
+                "skillType": "psi"
+              }
+            ],
+            "modifier": -20,
+            "toOpponent": true,
+            "requirement": "trying to locate you",
+            "id": "xbdr1od4vm"
+          }
+        ],
+        "id": "77ujligfex"
+      }
+    ],
+    "subtype": "",
+    "traitType": "positive"
+  },
+  "flags": {},
+  "img": "icons/svg/mystery-man.svg",
+  "effects": [],
+  "_key": "!items!dfpWbNmaPF8KcQam"
+}

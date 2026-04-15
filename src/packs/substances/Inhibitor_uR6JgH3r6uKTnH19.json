@@ -1,0 +1,96 @@
+{
+  "name": "Inhibitor",
+  "permission": {
+    "default": 0,
+    "qJl17WpEHiovQQBC": 3
+  },
+  "type": "substance",
+  "system": {
+    "description": "<p>Inhibitor is a cocktail of neurochemicals that block some brain receptor and transmitter functions in an attempt to reduce psi-waves and block or impair sleights. This drug is commonly used to restrain async prisoners from using their abilities. Make a WIL Check at -20. If you fail, lose all psi abilities for the drug&rsquo;s duration. If you succeed, you still suffer a -30 modifier to Psi Tests. Inhibitor-influenced characters have a glazed, dopey expression and difficulty getting excited or emotional.</p>",
+    "reference": "Eclipse Phase Second Edition p. 334",
+    "complexity": "major",
+    "restricted": false,
+    "quality": "average",
+    "blueprint": {
+      "blueprintType": "",
+      "cracked": false,
+      "used": false
+    },
+    "quantity": 5,
+    "state": {
+      "stashed": false
+    },
+    "addiction": "mental",
+    "addictionMod": 20,
+    "hasSeverity": true,
+    "application": [
+      "dermal",
+      "inhalation",
+      "injection",
+      "oral"
+    ],
+    "base": {
+      "damage": {
+        "damageFormula": "",
+        "perTurn": false,
+        "armorPiercing": false,
+        "attackTraits": [],
+        "reduceAVbyDV": false,
+        "armorUsed": [],
+        "damageType": "physical"
+      },
+      "duration": 21600000,
+      "effects": [
+        {
+          "type": "successTest",
+          "tags": [
+            {
+              "type": "skill",
+              "skillType": "psi"
+            }
+          ],
+          "modifier": -30,
+          "toOpponent": false,
+          "requirement": "",
+          "id": "f0xu3abqx2"
+        }
+      ],
+      "wearOffStress": "",
+      "notes": ""
+    },
+    "category": "Psi",
+    "classification": "biochem",
+    "consumeOnUse": true,
+    "substanceType": "drug",
+    "quantityPerCost": 5,
+    "severity": {
+      "check": "wil",
+      "checkMod": -20,
+      "conditions": [],
+      "wearOffStress": "",
+      "damage": {
+        "damageFormula": "",
+        "perTurn": false,
+        "armorPiercing": false,
+        "attackTraits": [],
+        "reduceAVbyDV": false,
+        "armorUsed": [],
+        "damageType": "physical"
+      },
+      "duration": 21600000,
+      "effects": [
+        {
+          "type": "misc",
+          "unique": "",
+          "description": "Lose all psi abilities for the drug’s duration",
+          "id": "j0kutntir9"
+        }
+      ],
+      "notes": ""
+    }
+  },
+  "flags": {},
+  "effects": [],
+  "_id": "uR6JgH3r6uKTnH19",
+  "_key": "!items!uR6JgH3r6uKTnH19"
+}

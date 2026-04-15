@@ -1,0 +1,97 @@
+{
+  "name": "Brutalitea",
+  "permission": {
+    "default": 0,
+    "qJl17WpEHiovQQBC": 3
+  },
+  "type": "substance",
+  "system": {
+    "description": "<p>Often served as a delicious tea, this combat drug heightens endurance and injury tolerance. Increase your durability by 5, Wound Threshold by 1, and Death Rating by 3 for 3 hours.</p>",
+    "reference": "Eclipse Phase Second Edition p. 331",
+    "complexity": "minor",
+    "restricted": false,
+    "quality": "average",
+    "blueprint": {
+      "blueprintType": "",
+      "cracked": false,
+      "used": false
+    },
+    "quantity": 5,
+    "state": {
+      "stashed": false
+    },
+    "addiction": "physical",
+    "addictionMod": -10,
+    "hasSeverity": false,
+    "application": [
+      "dermal",
+      "inhalation",
+      "injection",
+      "oral"
+    ],
+    "base": {
+      "damage": {
+        "damageFormula": "",
+        "perTurn": false,
+        "armorPiercing": false,
+        "attackTraits": [],
+        "reduceAVbyDV": false,
+        "armorUsed": [],
+        "damageType": "physical"
+      },
+      "duration": 28800000,
+      "effects": [
+        {
+          "type": "health",
+          "health": "physical",
+          "stat": "durability",
+          "modifier": 5,
+          "id": "7qeppr9inf"
+        },
+        {
+          "type": "health",
+          "health": "physical",
+          "stat": "woundThreshold",
+          "modifier": 1,
+          "id": "407cdbhmxl"
+        },
+        {
+          "type": "health",
+          "health": "physical",
+          "stat": "deathRating",
+          "modifier": 3,
+          "id": "latv9kxyh4"
+        }
+      ],
+      "wearOffStress": "",
+      "notes": ""
+    },
+    "category": "Combat",
+    "classification": "biochem",
+    "consumeOnUse": true,
+    "substanceType": "drug",
+    "quantityPerCost": 5,
+    "severity": {
+      "check": "som",
+      "checkMod": 0,
+      "conditions": [],
+      "wearOffStress": "",
+      "damage": {
+        "damageFormula": "",
+        "perTurn": false,
+        "armorPiercing": false,
+        "attackTraits": [],
+        "reduceAVbyDV": false,
+        "armorUsed": [],
+        "damageType": "physical"
+      },
+      "duration": 3000,
+      "effects": [],
+      "notes": ""
+    }
+  },
+  "flags": {},
+  "effects": [],
+  "_id": "GLQK3U9PgbLzJ2hS",
+  "_key": "!items!GLQK3U9PgbLzJ2hS"
+}

@@ -1,0 +1,63 @@
+{
+  "name": "Smart",
+  "permission": {
+    "default": 0,
+    "qJl17WpEHiovQQBC": 3
+  },
+  "type": "firearmAmmo",
+  "system": {
+    "description": "<p>Firearm smart ammo is made from programmable matter. In addition to its standard form, it can transform into accushot, hollowpoint, or plastic rounds. The firer can change all or some of the bullets in the magazine (in any order) with a complex action. All of the bullets fired together with a single complex action must be of the same programmed type.</p>",
+    "reference": "Eclipse Phase Second Edition p. 211",
+    "complexity": "moderate",
+    "restricted": true,
+    "quality": "average",
+    "blueprint": {
+      "blueprintType": "",
+      "cracked": false,
+      "used": false
+    },
+    "quantity": 100,
+    "state": {
+      "stashed": false
+    },
+    "ammoClass": "mediumPistol",
+    "carryPayload": false,
+    "roundsPerComplexity": 100,
+    "modes": [
+      {
+        "name": "Accushot",
+        "armorPiercing": false,
+        "attackTraits": [],
+        "damageFormula": "",
+        "steady": true,
+        "damageModifierType": "formula",
+        "notes": "",
+        "id": "_defaultID"
+      },
+      {
+        "name": "Hollow-Point",
+        "attackTraits": [],
+        "armorPiercing": false,
+        "steady": false,
+        "damageFormula": "1d6",
+        "damageModifierType": "formula",
+        "notes": "Extra DV only vs. biomorph",
+        "id": "uljpnlct3t"
+      },
+      {
+        "name": "Plastic",
+        "attackTraits": [],
+        "armorPiercing": false,
+        "steady": false,
+        "damageFormula": "",
+        "damageModifierType": "halve",
+        "notes": "",
+        "id": "t624o5fxoo"
+      }
+    ]
+  },
+  "flags": {},
+  "effects": [],
+  "_id": "jAbOFjiKKWwB7VG4",
+  "_key": "!items!jAbOFjiKKWwB7VG4"
+}

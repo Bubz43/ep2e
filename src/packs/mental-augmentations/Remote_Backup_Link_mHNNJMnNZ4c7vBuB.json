@@ -1,0 +1,82 @@
+{
+  "name": "Remote Backup Link",
+  "permission": {
+    "default": 0,
+    "qJl17WpEHiovQQBC": 3
+  },
+  "type": "physicalTech",
+  "system": {
+    "description": "<p>Your morph&rsquo;s cortical stack is linked to an implanted quantum farcaster ▶336 linked to a highly secure storage facility. Using standard radio and quantum encryption ▶247, the farcaster broadcasts full backups of your ego (pulled from your cortical stack&rsquo;s neural lace network) once every 48 hours. This transfer takes a single action turn. At the GM&rsquo;s discretion, the backup interval may be scheduled more or less frequently, keeping in mind that ego broadcasts are limited for security purposes and because they hog bandwidth. Broadcast egos must be within range of the recipient to be received; for this reason the system&rsquo;s usefulness is limited to select habitats or situations where you have arranged for secure storage in a nearby vicinity, such as onboard a nearby spaceship. If the radio broadcasts are blocked or jammed, this device cannot save remote backups.</p>",
+    "reference": "Eclipse Phase Second Edition p. 320",
+    "complexity": "major",
+    "restricted": false,
+    "quality": "average",
+    "concealable": false,
+    "fragile": false,
+    "singleUse": false,
+    "twoHanded": false,
+    "blueprint": {
+      "blueprintType": "",
+      "cracked": false,
+      "used": false
+    },
+    "state": {
+      "disabled": false,
+      "equipped": false,
+      "fabStartTime": 0,
+      "activated": false,
+      "embeddedEgos": [],
+      "onboardAliDeleted": false
+    },
+    "activatedEffects": [],
+    "deviceType": "",
+    "category": "Mental Augments",
+    "fabricator": "",
+    "activationAction": "automatic",
+    "passiveEffects": [
+      {
+        "type": "misc",
+        "unique": "",
+        "description": "Quantum farcaster for remote backup every 48 hrs.",
+        "id": "ygcwbqd1fd"
+      }
+    ],
+    "activation": "none",
+    "resistEffectsCheck": "",
+    "usedEffectsDuration": 3000,
+    "onboardALI": false,
+    "firewallRating": 30,
+    "fabPrintDuration": 0,
+    "firewallHealth": {
+      "baseDurability": 30,
+      "rebootEndTime": -1,
+      "crashWounds": 0,
+      "damage": 0,
+      "log": [],
+      "wounds": 0
+    },
+    "meshHealth": {
+      "baseDurability": 20,
+      "damage": 0,
+      "wounds": 0,
+      "aidedHealTickStartTime": 0,
+      "ownHealTickStartTime": 0,
+      "damageRepair": {
+        "amount": "1d10",
+        "interval": 86400000
+      },
+      "woundRepair": {
+        "amount": 1,
+        "interval": 86400000
+      },
+      "log": [],
+      "rebootEndTime": -1,
+      "crashWounds": 0
+    },
+    "wareType": "cyberware"
+  },
+  "flags": {},
+  "effects": [],
+  "_id": "mHNNJMnNZ4c7vBuB",
+  "_key": "!items!mHNNJMnNZ4c7vBuB"
+}

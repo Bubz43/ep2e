@@ -1,0 +1,85 @@
+{
+  "_id": "8DmnUUhdPsb3mgTb",
+  "name": "Poor Instinct",
+  "permission": {
+    "default": 0,
+    "qHi89sFcK4gHlOPd": 3
+  },
+  "type": "trait",
+  "system": {
+    "description": "<p>Your inherent judgment is off. Suffer -5 per level to INT Checks.</p>",
+    "reference": "Eclipse Phase Second Edition p. 80",
+    "restrictions": "",
+    "triggers": "",
+    "source": "ego",
+    "state": {
+      "level": 0,
+      "triggered": false
+    },
+    "levels": [
+      {
+        "cost": 1,
+        "effects": [
+          {
+            "type": "successTest",
+            "tags": [
+              {
+                "type": "aptitudeCheck",
+                "aptitude": "int"
+              }
+            ],
+            "modifier": -5,
+            "toOpponent": false,
+            "requirement": "",
+            "id": "44q0a83dvg"
+          }
+        ],
+        "id": "yqhazfx0mp"
+      },
+      {
+        "cost": 2,
+        "effects": [
+          {
+            "type": "successTest",
+            "tags": [
+              {
+                "type": "aptitudeCheck",
+                "aptitude": "int"
+              }
+            ],
+            "modifier": -10,
+            "toOpponent": false,
+            "requirement": "",
+            "id": "44q0a83dvg"
+          }
+        ],
+        "id": "rhx8f6uh8p"
+      },
+      {
+        "cost": 3,
+        "effects": [
+          {
+            "type": "successTest",
+            "tags": [
+              {
+                "type": "aptitudeCheck",
+                "aptitude": "int"
+              }
+            ],
+            "modifier": -15,
+            "toOpponent": false,
+            "requirement": "",
+            "id": "44q0a83dvg"
+          }
+        ],
+        "id": "h1z09wnkm5"
+      }
+    ],
+    "subtype": "",
+    "traitType": "negative"
+  },
+  "flags": {},
+  "img": "icons/svg/mystery-man.svg",
+  "effects": [],
+  "_key": "!items!8DmnUUhdPsb3mgTb"
+}

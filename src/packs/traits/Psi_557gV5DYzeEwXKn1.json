@@ -1,0 +1,52 @@
+{
+  "_id": "557gV5DYzeEwXKn1",
+  "name": "Psi",
+  "permission": {
+    "default": 0,
+    "qHi89sFcK4gHlOPd": 3
+  },
+  "type": "trait",
+  "system": {
+    "description": "<p>You are infected with the Watts-MacLeod strain of the exsurgent virus, which altered your brain structure and enhanced your cognitive abilities. You may learn the Psi skill ▶51 and purchase psi abilities, called sleights (▶280 and 282). At Level 1, you may only use psi-chi sleights. At Level 2, the character may use both psi-chi and psi-gamma sleights.</p><p>Psi is not without drawbacks. You must also take a negative trait according to your sub-strain ▶273 at no CP bonus. This required trait does not count towards trait CP limits.</p>",
+    "reference": "Eclipse Phase Second Edition p. 74",
+    "restrictions": "",
+    "triggers": "",
+    "source": "ego",
+    "state": {
+      "level": 0,
+      "triggered": false
+    },
+    "levels": [
+      {
+        "cost": 2,
+        "effects": [
+          {
+            "type": "misc",
+            "unique": "",
+            "description": "You know the Psi skill and may use psi-chi sleights. You also suffer from a Mental Disorder",
+            "id": "5j16vwbf76"
+          }
+        ],
+        "id": "3xghjr9pe5"
+      },
+      {
+        "cost": 4,
+        "effects": [
+          {
+            "type": "misc",
+            "unique": "",
+            "description": "You know the Psi skill and may use both psi-chi and psi-gamma sleights.\nYou also suffer from a Mental Disorder",
+            "id": "yjh2h3scp6"
+          }
+        ],
+        "id": "rkyp5h7s5b"
+      }
+    ],
+    "subtype": "",
+    "traitType": "positive"
+  },
+  "flags": {},
+  "img": "icons/svg/mystery-man.svg",
+  "effects": [],
+  "_key": "!items!557gV5DYzeEwXKn1"
+}

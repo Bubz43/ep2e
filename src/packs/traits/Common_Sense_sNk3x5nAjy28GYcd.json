@@ -1,0 +1,40 @@
+{
+  "_id": "sNk3x5nAjy28GYcd",
+  "name": "Common Sense",
+  "permission": {
+    "default": 0,
+    "qHi89sFcK4gHlOPd": 3
+  },
+  "type": "trait",
+  "system": {
+    "description": "<p>Your innate sense of judgment cuts through distractions and other factors that might cloud a decision. Once per game session, you may ask the GM what choice to make or course of action to take; the GM will give you solid advice based on what your character knows. Alternatively, if you are about to make a disastrous decision, the GM can use your free hint to warn you that you are making a grave mistake.</p>",
+    "reference": "Eclipse Phase Second Edition p. 73",
+    "restrictions": "",
+    "triggers": "",
+    "source": "ego",
+    "state": {
+      "level": 0,
+      "triggered": false
+    },
+    "levels": [
+      {
+        "cost": 2,
+        "effects": [
+          {
+            "type": "misc",
+            "unique": "",
+            "description": "Once per session: may ask the GM for best advice or the GM can use a hint to warn you",
+            "id": "m5hrpukkk3"
+          }
+        ],
+        "id": "yefk6qf2et"
+      }
+    ],
+    "subtype": "",
+    "traitType": "positive"
+  },
+  "flags": {},
+  "img": "icons/svg/mystery-man.svg",
+  "effects": [],
+  "_key": "!items!sNk3x5nAjy28GYcd"
+}

@@ -1,0 +1,18 @@
+{
+  "_id": "oH8lofdKuy23XuxM",
+  "name": "Silencer/Sound Suppressor",
+  "permission": {
+    "default": 0,
+    "qHi89sFcK4gHlOPd": 3
+  },
+  "folder": "",
+  "flags": {
+    "core": {
+      "sourceId": "JournalEntry.AtxKpHcByn9WflM4"
+    }
+  },
+  "content": "<p>This barrel-mounted accessory reduces the sound of a firearm’s discharge (they cannot be used on railguns). Apply a -30 modifier on hearing-based Perceive Tests to hear or locate the gun’s firing.</p>",
+  "pages": [],
+  "categories": [],
+  "_key": "!journal!oH8lofdKuy23XuxM"
+}

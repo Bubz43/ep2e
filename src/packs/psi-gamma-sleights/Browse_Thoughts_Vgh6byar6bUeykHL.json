@@ -1,0 +1,61 @@
+{
+  "name": "Browse Thoughts",
+  "permission": {
+    "default": 0,
+    "qJl17WpEHiovQQBC": 3
+  },
+  "type": "sleight",
+  "system": {
+    "description": "<p>You scan the target&rsquo;s surface thoughts, gaining a general sense of what is currently running through their mind. Superior successes provide deeper detail. This is not an invasive delve into the target&rsquo;s mind for specific information like Deep Scan ▶283; instead, you simply get a read on what the target is currently thinking.</p>",
+    "reference": "Eclipse Phase Second Edition p. 283",
+    "duration": "sustained",
+    "infectionMod": 4,
+    "sleightType": "gamma",
+    "action": "complex",
+    "timeframe": 0,
+    "effectsToSelf": [
+      {
+        "type": "misc",
+        "unique": "",
+        "description": "Scan target’s surface thoughts.",
+        "id": "iszolj90pb"
+      }
+    ],
+    "effectsToTarget": [
+      {
+        "type": "misc",
+        "unique": "",
+        "description": "Your surface thoughts are being scanned.",
+        "id": "7n64almxms"
+      }
+    ],
+    "scaleEffectsOnSuperior": false,
+    "attack": {
+      "useMentalArmor": false,
+      "attackTraits": [],
+      "damageFormula": "",
+      "damageType": "mental",
+      "notes": ""
+    },
+    "heal": {
+      "formula": "",
+      "healthType": "mental"
+    },
+    "mentalArmor": {
+      "apply": false,
+      "divisor": 3,
+      "formula": "1d6"
+    },
+    "status": {
+      "sustaining": false,
+      "pushDuration": 0,
+      "pushed": false,
+      "pushStartTime": 0,
+      "sustainingOn": []
+    }
+  },
+  "flags": {},
+  "effects": [],
+  "_id": "Vgh6byar6bUeykHL",
+  "_key": "!items!Vgh6byar6bUeykHL"
+}

@@ -1,0 +1,52 @@
+{
+  "_id": "WhefWoDDu8EbTome",
+  "name": "Spatial Visualization",
+  "permission": {
+    "default": 0,
+    "qHi89sFcK4gHlOPd": 3
+  },
+  "type": "trait",
+  "system": {
+    "description": "<p>You have a knack for conceptualizing dimensions, distances, volumes, and shapes. You receive a +10 modifier for any Know or Technical skill tests involving 3D visualization.</p>",
+    "reference": "Eclipse Phase Second Edition p. 75",
+    "restrictions": "",
+    "triggers": "",
+    "source": "ego",
+    "state": {
+      "level": 0,
+      "triggered": false
+    },
+    "levels": [
+      {
+        "cost": 2,
+        "effects": [
+          {
+            "type": "successTest",
+            "tags": [
+              {
+                "type": "fieldSkill",
+                "fieldSkill": "know",
+                "field": ""
+              },
+              {
+                "type": "skillCategory",
+                "category": "technical"
+              }
+            ],
+            "modifier": 10,
+            "toOpponent": false,
+            "requirement": "involving 3D visualization.",
+            "id": "w9zu81kt6o"
+          }
+        ],
+        "id": "6nk5mtps52"
+      }
+    ],
+    "subtype": "",
+    "traitType": "positive"
+  },
+  "flags": {},
+  "img": "icons/svg/mystery-man.svg",
+  "effects": [],
+  "_key": "!items!WhefWoDDu8EbTome"
+}

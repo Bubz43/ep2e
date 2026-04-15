@@ -1,0 +1,54 @@
+{
+  "_id": "Zkrv3b6wQqtI4DHP",
+  "name": "Animal Empathy",
+  "permission": {
+    "default": 0,
+    "qHi89sFcK4gHlOPd": 3
+  },
+  "type": "trait",
+  "system": {
+    "description": "<p>You have an instinctive feel for handling and working with non-sapient animals. Apply a +10 modifier to Exotic Skill: Animal Handling and other skill tests to influence or interact with animals.</p>",
+    "reference": "Eclipse Phase Second Edition p. 73",
+    "restrictions": "",
+    "triggers": "",
+    "source": "ego",
+    "state": {
+      "level": 0,
+      "triggered": false
+    },
+    "levels": [
+      {
+        "cost": 1,
+        "effects": [
+          {
+            "type": "successTest",
+            "tags": [
+              {
+                "type": "fieldSkill",
+                "fieldSkill": "exotic",
+                "field": "Animal Handling"
+              }
+            ],
+            "modifier": 10,
+            "toOpponent": false,
+            "requirement": "",
+            "id": "uesocfswk1"
+          },
+          {
+            "type": "misc",
+            "unique": "",
+            "description": "+10 to skills tests to influence or interact with animals",
+            "id": "18ec6l09k9"
+          }
+        ],
+        "id": "16dbsb55da"
+      }
+    ],
+    "subtype": "",
+    "traitType": "positive"
+  },
+  "flags": {},
+  "img": "icons/svg/mystery-man.svg",
+  "effects": [],
+  "_key": "!items!Zkrv3b6wQqtI4DHP"
+}

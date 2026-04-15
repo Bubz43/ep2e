@@ -1,0 +1,57 @@
+{
+  "_id": "kgurDAq2LTI4Z1YN",
+  "name": "Hardening",
+  "permission": {
+    "default": 0,
+    "qHi89sFcK4gHlOPd": 3
+  },
+  "type": "trait",
+  "system": {
+    "description": "<p>You are accustomed to trauma, but it has scarred you. You are immune to stress from either alienation, helplessness, or violence (choose one). However, your WIL Check is reduced by 10 and you suffer a -10 modifier on Persuade Tests. This trait may be taken multiple times for different types of stress; modifiers are cumulative.</p>",
+    "reference": "Eclipse Phase Second Edition p. 74",
+    "restrictions": "",
+    "triggers": "",
+    "source": "ego",
+    "state": {
+      "level": 0,
+      "triggered": false
+    },
+    "levels": [
+      {
+        "cost": 1,
+        "effects": [
+          {
+            "type": "successTest",
+            "tags": [
+              {
+                "type": "aptitudeCheck",
+                "aptitude": "wil"
+              },
+              {
+                "type": "skill",
+                "skillType": "persuade"
+              }
+            ],
+            "modifier": -10,
+            "toOpponent": false,
+            "requirement": "",
+            "id": "euaptbbfqt"
+          },
+          {
+            "type": "misc",
+            "unique": "",
+            "description": "You are immune to either alienation, helplessness or violence (choose one)",
+            "id": "8695grtuz3"
+          }
+        ],
+        "id": "7d96iwswbe"
+      }
+    ],
+    "subtype": "",
+    "traitType": "positive"
+  },
+  "flags": {},
+  "img": "icons/svg/mystery-man.svg",
+  "effects": [],
+  "_key": "!items!kgurDAq2LTI4Z1YN"
+}

@@ -1,0 +1,54 @@
+{
+  "name": "Nightmare",
+  "permission": {
+    "default": 0,
+    "qJl17WpEHiovQQBC": 3
+  },
+  "type": "sleight",
+  "system": {
+    "description": "<p>You bombard the target with horrific images and sensations, eroding their mental stability. You inflict 2d10 SV to the target, +1d6 per superior success. This is reduced by mental armor.</p>",
+    "reference": "Eclipse Phase Second Edition p. 285",
+    "duration": "instant",
+    "infectionMod": 6,
+    "sleightType": "gamma",
+    "action": "complex",
+    "timeframe": 0,
+    "effectsToSelf": [],
+    "effectsToTarget": [
+      {
+        "type": "misc",
+        "unique": "",
+        "description": "Reduced by Psi armor",
+        "id": "9sism0vdxo"
+      }
+    ],
+    "scaleEffectsOnSuperior": false,
+    "attack": {
+      "useMentalArmor": true,
+      "attackTraits": [],
+      "damageFormula": "2d10",
+      "damageType": "mental",
+      "notes": ""
+    },
+    "heal": {
+      "formula": "",
+      "healthType": "mental"
+    },
+    "mentalArmor": {
+      "apply": false,
+      "divisor": 3,
+      "formula": "1d6"
+    },
+    "status": {
+      "sustaining": false,
+      "pushDuration": 0,
+      "pushed": false,
+      "pushStartTime": 0,
+      "sustainingOn": []
+    }
+  },
+  "flags": {},
+  "effects": [],
+  "_id": "EvCIOHj0gXpe0Zio",
+  "_key": "!items!EvCIOHj0gXpe0Zio"
+}

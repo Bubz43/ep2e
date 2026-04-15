@@ -1,0 +1,1678 @@
+{
+  "_id": "8Cz7f15eyVP2jzzL",
+  "name": "Clown Sprite",
+  "type": "character",
+  "sort": 100001,
+  "flags": {
+    "ep2e": {
+      "biological": {
+        "name": "Clown Sprite",
+        "permission": {
+          "default": 0,
+          "qJl17WpEHiovQQBC": 3
+        },
+        "type": "biological",
+        "folder": "c14Gbxurusgb9xVz",
+        "sort": 1400001,
+        "flags": {},
+        "prototypeToken": {
+          "flags": {},
+          "name": "Clown Sprite",
+          "displayName": 0,
+          "img": "icons/svg/mystery-man.svg",
+          "tint": null,
+          "width": 1,
+          "height": 1,
+          "scale": 1,
+          "lockRotation": false,
+          "rotation": 0,
+          "vision": false,
+          "dimSight": 0,
+          "brightSight": 0,
+          "dimLight": 0,
+          "brightLight": 0,
+          "sightAngle": 360,
+          "lightAngle": 360,
+          "lightAlpha": 1,
+          "lightAnimation": {
+            "speed": 5,
+            "intensity": 5
+          },
+          "actorId": "wCM0JJS7A8PogXKL",
+          "actorLink": true,
+          "disposition": -1,
+          "displayBars": 0,
+          "bar1": {},
+          "bar2": {},
+          "randomImg": false
+        },
+        "items": [
+          {
+            "_id": "UNdXAcW1KfSBYiJp",
+            "name": "Chameleon Skin",
+            "type": "physicalTech",
+            "system": {
+              "description": "<p>The morph&rsquo;s skin is augmented with complex chromatophores so that it changes color like a chameleon or octopus. Your morph can match the appearance of almost any color and most patterns. Apply a +10 modifier to Infiltrate Tests, +30 if stationary and either nude or wearing smart clothing with the same color/ pattern. This camo does not apply against radar, x-ray, gamma-ray, or infrared heat sensors (including enhanced vision). Alternatively, you can deliberately stand out (+10 to +30 to Perceive Tests to notice) or simply look sharp.</p>",
+              "reference": "Eclipse Phase Second Edition p. 321",
+              "complexity": "moderate",
+              "restricted": false,
+              "quality": "average",
+              "concealable": false,
+              "fragile": false,
+              "singleUse": false,
+              "twoHanded": false,
+              "blueprint": {
+                "blueprintType": "",
+                "cracked": false,
+                "used": false
+              },
+              "state": {
+                "disabled": false,
+                "equipped": true,
+                "fabStartTime": 6471555000,
+                "activated": false,
+                "embeddedEgos": [],
+                "onboardAliDeleted": false
+              },
+              "activatedEffects": [],
+              "deviceType": "",
+              "category": "Social Augments",
+              "fabricator": "",
+              "activationAction": "automatic",
+              "passiveEffects": [
+                {
+                  "type": "successTest",
+                  "tags": [
+                    {
+                      "type": "skill",
+                      "skillType": "infiltrate"
+                    }
+                  ],
+                  "modifier": 10,
+                  "toOpponent": false,
+                  "requirement": "",
+                  "id": "d1x9ta10p8"
+                },
+                {
+                  "type": "successTest",
+                  "tags": [
+                    {
+                      "type": "skill",
+                      "skillType": "infiltrate"
+                    }
+                  ],
+                  "modifier": 30,
+                  "toOpponent": false,
+                  "requirement": "still and covered",
+                  "id": "i8l9252zg9"
+                },
+                {
+                  "type": "misc",
+                  "unique": "",
+                  "description": "Change skin color",
+                  "id": "f6altxeyn8"
+                }
+              ],
+              "activation": "none",
+              "resistEffectsCheck": "",
+              "usedEffectsDuration": 3000,
+              "onboardALI": false,
+              "firewallRating": 30,
+              "fabPrintDuration": 0,
+              "firewallHealth": {
+                "baseDurability": 30,
+                "rebootEndTime": -1,
+                "crashWounds": 0,
+                "damage": 0,
+                "log": [],
+                "wounds": 0
+              },
+              "meshHealth": {
+                "baseDurability": 20,
+                "damage": 0,
+                "wounds": 0,
+                "aidedHealTickStartTime": 0,
+                "ownHealTickStartTime": 0,
+                "damageRepair": {
+                  "amount": "1d10",
+                  "interval": 86400000
+                },
+                "woundRepair": {
+                  "amount": 1,
+                  "interval": 86400000
+                },
+                "log": [],
+                "rebootEndTime": -1,
+                "crashWounds": 0
+              },
+              "wareType": "bioware"
+            },
+            "sort": 100000,
+            "flags": {},
+            "img": "icons/svg/mystery-man.svg",
+            "effects": []
+          },
+          {
+            "_id": "ZJQTJJ1uQxrSOjiz",
+            "name": "Enhanced Hearing",
+            "type": "physicalTech",
+            "system": {
+              "description": "<p>The morph&rsquo;s ears can hear both higher and lower frequency sounds &mdash; the range of sounds they can hear is twice that of normal human ears (Senses and Sensors ▶318). Your hearing is also more sensitive, allowing you to hear sounds as if you are 5 times closer. Apply a +10 to hearing-based Perceive Tests.</p>",
+              "reference": "Eclipse Phase Second Edition p. 318",
+              "complexity": "minor",
+              "restricted": false,
+              "quality": "average",
+              "concealable": false,
+              "fragile": false,
+              "singleUse": false,
+              "twoHanded": false,
+              "blueprint": {
+                "blueprintType": "",
+                "cracked": false,
+                "used": false
+              },
+              "state": {
+                "disabled": false,
+                "equipped": true,
+                "fabStartTime": 6471555000,
+                "activated": false,
+                "embeddedEgos": [],
+                "onboardAliDeleted": false
+              },
+              "activatedEffects": [],
+              "deviceType": "",
+              "category": "Sensory Augments",
+              "fabricator": "",
+              "activationAction": "automatic",
+              "passiveEffects": [
+                {
+                  "type": "misc",
+                  "unique": "",
+                  "description": "Hear higher and lower frequencies.",
+                  "id": "beyatjatoa"
+                },
+                {
+                  "type": "successTest",
+                  "tags": [
+                    {
+                      "type": "skill",
+                      "skillType": "perceive"
+                    }
+                  ],
+                  "modifier": 10,
+                  "toOpponent": false,
+                  "requirement": "hearing related",
+                  "id": "cf70cje5od"
+                }
+              ],
+              "activation": "none",
+              "resistEffectsCheck": "",
+              "usedEffectsDuration": 3000,
+              "onboardALI": false,
+              "firewallRating": 30,
+              "fabPrintDuration": 0,
+              "firewallHealth": {
+                "baseDurability": 30,
+                "rebootEndTime": -1,
+                "crashWounds": 0,
+                "damage": 0,
+                "log": [],
+                "wounds": 0
+              },
+              "meshHealth": {
+                "baseDurability": 20,
+                "damage": 0,
+                "wounds": 0,
+                "aidedHealTickStartTime": 0,
+                "ownHealTickStartTime": 0,
+                "damageRepair": {
+                  "amount": "1d10",
+                  "interval": 86400000
+                },
+                "woundRepair": {
+                  "amount": 1,
+                  "interval": 86400000
+                },
+                "log": [],
+                "rebootEndTime": -1,
+                "crashWounds": 0
+              },
+              "wareType": "bioware"
+            },
+            "sort": 600001,
+            "flags": {},
+            "img": "icons/svg/mystery-man.svg",
+            "effects": []
+          },
+          {
+            "_id": "3TCTvCsLeSyA8hB2",
+            "name": "Enhanced Smell",
+            "type": "physicalTech",
+            "system": {
+              "description": "<p>The morph&rsquo;s sense of smell is equal to that of a bloodhound. You can identify both chemicals and individuals by smell and can track people and chemically reactive objects by odor as long as the trail was made within the last several hours and has not been obscured. Apply a +10 to smell-based Perceive Tests. You can also gain a general sense of the emotions and health of biological characters within point-blank range (+10 to Kinesics Tests).</p>",
+              "reference": "Eclipse Phase Second Edition p. 318",
+              "complexity": "minor",
+              "restricted": false,
+              "quality": "average",
+              "concealable": false,
+              "fragile": false,
+              "singleUse": false,
+              "twoHanded": false,
+              "blueprint": {
+                "blueprintType": "",
+                "cracked": false,
+                "used": false
+              },
+              "state": {
+                "disabled": false,
+                "equipped": true,
+                "fabStartTime": 6471555000,
+                "activated": false,
+                "embeddedEgos": [],
+                "onboardAliDeleted": false
+              },
+              "activatedEffects": [],
+              "deviceType": "",
+              "category": "Sensory Augments",
+              "fabricator": "",
+              "activationAction": "automatic",
+              "passiveEffects": [
+                {
+                  "type": "successTest",
+                  "tags": [
+                    {
+                      "type": "skill",
+                      "skillType": "perceive"
+                    }
+                  ],
+                  "modifier": 10,
+                  "toOpponent": false,
+                  "requirement": "smell related",
+                  "id": "pmneakt8pa"
+                },
+                {
+                  "type": "successTest",
+                  "tags": [
+                    {
+                      "type": "skill",
+                      "skillType": "kinesics"
+                    }
+                  ],
+                  "modifier": 10,
+                  "toOpponent": false,
+                  "requirement": "point-blank with biomorphs",
+                  "id": "fezhc6e4dj"
+                }
+              ],
+              "activation": "none",
+              "resistEffectsCheck": "",
+              "usedEffectsDuration": 3000,
+              "onboardALI": false,
+              "firewallRating": 30,
+              "fabPrintDuration": 0,
+              "firewallHealth": {
+                "baseDurability": 30,
+                "rebootEndTime": -1,
+                "crashWounds": 0,
+                "damage": 0,
+                "log": [],
+                "wounds": 0
+              },
+              "meshHealth": {
+                "baseDurability": 20,
+                "damage": 0,
+                "wounds": 0,
+                "aidedHealTickStartTime": 0,
+                "ownHealTickStartTime": 0,
+                "damageRepair": {
+                  "amount": "1d10",
+                  "interval": 86400000
+                },
+                "woundRepair": {
+                  "amount": 1,
+                  "interval": 86400000
+                },
+                "log": [],
+                "rebootEndTime": -1,
+                "crashWounds": 0
+              },
+              "wareType": "bioware"
+            },
+            "sort": 700001,
+            "flags": {},
+            "img": "icons/svg/mystery-man.svg",
+            "effects": []
+          },
+          {
+            "_id": "cVlGxGRitEYxbYcH",
+            "name": "Grip Pads",
+            "type": "physicalTech",
+            "system": {
+              "description": "<p>You have specialized pads imitating the pads of gecko feet on your palms, lower arms, shins, and the bottoms of your feet. These pads adhere to any surface not made of a material designed to resist this augmentation. You can climb and support yourself on any surface that can support your weight. Apply a +30 modifier to Athletics Tests for climbing. You can also climb at a rate equal to your full move. The pads must be free to touch the surface (no shoes or gloves). The pads are obvious, but do not impair your manual dexterity or sense of touch.</p>",
+              "reference": "Eclipse Phase Second Edition p. 325",
+              "complexity": "minor",
+              "restricted": false,
+              "quality": "average",
+              "concealable": false,
+              "fragile": false,
+              "singleUse": false,
+              "twoHanded": false,
+              "blueprint": {
+                "blueprintType": "",
+                "cracked": false,
+                "used": false
+              },
+              "state": {
+                "disabled": false,
+                "equipped": true,
+                "fabStartTime": 6471555000,
+                "activated": false,
+                "embeddedEgos": [],
+                "onboardAliDeleted": false
+              },
+              "activatedEffects": [],
+              "deviceType": "",
+              "category": "Physical Augments",
+              "fabricator": "",
+              "activationAction": "automatic",
+              "passiveEffects": [
+                {
+                  "type": "successTest",
+                  "tags": [
+                    {
+                      "type": "skill",
+                      "skillType": "athletics"
+                    }
+                  ],
+                  "modifier": 30,
+                  "toOpponent": false,
+                  "requirement": "climbing",
+                  "id": "nig36iqyfv"
+                }
+              ],
+              "activation": "none",
+              "resistEffectsCheck": "",
+              "usedEffectsDuration": 3000,
+              "onboardALI": false,
+              "firewallRating": 30,
+              "fabPrintDuration": 0,
+              "firewallHealth": {
+                "baseDurability": 30,
+                "rebootEndTime": -1,
+                "crashWounds": 0,
+                "damage": 0,
+                "log": [],
+                "wounds": 0
+              },
+              "meshHealth": {
+                "baseDurability": 20,
+                "damage": 0,
+                "wounds": 0,
+                "aidedHealTickStartTime": 0,
+                "ownHealTickStartTime": 0,
+                "damageRepair": {
+                  "amount": "1d10",
+                  "interval": 86400000
+                },
+                "woundRepair": {
+                  "amount": 1,
+                  "interval": 86400000
+                },
+                "log": [],
+                "rebootEndTime": -1,
+                "crashWounds": 0
+              },
+              "wareType": "bioware"
+            },
+            "sort": 200000,
+            "flags": {},
+            "img": "icons/svg/mystery-man.svg",
+            "effects": []
+          },
+          {
+            "_id": "qw7tinLQnzes8S47",
+            "name": "Prehensile Feet",
+            "type": "physicalTech",
+            "system": {
+              "description": "<p>You can use your feet like hands. Your feet and leg joints are altered so that your toes are longer and more dexterous. The big toe is transformed into an opposable thumb. Physically, your morph&rsquo;s feet resemble a longer, narrower hand or a foot with finger-like toes. You can walk normally but must wear specially designed shoes. However, you run slightly slower than a morph with unmodified feet (-8 to your full movement). Your hips are also modified for greater mobility and flexibility. In a properly constructed chair, or floating in zero g, you can use both your hands and feet to manipulate the same object. This mod is common among belters, brinkers, and others living in microgravity.</p>",
+              "reference": "Eclipse Phase Second Edition p. 325",
+              "complexity": "minor",
+              "restricted": false,
+              "quality": "average",
+              "concealable": false,
+              "fragile": false,
+              "singleUse": false,
+              "twoHanded": false,
+              "blueprint": {
+                "blueprintType": "",
+                "cracked": false,
+                "used": false
+              },
+              "state": {
+                "disabled": false,
+                "equipped": true,
+                "fabStartTime": 6471555000,
+                "activated": false,
+                "embeddedEgos": [],
+                "onboardAliDeleted": false
+              },
+              "activatedEffects": [],
+              "deviceType": "",
+              "category": "Physical Augments",
+              "fabricator": "",
+              "activationAction": "automatic",
+              "passiveEffects": [
+                {
+                  "type": "misc",
+                  "unique": "",
+                  "description": "Can use feet as hands. -8 full move",
+                  "id": "p50kphtegx"
+                }
+              ],
+              "activation": "none",
+              "resistEffectsCheck": "",
+              "usedEffectsDuration": 3000,
+              "onboardALI": false,
+              "firewallRating": 30,
+              "fabPrintDuration": 0,
+              "firewallHealth": {
+                "baseDurability": 30,
+                "rebootEndTime": -1,
+                "crashWounds": 0,
+                "damage": 0,
+                "log": [],
+                "wounds": 0
+              },
+              "meshHealth": {
+                "baseDurability": 20,
+                "damage": 0,
+                "wounds": 0,
+                "aidedHealTickStartTime": 0,
+                "ownHealTickStartTime": 0,
+                "damageRepair": {
+                  "amount": "1d10",
+                  "interval": 86400000
+                },
+                "woundRepair": {
+                  "amount": 1,
+                  "interval": 86400000
+                },
+                "log": [],
+                "rebootEndTime": -1,
+                "crashWounds": 0
+              },
+              "wareType": "bioware"
+            },
+            "sort": 2500000,
+            "flags": {},
+            "img": "icons/svg/mystery-man.svg",
+            "effects": []
+          },
+          {
+            "_id": "pSESe0tLxIBe3nyL",
+            "name": "Prehensile Tail",
+            "type": "physicalTech",
+            "system": {
+              "description": "<p>Your morph is equipped with a 1.5-meter long tail, extending out from your tailbone/backside. This tail is prehensile and you can use it to grab, hold, and manipulate objects. You can control your tail&rsquo;s movements with concentration, but otherwise it tends to move on its own. Your tail also improves balance; apply a +10 modifier to Athletics or other tests where balance is a factor.</p>",
+              "reference": "Eclipse Phase Second Edition p. 325",
+              "complexity": "minor",
+              "restricted": false,
+              "quality": "average",
+              "concealable": false,
+              "fragile": false,
+              "singleUse": false,
+              "twoHanded": false,
+              "blueprint": {
+                "blueprintType": "",
+                "cracked": false,
+                "used": false
+              },
+              "state": {
+                "disabled": false,
+                "equipped": true,
+                "fabStartTime": 6471555000,
+                "activated": false,
+                "embeddedEgos": [],
+                "onboardAliDeleted": false
+              },
+              "activatedEffects": [],
+              "deviceType": "",
+              "category": "Physical Augments",
+              "fabricator": "",
+              "activationAction": "automatic",
+              "passiveEffects": [
+                {
+                  "type": "misc",
+                  "unique": "",
+                  "description": "Can grip with tail",
+                  "id": "k3ibb95rnb"
+                },
+                {
+                  "type": "successTest",
+                  "tags": [
+                    {
+                      "type": "skill",
+                      "skillType": "athletics"
+                    }
+                  ],
+                  "modifier": 10,
+                  "toOpponent": false,
+                  "requirement": "balance based",
+                  "id": "2rdriwefvf"
+                }
+              ],
+              "activation": "none",
+              "resistEffectsCheck": "",
+              "usedEffectsDuration": 3000,
+              "onboardALI": false,
+              "firewallRating": 30,
+              "fabPrintDuration": 0,
+              "firewallHealth": {
+                "baseDurability": 30,
+                "rebootEndTime": -1,
+                "crashWounds": 0,
+                "damage": 0,
+                "log": [],
+                "wounds": 0
+              },
+              "meshHealth": {
+                "baseDurability": 20,
+                "damage": 0,
+                "wounds": 0,
+                "aidedHealTickStartTime": 0,
+                "ownHealTickStartTime": 0,
+                "damageRepair": {
+                  "amount": "1d10",
+                  "interval": 86400000
+                },
+                "woundRepair": {
+                  "amount": 1,
+                  "interval": 86400000
+                },
+                "log": [],
+                "rebootEndTime": -1,
+                "crashWounds": 0
+              },
+              "wareType": "bioware"
+            },
+            "sort": 2700000,
+            "flags": {},
+            "img": "icons/svg/mystery-man.svg",
+            "effects": []
+          }
+        ],
+        "effects": [],
+        "_id": "wCM0JJS7A8PogXKL",
+        "img": "icons/svg/mystery-man.svg",
+        "system": {
+          "description": "<p>Found in the Echo system, these colorful, omnivorous, winged avian-primates normally live in a symbiotic relationship with carnivorous land anemones. These mischievous creatures have bonded with some transhumans. They are clever, playful, and prone to pranks.</p>",
+          "reference": "Eclipse Phase Second Edition p. 328",
+          "movementRates": [
+            {
+              "type": "winged",
+              "base": 8,
+              "full": 32,
+              "id": "j7kexz7f4j"
+            },
+            {
+              "type": "walker",
+              "base": 4,
+              "full": 12,
+              "id": "ywcp3n8zbo"
+            }
+          ],
+          "acquisition": {
+            "availability": 0,
+            "complexity": "rare",
+            "cost": 0,
+            "resource": "gearPoints",
+            "restricted": false
+          },
+          "pools": {
+            "insight": 0,
+            "moxie": 0,
+            "vigor": 0,
+            "flex": 0
+          },
+          "conditions": [],
+          "damagedArmor": [],
+          "prehensileLimbs": 3,
+          "sex": "",
+          "subtype": "Xenofauna",
+          "unarmedDV": "1d6",
+          "isSwarm": false,
+          "brain": "",
+          "recoveryConditions": "normal",
+          "size": "small",
+          "reach": 0,
+          "physicalHealth": {
+            "baseDurability": 20,
+            "bleedingOut": false,
+            "damage": 0,
+            "dots": [],
+            "aidedHealTickStartTime": 0,
+            "ownHealTickStartTime": 0,
+            "damageRepair": {
+              "amount": "1d10",
+              "interval": 86400000
+            },
+            "woundRepair": {
+              "amount": 1,
+              "interval": 604800000
+            },
+            "log": [],
+            "wounds": 0
+          }
+        }
+      }
+    }
+  },
+  "items": [
+    {
+      "_id": "wT0m055cM7oI4YXQ",
+      "name": "Chameleon Skin",
+      "type": "physicalTech",
+      "sort": 100000,
+      "flags": {},
+      "img": "icons/svg/mystery-man.svg",
+      "effects": [],
+      "system": {
+        "description": "<p>The morph&rsquo;s skin is augmented with complex chromatophores so that it changes color like a chameleon or octopus. Your morph can match the appearance of almost any color and most patterns. Apply a +10 modifier to Infiltrate Tests, +30 if stationary and either nude or wearing smart clothing with the same color/ pattern. This camo does not apply against radar, x-ray, gamma-ray, or infrared heat sensors (including enhanced vision). Alternatively, you can deliberately stand out (+10 to +30 to Perceive Tests to notice) or simply look sharp.</p>",
+        "reference": "Eclipse Phase Second Edition p. 321",
+        "complexity": "moderate",
+        "restricted": false,
+        "quality": "average",
+        "concealable": false,
+        "fragile": false,
+        "singleUse": false,
+        "twoHanded": false,
+        "blueprint": {
+          "blueprintType": "",
+          "cracked": false,
+          "used": false
+        },
+        "state": {
+          "disabled": false,
+          "equipped": true,
+          "fabStartTime": 6471555000,
+          "activated": false,
+          "embeddedEgos": [],
+          "onboardAliDeleted": false
+        },
+        "activatedEffects": [],
+        "deviceType": "",
+        "category": "Social Augments",
+        "fabricator": "",
+        "activationAction": "automatic",
+        "passiveEffects": [
+          {
+            "type": "successTest",
+            "tags": [
+              {
+                "type": "skill",
+                "skillType": "infiltrate"
+              }
+            ],
+            "modifier": 10,
+            "toOpponent": false,
+            "requirement": "",
+            "id": "d1x9ta10p8"
+          },
+          {
+            "type": "successTest",
+            "tags": [
+              {
+                "type": "skill",
+                "skillType": "infiltrate"
+              }
+            ],
+            "modifier": 30,
+            "toOpponent": false,
+            "requirement": "still and covered",
+            "id": "i8l9252zg9"
+          },
+          {
+            "type": "misc",
+            "unique": "",
+            "description": "Change skin color",
+            "id": "f6altxeyn8"
+          }
+        ],
+        "activation": "none",
+        "resistEffectsCheck": "",
+        "usedEffectsDuration": 3000,
+        "onboardALI": false,
+        "firewallRating": 30,
+        "fabPrintDuration": 0,
+        "firewallHealth": {
+          "baseDurability": 30,
+          "rebootEndTime": -1,
+          "crashWounds": 0,
+          "damage": 0,
+          "log": [],
+          "wounds": 0
+        },
+        "meshHealth": {
+          "baseDurability": 20,
+          "damage": 0,
+          "wounds": 0,
+          "aidedHealTickStartTime": 0,
+          "ownHealTickStartTime": 0,
+          "damageRepair": {
+            "amount": "1d10",
+            "interval": 86400000
+          },
+          "woundRepair": {
+            "amount": 1,
+            "interval": 86400000
+          },
+          "log": [],
+          "rebootEndTime": -1,
+          "crashWounds": 0
+        },
+        "wareType": "bioware"
+      },
+      "folder": null,
+      "ownership": {
+        "default": 0
+      },
+      "_stats": {
+        "systemId": null,
+        "systemVersion": null,
+        "coreVersion": null,
+        "createdTime": null,
+        "modifiedTime": null,
+        "lastModifiedBy": null
+      },
+      "_key": "!actors.items!8Cz7f15eyVP2jzzL.wT0m055cM7oI4YXQ"
+    },
+    {
+      "_id": "h2nuwLTTPupAcO7v",
+      "name": "Enhanced Hearing",
+      "type": "physicalTech",
+      "sort": 600001,
+      "flags": {},
+      "img": "icons/svg/mystery-man.svg",
+      "effects": [],
+      "system": {
+        "description": "<p>The morph&rsquo;s ears can hear both higher and lower frequency sounds &mdash; the range of sounds they can hear is twice that of normal human ears (Senses and Sensors ▶318). Your hearing is also more sensitive, allowing you to hear sounds as if you are 5 times closer. Apply a +10 to hearing-based Perceive Tests.</p>",
+        "reference": "Eclipse Phase Second Edition p. 318",
+        "complexity": "minor",
+        "restricted": false,
+        "quality": "average",
+        "concealable": false,
+        "fragile": false,
+        "singleUse": false,
+        "twoHanded": false,
+        "blueprint": {
+          "blueprintType": "",
+          "cracked": false,
+          "used": false
+        },
+        "state": {
+          "disabled": false,
+          "equipped": true,
+          "fabStartTime": 6471555000,
+          "activated": false,
+          "embeddedEgos": [],
+          "onboardAliDeleted": false
+        },
+        "activatedEffects": [],
+        "deviceType": "",
+        "category": "Sensory Augments",
+        "fabricator": "",
+        "activationAction": "automatic",
+        "passiveEffects": [
+          {
+            "type": "misc",
+            "unique": "",
+            "description": "Hear higher and lower frequencies.",
+            "id": "beyatjatoa"
+          },
+          {
+            "type": "successTest",
+            "tags": [
+              {
+                "type": "skill",
+                "skillType": "perceive"
+              }
+            ],
+            "modifier": 10,
+            "toOpponent": false,
+            "requirement": "hearing related",
+            "id": "cf70cje5od"
+          }
+        ],
+        "activation": "none",
+        "resistEffectsCheck": "",
+        "usedEffectsDuration": 3000,
+        "onboardALI": false,
+        "firewallRating": 30,
+        "fabPrintDuration": 0,
+        "firewallHealth": {
+          "baseDurability": 30,
+          "rebootEndTime": -1,
+          "crashWounds": 0,
+          "damage": 0,
+          "log": [],
+          "wounds": 0
+        },
+        "meshHealth": {
+          "baseDurability": 20,
+          "damage": 0,
+          "wounds": 0,
+          "aidedHealTickStartTime": 0,
+          "ownHealTickStartTime": 0,
+          "damageRepair": {
+            "amount": "1d10",
+            "interval": 86400000
+          },
+          "woundRepair": {
+            "amount": 1,
+            "interval": 86400000
+          },
+          "log": [],
+          "rebootEndTime": -1,
+          "crashWounds": 0
+        },
+        "wareType": "bioware"
+      },
+      "folder": null,
+      "ownership": {
+        "default": 0
+      },
+      "_stats": {
+        "systemId": null,
+        "systemVersion": null,
+        "coreVersion": null,
+        "createdTime": null,
+        "modifiedTime": null,
+        "lastModifiedBy": null
+      },
+      "_key": "!actors.items!8Cz7f15eyVP2jzzL.h2nuwLTTPupAcO7v"
+    },
+    {
+      "_id": "7nJRcOaF1B21kjwU",
+      "name": "Enhanced Smell",
+      "type": "physicalTech",
+      "sort": 700001,
+      "flags": {},
+      "img": "icons/svg/mystery-man.svg",
+      "effects": [],
+      "system": {
+        "description": "<p>The morph&rsquo;s sense of smell is equal to that of a bloodhound. You can identify both chemicals and individuals by smell and can track people and chemically reactive objects by odor as long as the trail was made within the last several hours and has not been obscured. Apply a +10 to smell-based Perceive Tests. You can also gain a general sense of the emotions and health of biological characters within point-blank range (+10 to Kinesics Tests).</p>",
+        "reference": "Eclipse Phase Second Edition p. 318",
+        "complexity": "minor",
+        "restricted": false,
+        "quality": "average",
+        "concealable": false,
+        "fragile": false,
+        "singleUse": false,
+        "twoHanded": false,
+        "blueprint": {
+          "blueprintType": "",
+          "cracked": false,
+          "used": false
+        },
+        "state": {
+          "disabled": false,
+          "equipped": true,
+          "fabStartTime": 6471555000,
+          "activated": false,
+          "embeddedEgos": [],
+          "onboardAliDeleted": false
+        },
+        "activatedEffects": [],
+        "deviceType": "",
+        "category": "Sensory Augments",
+        "fabricator": "",
+        "activationAction": "automatic",
+        "passiveEffects": [
+          {
+            "type": "successTest",
+            "tags": [
+              {
+                "type": "skill",
+                "skillType": "perceive"
+              }
+            ],
+            "modifier": 10,
+            "toOpponent": false,
+            "requirement": "smell related",
+            "id": "pmneakt8pa"
+          },
+          {
+            "type": "successTest",
+            "tags": [
+              {
+                "type": "skill",
+                "skillType": "kinesics"
+              }
+            ],
+            "modifier": 10,
+            "toOpponent": false,
+            "requirement": "point-blank with biomorphs",
+            "id": "fezhc6e4dj"
+          }
+        ],
+        "activation": "none",
+        "resistEffectsCheck": "",
+        "usedEffectsDuration": 3000,
+        "onboardALI": false,
+        "firewallRating": 30,
+        "fabPrintDuration": 0,
+        "firewallHealth": {
+          "baseDurability": 30,
+          "rebootEndTime": -1,
+          "crashWounds": 0,
+          "damage": 0,
+          "log": [],
+          "wounds": 0
+        },
+        "meshHealth": {
+          "baseDurability": 20,
+          "damage": 0,
+          "wounds": 0,
+          "aidedHealTickStartTime": 0,
+          "ownHealTickStartTime": 0,
+          "damageRepair": {
+            "amount": "1d10",
+            "interval": 86400000
+          },
+          "woundRepair": {
+            "amount": 1,
+            "interval": 86400000
+          },
+          "log": [],
+          "rebootEndTime": -1,
+          "crashWounds": 0
+        },
+        "wareType": "bioware"
+      },
+      "folder": null,
+      "ownership": {
+        "default": 0
+      },
+      "_stats": {
+        "systemId": null,
+        "systemVersion": null,
+        "coreVersion": null,
+        "createdTime": null,
+        "modifiedTime": null,
+        "lastModifiedBy": null
+      },
+      "_key": "!actors.items!8Cz7f15eyVP2jzzL.7nJRcOaF1B21kjwU"
+    },
+    {
+      "_id": "vnhhQX1XVLFp4miJ",
+      "name": "Grip Pads",
+      "type": "physicalTech",
+      "sort": 200000,
+      "flags": {},
+      "img": "icons/svg/mystery-man.svg",
+      "effects": [],
+      "system": {
+        "description": "<p>You have specialized pads imitating the pads of gecko feet on your palms, lower arms, shins, and the bottoms of your feet. These pads adhere to any surface not made of a material designed to resist this augmentation. You can climb and support yourself on any surface that can support your weight. Apply a +30 modifier to Athletics Tests for climbing. You can also climb at a rate equal to your full move. The pads must be free to touch the surface (no shoes or gloves). The pads are obvious, but do not impair your manual dexterity or sense of touch.</p>",
+        "reference": "Eclipse Phase Second Edition p. 325",
+        "complexity": "minor",
+        "restricted": false,
+        "quality": "average",
+        "concealable": false,
+        "fragile": false,
+        "singleUse": false,
+        "twoHanded": false,
+        "blueprint": {
+          "blueprintType": "",
+          "cracked": false,
+          "used": false
+        },
+        "state": {
+          "disabled": false,
+          "equipped": true,
+          "fabStartTime": 6471555000,
+          "activated": false,
+          "embeddedEgos": [],
+          "onboardAliDeleted": false
+        },
+        "activatedEffects": [],
+        "deviceType": "",
+        "category": "Physical Augments",
+        "fabricator": "",
+        "activationAction": "automatic",
+        "passiveEffects": [
+          {
+            "type": "successTest",
+            "tags": [
+              {
+                "type": "skill",
+                "skillType": "athletics"
+              }
+            ],
+            "modifier": 30,
+            "toOpponent": false,
+            "requirement": "climbing",
+            "id": "nig36iqyfv"
+          }
+        ],
+        "activation": "none",
+        "resistEffectsCheck": "",
+        "usedEffectsDuration": 3000,
+        "onboardALI": false,
+        "firewallRating": 30,
+        "fabPrintDuration": 0,
+        "firewallHealth": {
+          "baseDurability": 30,
+          "rebootEndTime": -1,
+          "crashWounds": 0,
+          "damage": 0,
+          "log": [],
+          "wounds": 0
+        },
+        "meshHealth": {
+          "baseDurability": 20,
+          "damage": 0,
+          "wounds": 0,
+          "aidedHealTickStartTime": 0,
+          "ownHealTickStartTime": 0,
+          "damageRepair": {
+            "amount": "1d10",
+            "interval": 86400000
+          },
+          "woundRepair": {
+            "amount": 1,
+            "interval": 86400000
+          },
+          "log": [],
+          "rebootEndTime": -1,
+          "crashWounds": 0
+        },
+        "wareType": "bioware"
+      },
+      "folder": null,
+      "ownership": {
+        "default": 0
+      },
+      "_stats": {
+        "systemId": null,
+        "systemVersion": null,
+        "coreVersion": null,
+        "createdTime": null,
+        "modifiedTime": null,
+        "lastModifiedBy": null
+      },
+      "_key": "!actors.items!8Cz7f15eyVP2jzzL.vnhhQX1XVLFp4miJ"
+    },
+    {
+      "_id": "ICor6UPg0k6DUxOm",
+      "name": "Prehensile Feet",
+      "type": "physicalTech",
+      "sort": 2500000,
+      "flags": {},
+      "img": "icons/svg/mystery-man.svg",
+      "effects": [],
+      "system": {
+        "description": "<p>You can use your feet like hands. Your feet and leg joints are altered so that your toes are longer and more dexterous. The big toe is transformed into an opposable thumb. Physically, your morph&rsquo;s feet resemble a longer, narrower hand or a foot with finger-like toes. You can walk normally but must wear specially designed shoes. However, you run slightly slower than a morph with unmodified feet (-8 to your full movement). Your hips are also modified for greater mobility and flexibility. In a properly constructed chair, or floating in zero g, you can use both your hands and feet to manipulate the same object. This mod is common among belters, brinkers, and others living in microgravity.</p>",
+        "reference": "Eclipse Phase Second Edition p. 325",
+        "complexity": "minor",
+        "restricted": false,
+        "quality": "average",
+        "concealable": false,
+        "fragile": false,
+        "singleUse": false,
+        "twoHanded": false,
+        "blueprint": {
+          "blueprintType": "",
+          "cracked": false,
+          "used": false
+        },
+        "state": {
+          "disabled": false,
+          "equipped": true,
+          "fabStartTime": 6471555000,
+          "activated": false,
+          "embeddedEgos": [],
+          "onboardAliDeleted": false
+        },
+        "activatedEffects": [],
+        "deviceType": "",
+        "category": "Physical Augments",
+        "fabricator": "",
+        "activationAction": "automatic",
+        "passiveEffects": [
+          {
+            "type": "misc",
+            "unique": "",
+            "description": "Can use feet as hands. -8 full move",
+            "id": "p50kphtegx"
+          }
+        ],
+        "activation": "none",
+        "resistEffectsCheck": "",
+        "usedEffectsDuration": 3000,
+        "onboardALI": false,
+        "firewallRating": 30,
+        "fabPrintDuration": 0,
+        "firewallHealth": {
+          "baseDurability": 30,
+          "rebootEndTime": -1,
+          "crashWounds": 0,
+          "damage": 0,
+          "log": [],
+          "wounds": 0
+        },
+        "meshHealth": {
+          "baseDurability": 20,
+          "damage": 0,
+          "wounds": 0,
+          "aidedHealTickStartTime": 0,
+          "ownHealTickStartTime": 0,
+          "damageRepair": {
+            "amount": "1d10",
+            "interval": 86400000
+          },
+          "woundRepair": {
+            "amount": 1,
+            "interval": 86400000
+          },
+          "log": [],
+          "rebootEndTime": -1,
+          "crashWounds": 0
+        },
+        "wareType": "bioware"
+      },
+      "folder": null,
+      "ownership": {
+        "default": 0
+      },
+      "_stats": {
+        "systemId": null,
+        "systemVersion": null,
+        "coreVersion": null,
+        "createdTime": null,
+        "modifiedTime": null,
+        "lastModifiedBy": null
+      },
+      "_key": "!actors.items!8Cz7f15eyVP2jzzL.ICor6UPg0k6DUxOm"
+    },
+    {
+      "_id": "QnZiBMaZjtsZoIFq",
+      "name": "Prehensile Tail",
+      "type": "physicalTech",
+      "sort": 2700000,
+      "flags": {},
+      "img": "icons/svg/mystery-man.svg",
+      "effects": [],
+      "system": {
+        "description": "<p>Your morph is equipped with a 1.5-meter long tail, extending out from your tailbone/backside. This tail is prehensile and you can use it to grab, hold, and manipulate objects. You can control your tail&rsquo;s movements with concentration, but otherwise it tends to move on its own. Your tail also improves balance; apply a +10 modifier to Athletics or other tests where balance is a factor.</p>",
+        "reference": "Eclipse Phase Second Edition p. 325",
+        "complexity": "minor",
+        "restricted": false,
+        "quality": "average",
+        "concealable": false,
+        "fragile": false,
+        "singleUse": false,
+        "twoHanded": false,
+        "blueprint": {
+          "blueprintType": "",
+          "cracked": false,
+          "used": false
+        },
+        "state": {
+          "disabled": false,
+          "equipped": true,
+          "fabStartTime": 6471555000,
+          "activated": false,
+          "embeddedEgos": [],
+          "onboardAliDeleted": false
+        },
+        "activatedEffects": [],
+        "deviceType": "",
+        "category": "Physical Augments",
+        "fabricator": "",
+        "activationAction": "automatic",
+        "passiveEffects": [
+          {
+            "type": "misc",
+            "unique": "",
+            "description": "Can grip with tail",
+            "id": "k3ibb95rnb"
+          },
+          {
+            "type": "successTest",
+            "tags": [
+              {
+                "type": "skill",
+                "skillType": "athletics"
+              }
+            ],
+            "modifier": 10,
+            "toOpponent": false,
+            "requirement": "balance based",
+            "id": "2rdriwefvf"
+          }
+        ],
+        "activation": "none",
+        "resistEffectsCheck": "",
+        "usedEffectsDuration": 3000,
+        "onboardALI": false,
+        "firewallRating": 30,
+        "fabPrintDuration": 0,
+        "firewallHealth": {
+          "baseDurability": 30,
+          "rebootEndTime": -1,
+          "crashWounds": 0,
+          "damage": 0,
+          "log": [],
+          "wounds": 0
+        },
+        "meshHealth": {
+          "baseDurability": 20,
+          "damage": 0,
+          "wounds": 0,
+          "aidedHealTickStartTime": 0,
+          "ownHealTickStartTime": 0,
+          "damageRepair": {
+            "amount": "1d10",
+            "interval": 86400000
+          },
+          "woundRepair": {
+            "amount": 1,
+            "interval": 86400000
+          },
+          "log": [],
+          "rebootEndTime": -1,
+          "crashWounds": 0
+        },
+        "wareType": "bioware"
+      },
+      "folder": null,
+      "ownership": {
+        "default": 0
+      },
+      "_stats": {
+        "systemId": null,
+        "systemVersion": null,
+        "coreVersion": null,
+        "createdTime": null,
+        "modifiedTime": null,
+        "lastModifiedBy": null
+      },
+      "_key": "!actors.items!8Cz7f15eyVP2jzzL.QnZiBMaZjtsZoIFq"
+    },
+    {
+      "_id": "TDHmndJ36trU9FK4",
+      "name": "Clown Sprite Traits",
+      "type": "trait",
+      "sort": 100000,
+      "flags": {},
+      "img": "icons/svg/mystery-man.svg",
+      "effects": [],
+      "system": {
+        "description": "",
+        "reference": "",
+        "restrictions": "",
+        "triggers": "",
+        "source": "morph",
+        "state": {
+          "level": 0,
+          "triggered": false
+        },
+        "levels": [
+          {
+            "cost": 1,
+            "effects": [
+              {
+                "type": "misc",
+                "unique": "",
+                "description": "Immune to anemone venom",
+                "id": "6t8zzf3s2h"
+              }
+            ],
+            "id": "_defaultLevel"
+          }
+        ],
+        "subtype": "",
+        "traitType": "positive"
+      },
+      "folder": null,
+      "ownership": {
+        "default": 0
+      },
+      "_stats": {
+        "systemId": null,
+        "systemVersion": null,
+        "coreVersion": null,
+        "createdTime": null,
+        "modifiedTime": null,
+        "lastModifiedBy": null
+      },
+      "_key": "!actors.items!8Cz7f15eyVP2jzzL.TDHmndJ36trU9FK4"
+    }
+  ],
+  "effects": [],
+  "system": {
+    "description": "",
+    "reference": "Eclipse Phase Second Edition p. 328",
+    "fakeId": "",
+    "aptitudes": {
+      "cog": 5,
+      "int": 15,
+      "ref": 20,
+      "sav": 15,
+      "som": 5,
+      "wil": 5
+    },
+    "temporary": [],
+    "favoriteItems": [],
+    "purchaseLog": [],
+    "fieldSkills": {
+      "exotic": [],
+      "hardware": [],
+      "know": [],
+      "medicine": [],
+      "pilot": []
+    },
+    "homeDevice": {
+      "actorId": "",
+      "itemId": ""
+    },
+    "network": {
+      "masterDeviceId": "",
+      "systemDefenders": [],
+      "unslavedDevices": []
+    },
+    "assets": [],
+    "settings": {
+      "canDefault": false,
+      "trackMentalHealth": true,
+      "useThreat": false,
+      "characterDetails": true,
+      "threatDetails": false,
+      "trackPoints": false,
+      "trackReputations": false,
+      "ignoreOverburdened": false
+    },
+    "shortRecharge": {
+      "refreshStartTime": 0,
+      "taken": 0
+    },
+    "longRecharge": {
+      "refreshStartTime": 0,
+      "taken": 0
+    },
+    "motivations": [],
+    "points": {
+      "customization": 0,
+      "gear": 0,
+      "morph": 0,
+      "rez": 0,
+      "credits": 0
+    },
+    "accumulatedTimeStart": 0,
+    "tasks": [],
+    "reps": {
+      "@Rep": {
+        "major": 0,
+        "minor": 0,
+        "moderate": 0,
+        "refreshStartTime": 0,
+        "score": 0,
+        "track": false
+      },
+      "cRep": {
+        "major": 0,
+        "minor": 0,
+        "moderate": 0,
+        "refreshStartTime": 0,
+        "score": 0,
+        "track": false
+      },
+      "fRep": {
+        "major": 0,
+        "minor": 0,
+        "moderate": 0,
+        "refreshStartTime": 0,
+        "score": 0,
+        "track": false
+      },
+      "gRep": {
+        "major": 0,
+        "minor": 0,
+        "moderate": 0,
+        "refreshStartTime": 0,
+        "score": 0,
+        "track": false
+      },
+      "iRep": {
+        "major": 0,
+        "minor": 0,
+        "moderate": 0,
+        "refreshStartTime": 0,
+        "score": 0,
+        "track": false
+      },
+      "rRep": {
+        "major": 0,
+        "minor": 0,
+        "moderate": 0,
+        "refreshStartTime": 0,
+        "score": 0,
+        "track": false
+      },
+      "xRep": {
+        "major": 0,
+        "minor": 0,
+        "moderate": 0,
+        "refreshStartTime": 0,
+        "score": 0,
+        "track": false
+      }
+    },
+    "skills": {
+      "athletics": {
+        "points": 40,
+        "specialization": ""
+      },
+      "deceive": {
+        "points": 0,
+        "specialization": ""
+      },
+      "fray": {
+        "points": 20,
+        "specialization": ""
+      },
+      "freeFall": {
+        "points": 0,
+        "specialization": ""
+      },
+      "guns": {
+        "points": 0,
+        "specialization": ""
+      },
+      "infiltrate": {
+        "points": 50,
+        "specialization": ""
+      },
+      "infosec": {
+        "points": 0,
+        "specialization": ""
+      },
+      "interface": {
+        "points": 0,
+        "specialization": ""
+      },
+      "kinesics": {
+        "points": 0,
+        "specialization": ""
+      },
+      "melee": {
+        "points": 20,
+        "specialization": ""
+      },
+      "perceive": {
+        "points": 20,
+        "specialization": ""
+      },
+      "persuade": {
+        "points": 0,
+        "specialization": ""
+      },
+      "program": {
+        "points": 0,
+        "specialization": ""
+      },
+      "provoke": {
+        "points": 0,
+        "specialization": ""
+      },
+      "psi": {
+        "points": 0,
+        "specialization": ""
+      },
+      "research": {
+        "points": 0,
+        "specialization": ""
+      },
+      "survival": {
+        "points": 0,
+        "specialization": ""
+      }
+    },
+    "spentPools": {
+      "flex": 0,
+      "insight": 0,
+      "moxie": 0,
+      "threat": 0,
+      "vigor": 0
+    },
+    "flex": 0,
+    "threat": 0,
+    "characterDetails": {
+      "age": "",
+      "aliases": "",
+      "background": "",
+      "career": "",
+      "faction": "",
+      "gender": "",
+      "interest": "",
+      "languages": ""
+    },
+    "egoType": "Xenofauna",
+    "forkType": "",
+    "threatDetails": {
+      "level": "yellow",
+      "niche": "",
+      "numbers": "",
+      "stress": {
+        "sv": "",
+        "minSV": 1,
+        "minStressOption": "none",
+        "notes": ""
+      }
+    },
+    "combatState": {
+      "complexAim": false,
+      "fullDefense": "",
+      "aggressive": false
+    },
+    "mentalHealth": {
+      "alienation": 0,
+      "damage": 0,
+      "helplessness": 0,
+      "log": [],
+      "naturalHealAttempts": [],
+      "violence": 0,
+      "wounds": 0,
+      "lastGainedStressTime": 0,
+      "aidedHealTickStartTime": -1,
+      "damageRepair": {
+        "amount": "",
+        "interval": 0
+      },
+      "ownHealTickStartTime": -1,
+      "woundRepair": {
+        "interval": 0,
+        "amount": 0
+      }
+    }
+  },
+  "ownership": {
+    "default": 0,
+    "qJl17WpEHiovQQBC": 3
+  },
+  "prototypeToken": {
+    "flags": {},
+    "name": "Clown Sprite",
+    "displayName": 0,
+    "width": 1,
+    "height": 1,
+    "lockRotation": false,
+    "rotation": 0,
+    "actorLink": true,
+    "disposition": -1,
+    "displayBars": 0,
+    "bar1": {
+      "attribute": null
+    },
+    "bar2": {
+      "attribute": null
+    },
+    "randomImg": false,
+    "light": {
+      "dim": 0,
+      "bright": 0,
+      "angle": 360,
+      "alpha": 1,
+      "animation": {
+        "speed": 5,
+        "intensity": 5,
+        "type": null,
+        "reverse": false
+      },
+      "color": null,
+      "coloration": 1,
+      "attenuation": 0.5,
+      "luminosity": 0.5,
+      "saturation": 0,
+      "contrast": 0,
+      "shadows": 0,
+      "darkness": {
+        "min": 0,
+        "max": 1
+      }
+    },
+    "texture": {
+      "src": "icons/svg/mystery-man.svg",
+      "tint": null,
+      "scaleX": 1,
+      "scaleY": 1,
+      "offsetX": 0,
+      "offsetY": 0,
+      "rotation": 0
+    },
+    "sight": {
+      "angle": 360,
+      "enabled": false,
+      "range": 0,
+      "brightness": 1,
+      "visionMode": "basic",
+      "color": null,
+      "attenuation": 0.1,
+      "saturation": 0,
+      "contrast": 0
+    },
+    "alpha": 1,
+    "detectionModes": []
+  },
+  "img": "icons/svg/mystery-man.svg",
+  "folder": null,
+  "_stats": {
+    "systemId": "ep2e",
+    "systemVersion": "1.0",
+    "coreVersion": "10.279",
+    "createdTime": null,
+    "modifiedTime": 1661875708325,
+    "lastModifiedBy": "insS7Tc4tz1EbXlo"
+  },
+  "_key": "!actors!8Cz7f15eyVP2jzzL"
+}

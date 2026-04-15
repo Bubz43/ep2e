@@ -1,0 +1,18 @@
+{
+  "_id": "3LBc0cYvG27AfVH3",
+  "name": "Smart Magazine",
+  "permission": {
+    "default": 0,
+    "qHi89sFcK4gHlOPd": 3
+  },
+  "folder": "",
+  "flags": {
+    "core": {
+      "sourceId": "JournalEntry.kcOq3hwphUdgpfGo"
+    }
+  },
+  "content": "<p>A smart magazine allows you to pick and choose what ammo round will be fired with each shot. This system leaves less room for bullets, however, so reduce the weapon’s ammunition capacity by half (round up). Smart magazines can be combined with extended magazines, in which case ammo capacity is normal.</p>",
+  "pages": [],
+  "categories": [],
+  "_key": "!journal!3LBc0cYvG27AfVH3"
+}

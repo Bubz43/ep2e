@@ -1,0 +1,45 @@
+{
+  "name": "Zap",
+  "permission": {
+    "default": 0,
+    "qJl17WpEHiovQQBC": 3
+  },
+  "type": "firearmAmmo",
+  "system": {
+    "description": "<p>Zap rounds are rubber or gel bullets that shock the target with a piezoelectric charge.</p>",
+    "reference": "Eclipse Phase Second Edition p. 211",
+    "complexity": "minor",
+    "restricted": false,
+    "quality": "average",
+    "blueprint": {
+      "blueprintType": "",
+      "cracked": false,
+      "used": false
+    },
+    "quantity": 100,
+    "state": {
+      "stashed": false
+    },
+    "ammoClass": "sniperRifle",
+    "carryPayload": false,
+    "roundsPerComplexity": 100,
+    "modes": [
+      {
+        "name": "",
+        "armorPiercing": false,
+        "attackTraits": [
+          "shock"
+        ],
+        "damageFormula": "",
+        "steady": false,
+        "damageModifierType": "halve",
+        "notes": "",
+        "id": "_defaultID"
+      }
+    ]
+  },
+  "flags": {},
+  "effects": [],
+  "_id": "lqrdPx99vvmjNjy4",
+  "_key": "!items!lqrdPx99vvmjNjy4"
+}

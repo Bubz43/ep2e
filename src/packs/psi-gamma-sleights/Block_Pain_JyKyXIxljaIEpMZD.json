@@ -1,0 +1,55 @@
+{
+  "name": "Block Pain",
+  "permission": {
+    "default": 0,
+    "qJl17WpEHiovQQBC": 3
+  },
+  "type": "sleight",
+  "system": {
+    "description": "<p>You impede the target&rsquo;s pain receptors. For WIL &divide; 5 minutes, the target can ignore the effects of one wound, plus one per superior success. This is cumulative with other pain editing effects, up to a maximum of 3 wound effects.</p>",
+    "reference": "Eclipse Phase Second Edition p. 282",
+    "duration": "minutes",
+    "infectionMod": 4,
+    "sleightType": "gamma",
+    "action": "complex",
+    "timeframe": 0,
+    "effectsToSelf": [],
+    "effectsToTarget": [
+      {
+        "type": "health",
+        "health": "physical",
+        "stat": "woundsIgnored",
+        "modifier": 1,
+        "id": "69ssfd4na8"
+      }
+    ],
+    "scaleEffectsOnSuperior": true,
+    "attack": {
+      "useMentalArmor": false,
+      "attackTraits": [],
+      "damageFormula": "",
+      "damageType": "mental",
+      "notes": ""
+    },
+    "heal": {
+      "formula": "",
+      "healthType": "mental"
+    },
+    "mentalArmor": {
+      "apply": false,
+      "divisor": 3,
+      "formula": "1d6"
+    },
+    "status": {
+      "sustaining": false,
+      "pushDuration": 0,
+      "pushed": false,
+      "pushStartTime": 0,
+      "sustainingOn": []
+    }
+  },
+  "flags": {},
+  "effects": [],
+  "_id": "JyKyXIxljaIEpMZD",
+  "_key": "!items!JyKyXIxljaIEpMZD"
+}

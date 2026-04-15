@@ -1,0 +1,183 @@
+{
+  "name": "Fokus",
+  "permission": {
+    "default": 0,
+    "qJl17WpEHiovQQBC": 3
+  },
+  "type": "substance",
+  "system": {
+    "description": "<p>This drug enables hyper-focus and concentration. Acquire the Enhanced Behavior: Obsessive (Level 2) trait for the duration and reduce task action timeframes by 25%.</p>",
+    "reference": "Eclipse Phase Second Edition p. 331",
+    "complexity": "minor",
+    "restricted": false,
+    "quality": "average",
+    "blueprint": {
+      "blueprintType": "",
+      "cracked": false,
+      "used": false
+    },
+    "quantity": 5,
+    "state": {
+      "stashed": false
+    },
+    "addiction": "mental",
+    "addictionMod": 0,
+    "hasSeverity": false,
+    "application": [
+      "dermal",
+      "inhalation",
+      "injection",
+      "oral"
+    ],
+    "base": {
+      "damage": {
+        "damageFormula": "",
+        "perTurn": false,
+        "armorPiercing": false,
+        "attackTraits": [],
+        "reduceAVbyDV": false,
+        "armorUsed": [],
+        "damageType": "physical"
+      },
+      "duration": 43200000,
+      "effects": [
+        {
+          "type": "duration",
+          "subtype": "taskActionTimeframe",
+          "modifier": -25,
+          "taskType": "",
+          "cummulative": false,
+          "halve": false,
+          "id": "hldq4a0w27"
+        }
+      ],
+      "wearOffStress": "",
+      "notes": ""
+    },
+    "category": "Cognitive",
+    "classification": "biochem",
+    "consumeOnUse": true,
+    "substanceType": "drug",
+    "quantityPerCost": 5,
+    "severity": {
+      "check": "som",
+      "checkMod": 0,
+      "conditions": [],
+      "wearOffStress": "",
+      "damage": {
+        "damageFormula": "",
+        "perTurn": false,
+        "armorPiercing": false,
+        "attackTraits": [],
+        "reduceAVbyDV": false,
+        "armorUsed": [],
+        "damageType": "physical"
+      },
+      "duration": 3000,
+      "effects": [],
+      "notes": ""
+    }
+  },
+  "flags": {
+    "ep2e": {
+      "baseAppliedItems": [
+        {
+          "_id": "xgGGWFQCLLqtXlEg-base-5yk7284psn",
+          "name": "Enhanced Behavior: Obsessive",
+          "permission": {
+            "default": 0,
+            "qHi89sFcK4gHlOPd": 3
+          },
+          "type": "trait",
+          "system": {
+            "description": "<p>Your conduct or moods are modified. This may be due to conditioning and reprogramming via time-accelerated psychosurgery ▶294, drugs, genetic tweaks, psi, or other factors. This may have been a deliberate choice or it may have been inflicted against your will. Work with your GM to define a specific emotion (e.g., happiness, contentment, love) or behavior (e.g., aggression, commitment, curiosity, orderliness, loyalty). Apply a -10 modifier per level to all actions when withheld from the behavior/emotion.</p><p>Level 1: You are encouraged to pursue the behavior and associate it with positive feelings; emotions are boosted.</p><p>Level 2: You are driven to engage in the specified behavior; emotions are exaggerated. Holding back requires a WIL Check.</p><p>Level 3: The behavior is enforced; emotions are compulsory and ongoing. If restrained from the conduct or the emotion is suppressed, suffer SV 1d6.</p><p>This trait may be taken more than once for different behaviors.</p>",
+            "reference": "Eclipse Phase Second Edition p. 78",
+            "restrictions": "",
+            "triggers": "",
+            "source": "ego",
+            "state": {
+              "level": 1,
+              "triggered": false
+            },
+            "levels": [
+              {
+                "cost": 1,
+                "effects": [
+                  {
+                    "type": "successTest",
+                    "tags": [
+                      {
+                        "type": "allActions"
+                      }
+                    ],
+                    "modifier": -10,
+                    "toOpponent": false,
+                    "requirement": "withheld from behavior/emotion",
+                    "id": "aqy1m46h1a"
+                  }
+                ],
+                "id": "unkeixdz2e"
+              },
+              {
+                "cost": 2,
+                "effects": [
+                  {
+                    "type": "successTest",
+                    "tags": [
+                      {
+                        "type": "allActions"
+                      }
+                    ],
+                    "modifier": -20,
+                    "toOpponent": false,
+                    "requirement": "withheld from behavior/emotion",
+                    "id": "j425rl53gv"
+                  },
+                  {
+                    "type": "misc",
+                    "unique": "",
+                    "description": "Holding back requires a WIL Check",
+                    "id": "bvrj3ruh2s"
+                  }
+                ],
+                "id": "f5ai6gh49s"
+              },
+              {
+                "cost": 4,
+                "effects": [
+                  {
+                    "type": "successTest",
+                    "tags": [
+                      {
+                        "type": "allActions"
+                      }
+                    ],
+                    "modifier": -30,
+                    "toOpponent": false,
+                    "requirement": "withheld from behavior/emotion",
+                    "id": "otqcabcezw"
+                  },
+                  {
+                    "type": "misc",
+                    "unique": "",
+                    "description": "If restrained from conduct or suppressing the emotion, suffer SV 1d6",
+                    "id": "aclz7eoaqu"
+                  }
+                ],
+                "id": "0cqtsrk172"
+              }
+            ],
+            "subtype": "",
+            "traitType": "negative"
+          },
+          "flags": {},
+          "img": "icons/svg/mystery-man.svg",
+          "effects": []
+        }
+      ]
+    }
+  },
+  "effects": [],
+  "_id": "6Swc5eEZgNJrZAsq",
+  "_key": "!items!6Swc5eEZgNJrZAsq"
+}

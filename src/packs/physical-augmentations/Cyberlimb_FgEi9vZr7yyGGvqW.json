@@ -1,0 +1,95 @@
+{
+  "name": "Cyberlimb",
+  "permission": {
+    "default": 0,
+    "qJl17WpEHiovQQBC": 3
+  },
+  "type": "physicalTech",
+  "system": {
+    "description": "<p>Standard replacement cyberlimbs function the same as their biological equivalents, though they are made of sturdier materials. Apply a +5 bonus to SOM Checks. They have a 6/4 AV when targeted specifically. Since limbs can easily be regrown, some people consider cybernetic prostheses to be vulgar and distasteful; others treat them as iconic symbols of self-expression. They can be equipped with hidden compartments, lights, speakers, holographic projectors, weapon mounts ▶323, and other add-ons. They may also be disguised to appear real with a synthetic mask ▶321. You may have multiple cyberlimbs.</p>",
+    "reference": "Eclipse Phase Second Edition p. 325",
+    "complexity": "moderate",
+    "restricted": false,
+    "quality": "average",
+    "concealable": false,
+    "fragile": false,
+    "singleUse": false,
+    "twoHanded": false,
+    "blueprint": {
+      "blueprintType": "",
+      "cracked": false,
+      "used": false
+    },
+    "state": {
+      "disabled": false,
+      "equipped": false,
+      "fabStartTime": 0,
+      "activated": false,
+      "embeddedEgos": [],
+      "onboardAliDeleted": false
+    },
+    "activatedEffects": [],
+    "deviceType": "",
+    "category": "Physical Augments",
+    "fabricator": "",
+    "activationAction": "automatic",
+    "passiveEffects": [
+      {
+        "type": "misc",
+        "unique": "",
+        "description": "Replacement limb. 6/4 AV when targeted",
+        "id": "lzg6znxufj"
+      },
+      {
+        "type": "successTest",
+        "tags": [
+          {
+            "type": "aptitudeCheck",
+            "aptitude": "som"
+          }
+        ],
+        "modifier": 5,
+        "toOpponent": false,
+        "requirement": "",
+        "id": "odbu4i0kau"
+      }
+    ],
+    "activation": "none",
+    "resistEffectsCheck": "",
+    "usedEffectsDuration": 3000,
+    "onboardALI": false,
+    "firewallRating": 30,
+    "fabPrintDuration": 0,
+    "firewallHealth": {
+      "baseDurability": 30,
+      "rebootEndTime": -1,
+      "crashWounds": 0,
+      "damage": 0,
+      "log": [],
+      "wounds": 0
+    },
+    "meshHealth": {
+      "baseDurability": 20,
+      "damage": 0,
+      "wounds": 0,
+      "aidedHealTickStartTime": 0,
+      "ownHealTickStartTime": 0,
+      "damageRepair": {
+        "amount": "1d10",
+        "interval": 86400000
+      },
+      "woundRepair": {
+        "amount": 1,
+        "interval": 86400000
+      },
+      "log": [],
+      "rebootEndTime": -1,
+      "crashWounds": 0
+    },
+    "wareType": "cyberware"
+  },
+  "flags": {},
+  "effects": [],
+  "_id": "FgEi9vZr7yyGGvqW",
+  "_key": "!items!FgEi9vZr7yyGGvqW"
+}

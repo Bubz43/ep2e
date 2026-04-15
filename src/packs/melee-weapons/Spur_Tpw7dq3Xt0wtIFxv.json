@@ -1,0 +1,54 @@
+{
+  "name": "Spur",
+  "permission": {
+    "default": 0,
+    "qJl17WpEHiovQQBC": 3
+  },
+  "type": "meleeWeapon",
+  "system": {
+    "description": "<p>A smart-material blade is bonded to the bones on the back of the morph&rsquo;s hand, foot, or other strategic place. This blade extends up to 6 inches through concealed ports.</p>",
+    "reference": "Eclipse Phase Second Edition p. 204",
+    "complexity": "minor",
+    "restricted": true,
+    "quality": "average",
+    "concealable": true,
+    "fragile": false,
+    "singleUse": false,
+    "twoHanded": false,
+    "blueprint": {
+      "blueprintType": "",
+      "cracked": false,
+      "used": false
+    },
+    "state": {
+      "disabled": false,
+      "equipped": false
+    },
+    "primaryAttack": {
+      "armorPiercing": false,
+      "attackTraits": [],
+      "damageFormula": "2d6 + 3",
+      "label": "",
+      "notes": ""
+    },
+    "secondaryAttack": {
+      "armorPiercing": false,
+      "attackTraits": [],
+      "damageFormula": "",
+      "label": "",
+      "notes": ""
+    },
+    "hasSecondaryAttack": false,
+    "augmentUnarmed": false,
+    "acceptsPayload": false,
+    "reachBonus": 0,
+    "improvised": false,
+    "touchOnly": false,
+    "wareType": "cyberware",
+    "exoticSkill": ""
+  },
+  "flags": {},
+  "effects": [],
+  "_id": "Tpw7dq3Xt0wtIFxv",
+  "_key": "!items!Tpw7dq3Xt0wtIFxv"
+}

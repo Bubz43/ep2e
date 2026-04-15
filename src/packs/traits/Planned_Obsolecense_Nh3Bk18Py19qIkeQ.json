@@ -1,0 +1,40 @@
+{
+  "_id": "Nh3Bk18Py19qIkeQ",
+  "name": "Planned Obsolecense",
+  "permission": {
+    "default": 0,
+    "qHi89sFcK4gHlOPd": 3
+  },
+  "type": "trait",
+  "system": {
+    "description": "<p>The morph is designed in such a way that it needs periodic genetic service pack therapy or proprietary maintenance or its performance will degrade. Treat this as a Moderate Complexity service required every month. For each month this is skipped, reduce the morph’s pools by 1 (the GM chooses which pool). If pools are reduced to 0, the morph incurs 1 wound per month that may not be repaired or healed. These manifest as joint pain, neural degradation, tumors, and other malfunctions. Once 4 wounds are accumulated, the morph is incapacitated. A gene therapy or maintenance session from a licensed hypercorp service provider (or a black market pirate) will restore the morph to full functionality.</p>",
+    "reference": "Eclipse Phase Second Edition p. 79",
+    "restrictions": "",
+    "triggers": "",
+    "source": "morph",
+    "state": {
+      "level": 0,
+      "triggered": false
+    },
+    "levels": [
+      {
+        "cost": 1,
+        "effects": [
+          {
+            "type": "misc",
+            "unique": "",
+            "description": "You need monthly maintenace on your morph or your it will start losing it's pools",
+            "id": "4m131t2n1k"
+          }
+        ],
+        "id": "maqxfyzwjq"
+      }
+    ],
+    "subtype": "",
+    "traitType": "negative"
+  },
+  "flags": {},
+  "img": "icons/svg/mystery-man.svg",
+  "effects": [],
+  "_key": "!items!Nh3Bk18Py19qIkeQ"
+}

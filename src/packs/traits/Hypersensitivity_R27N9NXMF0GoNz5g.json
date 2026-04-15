@@ -1,0 +1,40 @@
+{
+  "_id": "R27N9NXMF0GoNz5g",
+  "name": "Hypersensitivity",
+  "permission": {
+    "default": 0,
+    "qHi89sFcK4gHlOPd": 3
+  },
+  "type": "trait",
+  "system": {
+    "description": "<p>This trait is only available to biomorphs. This morph rejects implants that are not already part of its design. It may not be upgraded with any additional bioware, cyberware, or nanoware.</p>",
+    "reference": "Eclipse Phase Second Edition p. 78",
+    "restrictions": "",
+    "triggers": "",
+    "source": "morph",
+    "state": {
+      "level": 0,
+      "triggered": false
+    },
+    "levels": [
+      {
+        "cost": 3,
+        "effects": [
+          {
+            "type": "misc",
+            "unique": "",
+            "description": "May not have any additional bioware, cyberware or nanoware",
+            "id": "jr4hvb9tf7"
+          }
+        ],
+        "id": "qqdr37kesh"
+      }
+    ],
+    "subtype": "",
+    "traitType": "negative"
+  },
+  "flags": {},
+  "img": "icons/svg/mystery-man.svg",
+  "effects": [],
+  "_key": "!items!R27N9NXMF0GoNz5g"
+}

@@ -1,0 +1,26 @@
+{
+  "name": "Recovery Bond",
+  "permission": {
+    "default": 0,
+    "qJl17WpEHiovQQBC": 3
+  },
+  "type": "physicalService",
+  "system": {
+    "description": "<p>An agent will seek to recover your stack via safe/legal means.</p>\n<p>&nbsp;</p>\n<p>In the event of your death or disappearance, an agent of the insurer will personally seek to recover your cortical stack using all safe and legal methods at their disposal. This includes negotiating with rival polities, paying ransoms, sponsoring search teams, etc.</p>",
+    "reference": "Eclipse Phase Second Edition p. 315",
+    "complexity": "major",
+    "restricted": false,
+    "quality": "average",
+    "serviceDuration": -1,
+    "reputations": [],
+    "serviceType": "generic",
+    "state": {
+      "serviceStartTime": 0,
+      "equipped": false
+    }
+  },
+  "flags": {},
+  "effects": [],
+  "_id": "Qm27MJLhpOkTRnc9",
+  "_key": "!items!Qm27MJLhpOkTRnc9"
+}

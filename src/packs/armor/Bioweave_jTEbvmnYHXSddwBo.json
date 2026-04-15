@@ -1,0 +1,50 @@
+{
+  "name": "Bioweave",
+  "permission": {
+    "default": 0,
+    "qJl17WpEHiovQQBC": 3
+  },
+  "type": "armor",
+  "system": {
+    "description": "<p>The morph’s dermal layers are laced with spidersilk fibers, providing protection without changing the appearance, texture, or sensitivity of the skin.</p>",
+    "reference": "Eclipse Phase Second Edition p. 214",
+    "complexity": "minor",
+    "restricted": false,
+    "quality": "average",
+    "blueprint": {
+      "blueprintType": "",
+      "cracked": false,
+      "used": false
+    },
+    "state": {
+      "disabled": false,
+      "equipped": false,
+      "activated": false
+    },
+    "activeArmor": {
+      "energy": 0,
+      "kinetic": 0,
+      "concealable": false,
+      "layerable": false
+    },
+    "armorValues": {
+      "energy": 2,
+      "kinetic": 3,
+      "concealable": true,
+      "layerable": true
+    },
+    "attackTraits": [],
+    "effects": [],
+    "hasActiveState": false,
+    "fragile": false,
+    "singleUse": false,
+    "twoHanded": false,
+    "notes": "",
+    "wareType": "bioware"
+  },
+  "flags": {},
+  "img": "icons/svg/mystery-man.svg",
+  "effects": [],
+  "_id": "jTEbvmnYHXSddwBo",
+  "_key": "!items!jTEbvmnYHXSddwBo"
+}

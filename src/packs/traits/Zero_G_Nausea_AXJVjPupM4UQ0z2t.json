@@ -1,0 +1,52 @@
+{
+  "_id": "AXJVjPupM4UQ0z2t",
+  "name": "Zero-G Nausea",
+  "permission": {
+    "default": 0,
+    "qHi89sFcK4gHlOPd": 3
+  },
+  "type": "trait",
+  "system": {
+    "description": "<p>This trait is only available to biomorphs. This morph suffers from space sickness and does not fare well in zero gravity. Apply a -10 impairment modifier in any microgravity climate. Additionally, the first time you must acclimate or endure excessive movement in microgravity, you must make a SOM Check or spend 1 hour incapacitated by nausea.</p>",
+    "reference": "Eclipse Phase Second Edition p. 80",
+    "restrictions": "",
+    "triggers": "",
+    "source": "morph",
+    "state": {
+      "level": 0,
+      "triggered": false
+    },
+    "levels": [
+      {
+        "cost": 2,
+        "effects": [
+          {
+            "type": "successTest",
+            "tags": [
+              {
+                "type": "allActions"
+              }
+            ],
+            "modifier": -10,
+            "toOpponent": false,
+            "requirement": "in microgravity",
+            "id": "je47t8kso0"
+          },
+          {
+            "type": "misc",
+            "unique": "",
+            "description": "First time must acclimate or endure excessive movement in micrograv, make a SOM Check or be incapacitated by nausea for 1 hour",
+            "id": "tms2w2okpj"
+          }
+        ],
+        "id": "253k97i3ac"
+      }
+    ],
+    "subtype": "",
+    "traitType": "negative"
+  },
+  "flags": {},
+  "img": "icons/svg/mystery-man.svg",
+  "effects": [],
+  "_key": "!items!AXJVjPupM4UQ0z2t"
+}

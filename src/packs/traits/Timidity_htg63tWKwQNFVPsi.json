@@ -1,0 +1,85 @@
+{
+  "_id": "htg63tWKwQNFVPsi",
+  "name": "Timidity",
+  "permission": {
+    "default": 0,
+    "qHi89sFcK4gHlOPd": 3
+  },
+  "type": "trait",
+  "system": {
+    "description": "<p>You are weak-willed and easily intimidated. Apply -5 per level to WIL Checks.</p>",
+    "reference": "Eclipse Phase Second Edition",
+    "restrictions": "",
+    "triggers": "",
+    "source": "ego",
+    "state": {
+      "level": 0,
+      "triggered": false
+    },
+    "levels": [
+      {
+        "cost": 1,
+        "effects": [
+          {
+            "type": "successTest",
+            "tags": [
+              {
+                "type": "aptitudeCheck",
+                "aptitude": "wil"
+              }
+            ],
+            "modifier": -5,
+            "toOpponent": false,
+            "requirement": "",
+            "id": "gag18366rc"
+          }
+        ],
+        "id": "k6pkoios4n"
+      },
+      {
+        "cost": 2,
+        "effects": [
+          {
+            "type": "successTest",
+            "tags": [
+              {
+                "type": "aptitudeCheck",
+                "aptitude": "wil"
+              }
+            ],
+            "modifier": -10,
+            "toOpponent": false,
+            "requirement": "",
+            "id": "gag18366rc"
+          }
+        ],
+        "id": "5vnqtbi2k1"
+      },
+      {
+        "cost": 3,
+        "effects": [
+          {
+            "type": "successTest",
+            "tags": [
+              {
+                "type": "aptitudeCheck",
+                "aptitude": "wil"
+              }
+            ],
+            "modifier": -15,
+            "toOpponent": false,
+            "requirement": "",
+            "id": "gag18366rc"
+          }
+        ],
+        "id": "4ktwykblla"
+      }
+    ],
+    "subtype": "",
+    "traitType": "negative"
+  },
+  "flags": {},
+  "img": "icons/svg/mystery-man.svg",
+  "effects": [],
+  "_key": "!items!htg63tWKwQNFVPsi"
+}

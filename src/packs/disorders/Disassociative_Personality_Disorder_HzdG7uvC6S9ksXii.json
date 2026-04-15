@@ -1,0 +1,44 @@
+{
+  "name": "Disassociative Personality Disorder",
+  "permission": {
+    "default": 0,
+    "qJl17WpEHiovQQBC": 3
+  },
+  "type": "trait",
+  "system": {
+    "description": "<p>A separate, distinct personality develops apart from your original personality. The personalities may or may not be aware of each other and &ldquo;conscious&rdquo; during the actions of the other personality, though there is some basic information sharing (such as language and core skill sets). Most subjects have only a single extra personality, but it is not unheard of to have several personalities. Each personality sees itself as a distinct person with their own wants, needs, and motivations.</p>",
+    "reference": "Eclipse Phase Second Edition p. 225",
+    "restrictions": "",
+    "triggers": "Helplessness, specific memories, the unkown, violence",
+    "source": "ego",
+    "state": {
+      "level": 0,
+      "triggered": false
+    },
+    "levels": [
+      {
+        "cost": 2,
+        "effects": [
+          {
+            "type": "misc",
+            "unique": "",
+            "description": "The other personality must be roleplayed (perhaps by the GM or another player)",
+            "id": "sdashh9x11"
+          }
+        ],
+        "id": "_defaultLevel"
+      }
+    ],
+    "subtype": "",
+    "traitType": "positive"
+  },
+  "flags": {
+    "core": {
+      "sourceId": "Item.Ri4FOaqxsl3hYaBh"
+    }
+  },
+  "img": "icons/svg/mystery-man.svg",
+  "effects": [],
+  "_id": "HzdG7uvC6S9ksXii",
+  "_key": "!items!HzdG7uvC6S9ksXii"
+}

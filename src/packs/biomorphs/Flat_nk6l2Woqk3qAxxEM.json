@@ -1,0 +1,99 @@
+{
+  "_id": "nk6l2Woqk3qAxxEM",
+  "name": "Flat",
+  "permission": {
+    "default": 0,
+    "qJl17WpEHiovQQBC": 3
+  },
+  "type": "biological",
+  "system": {
+    "description": "<p>Flats are baseline unmodified humans, born with all of the natural defects, hereditary diseases, and other genetic mutations that evolution so lovingly applies. Flats are increasingly rare outside bioconservative enclaves &mdash; most died off with the rest of humanity during the Fall.</p>",
+    "reference": "Eclipse Phase Second Edition p. 54",
+    "movementRates": [
+      {
+        "type": "walker",
+        "base": 4,
+        "full": 20,
+        "id": "pf1rs2o39p"
+      }
+    ],
+    "acquisition": {
+      "availability": 30,
+      "complexity": "minor",
+      "cost": 0,
+      "resource": "morphPoints",
+      "restricted": false
+    },
+    "pools": {
+      "insight": 0,
+      "moxie": 0,
+      "vigor": 0,
+      "flex": 0
+    },
+    "conditions": [],
+    "damagedArmor": [],
+    "prehensileLimbs": 2,
+    "sex": "",
+    "subtype": "Biomorph",
+    "unarmedDV": "1d6",
+    "isSwarm": false,
+    "brain": "",
+    "recoveryConditions": "normal",
+    "size": "medium",
+    "reach": 0,
+    "physicalHealth": {
+      "baseDurability": 30,
+      "bleedingOut": false,
+      "damage": 0,
+      "dots": [],
+      "aidedHealTickStartTime": 0,
+      "ownHealTickStartTime": 0,
+      "damageRepair": {
+        "amount": "1d10",
+        "interval": 86400000
+      },
+      "woundRepair": {
+        "amount": 1,
+        "interval": 604800000
+      },
+      "log": [],
+      "wounds": 0
+    }
+  },
+  "sort": 100001,
+  "flags": {},
+  "prototypeToken": {
+    "flags": {},
+    "name": "Flat",
+    "displayName": 0,
+    "img": "icons/svg/mystery-man.svg",
+    "tint": null,
+    "width": 1,
+    "height": 1,
+    "scale": 1,
+    "lockRotation": false,
+    "rotation": 0,
+    "vision": false,
+    "dimSight": 0,
+    "brightSight": 0,
+    "dimLight": 0,
+    "brightLight": 0,
+    "sightAngle": 360,
+    "lightAngle": 360,
+    "lightAlpha": 1,
+    "lightAnimation": {
+      "speed": 5,
+      "intensity": 5
+    },
+    "actorId": "nk6l2Woqk3qAxxEM",
+    "actorLink": true,
+    "disposition": -1,
+    "displayBars": 0,
+    "bar1": {},
+    "bar2": {},
+    "randomImg": false
+  },
+  "items": [],
+  "effects": [],
+  "_key": "!actors!nk6l2Woqk3qAxxEM"
+}

@@ -1,0 +1,85 @@
+{
+  "_id": "KPlAIEw9KKb7CKMi",
+  "name": "Hyper Linguistics",
+  "permission": {
+    "default": 0,
+    "qHi89sFcK4gHlOPd": 3
+  },
+  "type": "trait",
+  "system": {
+    "description": "<p>You have a natural gift with linguistic structures and syntax. You receive a +10 modifier to INT Checks per level to grasp the general meaning or intent of communication spoken in languages you don’t know — even alien tongues. This trait provides no bonuses to written texts or non-verbal communications (such as Factor spores).</p>",
+    "reference": "Eclipse Phase Second Edition p. 74",
+    "restrictions": "",
+    "triggers": "",
+    "source": "ego",
+    "state": {
+      "level": 0,
+      "triggered": false
+    },
+    "levels": [
+      {
+        "cost": 1,
+        "effects": [
+          {
+            "type": "successTest",
+            "tags": [
+              {
+                "type": "aptitudeCheck",
+                "aptitude": "int"
+              }
+            ],
+            "modifier": 10,
+            "toOpponent": false,
+            "requirement": "communicating in spoken languages you don't know",
+            "id": "xrrzovyven"
+          }
+        ],
+        "id": "bxzfzm7bzh"
+      },
+      {
+        "cost": 2,
+        "effects": [
+          {
+            "type": "successTest",
+            "tags": [
+              {
+                "type": "aptitudeCheck",
+                "aptitude": "int"
+              }
+            ],
+            "modifier": 20,
+            "toOpponent": false,
+            "requirement": "communicating in spoken languages you don't know",
+            "id": "xrrzovyven"
+          }
+        ],
+        "id": "fbty4en343"
+      },
+      {
+        "cost": 3,
+        "effects": [
+          {
+            "type": "successTest",
+            "tags": [
+              {
+                "type": "aptitudeCheck",
+                "aptitude": "int"
+              }
+            ],
+            "modifier": 30,
+            "toOpponent": false,
+            "requirement": "communicating in spoken languages you don't know",
+            "id": "xrrzovyven"
+          }
+        ],
+        "id": "7azejjpdsg"
+      }
+    ],
+    "subtype": "",
+    "traitType": "positive"
+  },
+  "flags": {},
+  "img": "icons/svg/mystery-man.svg",
+  "effects": [],
+  "_key": "!items!KPlAIEw9KKb7CKMi"
+}

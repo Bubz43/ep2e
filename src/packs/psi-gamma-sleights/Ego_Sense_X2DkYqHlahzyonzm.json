@@ -1,0 +1,54 @@
+{
+  "name": "Ego Sense",
+  "permission": {
+    "default": 0,
+    "qJl17WpEHiovQQBC": 3
+  },
+  "type": "sleight",
+  "system": {
+    "description": "<p>You detect the presence and location (rough direction from yourself) of other sentient and biological life forms (i.e., egos and animals) within Close range. Each life form makes an opposed test against your roll. You suffer modifiers for size, the same as for ranged attacks. Superior successes provide additional details: approximate size, exact distance, type of creature, etc. If the target moves during the duration (WIL &divide; 5 action turns), you will have a rough idea of their speed and bearing.</p>",
+    "reference": "Eclipse Phase Second Edition p. 284",
+    "duration": "actionTurns",
+    "infectionMod": 2,
+    "sleightType": "gamma",
+    "action": "complex",
+    "timeframe": 0,
+    "effectsToSelf": [],
+    "effectsToTarget": [
+      {
+        "type": "misc",
+        "unique": "",
+        "description": "Detect biological life; extra info on range, size, type, etc with superior successes.",
+        "id": "06ryc23y7g"
+      }
+    ],
+    "scaleEffectsOnSuperior": false,
+    "attack": {
+      "useMentalArmor": false,
+      "attackTraits": [],
+      "damageFormula": "",
+      "damageType": "mental",
+      "notes": ""
+    },
+    "heal": {
+      "formula": "",
+      "healthType": "mental"
+    },
+    "mentalArmor": {
+      "apply": false,
+      "divisor": 3,
+      "formula": "1d6"
+    },
+    "status": {
+      "sustaining": false,
+      "pushDuration": 0,
+      "pushed": false,
+      "pushStartTime": 0,
+      "sustainingOn": []
+    }
+  },
+  "flags": {},
+  "effects": [],
+  "_id": "X2DkYqHlahzyonzm",
+  "_key": "!items!X2DkYqHlahzyonzm"
+}

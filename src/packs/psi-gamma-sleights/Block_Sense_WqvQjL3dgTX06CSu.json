@@ -1,0 +1,68 @@
+{
+  "name": "Block Sense",
+  "permission": {
+    "default": 0,
+    "qJl17WpEHiovQQBC": 3
+  },
+  "type": "sleight",
+  "system": {
+    "description": "<p>You short-circuit and temporary disable one of the target&rsquo;s sensory cortices (your choice). For WIL &divide; 5 action turns, the target loses that type of sensory input. The senses that may be negated include sight, hearing, touch, smell, taste, hunger, balance, direction, proprioception, facial recognition, and augmented senses such as electrical sense and radiation sense. Any actions that rely on the impaired sense require a test with a minimum -30 modifier.</p>",
+    "reference": "Eclipse Phase Second Edition p. 282",
+    "duration": "actionTurns",
+    "infectionMod": 4,
+    "sleightType": "gamma",
+    "action": "complex",
+    "timeframe": 0,
+    "effectsToSelf": [],
+    "effectsToTarget": [
+      {
+        "type": "misc",
+        "unique": "",
+        "description": "Negates one of the target’s senses (hearing, sight, smell, taste, touch).",
+        "id": "2w31xylm23"
+      },
+      {
+        "type": "successTest",
+        "tags": [
+          {
+            "type": "action",
+            "action": "",
+            "subtype": ""
+          }
+        ],
+        "modifier": -30,
+        "toOpponent": false,
+        "requirement": "relying on impaired sense",
+        "id": "narh2ylqal"
+      }
+    ],
+    "scaleEffectsOnSuperior": false,
+    "attack": {
+      "useMentalArmor": false,
+      "attackTraits": [],
+      "damageFormula": "",
+      "damageType": "mental",
+      "notes": ""
+    },
+    "heal": {
+      "formula": "",
+      "healthType": "mental"
+    },
+    "mentalArmor": {
+      "apply": false,
+      "divisor": 3,
+      "formula": "1d6"
+    },
+    "status": {
+      "sustaining": false,
+      "pushDuration": 0,
+      "pushed": false,
+      "pushStartTime": 0,
+      "sustainingOn": []
+    }
+  },
+  "flags": {},
+  "effects": [],
+  "_id": "WqvQjL3dgTX06CSu",
+  "_key": "!items!WqvQjL3dgTX06CSu"
+}

@@ -1,0 +1,87 @@
+{
+  "name": "Flight",
+  "permission": {
+    "default": 0,
+    "qJl17WpEHiovQQBC": 3
+  },
+  "type": "substance",
+  "system": {
+    "description": "<p>This drug is derived from pheromones released due to fear and is intended to instill alarm or even terror. Make a WIL Check or suffer a panic attack, inflicting SV 1d10. You also suffer a -30 modifier for resisting intimidation or fear-based emotional manipulations for 1 hour.</p>",
+    "reference": "Eclipse Phase Second Edition p. 335",
+    "complexity": "minor",
+    "restricted": true,
+    "quality": "average",
+    "blueprint": {
+      "blueprintType": "",
+      "cracked": false,
+      "used": false
+    },
+    "quantity": 5,
+    "state": {
+      "stashed": false
+    },
+    "addiction": "",
+    "addictionMod": 0,
+    "hasSeverity": true,
+    "application": [
+      "inhalation"
+    ],
+    "base": {
+      "damage": {
+        "damageFormula": "",
+        "perTurn": false,
+        "armorPiercing": false,
+        "attackTraits": [],
+        "reduceAVbyDV": false,
+        "armorUsed": [],
+        "damageType": "mental"
+      },
+      "duration": 3600000,
+      "effects": [
+        {
+          "type": "successTest",
+          "tags": [
+            {
+              "type": "action",
+              "action": "",
+              "subtype": ""
+            }
+          ],
+          "modifier": -30,
+          "toOpponent": false,
+          "requirement": "opposing intimidation or fear based emotional manipulation",
+          "id": "y5nelmvqcm"
+        }
+      ],
+      "wearOffStress": "",
+      "notes": ""
+    },
+    "category": "",
+    "classification": "biochem",
+    "consumeOnUse": true,
+    "substanceType": "toxin",
+    "quantityPerCost": 5,
+    "severity": {
+      "check": "wil",
+      "checkMod": 0,
+      "conditions": [],
+      "wearOffStress": "",
+      "damage": {
+        "damageFormula": "1d10",
+        "perTurn": false,
+        "armorPiercing": false,
+        "attackTraits": [],
+        "reduceAVbyDV": false,
+        "armorUsed": [],
+        "damageType": "mental"
+      },
+      "duration": 3000,
+      "effects": [],
+      "notes": ""
+    }
+  },
+  "flags": {},
+  "effects": [],
+  "_id": "e9HqzZjMtOQ5RRq7",
+  "_key": "!items!e9HqzZjMtOQ5RRq7"
+}

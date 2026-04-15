@@ -1,0 +1,43 @@
+{
+  "name": "Splash",
+  "permission": {
+    "default": 0,
+    "qJl17WpEHiovQQBC": 3
+  },
+  "type": "firearmAmmo",
+  "system": {
+    "description": "<p>Splash rounds carry a payload (acquired separately) like capsule ammo, but are designed to break upon impact rather than penetrating, splashing their contents on the target&rsquo;s exterior. Splash rounds are typically loaded with paint, taggant nanobots, tracker dye, and similar substances.</p>",
+    "reference": "Eclipse Phase Second Edition p. 211",
+    "complexity": "minor",
+    "restricted": false,
+    "quality": "average",
+    "blueprint": {
+      "blueprintType": "",
+      "cracked": false,
+      "used": false
+    },
+    "quantity": 100,
+    "state": {
+      "stashed": false
+    },
+    "ammoClass": "assaultRifle",
+    "carryPayload": true,
+    "roundsPerComplexity": 100,
+    "modes": [
+      {
+        "name": "",
+        "armorPiercing": false,
+        "attackTraits": [],
+        "damageFormula": "",
+        "steady": false,
+        "damageModifierType": "noDamage",
+        "notes": "",
+        "id": "_defaultID"
+      }
+    ]
+  },
+  "flags": {},
+  "effects": [],
+  "_id": "r0TgXrUzskyO5DVT",
+  "_key": "!items!r0TgXrUzskyO5DVT"
+}

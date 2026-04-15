@@ -1,0 +1,50 @@
+{
+  "name": "Industrial Armor",
+  "permission": {
+    "default": 0,
+    "qJl17WpEHiovQQBC": 3
+  },
+  "type": "armor",
+  "system": {
+    "description": "<p>This armor is designed to protect shells from collisions, extreme weather, industrial accidents, and similar wear-and-tear.</p>",
+    "reference": "Eclipse Phase Second Edition p. 214",
+    "complexity": "minor",
+    "restricted": false,
+    "quality": "average",
+    "blueprint": {
+      "blueprintType": "",
+      "cracked": false,
+      "used": false
+    },
+    "state": {
+      "disabled": false,
+      "equipped": false,
+      "activated": false
+    },
+    "activeArmor": {
+      "energy": 0,
+      "kinetic": 0,
+      "concealable": false,
+      "layerable": false
+    },
+    "armorValues": {
+      "energy": 6,
+      "kinetic": 4,
+      "concealable": false,
+      "layerable": true
+    },
+    "attackTraits": [],
+    "effects": [],
+    "hasActiveState": false,
+    "fragile": false,
+    "singleUse": false,
+    "twoHanded": false,
+    "notes": "",
+    "wareType": "hardware"
+  },
+  "flags": {},
+  "img": "icons/svg/mystery-man.svg",
+  "effects": [],
+  "_id": "SQ50jMla1T8BLmL6",
+  "_key": "!items!SQ50jMla1T8BLmL6"
+}

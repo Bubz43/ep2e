@@ -1,0 +1,44 @@
+{
+  "name": "Atavism",
+  "permission": {
+    "default": 0,
+    "qJl17WpEHiovQQBC": 3
+  },
+  "type": "trait",
+  "system": {
+    "description": "<p>Atavism mainly affects uplifts. When triggered, they regress to behaviors more in line with their animalistic precursors.<br /><br /></p>",
+    "reference": "Eclipse Phase Second Edition p. 224",
+    "restrictions": "",
+    "triggers": "Alienation, mobs, violence",
+    "source": "ego",
+    "state": {
+      "level": 0,
+      "triggered": false
+    },
+    "levels": [
+      {
+        "cost": 2,
+        "effects": [
+          {
+            "type": "misc",
+            "unique": "",
+            "description": "You might lose the ability to speak and reason or engage in primitive animalistic behavior such as threat or dominance displays.",
+            "id": "0vm2dinm1y"
+          }
+        ],
+        "id": "_defaultLevel"
+      }
+    ],
+    "subtype": "",
+    "traitType": "positive"
+  },
+  "flags": {
+    "core": {
+      "sourceId": "Item.hqRGwhBJMqKYVMgB"
+    }
+  },
+  "img": "icons/svg/mystery-man.svg",
+  "effects": [],
+  "_id": "PImIC2NhaJ2ep7Wv",
+  "_key": "!items!PImIC2NhaJ2ep7Wv"
+}
