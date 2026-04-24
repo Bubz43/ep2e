@@ -61,26 +61,26 @@ export class ParticipantSelector extends mix(LitElement).with(
       updateCombatState({
         type: CombatActionType.AddParticipants,
         payload: [...this.toAdd].map((entity) =>
-          entity instanceof Token
+          entity instanceof foundry.canvas.placeables.Token
             ? {
-                name: entity.name,
-                hidden: entity.document.hidden,
-                initiative:
-                  entity.actor?.type !== ActorType.Character ? 0 : null,
-                entityIdentifiers: entity.scene && {
-                  type: TrackedCombatEntity.Token,
-                  sceneId: entity.scene.id,
-                  tokenId: entity.id,
-                },
-              }
-            : {
-                name: entity.name,
-                initiative: entity.type !== ActorType.Character ? 0 : null,
-                entityIdentifiers: {
-                  type: TrackedCombatEntity.Actor,
-                  actorId: entity.id,
-                },
+              name: entity.name,
+              hidden: entity.document.hidden,
+              initiative:
+                entity.actor?.type !== ActorType.Character ? 0 : null,
+              entityIdentifiers: entity.scene && {
+                type: TrackedCombatEntity.Token,
+                sceneId: entity.scene.id,
+                tokenId: entity.id,
               },
+            }
+            : {
+              name: entity.name,
+              initiative: entity.type !== ActorType.Character ? 0 : null,
+              entityIdentifiers: {
+                type: TrackedCombatEntity.Actor,
+                actorId: entity.id,
+              },
+            },
         ),
       });
       this.toAdd.clear();
@@ -109,8 +109,8 @@ export class ParticipantSelector extends mix(LitElement).with(
     return html`
       <mwc-list multi>
         ${[...game.actors.values()].map((actor) => {
-          if (!actor.isOwner) return '';
-          return html`
+      if (!actor.isOwner) return '';
+      return html`
             <mwc-check-list-item
               graphic="medium"
               twoline
@@ -122,7 +122,7 @@ export class ParticipantSelector extends mix(LitElement).with(
               <span slot="secondary">${localize(actor.type)}</span>
             </mwc-check-list-item>
           `;
-        })}
+    })}
       </mwc-list>
       ${this.renderSubmitButton()}
     `;
@@ -132,8 +132,8 @@ export class ParticipantSelector extends mix(LitElement).with(
     return html`
       <mwc-list multi>
         ${readyCanvas()?.tokens?.placeables.map((token) => {
-          if (!token.isOwner) return '';
-          return html`
+      if (!token.isOwner) return '';
+      return html`
             <mwc-check-list-item
               graphic="medium"
               ?twoline=${!!token.actor}
@@ -146,13 +146,13 @@ export class ParticipantSelector extends mix(LitElement).with(
               />
               <span>${token.document.name}</span>
               ${token.actor
-                ? html`
+          ? html`
                     <span slot="secondary">${localize(token.actor.type)}</span>
                   `
-                : ''}
+          : ''}
             </mwc-check-list-item>
           `;
-        })}
+    })}
       </mwc-list>
       ${this.renderSubmitButton()}
     `;
@@ -169,65 +169,65 @@ export class ParticipantSelector extends mix(LitElement).with(
   private renderCustom() {
     return html`
       ${renderSubmitForm({
-        classes: 'custom-form',
-        props: { name: '', img: '', duration: 0, hidden: false },
-        update: ({ name = '???', img, duration, hidden }) => {
-          updateCombatState({
-            type: CombatActionType.AddParticipants,
-            payload: [
-              {
-                userId: game.user.id,
-                name,
-                img,
-                initiative: 0,
-                hidden,
-                entityIdentifiers: duration
-                  ? {
-                      type: TrackedCombatEntity.Time,
-                      startTime: currentWorldTimeMS(),
-                      duration,
-                    }
-                  : undefined,
-              },
-            ],
-          });
-        },
-        fields: ({ name, img, duration, hidden }) => [
-          renderTextField(name, { required: true }),
-          renderTextField(img, {
-            after: html`
+      classes: 'custom-form',
+      props: { name: '', img: '', duration: 0, hidden: false },
+      update: ({ name = '???', img, duration, hidden }) => {
+        updateCombatState({
+          type: CombatActionType.AddParticipants,
+          payload: [
+            {
+              userId: game.user.id,
+              name,
+              img,
+              initiative: 0,
+              hidden,
+              entityIdentifiers: duration
+                ? {
+                  type: TrackedCombatEntity.Time,
+                  startTime: currentWorldTimeMS(),
+                  duration,
+                }
+                : undefined,
+            },
+          ],
+        });
+      },
+      fields: ({ name, img, duration, hidden }) => [
+        renderTextField(name, { required: true }),
+        renderTextField(img, {
+          after: html`
               <button
                 @click=${({
-                  currentTarget,
-                }: Event & { currentTarget: HTMLElement }) => {
-                  openImagePicker(this, img.value, (path) => {
-                    closeImagePicker(this);
-                    const input = currentTarget
-                      ?.closest('sl-field')
-                      ?.querySelector('input');
-                    if (input) {
-                      input.value = path;
-                      input.click();
-                    }
-                    currentTarget.dispatchEvent(
-                      new SlCustomStoreEvent({
-                        key: img.prop,
-                        value: path,
-                      }),
-                    );
-                  });
-                }}
+            currentTarget,
+          }: Event & { currentTarget: HTMLElement }) => {
+              openImagePicker(this, img.value, (path) => {
+                closeImagePicker(this);
+                const input = currentTarget
+                  ?.closest('sl-field')
+                  ?.querySelector('input');
+                if (input) {
+                  input.value = path;
+                  input.click();
+                }
+                currentTarget.dispatchEvent(
+                  new SlCustomStoreEvent({
+                    key: img.prop,
+                    value: path,
+                  }),
+                );
+              });
+            }}
               >
                 ${img.value
-                  ? html` <img src=${img.value} height="25px" /> `
-                  : html`<mwc-icon>image_search</mwc-icon>`}
+              ? html` <img src=${img.value} height="25px" /> `
+              : html`<mwc-icon>image_search</mwc-icon>`}
               </button>
             `,
-          }),
-          renderLabeledCheckbox(hidden),
-          renderTimeField(duration),
-        ],
-      })}
+        }),
+        renderLabeledCheckbox(hidden),
+        renderTimeField(duration),
+      ],
+    })}
     `;
   }
 }

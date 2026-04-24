@@ -139,7 +139,7 @@ type PlaceableLayer<
   L extends PlaceablesLayer,
   T extends PlaceableObject,
   F = LayerInfo<T>,
-  > = Omit<L, keyof F> & F;
+> = Omit<L, keyof F> & F;
 
 export type CanvasLayers = {
   background: PlaceableLayer<BackgroundLayer, Tile>;
@@ -201,11 +201,18 @@ type GameCollections = {
   macros: Col<Macro>;
 };
 
+
+
 declare global {
   const PIXI: PIXI;
 
   const foundry: {
-    documents: typeof import('common/documents');
+    documents: typeof import('common/documents') & {
+      collections: {
+        Items: typeof Items
+        Actors: typeof Actors
+      }
+    }
     utils: typeof import('common/utils/module') & {
       fromUuidSync: (...args: Parameters<typeof fromUuid>) => { toDragData(): unknown } | undefined | null;
     };
@@ -214,9 +221,20 @@ declare global {
     packages: typeof import('common/packages');
     canvas: {
       Canvas: typeof Canvas
+      placeables: {
+        Token: typeof Token
+      }
     },
 
+    Game: typeof Game
 
+    appv1: {
+      sheets: {
+        ItemSheet: typeof ItemSheet
+        ActorSheet: typeof ActorSheet
+        JournalSheet: typeof JournalSheet
+      }
+    }
     applications: {
       hud: {
         TokenHUD: typeof TokenHUD
@@ -227,9 +245,38 @@ declare global {
         }
       }
       ux: {
+        DragDrop: {
+          implementation: typeof DragDrop
+        }
         TextEditor: {
           implementation: typeof TextEditor
         }
+      }
+      sheets: {
+        FolderConfig: typeof FolderConfig
+        UserConfig: typeof UserConfig
+      }
+      apps: {
+        FilePicker: {
+          implementation: typeof FilePicker
+        }
+      }
+      sidebar: {
+        apps: {
+          Compendium: typeof Compendium
+        }
+        tabs: {
+          ChatLog: typeof ChatLog,
+          CompendiumDirectory: typeof CompendiumDirectory,
+          ActorDirectory: typeof ActorDirectory
+          ItemDirectory: typeof ItemDirectory
+          CombatTracker: typeof CombatTracker
+        }
+      }
+    }
+    dice: {
+      terms: {
+        DiceTerm: typeof DiceTerm
       }
     }
   };
@@ -275,6 +322,8 @@ declare global {
   interface PlaceableObject {
     document: unknown;
   }
+
+  type JQuery<T extends HTMLElement = HTMLElement> = [T]
 
   interface PrototypeTokenData extends TokenData { }
 
@@ -406,9 +455,7 @@ declare global {
     activeControl: string;
   }
 
-  interface DiceTerm {
-    number: number;
-  }
+
 
   interface Roll {
     readonly formula: string;

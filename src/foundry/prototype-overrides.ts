@@ -27,15 +27,14 @@ import { compact, first, mapToObj, noop, pipe } from 'remeda';
 import { stopEvent } from 'weightless';
 import { readyCanvas } from './canvas';
 import { isKnownDrop, onlySetDragSource } from './drag-and-drop';
-import { navMenuListener } from './foundry-apps';
 import type { TokenData } from './foundry-cont';
 import { localize } from './localization';
 import { convertMenuOptions, gmIsConnected } from './misc-helpers';
 import { activeTokenStatusEffects } from './token-helpers';
 
 export const overridePrototypes = () => {
-  const { getData } = UserConfig.prototype;
-  UserConfig.prototype.getData = function () {
+  const { getData } = foundry.applications.sheets.UserConfig.prototype;
+  foundry.applications.sheets.UserConfig.prototype.getData = function () {
     const original = getData.call(this, {}) as {
       user: User;
       actors: ActorEP[];
@@ -49,8 +48,8 @@ export const overridePrototypes = () => {
     };
   };
 
-  const { _onPreventDragstart } = Game.prototype;
-  Game.prototype._onPreventDragstart = function (ev: DragEvent) {
+  const { _onPreventDragstart } = foundry.Game.prototype;
+  foundry.Game.prototype._onPreventDragstart = function (ev: DragEvent) {
     return pipe(ev.composedPath(), first(), (target) => {
       return target instanceof Element &&
         target.getAttribute('draggable') === 'true'
@@ -59,9 +58,9 @@ export const overridePrototypes = () => {
     });
   };
 
-  const { _onUpdate } = Token.prototype;
+  const { _onUpdate } = foundry.canvas.placeables.Token.prototype;
 
-  Token.prototype._onUpdate = function (
+  foundry.canvas.placeables.Token.prototype._onUpdate = function (
     data: Partial<TokenData>,
     options: unknown,
     userId: string,
@@ -70,7 +69,7 @@ export const overridePrototypes = () => {
     this.actor?.render(false, {});
   };
 
-  Token.prototype._drawEffects = async function () {
+  foundry.canvas.placeables.Token.prototype._drawEffects = async function () {
     this.effects.renderable = false;
 
     // Clear Effects Container
@@ -214,8 +213,8 @@ export const overridePrototypes = () => {
 
 
 
-  const { defaultOptions: journalSheetOptions } = JournalSheet;
-  Object.defineProperty(JournalSheet, 'defaultOptions', {
+  const { defaultOptions: journalSheetOptions } = foundry.appv1.sheets.JournalSheet;
+  Object.defineProperty(foundry.appv1.sheets.JournalSheet, 'defaultOptions', {
     enumerable: true,
     get() {
       return { ...(journalSheetOptions as {}), width: 620 };
@@ -261,10 +260,10 @@ export const overridePrototypes = () => {
   //   }
   // };
 
-  const { _replaceHTML } = CombatTracker.prototype;
+  const { _replaceHTML } = foundry.applications.sidebar.tabs.CombatTracker.prototype;
   //@ts-expect-error
-  CombatTracker.prototype._renderHTML = () => { };
-  CombatTracker.prototype._replaceHTML = function (
+  foundry.applications.sidebar.tabs.CombatTracker.prototype._renderHTML = () => { };
+  foundry.applications.sidebar.tabs.CombatTracker.prototype._replaceHTML = function (
     ...args: Parameters<typeof _replaceHTML>
   ) {
     const element = args[1] as HTMLElement;
@@ -364,8 +363,8 @@ export const overridePrototypes = () => {
     return className.indexOf('tox-') !== -1 || className.indexOf('mce-') !== -1;
   };
 
-  const { _handleDragStart } = DragDrop.prototype;
-  DragDrop.prototype._handleDragStart = function (ev: DragEvent) {
+  const { _handleDragStart } = foundry.applications.ux.DragDrop.implementation.prototype;
+  foundry.applications.ux.DragDrop.implementation.prototype._handleDragStart = function (ev: DragEvent) {
     _handleDragStart.call(this, ev);
     let data: unknown = null;
     try {
@@ -447,7 +446,7 @@ export const overridePrototypes = () => {
 
   const closeCreator = () => closeWindow(ItemCreator);
 
-  ItemDirectory.prototype._onCreateEntry = async function (ev: Event) {
+  foundry.applications.sidebar.tabs.ItemDirectory.prototype._onCreateEntry = async function (ev: Event) {
     stopEvent(ev);
 
     if (ev.currentTarget instanceof HTMLElement) {
@@ -465,7 +464,7 @@ export const overridePrototypes = () => {
     }
   };
 
-  ActorDirectory.prototype._onCreateEntry = async function (ev: Event) {
+  foundry.applications.sidebar.tabs.ActorDirectory.prototype._onCreateEntry = async function (ev: Event) {
     stopEvent(ev);
 
     if (ev.currentTarget instanceof HTMLElement) {

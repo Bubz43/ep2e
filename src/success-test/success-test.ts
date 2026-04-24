@@ -157,9 +157,10 @@ export const createSuccessTestModifier = ({
 
 type Awaited<T> = T extends PromiseLike<infer U> ? Awaited<U> : T;
 
-export class Percentile extends DiceTerm {
+
+export class Percentile extends foundry.dice.terms.DiceTerm {
   faces = 10;
-  declare results: Awaited<ReturnType<DiceTerm['roll']>>[];
+  declare results: Awaited<ReturnType<InstanceType<typeof foundry.dice.terms.DiceTerm>['roll']>>[];
 
   async roll() {
     const roll = await super.roll();

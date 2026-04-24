@@ -29,9 +29,9 @@ export class MessageSleightSustainEnd extends MessageElement {
       const actor =
         entity instanceof ActorEP
           ? entity
-          : entity instanceof Token
-          ? entity.actor
-          : null;
+          : entity instanceof foundry.canvas.placeables.Token
+            ? entity.actor
+            : null;
       if (actor?.proxy.type === ActorType.Character) {
         characters.set(actor.proxy, sustain);
       }
@@ -45,9 +45,9 @@ export class MessageSleightSustainEnd extends MessageElement {
         <p>${localize('applied')} ${localize('to')}</p>
         <ul>
           ${until(
-            this.renderAppliedTo(),
-            html`<mwc-circular-progress></mwc-circular-progress>`,
-          )}
+      this.renderAppliedTo(),
+      html`<mwc-circular-progress></mwc-circular-progress>`,
+    )}
         </ul>
       </div>
       ${this.sleightSustainEnd.removedFromIds.length
@@ -57,11 +57,11 @@ export class MessageSleightSustainEnd extends MessageElement {
 
               <ul>
                 ${this.sleightSustainEnd.removedFromIds.map((uuid) => {
-                  const entity = this.sleightSustainEnd.appliedTo.find(
-                    (a) => a.uuid === uuid,
-                  );
-                  return html`<colored-tag>${entity?.name}</colored-tag>`;
-                })}
+          const entity = this.sleightSustainEnd.appliedTo.find(
+            (a) => a.uuid === uuid,
+          );
+          return html`<colored-tag>${entity?.name}</colored-tag>`;
+        })}
               </ul>
             </div>
           `

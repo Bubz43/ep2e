@@ -67,7 +67,7 @@ export const openImagePicker = (
   const picker = pickers.get(key);
   if (picker?.rendered) closeImagePicker(key);
   else {
-    const newPicker = new FilePicker({
+    const newPicker = new foundry.applications.apps.FilePicker.implementation({
       type: 'image',
       current: currentSrc,
       callback,
@@ -86,19 +86,3 @@ export const closeImagePicker = (key: object) => {
   }
 };
 
-export const navMenuListener = (ev: MouseEvent) => {
-  const item = findMatchingElement(ev, '.scene');
-  if (!item) return;
-  const contextOptions = ui.nav._getContextMenuOptions();
-  Hooks.call('getSceneNavigationContext', ui.nav.element, contextOptions);
-  const targetEl = $(item);
-  const convertedOptions = convertMenuOptions(contextOptions, targetEl);
-  const heading = item
-    .querySelector<HTMLElement>('.scene-name')
-    ?.textContent?.trim();
-  openMenu({
-    content: convertedOptions,
-    position: ev,
-    header: heading ? { heading } : undefined,
-  });
-};

@@ -29,7 +29,7 @@ export class UserView extends LitElement {
   }
 
   private openPlayerConfig() {
-    new UserConfig(this.user, {}).render(true);
+    new foundry.applications.sheets.UserConfig(this.user, {}).render(true);
   }
 
   private popoutImage() {

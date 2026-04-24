@@ -42,12 +42,12 @@ addEPSocketHandler('messageData', (data) => {
 
 let ready = false;
 
-const messageQueue = new Map<JQuery, ChatMessageEP>();
+const messageQueue = new Map<HTMLElement, ChatMessageEP>();
 
 Hooks.once('ep-ready', () => {
   ready = true;
-  for (const [j, message] of messageQueue) {
-    onChatMessageRender(message, j);
+  for (const [html, message] of messageQueue) {
+    onChatMessageRender(message, html);
   }
 
   messageQueue.clear();
@@ -58,11 +58,10 @@ const scrollBottom = () => {
   (ui.chat._popout as ChatLog | undefined)?.scrollBottom();
 };
 
-export const onChatMessageRender = (message: ChatMessageEP, j: JQuery) => {
-  const [el] = j;
+export const onChatMessageRender = (message: ChatMessageEP, el: HTMLElement) => {
   if (!el) return;
   if (!ready) {
-    messageQueue.set(j, message);
+    messageQueue.set(el, message);
     return;
   }
 
@@ -76,8 +75,8 @@ export const onChatMessageRender = (message: ChatMessageEP, j: JQuery) => {
   const img = speakerToId.tokenId
     ? findToken(speakerToId)?.texture.src
     : speakerToId.actorId
-    ? findActor(speakerToId)?.img
-    : message.author?.avatar;
+      ? findActor(speakerToId)?.img
+      : message.author?.avatar;
 
   const fragment = new DocumentFragment();
 

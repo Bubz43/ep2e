@@ -43,14 +43,14 @@ const sceneUpdate = (tokenDoc: TokenDocument) => {
   } // TODO maybe end if not subject
 };
 mutatePlaceableHook({
-  entity: Token,
+  entity: foundry.canvas.placeables.Token,
   hook: 'on',
   event: MutateEvent.Update,
   callback: sceneUpdate,
 });
 
 mutatePlaceableHook({
-  entity: Token,
+  entity: foundry.canvas.placeables.Token,
   hook: 'on',
   event: MutateEvent.Delete,
   callback: (tokenDoc) => {

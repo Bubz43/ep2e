@@ -51,7 +51,7 @@ export class SceneView extends LitElement {
       MutateEvent.Update,
       MutateEvent.Delete,
     ]) {
-      mutatePlaceableHook({ entity: Token, hook, event, callback });
+      mutatePlaceableHook({ entity: foundry.canvas.placeables.Token, hook, event, callback });
     }
   }
 

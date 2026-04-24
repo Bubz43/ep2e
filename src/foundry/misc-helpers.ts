@@ -72,13 +72,13 @@ export const performIntegerSort = <T extends { id: string }>({
 type FoundryOption = {
   name: string;
   icon: string; // use unsafeHTML,
-  condition?: ((target: JQuery) => boolean | number) | boolean;
-  callback: (target: JQuery) => void;
+  condition?: ((target: JQuery | HTMLElement) => boolean | number) | boolean;
+  callback: (target: JQuery | HTMLElement) => void;
 };
 
 export const convertMenuOptions = (
   options: FoundryOption[],
-  targetLi: JQuery<HTMLElement>,
+  targetLi: HTMLElement,
 ) => {
   return (options || []).flatMap(({ name, icon, condition, callback }) =>
     (
@@ -87,10 +87,10 @@ export const convertMenuOptions = (
         : condition !== false
     )
       ? {
-          label: game.i18n.localize(name),
-          icon: html`${unsafeHTML(icon)}`,
-          callback: () => callback(targetLi),
-        }
+        label: game.i18n.localize(name),
+        icon: html`${unsafeHTML(icon)}`,
+        callback: () => callback(targetLi),
+      }
       : [],
   );
 };

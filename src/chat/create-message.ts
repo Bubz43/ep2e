@@ -44,11 +44,11 @@ const splitEntity = (entity: MessageInit['entity']) => {
   return {
     actor: entity instanceof ActorEP ? entity : entity?.actor,
     token:
-      entity instanceof Token
+      entity instanceof foundry.canvas.placeables.Token
         ? entity.document
         : entity instanceof TokenDocument
-        ? entity
-        : null,
+          ? entity
+          : null,
   };
 };
 
@@ -75,11 +75,11 @@ export const createMessage = async ({
       entity === null
         ? { alias }
         : ChatMessage.getSpeaker({
-            alias: alias || entity?.name,
-            scene: token?.parent,
-            actor,
-            token,
-          }),
+          alias: alias || entity?.name,
+          scene: token?.parent,
+          actor,
+          token,
+        }),
     type: roll ? CONST.CHAT_MESSAGE_TYPES.ROLL : undefined,
     blind: visibility === MessageVisibility.Blind,
     whisper:
@@ -87,8 +87,8 @@ export const createMessage = async ({
       (visibility === MessageVisibility.Self
         ? [game.user.id]
         : visibility !== MessageVisibility.Public
-        ? ChatMessage.getWhisperRecipients('GM').map((i: User) => i.id)
-        : undefined),
+          ? ChatMessage.getWhisperRecipients('GM').map((i: User) => i.id)
+          : undefined),
   };
   const { user } = game
 
@@ -124,9 +124,9 @@ export const createMessage = async ({
             ],
           },
         ],
-      }, 
-      user, false, chatMessageData.whisper, chatMessageData.blind
-     );
+      },
+        user, false, chatMessageData.whisper, chatMessageData.blind
+      );
     }
   }
 
