@@ -14,6 +14,19 @@ import type { Editor, RawEditorOptions } from 'tinymce';
 import type { EnrichedHTML } from '../enriched-html/enriched-html';
 import styles from './editor-wrapper.scss';
 
+interface RichTextEditor {
+  destroy: () => void;
+  getContent: () => string;
+}
+
+declare global {
+  class ProseMirror {
+    static dom: {
+      serializeString(editorContent: unknown): string
+    }
+  }
+}
+
 @customElement('editor-wrapper')
 export class EditorWrapper extends LitElement {
   static get is() {
@@ -37,9 +50,9 @@ export class EditorWrapper extends LitElement {
 
   @query('.spinner', true) private spinner!: CircularProgress;
 
-  @query('enriched-html') contentArea!: EnrichedHTML;
+  private contentArea!: EnrichedHTML;
 
-  private editor: Editor | null = null;
+  private editor: RichTextEditor | null = null;
 
   @LazyGetter()
   static get plugins() {
@@ -54,37 +67,51 @@ export class EditorWrapper extends LitElement {
   }
 
   updated(changedProps: PropertyValues<this>) {
-    if (changedProps.has('disabled') && this.disabled) this.cleanupEditor();
+    if (changedProps.has('disabled') && this.disabled) {
+      this.cleanupEditor();
+    }
+    if (!this.contentArea) {
+      const element = document.createElement("enriched-html");
+      element.content = this.content
+      element.slot = "html"
+      this.contentArea = element;
+      this.append(element)
+    } else if (changedProps.has("updateActions")) {
+      this.contentArea.content = this.content
+    }
   }
+
+
 
   private get content() {
     return this.updateActions.originalValue();
   }
 
-  private get editorOptions(): RawEditorOptions {
-    const { contentArea } = this;
+  // private get editorOptions(): RawEditorOptions {
+  //   const { contentArea } = this;
 
-    return {
-      target: contentArea,
-      setup: this.editorSetup,
-      save_onsavecallback: this.editorSave,
-      target_list: [{ title: 'New page', value: '_blank' }],
-      toolbar:
-        'styleselect bullist numlist image table hr link removeformat code',
-      // autoresize_on_init: false,
-      autoresize_overflow_padding: 10,
-      min_height: 200,
-      max_height: 400,
-      plugins: EditorWrapper.plugins,
-    };
-  }
+  //   return {
+  //     target: contentArea,
+  //     setup: this.editorSetup,
+  //     save_onsavecallback: this.editorSave,
+  //     // target_list: [{ title: 'New page', value: '_blank' }],
+  //     // toolbar:
+  //     //   'styleselect bullist numlist image table hr link removeformat code',
+  //     // autoresize_on_init: false,
+  //     // autoresize_overflow_padding: 10,
+  //     // min_height: 200,
+  //     // max_height: 400,
+  //     // plugins: EditorWrapper.plugins,
+  //     engine: "prosemirror",
+  //   };
+  // }
 
-  private editorSetup = (mce: Editor) => {
-    this.editor = mce;
-  };
+  // private editorSetup = (richTextEditor: RichTextEditor) => {
+  //   this.editor = richTextEditor;
+  // };
 
-  private editorSave = (mce: Editor) => {
-    const newContent = mce.getContent();
+  private editorSave = (richTextEditor: RichTextEditor) => {
+    const newContent = richTextEditor.getContent();
     // TODO: Trim tailing empty p tags/newlines
     this.cleanupEditor();
     this.save(newContent);
@@ -129,15 +156,51 @@ export class EditorWrapper extends LitElement {
       return this.editorSave(this.editor);
     }
 
-    const { contentArea, content, editorOptions, spinner } = this;
+    const { contentArea, content, spinner } = this;
     const opacity = [1, 0];
     const { animOptions } = EditorWrapper;
     spinner.closed = false;
     if (!contentArea) return;
     this.style.overflow = 'hidden';
     contentArea.animate({ opacity }, animOptions).onfinish = async () => {
-      const editor = await TextEditor.create(editorOptions, content);
-      editor.focus();
+      contentArea.hidden = true;
+      const editorWrapper = document.createElement("div")
+      editorWrapper.classList.add("editor", "prosemirror")
+      editorWrapper.slot = "html"
+      this.append(editorWrapper)
+      const target = document.createElement("div")
+      editorWrapper.append(target)
+      const editor: {
+        destroy?: VoidFunction,
+        focus(): void,
+        container?: HTMLElement
+        view?: {
+          dom: HTMLElement
+          state: {
+            doc: {
+              content: unknown
+            }
+          }
+        }
+      } = await foundry.applications.ux.TextEditor.implementation.create({
+        target,
+        engine: "prosemirror"
+      }, content);
+      if (editor.container) {
+        editor.container.slot = "html"
+        editor.focus();
+
+      } else if (editor.view) {
+        const { view } = editor;
+        this.editor = {
+          destroy: () => {
+            editorWrapper.remove();
+            editor.destroy?.()
+            contentArea.hidden = false;
+          },
+          getContent: () => ProseMirror.dom.serializeString(view.state.doc.content)
+        }
+      }
       contentArea.animate({ opacity: opacity.reverse() }, animOptions);
       this.requestUpdate();
       spinner.closed = true;
@@ -160,7 +223,8 @@ export class EditorWrapper extends LitElement {
         ></mwc-icon-button-toggle>
       </header>
 
-      <enriched-html .content=${this.content}></enriched-html>
+      <slot name="html"></slot>
+
 
       <mwc-circular-progress
         closed

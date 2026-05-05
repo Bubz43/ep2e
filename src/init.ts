@@ -96,8 +96,8 @@ Hooks.once('init', () => {
 
   foundry.documents.collections.Items.unregisterSheet('core', foundry.appv1.sheets.ItemSheet);
   foundry.documents.collections.Items.registerSheet(EP.Name, ItemEPSheet, { makeDefault: true });
-  CONFIG.TinyMCE.content_css.push(`${EP.Path}/darkMCE.css`);
-  (CONFIG.TinyMCE as RawEditorOptions).skin = 'oxide-dark';
+  // CONFIG.TinyMCE.content_css.push(`${EP.Path}/darkMCE.css`);
+  // (CONFIG.TinyMCE as RawEditorOptions).skin = 'oxide-dark';
   CONFIG.Combat.initiative.decimals = 2;
   CONFIG.statusEffects = compact([
     CONFIG.statusEffects[0],

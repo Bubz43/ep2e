@@ -28,9 +28,9 @@ const renderArmorValuesFields: FieldPropsRenderer<ArmorValues> = ({
   concealable,
   layerable,
 }) => [
-  [energy, kinetic].map((type) => renderNumberField(type, { min: 0 })),
-  html`<div>${map([layerable, concealable], renderLabeledCheckbox)}</div>`,
-];
+    [energy, kinetic].map((type) => renderNumberField(type, { min: 0 })),
+    html`<div>${map([layerable, concealable], renderLabeledCheckbox)}</div>`,
+  ];
 
 @customElement('armor-form')
 export class ArmorForm extends ItemFormBase {
@@ -48,6 +48,10 @@ export class ArmorForm extends ItemFormBase {
 
   private addCreatedEffect(ev: EffectCreatedEvent) {
     this.effectsOps.add({}, ev.effect);
+  }
+
+  override get descriptionUpdateActions() {
+    return this.item.updater.path('system', 'description')
   }
 
   render() {
@@ -69,27 +73,27 @@ export class ArmorForm extends ItemFormBase {
         </entity-form-header>
 
         ${renderUpdaterForm(updater.path('system'), {
-          disabled,
-          slot: 'sidebar',
-          fields: ({
+      disabled,
+      slot: 'sidebar',
+      fields: ({
+        wareType,
+        hasActiveState,
+        singleUse,
+        fragile,
+        twoHanded,
+      }) => [
+          renderSelectField(
             wareType,
-            hasActiveState,
-            singleUse,
-            fragile,
-            twoHanded,
-          }) => [
-            renderSelectField(
-              wareType,
-              enumValues(PhysicalWare),
-              emptyTextDash,
-            ),
-            renderLabeledCheckbox(hasActiveState),
-            html`<entity-form-sidebar-divider
+            enumValues(PhysicalWare),
+            emptyTextDash,
+          ),
+          renderLabeledCheckbox(hasActiveState),
+          html`<entity-form-sidebar-divider
               label=${localize('gearTraits')}
             ></entity-form-sidebar-divider>`,
-            map([singleUse, fragile, twoHanded], renderLabeledCheckbox),
-          ],
-        })}
+          map([singleUse, fragile, twoHanded], renderLabeledCheckbox),
+        ],
+    })}
 
         <entity-form-sidebar-divider
           slot="sidebar"
@@ -97,22 +101,22 @@ export class ArmorForm extends ItemFormBase {
         ></entity-form-sidebar-divider>
 
         ${renderAutoForm({
-          props: pairedTraits,
-          disabled,
-          slot: 'sidebar',
-          update: createPipe(
-            changeTraits,
-            updater.path('system', 'attackTraits').commit,
-          ),
-          fields: (traits) => map(Object.values(traits), renderLabeledCheckbox),
-        })}
+      props: pairedTraits,
+      disabled,
+      slot: 'sidebar',
+      update: createPipe(
+        changeTraits,
+        updater.path('system', 'attackTraits').commit,
+      ),
+      fields: (traits) => map(Object.values(traits), renderLabeledCheckbox),
+    })}
 
         <div slot="details">
           ${renderUpdaterForm(updater.path('system'), {
-            disabled,
-            classes: complexityForm.cssClass,
-            fields: renderComplexityFields,
-          })}
+      disabled,
+      classes: complexityForm.cssClass,
+      fields: renderComplexityFields,
+    })}
 
           <div class="both-values">
             <section>
@@ -120,26 +124,26 @@ export class ArmorForm extends ItemFormBase {
                 heading="${localize('armor')} ${localize('values')}"
               ></sl-header>
               ${renderUpdaterForm(updater.path('system', 'armorValues'), {
-                disabled,
-                classes: `armor-values-form ${hasActiveState ? '' : 'solo'}`,
-                fields: renderArmorValuesFields,
-              })}
+      disabled,
+      classes: `armor-values-form ${hasActiveState ? '' : 'solo'}`,
+      fields: renderArmorValuesFields,
+    })}
             </section>
 
             ${hasActiveState
-              ? html`
+        ? html`
                   <section>
                     <sl-header
                       heading="${localize('when')} ${localize('activated')}"
                     ></sl-header>
                     ${renderUpdaterForm(updater.path('system', 'activeArmor'), {
-                      disabled,
-                      classes: 'armor-values-form',
-                      fields: renderArmorValuesFields,
-                    })}
+          disabled,
+          classes: 'armor-values-form',
+          fields: renderArmorValuesFields,
+        })}
                   </section>
                 `
-              : ''}
+        : ''}
           </div>
 
           <section>
@@ -154,22 +158,18 @@ export class ArmorForm extends ItemFormBase {
               ></mwc-icon-button
             ></sl-header>
             ${notEmpty(effects)
-              ? html`
+        ? html`
                   <item-form-effects-list
                     .effects=${effects}
                     .operations=${this.effectsOps}
                     ?disabled=${disabled}
                   ></item-form-effects-list>
                 `
-              : ''}
+        : ''}
           </section>
         </div>
 
-        <editor-wrapper
-          slot="description"
-          ?disabled=${disabled}
-          .updateActions=${updater.path('system', 'description')}
-        ></editor-wrapper>
+        ${this.renderDescriptionSlot()}
         ${this.renderDrawerContent()}
       </entity-form-layout>
     `;

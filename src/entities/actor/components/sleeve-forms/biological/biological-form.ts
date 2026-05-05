@@ -56,6 +56,10 @@ export class BiologicalForm extends SleeveFormBase {
       );
   });
 
+  override get descriptionUpdateActions() {
+    return this.sleeve.updater.path('system', 'description')
+  }
+
   render() {
     const {
       updater,
@@ -84,44 +88,44 @@ export class BiologicalForm extends SleeveFormBase {
         </entity-form-header>
 
         ${renderUpdaterForm(updater.path('system'), {
-          disabled,
-          slot: 'sidebar',
-          fields: ({
-            size,
-            subtype,
-            sex,
-            isSwarm,
-            reach,
-            unarmedDV,
-            prehensileLimbs,
-            brain,
-          }) => [
-            notEmpty(availableBrains)
-              ? html`
+      disabled,
+      slot: 'sidebar',
+      fields: ({
+        size,
+        subtype,
+        sex,
+        isSwarm,
+        reach,
+        unarmedDV,
+        prehensileLimbs,
+        brain,
+      }) => [
+          notEmpty(availableBrains)
+            ? html`
                   ${renderSelectField(brain, [...availableBrains.keys()], {
-                    emptyText: localize('default'),
-                    altLabel: (key) => availableBrains.get(key)!.fullName,
-                  })}
+              emptyText: localize('default'),
+              altLabel: (key) => availableBrains.get(key)!.fullName,
+            })}
                   <entity-form-sidebar-divider></entity-form-sidebar-divider>
                 `
-              : '',
-            renderTextField(subtype),
-            renderTextField(sex),
-            html`<entity-form-sidebar-divider></entity-form-sidebar-divider>`,
-            renderLabeledCheckbox(isSwarm, {
-              tooltipText: localize('DESCRIPTIONS', 'AppliesSwarmRules'),
-            }),
-            renderSelectField(size, enumValues(Size)),
-            html`<entity-form-sidebar-divider></entity-form-sidebar-divider>`,
-            isSwarm.value
-              ? ''
-              : [
-                  renderNumberField(prehensileLimbs, { min: 0 }),
-                  renderNumberField(reach, { min: 0, max: 30, step: 10 }),
-                ],
-            renderFormulaField(unarmedDV),
-          ],
-        })}
+            : '',
+          renderTextField(subtype),
+          renderTextField(sex),
+          html`<entity-form-sidebar-divider></entity-form-sidebar-divider>`,
+          renderLabeledCheckbox(isSwarm, {
+            tooltipText: localize('DESCRIPTIONS', 'AppliesSwarmRules'),
+          }),
+          renderSelectField(size, enumValues(Size)),
+          html`<entity-form-sidebar-divider></entity-form-sidebar-divider>`,
+          isSwarm.value
+            ? ''
+            : [
+              renderNumberField(prehensileLimbs, { min: 0 }),
+              renderNumberField(reach, { min: 0, max: 30, step: 10 }),
+            ],
+          renderFormulaField(unarmedDV),
+        ],
+    })}
 
         <div slot="details">
           <sleeve-form-acquisition
@@ -144,9 +148,9 @@ export class BiologicalForm extends SleeveFormBase {
                 @focus=${tooltip.fromData}
                 icon="change_history"
                 @click=${this.setDrawerFromEvent(
-                  this.renderPhysicalHealthChangeHistory,
-                  false,
-                )}
+      this.renderPhysicalHealthChangeHistory,
+      false,
+    )}
               ></mwc-icon-button>
             </sl-header>
             <health-item
@@ -158,7 +162,7 @@ export class BiologicalForm extends SleeveFormBase {
           </section>
 
           ${nonDefaultBrain
-            ? html`
+        ? html`
                 <section>
                   <sl-header heading=${localize('meshHealth')}>
                     <mwc-icon-button
@@ -168,9 +172,9 @@ export class BiologicalForm extends SleeveFormBase {
                       @focus=${tooltip.fromData}
                       icon="change_history"
                       @click=${this.setDrawerFromEvent(
-                        this.renderMeshHealthChangeHistory,
-                        false,
-                      )}
+          this.renderMeshHealthChangeHistory,
+          false,
+        )}
                     ></mwc-icon-button>
                   </sl-header>
                   <health-item
@@ -187,13 +191,13 @@ export class BiologicalForm extends SleeveFormBase {
                     ?disabled=${disabled}
                     .health=${nonDefaultBrain.firewallHealth}
                     @click=${this.setDrawerFromEvent(
-                      this.renderFirewallHealthEdit,
-                    )}
+          this.renderFirewallHealthEdit,
+        )}
                   >
                   </health-item>
                 </section>
               `
-            : ''}
+        : ''}
 
           <section>
             <sl-header heading=${localize('movementRates')}>
@@ -215,48 +219,44 @@ export class BiologicalForm extends SleeveFormBase {
           <sl-dropzone @drop=${this.handleItemDrop} ?disabled=${disabled}>
             <sl-header
               heading="${localize('traits')} & ${localize(
-                'installed',
-              )} ${localize('ware')}"
+          'installed',
+        )} ${localize('ware')}"
             >
               <mwc-icon
                 slot="info"
                 data-ep-tooltip=${localize(
-                  'DESCRIPTIONS',
-                  'OnlyPhysicalMorphItems',
-                )}
+          'DESCRIPTIONS',
+          'OnlyPhysicalMorphItems',
+        )}
                 @mouseover=${tooltip.fromData}
                 >info</mwc-icon
               >
               ${notEmpty(itemTrash) && !disabled
-                ? html`
+        ? html`
                     <mwc-icon-button
                       @click=${this.setDrawerFromEvent(this.renderItemTrash)}
                       icon="delete_outline"
                       slot="action"
                     ></mwc-icon-button>
                   `
-                : ''}
+        : ''}
             </sl-header>
 
             ${itemGroupKeys.map((key) => {
-              const group = itemGroups[key];
-              return notEmpty(group)
-                ? html`
+          const group = itemGroups[key];
+          return notEmpty(group)
+            ? html`
                     <form-items-list
                       .dragStartHandler=${this.itemDragStart}
                       .items=${group}
                       label=${localize(key)}
                     ></form-items-list>
                   `
-                : '';
-            })}
+            : '';
+        })}
           </sl-dropzone>
         </div>
-        <editor-wrapper
-          slot="description"
-          ?disabled=${disabled}
-          .updateActions=${updater.path('system', 'description')}
-        ></editor-wrapper>
+        ${this.renderDescriptionSlot()}
         ${this.renderDrawerContent()}
       </entity-form-layout>
     `;
@@ -267,12 +267,12 @@ export class BiologicalForm extends SleeveFormBase {
       <h3>${localize('add')} ${localize('movement')}</h3>
 
       ${renderSubmitForm({
-        props: defaultMovement,
-        update: this.movementOperations.add,
-        fields: renderMovementRateFields,
-        noDebounce: true,
-        submitEmpty: true,
-      })}
+      props: defaultMovement,
+      update: this.movementOperations.add,
+      fields: renderMovementRateFields,
+      noDebounce: true,
+      submitEmpty: true,
+    })}
     `;
   }
 
@@ -317,9 +317,9 @@ export class BiologicalForm extends SleeveFormBase {
     return html`
       <h3>${localize('physicalHealth')}</h3>
       ${renderUpdaterForm(updater.path('system', 'physicalHealth'), {
-        fields: ({ baseDurability }) =>
-          renderNumberField(baseDurability, { min: 1 }),
-      })}
+      fields: ({ baseDurability }) =>
+        renderNumberField(baseDurability, { min: 1 }),
+    })}
       <health-state-form .health=${physicalHealth}></health-state-form>
       <health-regen-settings-form
         .health=${physicalHealth}
@@ -335,9 +335,9 @@ export class BiologicalForm extends SleeveFormBase {
     return html`
       <h3>${localize('meshHealth')}</h3>
       ${renderUpdaterForm(updater.path('system', 'meshHealth'), {
-        fields: ({ baseDurability }) =>
-          renderNumberField(baseDurability, { min: 1 }),
-      })}
+      fields: ({ baseDurability }) =>
+        renderNumberField(baseDurability, { min: 1 }),
+    })}
       <health-state-form .health=${meshHealth}></health-state-form>
       <health-regen-settings-form
         .health=${meshHealth}
@@ -355,9 +355,9 @@ export class BiologicalForm extends SleeveFormBase {
       return html`
         <h3>${nonDefaultBrain.name} ${localize('firewallHealth')}</h3>
         ${renderUpdaterForm(updater.path('system', 'firewallHealth'), {
-          fields: ({ baseDurability }) =>
-            renderNumberField(baseDurability, { min: 1 }),
-        })}
+        fields: ({ baseDurability }) =>
+          renderNumberField(baseDurability, { min: 1 }),
+      })}
         <health-state-form .health=${firewallHealth}></health-state-form>
       `;
     }

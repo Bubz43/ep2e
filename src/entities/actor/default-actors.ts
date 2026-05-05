@@ -32,7 +32,7 @@ export const createDigimorph = () => {
         restricted: false,
       },
       meshHealth: {
-        ...game.system.template.Actor.infomorph.meshHealth,
+        ...game.model.Actor.infomorph.meshHealth,
         baseDurability: 25,
       },
     },

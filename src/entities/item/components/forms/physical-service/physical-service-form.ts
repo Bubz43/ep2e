@@ -51,6 +51,10 @@ export class PhysicalServiceForm extends ItemFormBase {
     () => this.item.updater.path('system', 'reputations').commit,
   );
 
+  override get descriptionUpdateActions() {
+    return this.item.updater.path('system', 'description')
+  }
+
   render() {
     const { updater, type, isFakeEgoId } = this.item;
     const { disabled } = this;
@@ -70,35 +74,31 @@ export class PhysicalServiceForm extends ItemFormBase {
             <sl-header heading=${localize('details')}></sl-header>
             <div class="detail-forms">
               ${renderUpdaterForm(updater.path('system'), {
-                disabled,
-                classes: 'primary-fields-form',
-                fields: ({ serviceType, serviceDuration: duration }) => [
-                  renderSelectField(
-                    serviceType,
-                    enumValues(PhysicalServiceType),
-                  ),
-                  renderTimeField(duration, {
-                    min: CommonInterval.Turn,
-                    permanentLabel: localize('indefinite'),
-                  }),
-                ],
-              })}
+      disabled,
+      classes: 'primary-fields-form',
+      fields: ({ serviceType, serviceDuration: duration }) => [
+        renderSelectField(
+          serviceType,
+          enumValues(PhysicalServiceType),
+        ),
+        renderTimeField(duration, {
+          min: CommonInterval.Turn,
+          permanentLabel: localize('indefinite'),
+        }),
+      ],
+    })}
               ${renderUpdaterForm(updater.path('system'), {
-                disabled,
-                classes: complexityForm.cssClass,
-                fields: renderComplexityFields,
-              })}
+      disabled,
+      classes: complexityForm.cssClass,
+      fields: renderComplexityFields,
+    })}
             </div>
           </section>
 
           ${isFakeEgoId ? this.renderReps() : ''}
         </div>
 
-        <editor-wrapper
-          slot="description"
-          ?disabled=${disabled}
-          .updateActions=${updater.path('system', 'description')}
-        ></editor-wrapper>
+        ${this.renderDescriptionSlot()}
         ${this.renderDrawerContent()}
       </entity-form-layout>
     `;
@@ -123,7 +123,7 @@ export class PhysicalServiceForm extends ItemFormBase {
 
         <sl-animated-list class="rep-list">
           ${repeat(reputations, idProp, (rep) => {
-            return html`
+      return html`
               <li class="rep">
                 <div class="rep-main">
                   <span class="rep-name"
@@ -134,22 +134,22 @@ export class PhysicalServiceForm extends ItemFormBase {
                   >
                   <sl-popover
                     .renderOnDemand=${() =>
-                      html`<sl-popover-section>
+          html`<sl-popover-section>
                         ${renderSubmitForm({
-                          props: rep,
-                          update: this.repOps.update,
-                          fields: ({ acronym, network }) => [
-                            renderTextField(network, {
-                              required: true,
-                              placeholder: localize('FULL', RepNetwork.Civic),
-                            }),
-                            renderTextField(acronym, {
-                              required: true,
-                              placeholder: localize(RepNetwork.Civic),
-                              maxLength: 6,
-                            }),
-                          ],
-                        })}
+            props: rep,
+            update: this.repOps.update,
+            fields: ({ acronym, network }) => [
+              renderTextField(network, {
+                required: true,
+                placeholder: localize('FULL', RepNetwork.Civic),
+              }),
+              renderTextField(acronym, {
+                required: true,
+                placeholder: localize(RepNetwork.Civic),
+                maxLength: 6,
+              }),
+            ],
+          })}
                       </sl-popover-section>`}
                   >
                     <mwc-icon-button
@@ -167,58 +167,58 @@ export class PhysicalServiceForm extends ItemFormBase {
 
                 <div class="favors">
                   ${[...maxFavors].map(([favor, max]) => {
-                    const usedAmount = rep[favor];
-                    return html`
+            const usedAmount = rep[favor];
+            return html`
                       <span title=${localize(favor)}>
                         <span class="favor-label">${localize(favor)}</span>
                         ${range(1, max + 1).map((favorNumber) => {
-                          const used = usedAmount >= favorNumber;
-                          return html`
+              const used = usedAmount >= favorNumber;
+              return html`
                             <mwc-icon-button
                               @click=${() => {
-                                const isActive =
-                                  repRefreshTimerActive(rep) &&
-                                  rep.refreshStartTime !== 0;
-                                const setRefresh =
-                                  favor === Favor.Major ? false : !isActive;
-                                return this.repOps.update(
-                                  {
-                                    [favor]: used
-                                      ? favorNumber === 1
-                                        ? 0
-                                        : favorNumber === 2
-                                        ? 1
-                                        : 2
-                                      : favorNumber,
-                                    refreshStartTime: setRefresh
-                                      ? currentWorldTimeMS()
-                                      : undefined,
-                                  },
-                                  { id: rep.id },
-                                );
-                              }}
+                  const isActive =
+                    repRefreshTimerActive(rep) &&
+                    rep.refreshStartTime !== 0;
+                  const setRefresh =
+                    favor === Favor.Major ? false : !isActive;
+                  return this.repOps.update(
+                    {
+                      [favor]: used
+                        ? favorNumber === 1
+                          ? 0
+                          : favorNumber === 2
+                            ? 1
+                            : 2
+                        : favorNumber,
+                      refreshStartTime: setRefresh
+                        ? currentWorldTimeMS()
+                        : undefined,
+                    },
+                    { id: rep.id },
+                  );
+                }}
                               ?disabled=${this.disabled}
                               icon=${used
-                                ? 'check_box'
-                                : 'check_box_outline_blank'}
+                  ? 'check_box'
+                  : 'check_box_outline_blank'}
                             ></mwc-icon-button>
                           `;
-                        })}
+            })}
                       </span>
                     `;
-                  })}
+          })}
                 </div>
                 ${renderAutoForm({
-                  classes: 'score-form',
-                  props: rep,
-                  update: this.repOps.update,
-                  disabled,
-                  fields: ({ score }) =>
-                    renderNumberField(score, { min: -99, max: 99 }),
-                })}
+            classes: 'score-form',
+            props: rep,
+            update: this.repOps.update,
+            disabled,
+            fields: ({ score }) =>
+              renderNumberField(score, { min: -99, max: 99 }),
+          })}
               </li>
             `;
-          })}
+    })}
         </sl-animated-list>
       </section>
     `;
@@ -230,47 +230,47 @@ export class PhysicalServiceForm extends ItemFormBase {
       <h3>${localize('add')} ${localize('rep')}</h3>
 
       ${renderAutoForm({
-        props: { mode: repCreatorMode },
-        update: ({ mode }) => mode && (this.repCreatorMode = mode),
-        fields: ({ mode }) =>
-          renderRadioFields(mode, enumValues(RepCreatorMode)),
-      })}
+      props: { mode: repCreatorMode },
+      update: ({ mode }) => mode && (this.repCreatorMode = mode),
+      fields: ({ mode }) =>
+        renderRadioFields(mode, enumValues(RepCreatorMode)),
+    })}
       ${repCreatorMode === RepCreatorMode.Common
         ? renderSubmitForm({
-            submitEmpty: true,
-            props: { rep: RepNetwork.Anarchist, score: 10 },
-            update: ({ rep = RepNetwork.Anarchist, score = 10 }) => {
-              this.repOps.add(
-                {},
-                createRep({
-                  acronym: localize(rep),
-                  network: localize('FULL', rep),
-                  score,
-                }),
-              );
-            },
-            fields: ({ rep, score }) => [
-              renderSelectField(rep, enumValues(RepNetwork)),
-              renderNumberField(score, { min: -99, max: 99 }),
-            ],
-          })
+          submitEmpty: true,
+          props: { rep: RepNetwork.Anarchist, score: 10 },
+          update: ({ rep = RepNetwork.Anarchist, score = 10 }) => {
+            this.repOps.add(
+              {},
+              createRep({
+                acronym: localize(rep),
+                network: localize('FULL', rep),
+                score,
+              }),
+            );
+          },
+          fields: ({ rep, score }) => [
+            renderSelectField(rep, enumValues(RepNetwork)),
+            renderNumberField(score, { min: -99, max: 99 }),
+          ],
+        })
         : renderSubmitForm({
-            props: createRep({ acronym: '', network: '' }),
-            update: this.repOps.add,
-            fields: ({ score, acronym, network }) => [
-              renderTextField(network, {
-                required: true,
-                placeholder: localize('FULL', RepNetwork.Civic),
-              }),
-              renderTextField(acronym, {
-                required: true,
-                placeholder: localize(RepNetwork.Civic),
-                maxLength: 6,
-              }),
-              ,
-              renderNumberField(score, { min: -99, max: 99 }),
-            ],
-          })}
+          props: createRep({ acronym: '', network: '' }),
+          update: this.repOps.add,
+          fields: ({ score, acronym, network }) => [
+            renderTextField(network, {
+              required: true,
+              placeholder: localize('FULL', RepNetwork.Civic),
+            }),
+            renderTextField(acronym, {
+              required: true,
+              placeholder: localize(RepNetwork.Civic),
+              maxLength: 6,
+            }),
+            ,
+            renderNumberField(score, { min: -99, max: 99 }),
+          ],
+        })}
     `;
   }
 }

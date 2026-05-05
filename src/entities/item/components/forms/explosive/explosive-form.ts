@@ -119,6 +119,10 @@ export class ExplosiveForm extends ItemFormBase {
     return this.item.removeSubstance();
   }
 
+  override get descriptionUpdateActions() {
+    return this.item.updater.path('system', 'description')
+  }
+
   render() {
     const { updater, type, loaded, attacks, canContainSubstance, substance } =
       this.item;
@@ -137,113 +141,113 @@ export class ExplosiveForm extends ItemFormBase {
         </entity-form-header>
 
         ${renderAutoForm({
-          props: originalValue(),
-          update: ({ explosiveType, ...values }) =>
-            commit(
-              explosiveType !== undefined
-                ? { explosiveType, size: ExplosiveSize.Mini }
-                : values,
-            ),
-          disabled,
-          slot: 'sidebar',
-          fields: ({
-            explosiveType,
-            size,
-            sticky,
+      props: originalValue(),
+      update: ({ explosiveType, ...values }) =>
+        commit(
+          explosiveType !== undefined
+            ? { explosiveType, size: ExplosiveSize.Mini }
+            : values,
+        ),
+      disabled,
+      slot: 'sidebar',
+      fields: ({
+        explosiveType,
+        size,
+        sticky,
+        useSubstance,
+        hasSecondaryMode,
+        areaEffect: areaEffectType,
+        areaEffectRadius: radius,
+      }) => [
+          renderSelectField(explosiveType, enumValues(ExplosiveType), {
+            disabled: loaded,
+          }),
+          explosiveType.value !== ExplosiveType.Generic
+            ? renderSelectField(
+              size,
+              explosiveType.value === ExplosiveType.Missile
+                ? enumValues(ExplosiveSize)
+                : [ExplosiveSize.Mini, ExplosiveSize.Standard],
+              { disabled: loaded },
+            )
+            : '',
+          renderSelectField(
             useSubstance,
-            hasSecondaryMode,
-            areaEffect: areaEffectType,
-            areaEffectRadius: radius,
-          }) => [
-            renderSelectField(explosiveType, enumValues(ExplosiveType), {
-              disabled: loaded,
-            }),
-            explosiveType.value !== ExplosiveType.Generic
-              ? renderSelectField(
-                  size,
-                  explosiveType.value === ExplosiveType.Missile
-                    ? enumValues(ExplosiveSize)
-                    : [ExplosiveSize.Mini, ExplosiveSize.Standard],
-                  { disabled: loaded },
-                )
-              : '',
-            renderSelectField(
-              useSubstance,
-              [
-                SubstanceApplicationMethod.Dermal,
-                SubstanceApplicationMethod.Inhalation,
-              ],
-              { emptyText: localize('n/a') },
-            ),
-            html`<entity-form-sidebar-divider></entity-form-sidebar-divider>`,
-            renderLabeledCheckbox(sticky),
-            renderLabeledCheckbox({
-              ...hasSecondaryMode,
-              label: localize('secondaryMode'),
-            }),
-            html`<entity-form-sidebar-divider></entity-form-sidebar-divider>`,
-            renderSelectField(
-              areaEffectType,
-              [AreaEffectType.Uniform, AreaEffectType.Centered],
-              { emptyText: localize('none') },
-            ),
-            areaEffectType.value === AreaEffectType.Uniform
-              ? renderNumberField(
-                  { ...radius, label: `${localize('radius')} (m.)` },
-                  { min: 2 },
-                )
-              : '',
-          ],
-        })}
+            [
+              SubstanceApplicationMethod.Dermal,
+              SubstanceApplicationMethod.Inhalation,
+            ],
+            { emptyText: localize('n/a') },
+          ),
+          html`<entity-form-sidebar-divider></entity-form-sidebar-divider>`,
+          renderLabeledCheckbox(sticky),
+          renderLabeledCheckbox({
+            ...hasSecondaryMode,
+            label: localize('secondaryMode'),
+          }),
+          html`<entity-form-sidebar-divider></entity-form-sidebar-divider>`,
+          renderSelectField(
+            areaEffectType,
+            [AreaEffectType.Uniform, AreaEffectType.Centered],
+            { emptyText: localize('none') },
+          ),
+          areaEffectType.value === AreaEffectType.Uniform
+            ? renderNumberField(
+              { ...radius, label: `${localize('radius')} (m.)` },
+              { min: 2 },
+            )
+            : '',
+        ],
+    })}
 
         <div slot="details">
           <section>
             <sl-header heading=${localize('details')}></sl-header>
             <div class="detail-forms">
               ${renderUpdaterForm(updater.path('system'), {
-                classes: complexityForm.cssClass,
-                disabled,
-                fields: renderComplexityFields,
-              })}
+      classes: complexityForm.cssClass,
+      disabled,
+      fields: renderComplexityFields,
+    })}
               ${renderUpdaterForm(updater.path('system'), {
-                disabled,
-                classes: 'quantity-form',
-                fields: ({ quantity, unitsPerComplexity }) => [
-                  loaded
-                    ? html`<div></div>`
-                    : renderNumberField(quantity, { min: 0, max: 9999 }),
-                  renderNumberField(unitsPerComplexity, { min: 1, max: 99 }),
-                ],
-              })}
+      disabled,
+      classes: 'quantity-form',
+      fields: ({ quantity, unitsPerComplexity }) => [
+        loaded
+          ? html`<div></div>`
+          : renderNumberField(quantity, { min: 0, max: 9999 }),
+        renderNumberField(unitsPerComplexity, { min: 1, max: 99 }),
+      ],
+    })}
             </div>
           </section>
 
           ${this.renderAttack(attacks.primary, WeaponAttackType.Primary)}
           ${attacks.secondary
-            ? this.renderAttack(attacks.secondary, WeaponAttackType.Secondary)
-            : ''}
+        ? this.renderAttack(attacks.secondary, WeaponAttackType.Secondary)
+        : ''}
           ${canContainSubstance
-            ? html`
+        ? html`
                 <sl-dropzone ?disabled=${disabled} @drop=${this.addSubstance}>
                   <sl-header
                     heading=${localize('substance')}
                     ?hideBorder=${!substance}
                   >
                     ${renderUpdaterForm(updater.path('system'), {
-                      disabled,
-                      classes: 'doses-form',
-                      slot: 'action',
-                      fields: ({ dosesPerUnit }) => html`
+          disabled,
+          classes: 'doses-form',
+          slot: 'action',
+          fields: ({ dosesPerUnit }) => html`
                         <mwc-formfield alignEnd label=${dosesPerUnit.label}
                           >${renderNumberInput(dosesPerUnit, {
-                            min: 1,
-                          })}</mwc-formfield
+            min: 1,
+          })}</mwc-formfield
                         >
                       `,
-                    })}
+        })}
                   </sl-header>
                   ${substance
-                    ? html`
+            ? html`
                         <div class="addon">
                           <span class="addon-name">${substance.name}</span>
                           <span class="addon-type">${substance.fullType}</span>
@@ -257,17 +261,13 @@ export class ExplosiveForm extends ItemFormBase {
                           ></delete-button>
                         </div>
                       `
-                    : ''}
+            : ''}
                 </sl-dropzone>
               `
-            : ''}
+        : ''}
         </div>
 
-        <editor-wrapper
-          slot="description"
-          ?disabled=${disabled}
-          .updateActions=${updater.path('system', 'description')}
-        ></editor-wrapper>
+        ${this.renderDescriptionSlot()}
         ${this.renderDrawerContent()}
       </entity-form-layout>
     `;
@@ -282,45 +282,45 @@ export class ExplosiveForm extends ItemFormBase {
             slot="action"
             ?disabled=${this.disabled}
             @click=${this.setDrawerFromEvent(
-              type === WeaponAttackType.Primary
-                ? this.renderPrimaryAttackEdit
-                : this.renderSecondaryAttackEdit,
-            )}
+      type === WeaponAttackType.Primary
+        ? this.renderPrimaryAttackEdit
+        : this.renderSecondaryAttackEdit,
+    )}
           ></mwc-icon-button>
         </sl-header>
         <div class="attack-details">
           <sl-group label=${localize('SHORT', 'damageValue')}>
             ${notEmpty(attack.rollFormulas)
-              ? [
-                  formatLabeledFormulas(attack.rollFormulas),
-                  formatArmorUsed(attack),
-                ].join('; ')
-              : '-'}
+        ? [
+          formatLabeledFormulas(attack.rollFormulas),
+          formatArmorUsed(attack),
+        ].join('; ')
+        : '-'}
           </sl-group>
 
           ${notEmpty(attack.attackTraits)
-            ? html`
+        ? html`
                 <sl-group class="attack-traits" label=${localize('traits')}>
                   ${map(attack.attackTraits, localize).join(', ')}</sl-group
                 >
               `
-            : ''}
+        : ''}
           ${attack.duration
-            ? html`
+        ? html`
                 <sl-group label=${localize('duration')}
                   >${prettyMilliseconds(attack.duration, {
-                    compact: false,
-                  })}</sl-group
+          compact: false,
+        })}</sl-group
                 >
               `
-            : ''}
+        : ''}
           ${attack.notes
-            ? html`
+        ? html`
                 <sl-group class="attack-notes" label=${localize('notes')}>
                   ${attack.notes}</sl-group
                 >
               `
-            : ''}
+        : ''}
         </div>
       </section>
     `;
@@ -347,15 +347,15 @@ export class ExplosiveForm extends ItemFormBase {
     return html`
       <h3>${modeLabel}</h3>
       ${renderUpdaterForm(updater, {
-        disabled,
-        fields: ({
-          damageFormula,
-          armorPiercing,
-          label,
-          armorUsed,
-          notes,
-          duration,
-        }) => [
+      disabled,
+      fields: ({
+        damageFormula,
+        armorPiercing,
+        label,
+        armorUsed,
+        notes,
+        duration,
+      }) => [
           this.item.hasSecondaryMode
             ? renderTextField(label, { placeholder: modeLabel })
             : '',
@@ -369,17 +369,17 @@ export class ExplosiveForm extends ItemFormBase {
           renderTimeField(duration, { whenZero: localize('instant') }),
           renderTextField(notes),
         ],
-      })}
+    })}
       <p class="label">${localize('attackTraits')}</p>
       ${renderAutoForm({
-        props: pairedTraits,
-        update: createPipe(change, objOf('attackTraits'), updater.commit),
-        fields: (traits) => map(Object.values(traits), renderLabeledCheckbox),
-      })}
+      props: pairedTraits,
+      update: createPipe(change, objOf('attackTraits'), updater.commit),
+      fields: (traits) => map(Object.values(traits), renderLabeledCheckbox),
+    })}
       ${renderUpdaterForm(updater, {
-        disabled,
-        fields: ({ attackTraitNotes }) => renderTextField(attackTraitNotes),
-      })}
+      disabled,
+      fields: ({ attackTraitNotes }) => renderTextField(attackTraitNotes),
+    })}
     `;
   }
 }

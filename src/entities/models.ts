@@ -56,15 +56,15 @@ export type SleeveType = typeof sleeveTypes[number];
 
 type ActorFlags<T extends ActorType> = T extends ActorType.Character
   ? {
-      vehicle: ActorEntity<ActorType.Synthetic> | null;
-      [ItemType.Psi]: ItemEntity<ItemType.Psi> | null;
-      compactSheet: boolean;
-      foreignPsiInfluences: StringID<PsiInfluenceData>[];
-    } & { [key in SleeveType]: ActorEntity<key> | null }
+    vehicle: ActorEntity<ActorType.Synthetic> | null;
+    [ItemType.Psi]: ItemEntity<ItemType.Psi> | null;
+    compactSheet: boolean;
+    foreignPsiInfluences: StringID<PsiInfluenceData>[];
+  } & { [key in SleeveType]: ActorEntity<key> | null }
   : T extends ActorType.Synthetic
   ? {
-      exoskeletonItemIds: string[] | null;
-    }
+    exoskeletonItemIds: string[] | null;
+  }
   : never;
 
 export type ActorEntity<T extends ActorType = ActorType> = CommonEntityData & {
@@ -90,7 +90,7 @@ export const createActorEntity = <T extends ActorType>({
   name: string;
   data?: Partial<ActorEntity<T>['system']>;
 }): ActorEntity<T> => {
-  const modelData = foundry.utils.mergeObject(game.system.template.Actor[type], data || {}, {
+  const modelData = foundry.utils.mergeObject(game.model.Actor[type], data || {}, {
     inplace: false,
   });
   const _id = stringID(16);
@@ -143,7 +143,7 @@ export const createActorEntity = <T extends ActorType>({
 };
 
 export const createEgoData = (): FullEgoData => {
-  const data = pick(game.system.template.Actor.character, [
+  const data = pick(game.model.Actor.character, [
     'egoType',
     'forkType',
     'flex',
@@ -208,7 +208,7 @@ export const createItemEntity = <T extends ItemType>({
   name: string;
   system?: Partial<ItemEntity<T>['system']>;
 }): ItemEntity<T> => {
-  const modelData = foundry.utils.mergeObject(game.system.template.Item[type], data || {}, {
+  const modelData = foundry.utils.mergeObject(game.model.Item[type], data || {}, {
     inplace: false,
   });
   return {
@@ -266,40 +266,40 @@ type ItemFlags<T extends ItemType> = T extends ItemType.Psi
   ? { influences: readonly StringID<PsiInfluenceData>[] }
   : T extends ItemType.Substance
   ? SubstanceItemFlags & {
-      awaitingOnset: null | {
-        useMethod: SubstanceUseMethod;
-        onsetStartTime: number;
-        hidden: boolean;
-      };
-      active: null | ActiveSubstanceState;
-    }
+    awaitingOnset: null | {
+      useMethod: SubstanceUseMethod;
+      onsetStartTime: number;
+      hidden: boolean;
+    };
+    active: null | ActiveSubstanceState;
+  }
   : T extends ItemType.Explosive
   ? { substance: null | [ItemEntity<ItemType.Substance>] }
   : T extends ItemType.MeleeWeapon
   ? {
-      coating: null | [ItemEntity<ItemType.Substance>];
-      payload: null | [ItemEntity<ItemType.Explosive>];
-      damageIrrespectiveOfSize: boolean;
-      permanentCoating: boolean;
-      attackArmorUsed: ArmorType | '';
-    }
+    coating: null | [ItemEntity<ItemType.Substance>];
+    payload: null | [ItemEntity<ItemType.Explosive>];
+    damageIrrespectiveOfSize: boolean;
+    permanentCoating: boolean;
+    attackArmorUsed: ArmorType | '';
+  }
   : T extends ItemType.PhysicalTech
   ? {
-      onboardALI: DeepPartial<FullEgoData> | null;
-      gland: [ItemEntity<ItemType.Substance>] | null;
-      blueprint: [BlueprintSource] | null;
-    }
+    onboardALI: DeepPartial<FullEgoData> | null;
+    gland: [ItemEntity<ItemType.Substance>] | null;
+    blueprint: [BlueprintSource] | null;
+  }
   : T extends ItemType.Firearm
   ? {
-      specialAmmo: [ItemEntity<ItemType.FirearmAmmo>] | null;
-      shapes: ItemEntity<ItemType.Firearm>[];
-      transformation: GunTransformation;
-    }
+    specialAmmo: [ItemEntity<ItemType.FirearmAmmo>] | null;
+    shapes: ItemEntity<ItemType.Firearm>[];
+    transformation: GunTransformation;
+  }
   : T extends ItemType.Railgun
   ? {
-      shapes: ItemEntity<ItemType.Railgun>[];
-      transformation: GunTransformation;
-    }
+    shapes: ItemEntity<ItemType.Railgun>[];
+    transformation: GunTransformation;
+  }
   : T extends ItemType.FirearmAmmo
   ? { payload: [ItemEntity<ItemType.Substance>] | null }
   : T extends ItemType.SprayWeapon
@@ -310,14 +310,14 @@ type ItemFlags<T extends ItemType> = T extends ItemType.Psi
   ? { missiles: ItemEntity<ItemType.Explosive> | null }
   : T extends ItemType.Sleight
   ? {
-      attackArmorUsed: ArmorType | '';
-      exoticSkill: string;
-      applyTrait: [ItemEntity<ItemType.Trait>] | null;
-      modifyTrait: {
-        traitId: string;
-        levelModification: 1 | 2;
-      } | null;
-    }
+    attackArmorUsed: ArmorType | '';
+    exoticSkill: string;
+    applyTrait: [ItemEntity<ItemType.Trait>] | null;
+    modifyTrait: {
+      traitId: string;
+      levelModification: 1 | 2;
+    } | null;
+  }
   : never;
 
 export type DrugAppliedItem =

@@ -186,6 +186,10 @@ export class SubstanceForm extends ItemFormBase {
     }
   });
 
+  override get descriptionUpdateActions() {
+    return this.item.updater.path('system', 'description')
+  }
+
   render() {
     const {
       updater,
@@ -209,90 +213,86 @@ export class SubstanceForm extends ItemFormBase {
         </entity-form-header>
 
         ${renderUpdaterForm(updater.path('system'), {
-          disabled,
-          slot: 'sidebar',
-          fields: ({
-            category,
-            substanceType,
-            classification,
-            addiction,
-            addictionMod,
-            hasSeverity,
-            consumeOnUse,
-          }) => [
-            renderSelectField(
-              { ...substanceType, label: localize('type') },
-              enumValues(SubstanceType),
+      disabled,
+      slot: 'sidebar',
+      fields: ({
+        category,
+        substanceType,
+        classification,
+        addiction,
+        addictionMod,
+        hasSeverity,
+        consumeOnUse,
+      }) => [
+          renderSelectField(
+            { ...substanceType, label: localize('type') },
+            enumValues(SubstanceType),
+          ),
+          isChemical
+            ? ''
+            : renderSelectField(
+              classification,
+              enumValues(SubstanceClassification),
             ),
-            isChemical
-              ? ''
-              : renderSelectField(
-                  classification,
-                  enumValues(SubstanceClassification),
-                ),
-            renderTextField(category, { listId: 'drug-categories' }),
-            renderLabeledCheckbox(hasSeverity),
-            renderLabeledCheckbox(consumeOnUse),
-            isDrug
-              ? html`
+          renderTextField(category, { listId: 'drug-categories' }),
+          renderLabeledCheckbox(hasSeverity),
+          renderLabeledCheckbox(consumeOnUse),
+          isDrug
+            ? html`
                   ${this.drugCategoryTemplate}
                   <entity-form-sidebar-divider></entity-form-sidebar-divider>
                   ${renderSelectField(addiction, enumValues(DrugAddiction), {
-                    emptyText: localize('nonAddictive'),
-                  })}
+              emptyText: localize('nonAddictive'),
+            })}
                   ${isAddictive
-                    ? renderNumberField(
-                        {
-                          ...addictionMod,
-                          label: `${localize(
-                            AptitudeType.Willpower,
-                          )} ${localize('check')} ${localize(
-                            'SHORT',
-                            'modifier',
-                          )}`,
-                        },
-                        {
-                          min: -60,
-                          max: 60,
-                          step: 5,
-                        },
-                      )
-                    : ''}
+                ? renderNumberField(
+                  {
+                    ...addictionMod,
+                    label: `${localize(
+                      AptitudeType.Willpower,
+                    )} ${localize('check')} ${localize(
+                      'SHORT',
+                      'modifier',
+                    )}`,
+                  },
+                  {
+                    min: -60,
+                    max: 60,
+                    step: 5,
+                  },
+                )
+                : ''}
                 `
-              : '',
-          ],
-        })}
+            : '',
+        ],
+    })}
 
         <div slot="details">
           <section>
             <sl-header heading=${localize('details')}></sl-header>
             <div class="detail-forms">
               ${renderUpdaterForm(updater.path('system'), {
-                classes: complexityForm.cssClass,
-                disabled,
-                fields: renderComplexityFields,
-              })}
+      classes: complexityForm.cssClass,
+      disabled,
+      fields: renderComplexityFields,
+    })}
               ${renderUpdaterForm(updater.path('system'), {
-                disabled,
-                classes: 'quantity-form',
-                fields: ({ quantity, quantityPerCost }) => [
-                  loaded || appliedState
-                    ? html`<div></div>`
-                    : renderNumberField(quantity, { min: 0, max: 9999 }),
-                  renderNumberField(quantityPerCost, { min: 1 }),
-                ],
-              })}
+      disabled,
+      classes: 'quantity-form',
+      fields: ({ quantity, quantityPerCost }) => [
+        loaded || appliedState
+          ? html`<div></div>`
+          : renderNumberField(quantity, { min: 0, max: 9999 }),
+        renderNumberField(quantityPerCost, { min: 1 }),
+      ],
+    })}
             </div>
           </section>
           ${isChemical ? '' : html` ${this.renderApplicationMethods()} `}
           ${this.renderEffects()}
         </div>
 
-        <editor-wrapper
-          slot="description"
-          ?disabled=${disabled}
-          .updateActions=${updater.path('system', 'description')}
-        ></editor-wrapper>
+        ${this.renderDescriptionSlot()}
         ${this.renderDrawerContent()}
       </entity-form-layout>
     `;
@@ -303,35 +303,35 @@ export class SubstanceForm extends ItemFormBase {
       <section>
         <sl-header heading=${localize('applicationMethods')}>
           ${this.item.isElectronic
-            ? ''
-            : html`
+        ? ''
+        : html`
                 <mwc-icon-button
                   ?disabled=${this.disabled}
                   icon="edit"
                   slot="action"
                   @click=${this.setDrawerFromEvent(
-                    this.renderApplicationMethodSelector,
-                  )}
+          this.renderApplicationMethodSelector,
+        )}
                 ></mwc-icon-button>
               `}
         </sl-header>
         <sl-animated-list class="application-methods">
           ${repeat(
-            this.item.applicationMethods,
-            identity,
-            (method) =>
-              html`<li
+          this.item.applicationMethods,
+          identity,
+          (method) =>
+            html`<li
                 class="method"
                 data-ep-tooltip="${localize('onset')} ${localize(
-                  'time',
-                )}: ${prettyMilliseconds(Substance.onsetTime(method), {
-                  compact: false,
-                })}"
+              'time',
+            )}: ${prettyMilliseconds(Substance.onsetTime(method), {
+              compact: false,
+            })}"
                 @mouseenter=${tooltip.fromData}
               >
                 ${localize(method)}
               </li>`,
-          )}
+        )}
         </sl-animated-list>
       </section>
     `;
@@ -346,23 +346,23 @@ export class SubstanceForm extends ItemFormBase {
     return html`
       <h3>${localize('applicationMethods')}</h3>
       ${renderAutoForm({
-        props: applicationObj,
-        update: (methods) =>
-          pipe(
-            enumValues(SubstanceApplicationMethod),
-            flatMap((method) => {
-              const active = methods[method] ?? applicationObj[method];
-              return active ? method : [];
-            }),
-            this.item.updater.path('system', 'application').commit,
-          ),
-        fields: (methods) =>
-          enumValues(SubstanceApplicationMethod).map((method) =>
-            renderLabeledCheckbox(methods[method], {
-              disabled: application.length === 1 && applicationObj[method],
-            }),
-          ),
-      })}
+      props: applicationObj,
+      update: (methods) =>
+        pipe(
+          enumValues(SubstanceApplicationMethod),
+          flatMap((method) => {
+            const active = methods[method] ?? applicationObj[method];
+            return active ? method : [];
+          }),
+          this.item.updater.path('system', 'application').commit,
+        ),
+      fields: (methods) =>
+        enumValues(SubstanceApplicationMethod).map((method) =>
+          renderLabeledCheckbox(methods[method], {
+            disabled: application.length === 1 && applicationObj[method],
+          }),
+        ),
+    })}
     `;
   }
 
@@ -395,10 +395,9 @@ export class SubstanceForm extends ItemFormBase {
               <sl-header>
                 <span slot="heading" class="severity-header"
                   >${format('OnCheckFailure', {
-                    aptitude: `${localize('FULL', severity.check)} ${
-                      severity.checkMod ? withSign(severity.checkMod) : ''
-                    }`,
-                  })}</span
+          aptitude: `${localize('FULL', severity.check)} ${severity.checkMod ? withSign(severity.checkMod) : ''
+            }`,
+        })}</span
                 >
                 ${renderEffectInfo()} ${this.renderAddEffectButton('severity')}
                 <mwc-icon-button
@@ -410,14 +409,14 @@ export class SubstanceForm extends ItemFormBase {
               </sl-header>
               <div class="effect-details">
                 ${notEmpty(severity.conditions)
-                  ? html`
+            ? html`
                       <sl-group label=${localize('conditions')}
                         >${map(severity.conditions, localize).join(
-                          ', ',
-                        )}</sl-group
+              ', ',
+            )}</sl-group
                       >
                     `
-                  : ''}
+            : ''}
                 ${this.renderCommonEffectInfo('severity')}
               </div>
             </sl-dropzone>
@@ -448,8 +447,8 @@ export class SubstanceForm extends ItemFormBase {
           label=${localize('effects')}
           .effects=${effects}
           .operations=${group === 'base'
-            ? this.effectOps
-            : this.severityEffectOps}
+          ? this.effectOps
+          : this.severityEffectOps}
           ?disabled=${this.disabled}
         ></item-form-effects-list>`
       : '';
@@ -492,22 +491,22 @@ export class SubstanceForm extends ItemFormBase {
     return html`
       ${this.renderEffectsList(group)}
       ${itemKeys.map((key) => {
-        const itemGroup = itemGroups[key];
-        return notEmpty(itemGroup)
-          ? html`
+      const itemGroup = itemGroups[key];
+      return notEmpty(itemGroup)
+        ? html`
               <form-items-list
                 .items=${itemGroup}
                 label=${localize(key)}
               ></form-items-list>
             `
-          : '';
-      })}
+        : '';
+    })}
       ${damageFormula
         ? html`
             <sl-group
               label="${formatDamageType(damageType)} ${perTurn
-                ? localize('perTurn')
-                : ''}"
+            ? localize('perTurn')
+            : ''}"
             >
               ${damageFormula} ${formatArmorUsed(armor)}
             </sl-group>
@@ -520,13 +519,13 @@ export class SubstanceForm extends ItemFormBase {
       <sl-group label=${localize('duration')}
         >${prettyMilliseconds(duration, { compact: false })}
         ${wearOffStress
-          ? `(${format('TakeSVWhenWearsOff', {
-              wearOffStress,
-              substanceType: localize(
-                this.item.substanceType,
-              ).toLocaleLowerCase(),
-            })})`
-          : ''}</sl-group
+        ? `(${format('TakeSVWhenWearsOff', {
+          wearOffStress,
+          substanceType: localize(
+            this.item.substanceType,
+          ).toLocaleLowerCase(),
+        })})`
+        : ''}</sl-group
       >
     `;
   }
@@ -536,11 +535,11 @@ export class SubstanceForm extends ItemFormBase {
       <h3>${localize('add')} ${localize('effect')}</h3>
       ${this.item.hasSeverity
         ? renderAutoForm({
-            props: { group: this.effectGroup },
-            update: ({ group }) => group && (this.effectGroup = group),
-            fields: ({ group }) =>
-              renderRadioFields(group, ['base', 'severity']),
-          })
+          props: { group: this.effectGroup },
+          update: ({ group }) => group && (this.effectGroup = group),
+          fields: ({ group }) =>
+            renderRadioFields(group, ['base', 'severity']),
+        })
         : ''}
 
       <effect-creator @effect-created=${this.addCreatedEffect}></effect-creator>
@@ -552,19 +551,19 @@ export class SubstanceForm extends ItemFormBase {
     return html`
       <h3>${localize('base')}</h3>
       ${renderUpdaterForm(updater, {
-        fields: ({ duration, wearOffStress }) => [
-          renderFormulaField(wearOffStress),
-          renderTimeField(duration, {
-            permanentLabel: localize('indefinite'),
-            min: CommonInterval.Turn,
-          }),
-        ],
-      })}
+      fields: ({ duration, wearOffStress }) => [
+        renderFormulaField(wearOffStress),
+        renderTimeField(duration, {
+          permanentLabel: localize('indefinite'),
+          min: CommonInterval.Turn,
+        }),
+      ],
+    })}
       <p class="label">${localize('damage')}</p>
       ${this.renderEffectDamage('base')}
       ${renderUpdaterForm(updater, {
-        fields: ({ notes }) => renderTextareaField(notes),
-      })}
+      fields: ({ notes }) => renderTextareaField(notes),
+    })}
     `;
   }
 
@@ -574,17 +573,17 @@ export class SubstanceForm extends ItemFormBase {
     return html`
       <h3>${localize('severity')}</h3>
       ${renderUpdaterForm(updater, {
-        fields: ({ check, checkMod, duration, wearOffStress }) => [
-          html`<div class="check-fields">
+      fields: ({ check, checkMod, duration, wearOffStress }) => [
+        html`<div class="check-fields">
             ${[
-              renderSelectField(check, enumValues(AptitudeType)),
-              renderNumberField(checkMod, { min: -90, max: 90 }),
-            ]}
+            renderSelectField(check, enumValues(AptitudeType)),
+            renderNumberField(checkMod, { min: -90, max: 90 }),
+          ]}
           </div>`,
-          renderTimeField(duration, { permanentLabel: localize('indefinite') }),
-          renderFormulaField(wearOffStress),
-        ],
-      })}
+        renderTimeField(duration, { permanentLabel: localize('indefinite') }),
+        renderFormulaField(wearOffStress),
+      ],
+    })}
       <sl-popover
         padded
         placement=${Placement.Right}
@@ -594,8 +593,8 @@ export class SubstanceForm extends ItemFormBase {
           <span>${localize('apply')} ${localize('conditions')}</span>
           <span class="list-values"
             >${notEmpty(conditions)
-              ? map(conditions, localize).join(', ')
-              : localize('none')}</span
+        ? map(conditions, localize).join(', ')
+        : localize('none')}</span
           >
         </wl-list-item>
       </sl-popover>
@@ -603,8 +602,8 @@ export class SubstanceForm extends ItemFormBase {
       <p class="label">${localize('damage')}</p>
       ${this.renderEffectDamage('severity')}
       ${renderUpdaterForm(updater, {
-        fields: ({ notes }) => renderTextareaField(notes),
-      })}
+          fields: ({ notes }) => renderTextareaField(notes),
+        })}
     `;
   }
 
@@ -628,13 +627,13 @@ export class SubstanceForm extends ItemFormBase {
     const { damage } = this.item[group];
     return html`
       ${renderUpdaterForm(updater, {
-        fields: ({
-          damageFormula,
-          damageType,
-          perTurn,
-          reduceAVbyDV,
-          armorPiercing,
-        }) => [
+      fields: ({
+        damageFormula,
+        damageType,
+        perTurn,
+        reduceAVbyDV,
+        armorPiercing,
+      }) => [
           [
             renderFormulaField(damageFormula),
             renderSelectField(damageType, enumValues(HealthType)),
@@ -647,14 +646,14 @@ export class SubstanceForm extends ItemFormBase {
               ? html`
                   <div class="divider"></div>
                   ${[
-                    renderLabeledCheckbox(armorPiercing),
-                    renderLabeledCheckbox(reduceAVbyDV),
-                  ]}
+                  renderLabeledCheckbox(armorPiercing),
+                  renderLabeledCheckbox(reduceAVbyDV),
+                ]}
                 `
               : '',
           ],
         ],
-      })}
+    })}
     `;
   }
 
@@ -674,8 +673,8 @@ export class SubstanceForm extends ItemFormBase {
 
   private drugCategoryTemplate = html`<datalist id="drug-categories">
     ${enumValues(DrugCategory).map(
-      (category) => html` <option value=${localize(category)}></option> `,
-    )}
+    (category) => html` <option value=${localize(category)}></option> `,
+  )}
   </datalist>`;
 }
 

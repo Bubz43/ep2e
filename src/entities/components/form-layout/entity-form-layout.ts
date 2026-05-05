@@ -148,12 +148,12 @@ export class EntityFormLayout extends LitElement {
           @keydown=${this.closeDrawerOnEscape}
         >
           ${this.drawerOpen
-            ? html`<mwc-icon-button
+        ? html`<mwc-icon-button
                 icon="east"
                 class="drawer-closer"
                 @click=${this.closeDrawer}
               ></mwc-icon-button>`
-            : ''}
+        : ''}
           <slot @slotchange=${this.toggleDrawer} name="drawer-content"></slot>
         </div>
       </aside>

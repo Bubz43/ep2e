@@ -197,18 +197,18 @@ export class PhysicalTechForm extends ItemFormBase {
               dialogAction="confirm"
               unelevated
               @click=${() => {
-                const egoData = pick(clone(proxy.ego.data), [
-                  'system',
-                  'img',
-                  'name',
-                ]);
-                const items = [...proxy.ego.items.values()].flatMap((i) =>
-                  i.type === ItemType.Trait ? i.getDataCopy(false) : [],
-                );
-                this.item.onboardALI.updater
-                  .path('')
-                  .commit({ ...egoData, items });
-              }}
+            const egoData = pick(clone(proxy.ego.data), [
+              'system',
+              'img',
+              'name',
+            ]);
+            const items = [...proxy.ego.items.values()].flatMap((i) =>
+              i.type === ItemType.Trait ? i.getDataCopy(false) : [],
+            );
+            this.item.onboardALI.updater
+              .path('')
+              .commit({ ...egoData, items });
+          }}
               >${localize('confirm')}</mwc-button
             >
           </mwc-dialog>
@@ -218,6 +218,10 @@ export class PhysicalTechForm extends ItemFormBase {
       notify(NotificationType.Info, `${localize('onlyCharactersAllowed')}`);
     }
   });
+
+  override get descriptionUpdateActions() {
+    return this.item.updater.path('system', 'description')
+  }
 
   render() {
     const {
@@ -244,8 +248,8 @@ export class PhysicalTechForm extends ItemFormBase {
           ?disabled=${disabled}
         >
           ${isBlueprint
-            ? html` <li slot="tag">${localize('blueprint')}</li> `
-            : ''}
+        ? html` <li slot="tag">${localize('blueprint')}</li> `
+        : ''}
         </entity-form-header>
 
         ${renderUpdaterForm(updater.path('system'), {
@@ -262,53 +266,53 @@ export class PhysicalTechForm extends ItemFormBase {
             onboardALI,
             singleUse,
           }) => [
-            renderSelectField(wareType, enumValues(PhysicalWare), {
-              ...emptyTextDash,
-              disabled: !!embedded,
-            }),
-            renderTextField(category),
-            html`<entity-form-sidebar-divider></entity-form-sidebar-divider>`,
-            renderSelectField(activation, enumValues(Activation), {
-              disableOptions: notEmpty(this.item.epData.activatedEffects)
-                ? [Activation.None]
-                : undefined,
-            }),
-            hasActivation
-              ? renderSelectField(
+              renderSelectField(wareType, enumValues(PhysicalWare), {
+                ...emptyTextDash,
+                disabled: !!embedded,
+              }),
+              renderTextField(category),
+              html`<entity-form-sidebar-divider></entity-form-sidebar-divider>`,
+              renderSelectField(activation, enumValues(Activation), {
+                disableOptions: notEmpty(this.item.epData.activatedEffects)
+                  ? [Activation.None]
+                  : undefined,
+              }),
+              hasActivation
+                ? renderSelectField(
                   activationAction,
                   difference(enumValues(ActionType), [ActionType.Task]),
                 )
-              : '',
-            activation.value === Activation.Use
-              ? renderLabeledCheckbox(singleUse)
-              : '',
-            html`<entity-form-sidebar-divider></entity-form-sidebar-divider>`,
-            renderSelectField(deviceType, enumValues(DeviceType), {
-              ...emptyTextDash,
-              // disabled: !!embedded,
-            }),
-            hasMeshHealth
-              ? [
+                : '',
+              activation.value === Activation.Use
+                ? renderLabeledCheckbox(singleUse)
+                : '',
+              html`<entity-form-sidebar-divider></entity-form-sidebar-divider>`,
+              renderSelectField(deviceType, enumValues(DeviceType), {
+                ...emptyTextDash,
+                // disabled: !!embedded,
+              }),
+              hasMeshHealth
+                ? [
                   renderNumberField(firewallRating, { min: 1, max: 99 }),
                   renderLabeledCheckbox(onboardALI),
                 ]
-              : '',
-            renderSelectField(fabricator, enumValues(FabType), {
-              ...emptyTextDash,
-              disabled: this.item.disableFabTypeChange,
-            }),
-          ],
+                : '',
+              renderSelectField(fabricator, enumValues(FabType), {
+                ...emptyTextDash,
+                disabled: this.item.disableFabTypeChange,
+              }),
+            ],
         })}
 
         <div slot="details">
           ${renderUpdaterForm(updater.path('system'), {
-            disabled,
-            classes: complexityForm.cssClass,
-            fields: renderComplexityFields,
-          })}
+          disabled,
+          classes: complexityForm.cssClass,
+          fields: renderComplexityFields,
+        })}
           ${deviceType ? this.renderMeshHealthSection() : ''}
           ${hasOnboardALI
-            ? html`
+        ? html`
                 <sl-dropzone
                   ?disabled=${disabled}
                   @drop=${this.handleDropOnOnboardALI}
@@ -323,18 +327,18 @@ export class PhysicalTechForm extends ItemFormBase {
                     ></mwc-icon-button>
                   </sl-header>
                   ${onboardALI.trackMentalHealth
-                    ? html`
+            ? html`
                         <health-item .health=${onboardALI.mentalHealth}
                           ><span slot="source"
                             >${localize('mentalHealth')}</span
                           ></health-item
                         >
                       `
-                    : ''}
+            : ''}
                   <sl-group label=${localize('skills')} class="skills"
                     ><ul class="ali-skills">
                       ${onboardALI.skills.map(
-                        (skill, index, list) => html`
+              (skill, index, list) => html`
                           <li
                             class="ali-skill"
                             ?data-comma=${index < list.length - 1}
@@ -344,15 +348,15 @@ export class PhysicalTechForm extends ItemFormBase {
                             >
                           </li>
                         `,
-                      )}
+            )}
                     </ul></sl-group
                   >
                 </sl-dropzone>
               `
-            : ''}
+        : ''}
           ${this.item.fabricatorType
-            ? this.renderFabSection(this.item.fabricatorType)
-            : ''}
+        ? this.renderFabSection(this.item.fabricatorType)
+        : ''}
 
           <section
             class=${effectGroups.size === 0 && !hasUseActivation ? 'mini' : ''}
@@ -362,7 +366,7 @@ export class PhysicalTechForm extends ItemFormBase {
               ?hideBorder=${effectGroups.size === 0 && !hasUseActivation}
             >
               ${this.item.hasToggleActivation
-                ? html`
+        ? html`
                     <mwc-icon
                       slot="info"
                       data-ep-tooltip=${localize('PassiveEffectsWhenActivated')}
@@ -370,7 +374,7 @@ export class PhysicalTechForm extends ItemFormBase {
                       >info</mwc-icon
                     >
                   `
-                : ''}
+        : ''}
               <mwc-icon-button
                 icon="add"
                 slot="action"
@@ -379,44 +383,40 @@ export class PhysicalTechForm extends ItemFormBase {
               ></mwc-icon-button
             ></sl-header>
             ${hasUseActivation
-              ? renderUpdaterForm(updater.path('system'), {
-                  disabled,
-                  classes: 'activation-form',
-                  fields: ({ usedEffectsDuration, resistEffectsCheck }) => [
-                    renderSelectField(
-                      resistEffectsCheck,
-                      enumValues(AptitudeType),
-                      { emptyText: localize('none') },
-                    ),
-                    renderTimeField(usedEffectsDuration, {
-                      permanentLabel: localize('indefinite'),
-                      min: CommonInterval.Turn,
-                    }),
-                  ],
-                })
-              : ''}
+        ? renderUpdaterForm(updater.path('system'), {
+          disabled,
+          classes: 'activation-form',
+          fields: ({ usedEffectsDuration, resistEffectsCheck }) => [
+            renderSelectField(
+              resistEffectsCheck,
+              enumValues(AptitudeType),
+              { emptyText: localize('none') },
+            ),
+            renderTimeField(usedEffectsDuration, {
+              permanentLabel: localize('indefinite'),
+              min: CommonInterval.Turn,
+            }),
+          ],
+        })
+        : ''}
             ${[...effectGroups].map(([key, group]) =>
-              notEmpty(group)
-                ? html`
+          notEmpty(group)
+            ? html`
                     <item-form-effects-list
                       label=${ifDefined(
-                        hasActivation ? localize(key) : undefined,
-                      )}
+              hasActivation ? localize(key) : undefined,
+            )}
                       .effects=${group}
                       .operations=${this.effectsOps[`${key}Effects` as const]}
                       ?disabled=${disabled}
                     ></item-form-effects-list>
                   `
-                : '',
-            )}
+            : '',
+        )}
           </section>
         </div>
 
-        <editor-wrapper
-          slot="description"
-          ?disabled=${disabled}
-          .updateActions=${updater.path('system', 'description')}
-        ></editor-wrapper>
+        ${this.renderDescriptionSlot()}
         ${this.renderDrawerContent()}
       </entity-form-layout>
     `;
@@ -432,20 +432,20 @@ export class PhysicalTechForm extends ItemFormBase {
           ></sl-header>
 
           ${renderUpdaterForm(updater.path('system'), {
-            disabled: this.disabled,
-            classes: 'fab-duration-form',
-            fields: ({ fabPrintDuration }) =>
-              renderTimeField(
-                {
-                  ...fabPrintDuration,
-                  label: localize('printDuration'),
-                  value: fabPrintDuration.value || CommonInterval.Hour * 4,
-                },
-                { min: 0 },
-              ),
-          })}
+        disabled: this.disabled,
+        classes: 'fab-duration-form',
+        fields: ({ fabPrintDuration }) =>
+          renderTimeField(
+            {
+              ...fabPrintDuration,
+              label: localize('printDuration'),
+              value: fabPrintDuration.value || CommonInterval.Hour * 4,
+            },
+            { min: 0 },
+          ),
+      })}
           ${glandedSubstance
-            ? html`
+          ? html`
                 <div class="addon">
                   <span class="addon-name">${glandedSubstance.name}</span>
                   <span class="addon-type">${glandedSubstance.fullType}</span>
@@ -459,7 +459,7 @@ export class PhysicalTechForm extends ItemFormBase {
                   ></delete-button>
                 </div>
               `
-            : ''}
+          : ''}
         </sl-dropzone>
       `;
     }
@@ -477,20 +477,20 @@ export class PhysicalTechForm extends ItemFormBase {
         >
         </sl-header>
         ${itemBlueprint
-          ? renderUpdaterForm(updater.path('system'), {
-              disabled: this.disabled,
-              classes: 'fab-duration-form',
-              fields: ({ fabPrintDuration }) =>
-                renderTimeField(
-                  { ...fabPrintDuration, label: localize('printDuration') },
-                  {
-                    min: CommonInterval.Turn,
-                  },
-                ),
-            })
-          : ''}
+        ? renderUpdaterForm(updater.path('system'), {
+          disabled: this.disabled,
+          classes: 'fab-duration-form',
+          fields: ({ fabPrintDuration }) =>
+            renderTimeField(
+              { ...fabPrintDuration, label: localize('printDuration') },
+              {
+                min: CommonInterval.Turn,
+              },
+            ),
+        })
+        : ''}
         ${itemBlueprint
-          ? html`
+        ? html`
               <div class="addon">
                 <span class="addon-name">${itemBlueprint.name}</span>
                 <span class="addon-type">${itemBlueprint.fullType}</span>
@@ -504,7 +504,7 @@ export class PhysicalTechForm extends ItemFormBase {
                 ></delete-button>
               </div>
             `
-          : ''}
+        : ''}
       </sl-dropzone>
     `;
   }
@@ -520,9 +520,9 @@ export class PhysicalTechForm extends ItemFormBase {
             @focus=${tooltip.fromData}
             icon="change_history"
             @click=${this.setDrawerFromEvent(
-              this.renderHealthChangeHistory,
-              false,
-            )}
+      this.renderHealthChangeHistory,
+      false,
+    )}
           ></mwc-icon-button>
         </sl-header>
         <health-item
@@ -565,9 +565,9 @@ export class PhysicalTechForm extends ItemFormBase {
     return html`
       <h3>${localize('meshHealth')}</h3>
       ${renderUpdaterForm(updater.path('system', 'meshHealth'), {
-        fields: ({ baseDurability }) =>
-          renderNumberField(baseDurability, { min: 1 }),
-      })}
+      fields: ({ baseDurability }) =>
+        renderNumberField(baseDurability, { min: 1 }),
+    })}
       <health-state-form .health=${meshHealth}></health-state-form>
       <health-regen-settings-form
         .health=${meshHealth}
@@ -581,9 +581,9 @@ export class PhysicalTechForm extends ItemFormBase {
     return html`
       <h3>${localize('firewallHealth')}</h3>
       ${renderUpdaterForm(updater.path('system', 'firewallHealth'), {
-        fields: ({ baseDurability }) =>
-          renderNumberField(baseDurability, { min: 1 }),
-      })}
+      fields: ({ baseDurability }) =>
+        renderNumberField(baseDurability, { min: 1 }),
+    })}
       <health-state-form .health=${firewallHealth}></health-state-form>
     `;
   }
@@ -592,13 +592,13 @@ export class PhysicalTechForm extends ItemFormBase {
     return html`
       <h3>${localize('add')} ${localize('effect')}</h3>
       ${renderAutoForm({
-        props: { group: this.effectGroup },
-        classes: 'effect-group-form',
-        disabled: !this.item.hasActivation,
-        update: ({ group }) => group && (this.effectGroup = group),
-        fields: ({ group }) =>
-          renderRadioFields(group, ['passive', 'activated']),
-      })}
+      props: { group: this.effectGroup },
+      classes: 'effect-group-form',
+      disabled: !this.item.hasActivation,
+      update: ({ group }) => group && (this.effectGroup = group),
+      fields: ({ group }) =>
+        renderRadioFields(group, ['passive', 'activated']),
+    })}
 
       <effect-creator
         .effectTypes=${enumValues(EffectType)}

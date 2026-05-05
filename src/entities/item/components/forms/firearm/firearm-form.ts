@@ -158,6 +158,10 @@ export class FirearmForm extends ItemFormBase {
     });
   }
 
+  override get descriptionUpdateActions() {
+    return this.item.updater.path('system', 'description')
+  }
+
   render() {
     const {
       updater,
@@ -183,80 +187,80 @@ export class FirearmForm extends ItemFormBase {
         </entity-form-header>
 
         ${renderUpdaterForm(updater.path('system'), {
-          disabled,
-          slot: 'sidebar',
-          fields: this.renderSidebarFields,
-        })}
+      disabled,
+      slot: 'sidebar',
+      fields: this.renderSidebarFields,
+    })}
 
         <div slot="details">
           ${shapeChanging && !nestedShape
-            ? html`
+        ? html`
                 <sl-dropzone ?disabled=${disabled} @drop=${this.addShape}>
                   <sl-header
                     heading=${localize('shapes')}
                     ?hideBorder=${this.item.shapes.size === 0}
                   >
                     ${renderAutoForm({
-                      props: { shapeName },
-                      slot: 'action',
-                      classes: 'shape-name-form',
-                      update: ({ shapeName }) => {
-                        this.item.updater
-                          .path('system', 'shapeName')
-                          .commit(shapeName || this.item.shapeName);
-                        this.requestUpdate();
-                      },
-                      disabled,
-                      fields: ({ shapeName }) =>
-                        html`<mwc-formfield alignEnd label=${shapeName.label}
+          props: { shapeName },
+          slot: 'action',
+          classes: 'shape-name-form',
+          update: ({ shapeName }) => {
+            this.item.updater
+              .path('system', 'shapeName')
+              .commit(shapeName || this.item.shapeName);
+            this.requestUpdate();
+          },
+          disabled,
+          fields: ({ shapeName }) =>
+            html`<mwc-formfield alignEnd label=${shapeName.label}
                           >${renderTextInput(shapeName)}</mwc-formfield
                         >`,
-                    })}
+        })}
                   </sl-header>
                   ${notEmpty(this.item.shapes)
-                    ? html`
+            ? html`
                         <sl-animated-list class="shapes">
                           ${repeat(
-                            this.item.shapes.values(),
-                            idProp,
-                            (shape) => {
-                              const { id, name } = shape;
-                              return html`
+              this.item.shapes.values(),
+              idProp,
+              (shape) => {
+                const { id, name } = shape;
+                return html`
                                 <wl-list-item
                                   class="shape"
                                   clickable
                                   ?disabled=${disabled}
                                   @click=${() => this.item.swapShape(id)}
                                   @contextmenu=${(ev: MouseEvent) =>
-                                    this.openShapeMenu(ev, shape)}
+                    this.openShapeMenu(ev, shape)}
                                   >${name}</wl-list-item
                                 >
                               `;
-                            },
-                          )}
+              },
+            )}
                         </sl-animated-list>
                       `
-                    : ''}
+            : ''}
                 </sl-dropzone>
               `
-            : ''}
+        : ''}
           ${renderUpdaterForm(updater.path('system'), {
-            disabled,
-            classes: complexityForm.cssClass,
-            fields: renderComplexityFields,
-          })}
+          disabled,
+          classes: complexityForm.cssClass,
+          fields: renderComplexityFields,
+        })}
           ${this.renderAttack()}
 
           <sl-dropzone @drop=${this.addDrop} ?disabled=${disabled}>
             <sl-header heading=${localize('ammo')}></sl-header>
             ${specialAmmo
-              ? html`
+        ? html`
                   <div class="addon">
                     <span class="addon-name"
                       >${specialAmmo.name}
                       ${specialAmmo.hasMultipleModes
-                        ? `(${specialAmmo.modes.map((m) => m.name).join(', ')})`
-                        : ''}</span
+            ? `(${specialAmmo.modes.map((m) => m.name).join(', ')})`
+            : ''}</span
                     >
                     <span class="addon-type"
                       >${localize(specialAmmo.type)}</span
@@ -273,67 +277,64 @@ export class FirearmForm extends ItemFormBase {
                   </div>
                   <hr />
                 `
-              : ''}
+        : ''}
             ${renderAutoForm({
-              props: updater.path('system', 'ammo').originalValue(),
-              disabled,
-              classes: 'ammo-form',
-              update: ({ value, ...data }) => {
-                if (value !== undefined) this.item.updateAmmoCount(value);
-                else this.item.updater.path('system', 'ammo').commit(data);
-              },
-              fields: ({ value, max, ammoClass }) => [
-                renderSelectField(
-                  { ...ammoClass, label: localize('class') },
-                  enumValues(KineticWeaponClass),
-                  { disabled: !!specialAmmo },
-                ),
+          props: updater.path('system', 'ammo').originalValue(),
+          disabled,
+          classes: 'ammo-form',
+          update: ({ value, ...data }) => {
+            if (value !== undefined) this.item.updateAmmoCount(value);
+            else this.item.updater.path('system', 'ammo').commit(data);
+          },
+          fields: ({ value, max, ammoClass }) => [
+            renderSelectField(
+              { ...ammoClass, label: localize('class') },
+              enumValues(KineticWeaponClass),
+              { disabled: !!specialAmmo },
+            ),
 
-                renderNumberField(
-                  {
-                    ...max,
-                    label: `${
-                      magazineModifiers.capacityChanged ? localize('base') : ''
-                    } ${localize('capacity')}`,
-                  },
-                  { min: 1, max: 200 },
-                ),
-                specialAmmo?.hasMultipleModes
-                  ? renderNumberField(
-                      {
-                        prop: 'value',
-                        label: localize('loaded'),
-                        value: Math.min(ammoState.max + 1, ammoState.value),
-                      },
-                      {
-                        min: 0,
-                        max: ammoState.max + 1,
-                        helpPersistent: true,
-                        helpText: `${localize('capacity')}: ${
-                          ammoState.max
-                        } + 1`,
-                      },
-                    )
-                  : renderNumberField(
-                      {
-                        ...value,
-                        value: Math.min(ammoState.max + 1, value.value),
-                        label: localize('loaded'),
-                      },
-                      {
-                        min: 0,
-                        max: ammoState.max + 1,
-                        helpPersistent: true,
-                        helpText: `${localize('capacity')}: ${
-                          ammoState.max
-                        } + 1`,
-                      },
-                    ),
-              ],
-            })}
+            renderNumberField(
+              {
+                ...max,
+                label: `${magazineModifiers.capacityChanged ? localize('base') : ''
+                  } ${localize('capacity')}`,
+              },
+              { min: 1, max: 200 },
+            ),
+            specialAmmo?.hasMultipleModes
+              ? renderNumberField(
+                {
+                  prop: 'value',
+                  label: localize('loaded'),
+                  value: Math.min(ammoState.max + 1, ammoState.value),
+                },
+                {
+                  min: 0,
+                  max: ammoState.max + 1,
+                  helpPersistent: true,
+                  helpText: `${localize('capacity')}: ${ammoState.max
+                    } + 1`,
+                },
+              )
+              : renderNumberField(
+                {
+                  ...value,
+                  value: Math.min(ammoState.max + 1, value.value),
+                  label: localize('loaded'),
+                },
+                {
+                  min: 0,
+                  max: ammoState.max + 1,
+                  helpPersistent: true,
+                  helpText: `${localize('capacity')}: ${ammoState.max
+                    } + 1`,
+                },
+              ),
+          ],
+        })}
             ${specialAmmo?.hasMultipleModes
-              ? this.renderProgrammableAmmoForm(specialAmmo)
-              : ''}
+        ? this.renderProgrammableAmmoForm(specialAmmo)
+        : ''}
           </sl-dropzone>
 
           <section>
@@ -348,19 +349,15 @@ export class FirearmForm extends ItemFormBase {
 
             <sl-animated-list class="accessories-list">
               ${repeat(
-                accessories,
-                identity,
-                (accessory) => html` <li>${localize(accessory)}</li> `,
-              )}
+          accessories,
+          identity,
+          (accessory) => html` <li>${localize(accessory)}</li> `,
+        )}
             </sl-animated-list>
           </section>
         </div>
 
-        <editor-wrapper
-          slot="description"
-          ?disabled=${disabled}
-          .updateActions=${updater.path('system', 'description')}
-        ></editor-wrapper>
+        ${this.renderDescriptionSlot()}
         ${this.renderDrawerContent()}
       </entity-form-layout>
     `;
@@ -388,16 +385,16 @@ export class FirearmForm extends ItemFormBase {
     return html`
       <div class="ammo-mode-settings">
         ${renderAutoForm({
-          props: { mode: String(specialAmmoModeIndex) },
-          update: ({ mode }) =>
-            this.item.updater
-              .path('system', 'ammo', 'selectedModeIndex')
-              .commit(Number(mode) || 0),
-          fields: ({ mode }) =>
-            renderSelectField(mode, Object.keys(ammoModes), {
-              altLabel: (modeId) => ammoModes[modeId] || modeId,
-            }),
-        })}
+      props: { mode: String(specialAmmoModeIndex) },
+      update: ({ mode }) =>
+        this.item.updater
+          .path('system', 'ammo', 'selectedModeIndex')
+          .commit(Number(mode) || 0),
+      fields: ({ mode }) =>
+        renderSelectField(mode, Object.keys(ammoModes), {
+          altLabel: (modeId) => ammoModes[modeId] || modeId,
+        }),
+    })}
         <sl-group label=${localize('availableShots')}
           ><span class="available-shots">${availableShots}</span></sl-group
         >
@@ -428,44 +425,44 @@ export class FirearmForm extends ItemFormBase {
         <div class="attack-details">
           <sl-group label=${localize('SHORT', 'damageValue')}>
             ${notEmpty(attack.rollFormulas)
-              ? [
-                  formatLabeledFormulas(attack.rollFormulas),
-                  formatArmorUsed(attack),
-                ].join('; ')
-              : '-'}
+        ? [
+          formatLabeledFormulas(attack.rollFormulas),
+          formatArmorUsed(attack),
+        ].join('; ')
+        : '-'}
           </sl-group>
 
           <sl-group label=${localize('firingModes')} class="firing-modes"
             >${attack.firingModes
-              .map((mode) => localize('SHORT', mode))
-              .join('/')}</sl-group
+        .map((mode) => localize('SHORT', mode))
+        .join('/')}</sl-group
           >
 
           ${attack.notes
-            ? html`
+        ? html`
                 <sl-group class="attack-notes" label=${localize('notes')}>
                   ${attack.notes}</sl-group
                 >
               `
-            : ''}
+        : ''}
           ${specialAmmo && mode
-            ? html`
+        ? html`
                 <hr />
 
                 <sl-group label=${localize('ammo')}
                   >${specialAmmo.name}
                   ${specialAmmo.hasMultipleModes
-                    ? `(${mode.name})`
-                    : ''}</sl-group
+            ? `(${mode.name})`
+            : ''}</sl-group
                 >
                 ${specialAmmo.payload
-                  ? html`<sl-group label=${localize('payload')}
+            ? html`<sl-group label=${localize('payload')}
                       >${specialAmmo.payload.name}</sl-group
                     >`
-                  : ''}
+            : ''}
                 ${renderFirearmAmmoDetails(mode)}
               `
-            : ''}
+        : ''}
         </div>
       </section>
     `;

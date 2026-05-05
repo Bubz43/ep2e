@@ -36,6 +36,10 @@ export class InfomorphForm extends SleeveFormBase {
       );
   });
 
+  override get descriptionUpdateActions() {
+    return this.sleeve.updater.path('system', 'description')
+  }
+
   render() {
     const {
       updater,
@@ -79,9 +83,9 @@ export class InfomorphForm extends SleeveFormBase {
                 @focus=${tooltip.fromData}
                 icon="change_history"
                 @click=${this.setDrawerFromEvent(
-                  this.renderHealthChangeHistory,
-                  false,
-                )}
+      this.renderHealthChangeHistory,
+      false,
+    )}
               ></mwc-icon-button>
             </sl-header>
             <health-item
@@ -103,41 +107,37 @@ export class InfomorphForm extends SleeveFormBase {
                 >info</mwc-icon
               >
               ${notEmpty(itemTrash) && !disabled
-                ? html`
+        ? html`
                     <mwc-icon-button
                       @click=${this.setDrawerFromEvent(this.renderItemTrash)}
                       icon="delete_outline"
                       slot="action"
                     ></mwc-icon-button>
                   `
-                : ''}
+        : ''}
             </sl-header>
 
             ${notEmpty(itemGroups.ware)
-              ? html`
+        ? html`
                   <form-items-list
                     .dragStartHandler=${this.itemDragStart}
                     .items=${itemGroups.ware}
                     label=${localize('software')}
                   ></form-items-list>
                 `
-              : ''}
+        : ''}
             ${notEmpty(itemGroups.traits)
-              ? html`
+        ? html`
                   <form-items-list
                     .dragStartHandler=${this.itemDragStart}
                     .items=${itemGroups.traits}
                     label=${localize('traits')}
                   ></form-items-list>
                 `
-              : ''}
+        : ''}
           </sl-dropzone>
         </div>
-        <editor-wrapper
-          slot="description"
-          ?disabled=${disabled}
-          .updateActions=${updater.path('system', 'description')}
-        ></editor-wrapper>
+        ${this.renderDescriptionSlot()}
         ${this.renderDrawerContent()}
       </entity-form-layout>
     `;
@@ -165,9 +165,9 @@ export class InfomorphForm extends SleeveFormBase {
     return html`
       <h3>${localize('meshHealth')}</h3>
       ${renderUpdaterForm(updater.path('system', 'meshHealth'), {
-        fields: ({ baseDurability }) =>
-          renderNumberField(baseDurability, { min: 1 }),
-      })}
+      fields: ({ baseDurability }) =>
+        renderNumberField(baseDurability, { min: 1 }),
+    })}
       <health-state-form .health=${meshHealth}></health-state-form>
       <health-regen-settings-form
         .health=${meshHealth}

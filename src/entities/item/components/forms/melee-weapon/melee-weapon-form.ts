@@ -186,6 +186,10 @@ export class MeleeWeaponForm extends ItemFormBase {
     return this.item.removePayload();
   }
 
+  override get descriptionUpdateActions() {
+    return this.item.updater.path('system', 'description')
+  }
+
   render() {
     const {
       updater,
@@ -212,29 +216,29 @@ export class MeleeWeaponForm extends ItemFormBase {
           ?disabled=${disabled}
         >
           ${damageIrrespectiveOfSize
-            ? html`<li
+        ? html`<li
                 slot="tag"
                 @mouseover=${tooltip.fromData}
                 data-ep-tooltip=${localize(
-                  'DESCRIPTIONS',
-                  'IgnoreSizeMeleeDamageModifiers',
-                )}
+          'DESCRIPTIONS',
+          'IgnoreSizeMeleeDamageModifiers',
+        )}
               >
                 ${localize('damageIrrespectiveOfSize')}
               </li>`
-            : ''}
+        : ''}
           ${permanentCoating
-            ? html`<li
+        ? html`<li
                 slot="tag"
                 @mouseover=${tooltip.fromData}
                 data-ep-tooltip=${localize(
-                  'DESCRIPTIONS',
-                  'PermanentMeleeCoatings',
-                )}
+          'DESCRIPTIONS',
+          'PermanentMeleeCoatings',
+        )}
               >
                 ${localize('permanentCoating')}
               </li>`
-            : ''}
+        : ''}
           <mwc-icon-button
             slot="settings"
             icon="settings"
@@ -256,26 +260,26 @@ export class MeleeWeaponForm extends ItemFormBase {
             acceptsPayload,
             ...gearTraits
           }) => [
-            renderSelectField(wareType, enumValues(PhysicalWare), {
-              emptyText: '-',
-            }),
-            renderNumberField(reachBonus, { min: 0, max: 30, step: 10 }),
-            html`<entity-form-sidebar-divider></entity-form-sidebar-divider>`,
-            map(
-              [
-                touchOnly,
-                augmentUnarmed,
-                improvised,
-                { ...hasSecondaryAttack, label: localize('secondaryAttack') },
-                { ...acceptsPayload, label: localize('payload') },
-              ],
-              renderLabeledCheckbox,
-            ),
-            html`<entity-form-sidebar-divider
+              renderSelectField(wareType, enumValues(PhysicalWare), {
+                emptyText: '-',
+              }),
+              renderNumberField(reachBonus, { min: 0, max: 30, step: 10 }),
+              html`<entity-form-sidebar-divider></entity-form-sidebar-divider>`,
+              map(
+                [
+                  touchOnly,
+                  augmentUnarmed,
+                  improvised,
+                  { ...hasSecondaryAttack, label: localize('secondaryAttack') },
+                  { ...acceptsPayload, label: localize('payload') },
+                ],
+                renderLabeledCheckbox,
+              ),
+              html`<entity-form-sidebar-divider
               label=${localize('gearTraits')}
             ></entity-form-sidebar-divider>`,
-            renderGearTraitCheckboxes(gearTraits),
-          ],
+              renderGearTraitCheckboxes(gearTraits),
+            ],
         })}
 
         <div slot="details">
@@ -283,70 +287,70 @@ export class MeleeWeaponForm extends ItemFormBase {
             <sl-header heading=${localize('details')}></sl-header>
             <div class="detail-forms">
               ${renderUpdaterForm(updater.path('system'), {
-                disabled,
-                classes: complexityForm.cssClass,
-                fields: renderComplexityFields,
-              })}
+          disabled,
+          classes: complexityForm.cssClass,
+          fields: renderComplexityFields,
+        })}
               ${renderAutoForm({
-                classes: 'skill-form',
-                disabled,
-                props: {
-                  skillOption: this.skillOption,
-                  exotic: exoticSkillName,
-                },
-                update: ({ skillOption, exotic }) => {
-                  if (exotic !== undefined) {
-                    this.item.updater
-                      .path('system', 'exoticSkill')
-                      .commit(exotic);
-                  } else if (skillOption === WeaponSkillOption.None) {
-                    this.skillOption = skillOption;
-                    this.item.updater.path('system', 'exoticSkill').commit('');
-                  } else if (skillOption) {
-                    this.skillOption = skillOption;
-                    if (
-                      skillOption === WeaponSkillOption.Exotic &&
-                      !this.item.exoticSkillName
-                    ) {
-                      this.item.updater
-                        .path('system', 'exoticSkill')
-                        .commit(this.item.name);
-                    }
-                  }
-                },
-                fields: ({ skillOption, exotic }) => html`
+          classes: 'skill-form',
+          disabled,
+          props: {
+            skillOption: this.skillOption,
+            exotic: exoticSkillName,
+          },
+          update: ({ skillOption, exotic }) => {
+            if (exotic !== undefined) {
+              this.item.updater
+                .path('system', 'exoticSkill')
+                .commit(exotic);
+            } else if (skillOption === WeaponSkillOption.None) {
+              this.skillOption = skillOption;
+              this.item.updater.path('system', 'exoticSkill').commit('');
+            } else if (skillOption) {
+              this.skillOption = skillOption;
+              if (
+                skillOption === WeaponSkillOption.Exotic &&
+                !this.item.exoticSkillName
+              ) {
+                this.item.updater
+                  .path('system', 'exoticSkill')
+                  .commit(this.item.name);
+              }
+            }
+          },
+          fields: ({ skillOption, exotic }) => html`
                   <span class="radio-wrapper"
                     >${localize('skill')}
                     ${renderRadioFields(
-                      skillOption,
-                      enumValues(WeaponSkillOption),
-                      {
-                        altLabel: (option) =>
-                          option === WeaponSkillOption.None
-                            ? localize(SkillType.Melee)
-                            : localize(option),
-                      },
-                    )}
+            skillOption,
+            enumValues(WeaponSkillOption),
+            {
+              altLabel: (option) =>
+                option === WeaponSkillOption.None
+                  ? localize(SkillType.Melee)
+                  : localize(option),
+            },
+          )}
                   </span>
                   ${renderTextInput(exotic, {
-                    placeholder: `e.g. ${this.item.name}`,
-                    disabled: this.skillOption !== WeaponSkillOption.Exotic,
-                  })}
+            placeholder: `e.g. ${this.item.name}`,
+            disabled: this.skillOption !== WeaponSkillOption.Exotic,
+          })}
                 `,
-              })}
+        })}
               ${renderAutoForm({
-                props: armorUsedProps,
-                update: ({ armorUsed }) => {
-                  this.item.updater
-                    .path('flags', EP.Name, 'attackArmorUsed')
-                    .commit(armorUsed);
-                },
-                fields: ({ armorUsed }) =>
-                  renderSelectField(armorUsed, [
-                    ArmorType.Kinetic,
-                    ArmorType.Energy,
-                  ]),
-              })}
+          props: armorUsedProps,
+          update: ({ armorUsed }) => {
+            this.item.updater
+              .path('flags', EP.Name, 'attackArmorUsed')
+              .commit(armorUsed);
+          },
+          fields: ({ armorUsed }) =>
+            renderSelectField(armorUsed, [
+              ArmorType.Kinetic,
+              ArmorType.Energy,
+            ]),
+        })}
             </div>
           </section>
         </div>
@@ -354,8 +358,8 @@ export class MeleeWeaponForm extends ItemFormBase {
         <sl-animated-list slot="details" skipExitAnimation>
           ${this.renderAttack(attacks.primary, WeaponAttackType.Primary)}
           ${attacks.secondary
-            ? this.renderAttack(attacks.secondary, WeaponAttackType.Secondary)
-            : ''}
+        ? this.renderAttack(attacks.secondary, WeaponAttackType.Secondary)
+        : ''}
         </sl-animated-list>
 
         <sl-animated-list slot="details" class="addons">
@@ -364,14 +368,14 @@ export class MeleeWeaponForm extends ItemFormBase {
               ><mwc-icon
                 slot="info"
                 data-ep-tooltip="${localize('drop')} ${localize(
-                  'non-electronic',
-                )} ${localize('substance')}"
+          'non-electronic',
+        )} ${localize('substance')}"
                 @mouseenter=${tooltip.fromData}
                 >info</mwc-icon
               ></sl-header
             >
             ${coating
-              ? html`
+        ? html`
                   <div class="addon">
                     <span class="addon-name">${coating.name}</span>
                     <span class="addon-type">${coating.fullType}</span>
@@ -385,10 +389,10 @@ export class MeleeWeaponForm extends ItemFormBase {
                     ></delete-button>
                   </div>
                 `
-              : ''}
+        : ''}
           </sl-dropzone>
           ${acceptsPayload
-            ? html`
+        ? html`
                 <sl-dropzone
                   ?disabled=${disabled}
                   data-drop="payload"
@@ -400,14 +404,14 @@ export class MeleeWeaponForm extends ItemFormBase {
                     ><mwc-icon
                       slot="info"
                       data-ep-tooltip="${localize('drop')} ${localize(
-                        'any',
-                      )} ${localize('explosive')}"
+          'any',
+        )} ${localize('explosive')}"
                       @mouseenter=${tooltip.fromData}
                       >info</mwc-icon
                     ></sl-header
                   >
                   ${payload
-                    ? html`
+            ? html`
                         <div class="addon">
                           <span class="addon-name">${payload.name}</span>
                           <span class="addon-type">${payload.fullType}</span>
@@ -421,17 +425,13 @@ export class MeleeWeaponForm extends ItemFormBase {
                           ></delete-button>
                         </div>
                       `
-                    : ''}
+            : ''}
                 </sl-dropzone>
               `
-            : ''}
+        : ''}
         </sl-animated-list>
 
-        <editor-wrapper
-          slot="description"
-          ?disabled=${disabled}
-          .updateActions=${updater.path('system', 'description')}
-        ></editor-wrapper>
+        ${this.renderDescriptionSlot()}
         ${this.renderDrawerContent()}
       </entity-form-layout>
     `;
@@ -442,18 +442,18 @@ export class MeleeWeaponForm extends ItemFormBase {
     return html`
       <h3>${localize('overrides')}</h3>
       ${renderAutoForm({
-        props: { permanentCoating, damageIrrespectiveOfSize },
-        update: this.item.updater.path('flags', EP.Name).commit,
-        fields: ({ permanentCoating, damageIrrespectiveOfSize }) => [
-          renderLabeledCheckbox(permanentCoating),
-          html`<p>${localize('DESCRIPTIONS', 'PermanentMeleeCoatings')}</p>`,
+      props: { permanentCoating, damageIrrespectiveOfSize },
+      update: this.item.updater.path('flags', EP.Name).commit,
+      fields: ({ permanentCoating, damageIrrespectiveOfSize }) => [
+        renderLabeledCheckbox(permanentCoating),
+        html`<p>${localize('DESCRIPTIONS', 'PermanentMeleeCoatings')}</p>`,
 
-          renderLabeledCheckbox(damageIrrespectiveOfSize),
-          html`<p>
+        renderLabeledCheckbox(damageIrrespectiveOfSize),
+        html`<p>
             ${localize('DESCRIPTIONS', 'IgnoreSizeMeleeDamageModifiers')}
           </p>`,
-        ],
-      })}
+      ],
+    })}
     `;
   }
 
@@ -466,43 +466,42 @@ export class MeleeWeaponForm extends ItemFormBase {
             slot="action"
             ?disabled=${this.disabled}
             @click=${this.setDrawerFromEvent(
-              type === WeaponAttackType.Primary
-                ? this.renderPrimaryAttackEdit
-                : this.renderSecondaryAttackEdit,
-            )}
+      type === WeaponAttackType.Primary
+        ? this.renderPrimaryAttackEdit
+        : this.renderSecondaryAttackEdit,
+    )}
           ></mwc-icon-button>
         </sl-header>
         <div class="attack-details">
           <sl-group label=${localize('SHORT', 'damageValue')}>
             ${this.item.augmentUnarmed
-              ? `${localize('unarmed')} ${
-                  notEmpty(attack.rollFormulas) ? `+` : ''
-                }`
-              : ''}
+        ? `${localize('unarmed')} ${notEmpty(attack.rollFormulas) ? `+` : ''
+        }`
+        : ''}
             ${notEmpty(attack.rollFormulas)
-              ? [
-                  formatLabeledFormulas(attack.rollFormulas),
-                  formatArmorUsed(attack),
-                ].join('; ')
-              : this.item.augmentUnarmed
-              ? ''
-              : '-'}
+        ? [
+          formatLabeledFormulas(attack.rollFormulas),
+          formatArmorUsed(attack),
+        ].join('; ')
+        : this.item.augmentUnarmed
+          ? ''
+          : '-'}
           </sl-group>
 
           ${notEmpty(attack.attackTraits)
-            ? html`
+        ? html`
                 <sl-group class="attack-traits" label=${localize('traits')}>
                   ${map(attack.attackTraits, localize).join(', ')}</sl-group
                 >
               `
-            : ''}
+        : ''}
           ${attack.notes
-            ? html`
+        ? html`
                 <sl-group class="attack-notes" label=${localize('notes')}>
                   ${attack.notes}</sl-group
                 >
               `
-            : ''}
+        : ''}
         </div>
       </section>
     `;
@@ -527,25 +526,25 @@ export class MeleeWeaponForm extends ItemFormBase {
     return html`
       <h3>${localize(hasSecondaryAttack ? type : 'attack')}</h3>
       ${renderUpdaterForm(updater, {
-        disabled,
-        fields: ({ damageFormula, armorPiercing, label }) => [
-          hasSecondaryAttack
-            ? renderTextField(label, { placeholder: localize(type) })
-            : '',
-          renderFormulaField(damageFormula),
-          renderLabeledCheckbox(armorPiercing),
-        ],
-      })}
+      disabled,
+      fields: ({ damageFormula, armorPiercing, label }) => [
+        hasSecondaryAttack
+          ? renderTextField(label, { placeholder: localize(type) })
+          : '',
+        renderFormulaField(damageFormula),
+        renderLabeledCheckbox(armorPiercing),
+      ],
+    })}
       <p class="label">${localize('attackTraits')}</p>
       ${renderAutoForm({
-        props: pairedTraits,
-        update: createPipe(change, objOf('attackTraits'), updater.commit),
-        fields: (traits) => map(Object.values(traits), renderLabeledCheckbox),
-      })}
+      props: pairedTraits,
+      update: createPipe(change, objOf('attackTraits'), updater.commit),
+      fields: (traits) => map(Object.values(traits), renderLabeledCheckbox),
+    })}
       ${renderUpdaterForm(updater, {
-        disabled,
-        fields: ({ notes }) => [renderTextareaField(notes)],
-      })}
+      disabled,
+      fields: ({ notes }) => [renderTextareaField(notes)],
+    })}
     `;
   }
 }

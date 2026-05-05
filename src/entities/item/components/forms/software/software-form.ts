@@ -89,6 +89,10 @@ export class SoftwareForm extends ItemFormBase {
     this.effectsOps[this.effectGroup].add({}, ev.effect);
   }
 
+  override get descriptionUpdateActions() {
+    return this.item.updater.path('system', 'description')
+  }
+
   render() {
     const {
       updater,
@@ -111,33 +115,33 @@ export class SoftwareForm extends ItemFormBase {
         </entity-form-header>
 
         ${renderUpdaterForm(updater.path('system'), {
-          disabled,
-          slot: 'sidebar',
-          fields: ({ softwareType, category, activation, meshAttacks }) => [
-            renderSelectField(softwareType, enumValues(SoftwareType)),
-            renderTextField(category),
-            html`<entity-form-sidebar-divider></entity-form-sidebar-divider>`,
-            renderSelectField(
-              activation,
-              difference(enumValues(ActionType), [ActionType.Task]),
-              {
-                altLabel: (action) =>
-                  `${localize(action)} ${localize('action')}`,
-                emptyText: notEmpty(effectGroups.get('activated'))
-                  ? undefined
-                  : '-',
-              },
-            ),
-            renderNumberField(meshAttacks, { min: 0, max: 2 }),
-          ],
-        })}
+      disabled,
+      slot: 'sidebar',
+      fields: ({ softwareType, category, activation, meshAttacks }) => [
+        renderSelectField(softwareType, enumValues(SoftwareType)),
+        renderTextField(category),
+        html`<entity-form-sidebar-divider></entity-form-sidebar-divider>`,
+        renderSelectField(
+          activation,
+          difference(enumValues(ActionType), [ActionType.Task]),
+          {
+            altLabel: (action) =>
+              `${localize(action)} ${localize('action')}`,
+            emptyText: notEmpty(effectGroups.get('activated'))
+              ? undefined
+              : '-',
+          },
+        ),
+        renderNumberField(meshAttacks, { min: 0, max: 2 }),
+      ],
+    })}
 
         <div slot="details">
           ${renderUpdaterForm(updater.path('system'), {
-            disabled,
-            classes: complexityForm.cssClass,
-            fields: renderComplexityFields,
-          })}
+      disabled,
+      classes: complexityForm.cssClass,
+      fields: renderComplexityFields,
+    })}
 
           <section>
             <sl-header heading=${localize('meshHealth')}>
@@ -148,9 +152,9 @@ export class SoftwareForm extends ItemFormBase {
                 @focus=${tooltip.fromData}
                 icon="change_history"
                 @click=${this.setDrawerFromEvent(
-                  this.renderHealthChangeHistory,
-                  false,
-                )}
+      this.renderHealthChangeHistory,
+      false,
+    )}
               ></mwc-icon-button>
             </sl-header>
             <health-item
@@ -175,19 +179,19 @@ export class SoftwareForm extends ItemFormBase {
               ></mwc-icon-button
             ></sl-header>
             ${[...effectGroups].map(([key, group]) =>
-              notEmpty(group)
-                ? html`
+      notEmpty(group)
+        ? html`
                     <item-form-effects-list
                       label=${ifDefined(
-                        hasActivation ? localize(key) : undefined,
-                      )}
+          hasActivation ? localize(key) : undefined,
+        )}
                       .effects=${group}
                       .operations=${this.effectsOps[key]}
                       ?disabled=${disabled}
                     ></item-form-effects-list>
                   `
-                : '',
-            )}
+        : '',
+    )}
           </section>
 
           <section class=${skills.length === 0 ? 'mini' : ''}>
@@ -204,11 +208,11 @@ export class SoftwareForm extends ItemFormBase {
             </sl-header>
 
             ${notEmpty(skills)
-              ? html` <sl-animated-list class="skills">
+        ? html` <sl-animated-list class="skills">
                   ${repeat(
-                    skills,
-                    idProp,
-                    (skill, index) => html`
+          skills,
+          idProp,
+          (skill, index) => html`
                       <li ?data-comma=${index < skills.length - 1}>
                         <sl-popover
                           .renderOnDemand=${() => html`
@@ -218,42 +222,38 @@ export class SoftwareForm extends ItemFormBase {
                               <delete-button
                                 slot="action"
                                 @delete=${this.skillOps.removeCallback(
-                                  skill.id,
-                                )}
+            skill.id,
+          )}
                               ></delete-button>
                               ${renderSubmitForm({
-                                props: skill,
-                                update: this.skillOps.update,
-                                fields: ({ name, specialization, total }) => [
-                                  renderTextField(name, { required: true }),
-                                  renderTextField(specialization),
-                                  renderNumberField(total, { min: 1, max: 99 }),
-                                ],
-                              })}
+            props: skill,
+            update: this.skillOps.update,
+            fields: ({ name, specialization, total }) => [
+              renderTextField(name, { required: true }),
+              renderTextField(specialization),
+              renderNumberField(total, { min: 1, max: 99 }),
+            ],
+          })}
                             </sl-popover-section>
                           `}
                         >
                           <button slot="base" ?disabled=${disabled}>
                             <span class="skill-name"
                               >${skill.name}${skill.specialization
-                                ? ` (${skill.specialization})`
-                                : ''}:</span
+              ? ` (${skill.specialization})`
+              : ''}:</span
                             ><span class="skill-total">${skill.total}</span>
                           </button>
                         </sl-popover>
                       </li>
                     `,
-                  )}
+        )}
                 </sl-animated-list>`
-              : ''}
+        : ''}
           </section>
         </div>
 
-        <editor-wrapper
-          slot="description"
-          ?disabled=${disabled}
-          .updateActions=${updater.path('system', 'description')}
-        ></editor-wrapper>
+        ${this.renderDescriptionSlot()}
         ${this.renderDrawerContent()}
       </entity-form-layout>
     `;
@@ -263,18 +263,18 @@ export class SoftwareForm extends ItemFormBase {
     return html`
       <h3>${localize('add')} ${localize('skill')}</h3>
       ${renderSubmitForm({
-        props: {
-          name: '',
-          specialization: '',
-          total: 1,
-        },
-        update: this.skillOps.add,
-        fields: ({ name, specialization, total }) => [
-          renderTextField(name, { required: true }),
-          renderTextField(specialization),
-          renderNumberField(total, { min: 1, max: 99 }),
-        ],
-      })}
+      props: {
+        name: '',
+        specialization: '',
+        total: 1,
+      },
+      update: this.skillOps.add,
+      fields: ({ name, specialization, total }) => [
+        renderTextField(name, { required: true }),
+        renderTextField(specialization),
+        renderNumberField(total, { min: 1, max: 99 }),
+      ],
+    })}
     `;
   }
 
@@ -306,9 +306,9 @@ export class SoftwareForm extends ItemFormBase {
     return html`
       <h3>${localize('meshHealth')}</h3>
       ${renderUpdaterForm(updater.path('system', 'meshHealth'), {
-        fields: ({ baseDurability }) =>
-          renderNumberField(baseDurability, { min: 1 }),
-      })}
+      fields: ({ baseDurability }) =>
+        renderNumberField(baseDurability, { min: 1 }),
+    })}
       <health-state-form .health=${meshHealth}></health-state-form>
     `;
   }
@@ -318,11 +318,11 @@ export class SoftwareForm extends ItemFormBase {
       <h3>${localize('add')} ${localize('effect')}</h3>
       ${this.item.hasActivation
         ? renderAutoForm({
-            props: { group: this.effectGroup },
-            update: ({ group }) => group && (this.effectGroup = group),
-            fields: ({ group }) =>
-              renderRadioFields(group, ['passive', 'activated']),
-          })
+          props: { group: this.effectGroup },
+          update: ({ group }) => group && (this.effectGroup = group),
+          fields: ({ group }) =>
+            renderRadioFields(group, ['passive', 'activated']),
+        })
         : ''}
 
       <effect-creator
@@ -341,43 +341,43 @@ export class SoftwareForm extends ItemFormBase {
             slot="action"
             ?disabled=${this.disabled}
             @click=${this.setDrawerFromEvent(
-              this[`render${capitalize(type)}CheckEdit` as const],
-            )}
+      this[`render${capitalize(type)}CheckEdit` as const],
+    )}
           ></mwc-icon-button>
           <mwc-icon-button
             icon="edit"
             slot="action"
             ?disabled=${this.disabled}
             @click=${this.setDrawerFromEvent(
-              this[`render${capitalize(type)}Edit` as const],
-            )}
+      this[`render${capitalize(type)}Edit` as const],
+    )}
           ></mwc-icon-button>
         </sl-header>
         <div class="attack-details">
           <sl-group label=${formatDamageType(attack.damageType)}>
             ${notEmpty(attack.rollFormulas)
-              ? [
-                  formatLabeledFormulas(attack.rollFormulas),
-                  formatArmorUsed(attack),
-                ].join('; ')
-              : '-'}
+        ? [
+          formatLabeledFormulas(attack.rollFormulas),
+          formatArmorUsed(attack),
+        ].join('; ')
+        : '-'}
           </sl-group>
 
           ${notEmpty(attack.attackTraits)
-            ? html`
+        ? html`
                 <sl-group class="attack-traits" label=${localize('traits')}>
                   ${map(attack.attackTraits, localize).join(', ')}</sl-group
                 >
               `
-            : ''}
+        : ''}
           ${this.renderAptitudeCheck(type)}
           ${attack.notes
-            ? html`
+        ? html`
                 <sl-group class="attack-notes" label=${localize('notes')}>
                   ${attack.notes}</sl-group
                 >
               `
-            : ''}
+        : ''}
         </div>
       </section>
     `;
@@ -426,14 +426,14 @@ export class SoftwareForm extends ItemFormBase {
       <h3>${localize(hasSecondaryAttack ? type : 'attack')}</h3>
 
       ${renderUpdaterForm(updater, {
-        fields: ({
-          damageFormula,
-          damageType,
-          useMeshArmor,
-          armorPiercing,
-          reduceAVbyDV,
-          label,
-        }) => [
+      fields: ({
+        damageFormula,
+        damageType,
+        useMeshArmor,
+        armorPiercing,
+        reduceAVbyDV,
+        label,
+      }) => [
           hasSecondaryAttack
             ? renderTextField(label, { placeholder: localize(type) })
             : '',
@@ -444,16 +444,16 @@ export class SoftwareForm extends ItemFormBase {
             ? map([armorPiercing, reduceAVbyDV], renderLabeledCheckbox)
             : '',
         ],
-      })}
+    })}
       <p class="label">${localize('attackTraits')}</p>
       ${renderAutoForm({
-        props: pairedTraits,
-        update: createPipe(change, objOf('attackTraits'), updater.commit),
-        fields: (traits) => map(Object.values(traits), renderLabeledCheckbox),
-      })}
+      props: pairedTraits,
+      update: createPipe(change, objOf('attackTraits'), updater.commit),
+      fields: (traits) => map(Object.values(traits), renderLabeledCheckbox),
+    })}
       ${renderUpdaterForm(updater, {
-        fields: ({ notes }) => renderTextareaField(notes),
-      })}
+      fields: ({ notes }) => renderTextareaField(notes),
+    })}
     `;
   }
 
@@ -474,8 +474,8 @@ export class SoftwareForm extends ItemFormBase {
       <aptitude-check-info-editor
         .aptitudeCheckInfo=${updater.originalValue()}
         @aptitude-check-info-update=${(ev: AptitudeCheckInfoUpdateEvent) => {
-          updater.commit(ev.changed);
-        }}
+        updater.commit(ev.changed);
+      }}
       ></aptitude-check-info-editor>
     `;
   }

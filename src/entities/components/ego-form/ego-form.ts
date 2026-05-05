@@ -43,7 +43,7 @@ import { hardeningTypes } from '@src/health/mental-health';
 import { gameSettings, tooltip } from '@src/init';
 import type { FieldProps, FieldPropsRenderer } from '@src/utility/field-values';
 import { notEmpty } from '@src/utility/helpers';
-import { customElement, html, LitElement, property } from 'lit-element';
+import { customElement, html, LitElement, property, PropertyValues } from 'lit-element';
 import { cache } from 'lit-html/directives/cache';
 import { classMap } from 'lit-html/directives/class-map';
 import { repeat } from 'lit-html/directives/repeat';
@@ -51,6 +51,7 @@ import mix from 'mix-with/lib';
 import { createPipe, identity, map, toPairs } from 'remeda';
 import { Ego } from '../../actor/ego';
 import styles from './ego-form.scss';
+import type { EditorWrapper } from '@src/components/editor-wrapper/editor-wrapper';
 
 const renderAptitudeField = ([, apt]: [
   string,
@@ -109,6 +110,23 @@ export class EgoForm extends mix(LitElement).with(
     this.ego.rollStress();
   }
 
+  private editorWrapper?: EditorWrapper;
+
+  update(changedProps: PropertyValues<this>) {
+    if (!this.editorWrapper) {
+      this.editorWrapper = document.createElement("editor-wrapper");
+      this.editorWrapper.slot = "description"
+      this.append(this.editorWrapper)
+    }
+    this.editorWrapper.disabled = this.ego.disabled;
+    this.editorWrapper.updateActions = this.ego.updater.path('system', 'description')
+    super.update(changedProps);
+  }
+
+  renderDescriptionSlot() {
+    return html`<slot name="description" slot="description"></slot>`
+  }
+
   render() {
     const { updater, disabled } = this.ego;
     const { activeTab } = this;
@@ -123,14 +141,8 @@ export class EgoForm extends mix(LitElement).with(
         ${this.renderTabBar('tabs')} ${this.renderSidebar()}
         ${cache(this.renderTabbedContent(this.activeTab))}
         ${activeTab === 'details'
-          ? html`
-              <editor-wrapper
-                slot="description"
-                ?disabled=${disabled}
-                .updateActions=${updater.path('system', 'description')}
-              ></editor-wrapper>
-            `
-          : ''}
+        ? this.renderDescriptionSlot()
+        : ''}
         ${this.renderDrawerContent()}
       </entity-form-layout>
     `;
@@ -166,22 +178,22 @@ export class EgoForm extends mix(LitElement).with(
         <sl-dropzone ?disabled=${disabled} @drop=${this.handleItemDrop}>
           <sl-header
             heading="${localize('traits')} ${this.ego.allowSleights
-              ? `& ${localize('sleights')}`
-              : ''}"
+        ? `& ${localize('sleights')}`
+        : ''}"
             itemCount=${traits.length + sleights.length}
             ?hideBorder=${!psi && traits.length + sleights.length === 0}
           >
             ${this.ego.allowSleights
-              ? html` <mwc-icon
+        ? html` <mwc-icon
                   slot="info"
                   data-ep-tooltip=${localize('DESCRIPTIONS', 'OnlyEgoItems')}
                   @mouseover=${tooltip.fromData}
                   >info</mwc-icon
                 >`
-              : ''}
+        : ''}
           </sl-header>
           ${psi
-            ? html`
+        ? html`
                 <div class="psi">
                   <span class="psi-info">
                     <span class="psi-label">${localize('psi')}:</span>
@@ -191,81 +203,81 @@ export class EgoForm extends mix(LitElement).with(
                     >
                   </span>
                   ${psi.openForm
-                    ? html`
+            ? html`
                         <mwc-icon-button
                           icon="launch"
                           @click=${psi.openForm}
                         ></mwc-icon-button>
                       `
-                    : ''}
+            : ''}
                   ${psi.deleteSelf
-                    ? html`
+            ? html`
                         <delete-button
                           ?disabled=${disabled}
                           @delete=${psi.deleteSelf}
                         ></delete-button>
                       `
-                    : ''}
+            : ''}
                 </div>
               `
-            : ''}
+        : ''}
           ${itemGroupKeys.map((key) => {
-            const group = itemGroups[key];
-            return notEmpty(group)
-              ? html`
+          const group = itemGroups[key];
+          return notEmpty(group)
+            ? html`
                   <form-items-list
                     .items=${group}
                     label=${localize(key)}
                   ></form-items-list>
                 `
-              : '';
-          })}
+            : '';
+        })}
         </sl-dropzone>
 
         ${settings.threatDetails
-          ? html`
+        ? html`
               <section>
                 <sl-header heading=${localize('threatDetails')}>
                   ${this.ego.hasStressRoll
-                    ? html`
+            ? html`
                         <mwc-button
                           class="stress-roll"
                           dense
                           slot="action"
                           label="${localize('SHORT', 'stressValue')}: ${this.ego
-                            .stressValueInfo.value}"
+                .stressValueInfo.value}"
                           @click=${this.rollStress}
                         ></mwc-button>
                       `
-                    : ''}
+            : ''}
                 </sl-header>
                 <div class="threat-details">
                   ${renderUpdaterForm(updater.path('system', 'threatDetails'), {
-                    classes: 'threat-details-form',
-                    disabled,
-                    fields: ({ niche, numbers, level }) => [
-                      renderTextField(niche),
-                      renderTextField(numbers),
-                      renderSelectField(
-                        { ...level, label: localize('threatLevel') },
-                        enumValues(ThreatLevel),
-                      ),
-                    ],
-                  })}
+              classes: 'threat-details-form',
+              disabled,
+              fields: ({ niche, numbers, level }) => [
+                renderTextField(niche),
+                renderTextField(numbers),
+                renderSelectField(
+                  { ...level, label: localize('threatLevel') },
+                  enumValues(ThreatLevel),
+                ),
+              ],
+            })}
                   <ego-form-threat-stress
                     ?disabled=${disabled}
                     .updateOps=${updater.path(
-                      'system',
-                      'threatDetails',
-                      'stress',
-                    )}
+              'system',
+              'threatDetails',
+              'stress',
+            )}
                   ></ego-form-threat-stress>
                 </div>
               </section>
             `
-          : ''}
+        : ''}
         ${settings.trackPoints
-          ? html`
+        ? html`
               <section
                 class="resource-points-section ${classMap({ disabled })}"
               >
@@ -274,28 +286,28 @@ export class EgoForm extends mix(LitElement).with(
                 >
                 </sl-header>
                 ${disabled
-                  ? ''
-                  : renderUpdaterForm(updater.path('system', 'points'), {
-                      disabled,
-                      classes: 'points-form',
-                      fields: (points) =>
-                        enumValues(CharacterPoint).map((point) =>
-                          useCredits || point !== CharacterPoint.Credits
-                            ? renderNumberField(
-                                {
-                                  ...points[point],
-                                  label: Ego.formatPoint(point),
-                                },
-                                point === CharacterPoint.Credits
-                                  ? undefined
-                                  : { min: -99, max: 99 },
-                              )
-                            : '',
-                        ),
-                    })}
+            ? ''
+            : renderUpdaterForm(updater.path('system', 'points'), {
+              disabled,
+              classes: 'points-form',
+              fields: (points) =>
+                enumValues(CharacterPoint).map((point) =>
+                  useCredits || point !== CharacterPoint.Credits
+                    ? renderNumberField(
+                      {
+                        ...points[point],
+                        label: Ego.formatPoint(point),
+                      },
+                      point === CharacterPoint.Credits
+                        ? undefined
+                        : { min: -99, max: 99 },
+                    )
+                    : '',
+                ),
+            })}
               </section>
             `
-          : ''}
+        : ''}
 
         <section>
           <sl-header
@@ -320,7 +332,7 @@ export class EgoForm extends mix(LitElement).with(
         </section>
 
         ${settings.trackMentalHealth
-          ? html`
+        ? html`
               <section>
                 <sl-header heading=${localize('mentalHealth')}
                   ><mwc-icon-button
@@ -330,9 +342,9 @@ export class EgoForm extends mix(LitElement).with(
                     @focus=${tooltip.fromData}
                     icon="change_history"
                     @click=${this.setDrawerFromEvent(
-                      this.renderMentalHealthChangeHistory,
-                      false,
-                    )}
+          this.renderMentalHealthChangeHistory,
+          false,
+        )}
                   ></mwc-icon-button
                 ></sl-header>
                 <health-item
@@ -343,33 +355,33 @@ export class EgoForm extends mix(LitElement).with(
                 ></health-item>
               </section>
             `
-          : ''}
+        : ''}
         ${settings.characterDetails
-          ? html`
+        ? html`
               <section>
                 <sl-header heading=${localize('character')}></sl-header>
                 ${renderUpdaterForm(
-                  updater.path('system', 'characterDetails'),
-                  {
-                    disabled,
-                    classes: 'character-details-form',
-                    fields: (details) =>
-                      enumValues(CharacterDetail).map((detail) =>
-                        CharacterDetail.Languages === detail
-                          ? renderTextareaField(details[detail], {
-                              helpText: localize('commaSeperated'),
-                              rows: 6,
-                            })
-                          : renderTextField(details[detail], {
-                              listId: detail,
-                            }),
-                      ),
-                  },
-                )}
+          updater.path('system', 'characterDetails'),
+          {
+            disabled,
+            classes: 'character-details-form',
+            fields: (details) =>
+              enumValues(CharacterDetail).map((detail) =>
+                CharacterDetail.Languages === detail
+                  ? renderTextareaField(details[detail], {
+                    helpText: localize('commaSeperated'),
+                    rows: 6,
+                  })
+                  : renderTextField(details[detail], {
+                    listId: detail,
+                  }),
+              ),
+          },
+        )}
                 ${this.detailDatalists}
               </section>
             `
-          : ''}
+        : ''}
       </div>
     `;
   }
@@ -385,8 +397,8 @@ export class EgoForm extends mix(LitElement).with(
     ([list, id]) => html`
       <datalist id=${id}>
         ${enumValues(list).map(
-          (listItem) => html` <option value=${localize(listItem)}></option> `,
-        )}
+      (listItem) => html` <option value=${localize(listItem)}></option> `,
+    )}
       </datalist>
     `,
   );
@@ -405,30 +417,30 @@ export class EgoForm extends mix(LitElement).with(
 
     return html`
       ${renderUpdaterForm(updater.path('system'), {
-        slot: 'sidebar',
-        disabled,
-        fields: ({ egoType, forkType, flex, threat }) => [
-          renderSelectField(
-            { ...forkType, label: localize('type') },
-            enumValues(Fork),
-            {
-              emptyText: `${localize('prime')} ${localize('ego')}`,
-              altLabel: (fork) => `${localize(fork)} ${localize('fork')}`,
-            },
-          ),
-          renderTextField(
-            { ...egoType, label: localize('class') },
-            { listId: 'ego-types' },
-          ),
-          this.egoTypes,
-          renderNumberField(
-            useThreat
-              ? threat
-              : { ...flex, label: `${flex.label} ${localize('bonus')}` },
-            { min: 0 },
-          ),
-        ],
-      })}
+      slot: 'sidebar',
+      disabled,
+      fields: ({ egoType, forkType, flex, threat }) => [
+        renderSelectField(
+          { ...forkType, label: localize('type') },
+          enumValues(Fork),
+          {
+            emptyText: `${localize('prime')} ${localize('ego')}`,
+            altLabel: (fork) => `${localize(fork)} ${localize('fork')}`,
+          },
+        ),
+        renderTextField(
+          { ...egoType, label: localize('class') },
+          { listId: 'ego-types' },
+        ),
+        this.egoTypes,
+        renderNumberField(
+          useThreat
+            ? threat
+            : { ...flex, label: `${flex.label} ${localize('bonus')}` },
+          { min: 0 },
+        ),
+      ],
+    })}
 
       <mwc-button
         label=${localize('settings')}
@@ -446,19 +458,19 @@ export class EgoForm extends mix(LitElement).with(
       ></entity-form-sidebar-divider>
 
       ${renderUpdaterForm(updater.path('system', 'aptitudes'), {
-        slot: 'sidebar',
-        classes: 'aptitudes',
-        fields: renderAptitudeFields,
-        disabled,
-      })}
+      slot: 'sidebar',
+      classes: 'aptitudes',
+      fields: renderAptitudeFields,
+      disabled,
+    })}
     `;
   }
 
   private egoTypes = html`
     <datalist id="ego-types">
       ${enumValues(EgoType).map(
-        (type) => html` <option value=${localize(type)}></option> `,
-      )}
+    (type) => html` <option value=${localize(type)}></option> `,
+  )}
     </datalist>
   `;
 
@@ -466,19 +478,19 @@ export class EgoForm extends mix(LitElement).with(
     return html`
       <h3>${localize('settings')}</h3>
       ${renderUpdaterForm(this.ego.updater.path('system', 'settings'), {
-        disabled: this.ego.disabled,
-        classes: 'settings-form',
-        fields: (props) =>
-          enumValues(EgoSetting).map((setting) => {
-            const prop = props[setting];
-            return setting === EgoSetting.TrackPoints
-              ? renderLabeledCheckbox({
-                  ...prop,
-                  label: localize('trackResourcePoints'),
-                })
-              : renderLabeledCheckbox(prop);
-          }),
-      })}
+      disabled: this.ego.disabled,
+      classes: 'settings-form',
+      fields: (props) =>
+        enumValues(EgoSetting).map((setting) => {
+          const prop = props[setting];
+          return setting === EgoSetting.TrackPoints
+            ? renderLabeledCheckbox({
+              ...prop,
+              label: localize('trackResourcePoints'),
+            })
+            : renderLabeledCheckbox(prop);
+        }),
+    })}
     `;
   }
 
@@ -499,11 +511,11 @@ export class EgoForm extends mix(LitElement).with(
 
       <p class="hardening-label">${localize('hardening')}</p>
       ${renderUpdaterForm(this.ego.updater.path('system', 'mentalHealth'), {
-        fields: (hardenings) =>
-          hardeningTypes.map((type) =>
-            renderNumberField(hardenings[type], { min: 0, max: 5 }),
-          ),
-      })}
+      fields: (hardenings) =>
+        hardeningTypes.map((type) =>
+          renderNumberField(hardenings[type], { min: 0, max: 5 }),
+        ),
+    })}
     `;
   }
 

@@ -121,6 +121,10 @@ export class SeekerWeaponForm extends ItemFormBase {
     this.missilesSheet = null;
   }
 
+  override get descriptionUpdateActions() {
+    return this.item.updater.path('system', 'description')
+  }
+
   render() {
     const {
       updater,
@@ -146,76 +150,76 @@ export class SeekerWeaponForm extends ItemFormBase {
         </entity-form-header>
 
         ${renderUpdaterForm(updater.path('system'), {
-          disabled,
-          slot: 'sidebar',
-          fields: ({ wareType, firingMode, hasAlternativeAmmo, ...traits }) => [
-            renderSelectField(
-              wareType,
-              enumValues(PhysicalWare),
-              emptyTextDash,
-            ),
-            renderSelectField(firingMode, [
-              FiringMode.SingleShot,
-              FiringMode.SemiAutomatic,
-            ]),
-            renderLabeledCheckbox(
-              {
-                ...hasAlternativeAmmo,
-                label: localize('alternativeAmmo'),
-              },
-              { disabled: alternativeMissile },
-            ),
-            html`<entity-form-sidebar-divider
+      disabled,
+      slot: 'sidebar',
+      fields: ({ wareType, firingMode, hasAlternativeAmmo, ...traits }) => [
+        renderSelectField(
+          wareType,
+          enumValues(PhysicalWare),
+          emptyTextDash,
+        ),
+        renderSelectField(firingMode, [
+          FiringMode.SingleShot,
+          FiringMode.SemiAutomatic,
+        ]),
+        renderLabeledCheckbox(
+          {
+            ...hasAlternativeAmmo,
+            label: localize('alternativeAmmo'),
+          },
+          { disabled: alternativeMissile },
+        ),
+        html`<entity-form-sidebar-divider
               label="${localize('weapon')} ${localize('traits')}"
             ></entity-form-sidebar-divider>`,
-            renderWeaponTraitCheckboxes(traits),
-            html`<entity-form-sidebar-divider
+        renderWeaponTraitCheckboxes(traits),
+        html`<entity-form-sidebar-divider
               label=${localize('gearTraits')}
             ></entity-form-sidebar-divider>`,
-            renderGearTraitCheckboxes(traits),
-          ],
-        })}
+        renderGearTraitCheckboxes(traits),
+      ],
+    })}
 
         <div slot="details">
           ${renderUpdaterForm(updater.path('system'), {
-            disabled,
-            classes: complexityForm.cssClass,
-            fields: renderComplexityFields,
-          })}
+      disabled,
+      classes: complexityForm.cssClass,
+      fields: renderComplexityFields,
+    })}
 
           <sl-dropzone ?disabled=${this.disabled} @drop=${this.addDrop}>
             <sl-header heading=${localize('ammo')}>
               ${missiles && !alternativeMissile
-                ? this.renderMissilesQuantityForm(missiles)
-                : ''}</sl-header
+        ? this.renderMissilesQuantityForm(missiles)
+        : ''}</sl-header
             >
             ${missiles && !alternativeMissile
-              ? this.renderMissiles(missiles)
-              : ''}
+        ? this.renderMissiles(missiles)
+        : ''}
             ${renderUpdaterForm(updater.path('system', 'primaryAmmo'), {
-              disabled,
-              classes: 'missile-info-form',
-              fields: ({ missileSize, missileCapacity, range }) => [
-                renderSelectField(missileSize, enumValues(ExplosiveSize), {
-                  disableOptions: allowAlternativeAmmo
-                    ? [alternativeAmmo.missileSize]
-                    : [],
-                  disabled: !!(missiles && !alternativeMissile),
-                }),
-                renderNumberField(
-                  {
-                    ...missileCapacity,
-                    label: `${localize('base')} ${localize('capacity')}`,
-                  },
-                  { min: 1 },
-                ),
-                renderNumberField(range, { min: 1 }),
-              ],
-            })}
+          disabled,
+          classes: 'missile-info-form',
+          fields: ({ missileSize, missileCapacity, range }) => [
+            renderSelectField(missileSize, enumValues(ExplosiveSize), {
+              disableOptions: allowAlternativeAmmo
+                ? [alternativeAmmo.missileSize]
+                : [],
+              disabled: !!(missiles && !alternativeMissile),
+            }),
+            renderNumberField(
+              {
+                ...missileCapacity,
+                label: `${localize('base')} ${localize('capacity')}`,
+              },
+              { min: 1 },
+            ),
+            renderNumberField(range, { min: 1 }),
+          ],
+        })}
           </sl-dropzone>
 
           ${allowAlternativeAmmo
-            ? html`
+        ? html`
                 <sl-dropzone
                   ?disabled=${this.disabled}
                   @drop=${this.addDrop}
@@ -223,42 +227,42 @@ export class SeekerWeaponForm extends ItemFormBase {
                 >
                   <sl-header heading=${localize('alternativeAmmo')}
                     >${missiles && alternativeMissile
-                      ? this.renderMissilesQuantityForm(missiles)
-                      : ''}</sl-header
+            ? this.renderMissilesQuantityForm(missiles)
+            : ''}</sl-header
                   >
                   ${missiles && alternativeMissile
-                    ? this.renderMissiles(missiles)
-                    : ''}
+            ? this.renderMissiles(missiles)
+            : ''}
                   ${renderUpdaterForm(
-                    updater.path('system', 'alternativeAmmo'),
+              updater.path('system', 'alternativeAmmo'),
+              {
+                disabled,
+                classes: 'missile-info-form',
+                fields: ({ missileSize, missileCapacity, range }) => [
+                  renderSelectField(
+                    missileSize,
+                    enumValues(ExplosiveSize),
                     {
-                      disabled,
-                      classes: 'missile-info-form',
-                      fields: ({ missileSize, missileCapacity, range }) => [
-                        renderSelectField(
-                          missileSize,
-                          enumValues(ExplosiveSize),
-                          {
-                            disableOptions: [primaryAmmo.missileSize],
-                            disabled: alternativeMissile,
-                          },
-                        ),
-                        renderNumberField(
-                          {
-                            ...missileCapacity,
-                            label: `${localize('base')} ${localize(
-                              'capacity',
-                            )}`,
-                          },
-                          { min: 1 },
-                        ),
-                        renderNumberField(range, { min: 1 }),
-                      ],
+                      disableOptions: [primaryAmmo.missileSize],
+                      disabled: alternativeMissile,
                     },
-                  )}
+                  ),
+                  renderNumberField(
+                    {
+                      ...missileCapacity,
+                      label: `${localize('base')} ${localize(
+                        'capacity',
+                      )}`,
+                    },
+                    { min: 1 },
+                  ),
+                  renderNumberField(range, { min: 1 }),
+                ],
+              },
+            )}
                 </sl-dropzone>
               `
-            : ''}
+        : ''}
 
           <section>
             <sl-header heading=${localize('accessories')}>
@@ -272,19 +276,15 @@ export class SeekerWeaponForm extends ItemFormBase {
 
             <sl-animated-list class="accessories-list">
               ${repeat(
-                accessories,
-                identity,
-                (accessory) => html` <li>${localize(accessory)}</li> `,
-              )}
+          accessories,
+          identity,
+          (accessory) => html` <li>${localize(accessory)}</li> `,
+        )}
             </sl-animated-list>
           </section>
         </div>
 
-        <editor-wrapper
-          slot="description"
-          ?disabled=${disabled}
-          .updateActions=${updater.path('system', 'description')}
-        ></editor-wrapper>
+        ${this.renderDescriptionSlot()}
         ${this.renderDrawerContent()}
       </entity-form-layout>
     `;
@@ -317,12 +317,12 @@ export class SeekerWeaponForm extends ItemFormBase {
       fields: ({ quantity }) => html`
         <mwc-formfield alignEnd label=${quantity.label}
           >${renderNumberInput(
-            { ...quantity, value: Math.min(quantity.value, currentCapacity) },
-            {
-              min: 0,
-              max: currentCapacity,
-            },
-          )}</mwc-formfield
+        { ...quantity, value: Math.min(quantity.value, currentCapacity) },
+        {
+          min: 0,
+          max: currentCapacity,
+        },
+      )}</mwc-formfield
         >
         <span class="capacity">/ ${currentCapacity}</span>
       `,

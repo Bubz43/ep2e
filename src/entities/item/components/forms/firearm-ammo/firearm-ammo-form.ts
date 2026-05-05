@@ -141,23 +141,27 @@ export class FirearmAmmoForm extends ItemFormBase {
       modes.length > length
         ? take(length)
         : (modes) =>
-            range(0, length).reduce(
-              (accum, index) =>
-                accum[index]
-                  ? accum
-                  : addFeature(accum, {
-                      name: '',
-                      attackTraits: [],
-                      armorPiercing: false,
-                      steady: false,
-                      damageFormula: '',
-                      damageModifierType: FirearmAmmoModifierType.Formula,
-                      notes: '',
-                    }),
-              modes,
-            ),
+          range(0, length).reduce(
+            (accum, index) =>
+              accum[index]
+                ? accum
+                : addFeature(accum, {
+                  name: '',
+                  attackTraits: [],
+                  armorPiercing: false,
+                  steady: false,
+                  damageFormula: '',
+                  damageModifierType: FirearmAmmoModifierType.Formula,
+                  notes: '',
+                }),
+            modes,
+          ),
       updater.path('system', 'modes').commit,
     );
+  }
+
+  override get descriptionUpdateActions() {
+    return this.item.updater.path('system', 'description')
   }
 
   render() {
@@ -179,56 +183,56 @@ export class FirearmAmmoForm extends ItemFormBase {
           <section>
             <sl-header heading=${localize('details')}>
               ${renderAutoForm({
-                slot: 'action',
-                disabled,
-                props: { count: modes.length },
-                update: ({ count = 1 }) =>
-                  this.updateProgrammedTypeCount(count),
-                fields: ({ count }) =>
-                  html`
+      slot: 'action',
+      disabled,
+      props: { count: modes.length },
+      update: ({ count = 1 }) =>
+        this.updateProgrammedTypeCount(count),
+      fields: ({ count }) =>
+        html`
                     <span class="modes-wrapper">
                       ${localize('programmableModes')}
                       ${renderSlider(count, {
-                        min: 1,
-                        max: 3,
-                        step: 1,
-                        markers: true,
-                        pin: true,
-                        disabled: loaded,
-                      })}
+          min: 1,
+          max: 3,
+          step: 1,
+          markers: true,
+          pin: true,
+          disabled: loaded,
+        })}
                     </span>
                   `,
-              })}
+    })}
             </sl-header>
             <div class="detail-forms">
               ${renderUpdaterForm(updater.path('system'), {
-                disabled,
-                classes: 'settings-form',
-                fields: ({ ammoClass, carryPayload }) => [
-                  renderSelectField(ammoClass, enumValues(KineticWeaponClass), {
-                    disabled: loaded,
-                  }),
-                  renderLabeledCheckbox(carryPayload),
-                ],
-              })}
+      disabled,
+      classes: 'settings-form',
+      fields: ({ ammoClass, carryPayload }) => [
+        renderSelectField(ammoClass, enumValues(KineticWeaponClass), {
+          disabled: loaded,
+        }),
+        renderLabeledCheckbox(carryPayload),
+      ],
+    })}
               ${renderUpdaterForm(updater.path('system'), {
-                classes: complexityForm.cssClass,
-                disabled,
-                fields: renderComplexityFields,
-              })}
+      classes: complexityForm.cssClass,
+      disabled,
+      fields: renderComplexityFields,
+    })}
               ${renderUpdaterForm(updater.path('system'), {
-                disabled,
-                classes: 'quantity-form',
-                fields: ({ quantity, roundsPerComplexity }) => [
-                  loaded
-                    ? html`<div></div>`
-                    : renderNumberField(
-                        { ...quantity, label: localize('rounds') },
-                        { min: 0, max: 9999 },
-                      ),
-                  renderNumberField(roundsPerComplexity, { min: 1 }),
-                ],
-              })}
+      disabled,
+      classes: 'quantity-form',
+      fields: ({ quantity, roundsPerComplexity }) => [
+        loaded
+          ? html`<div></div>`
+          : renderNumberField(
+            { ...quantity, label: localize('rounds') },
+            { min: 0, max: 9999 },
+          ),
+        renderNumberField(roundsPerComplexity, { min: 1 }),
+      ],
+    })}
             </div>
           </section>
         </div>
@@ -236,7 +240,7 @@ export class FirearmAmmoForm extends ItemFormBase {
         <sl-animated-list slot="details" transformOrigin="top">
           ${repeat(modes, idProp, this.renderMode)}
           ${canCarryPayload
-            ? html`
+        ? html`
                 <sl-dropzone ?disabled=${disabled} @drop=${this.addDrop}>
                   <sl-header
                     heading=${localize('payload')}
@@ -244,14 +248,14 @@ export class FirearmAmmoForm extends ItemFormBase {
                     ><mwc-icon
                       slot="info"
                       data-ep-tooltip="${localize('drop')} ${localize(
-                        'non-electronic',
-                      )} ${localize('substance')}"
+          'non-electronic',
+        )} ${localize('substance')}"
                       @mouseenter=${tooltip.fromData}
                       >info</mwc-icon
                     ></sl-header
                   >
                   ${payload
-                    ? html`
+            ? html`
                         <div class="addon">
                           <span class="addon-name">${payload.name}</span>
                           <span class="addon-type">${payload.fullType}</span>
@@ -265,17 +269,13 @@ export class FirearmAmmoForm extends ItemFormBase {
                           ></delete-button>
                         </div>
                       `
-                    : ''}
+            : ''}
                 </sl-dropzone>
               `
-            : ''}
+        : ''}
         </sl-animated-list>
 
-        <editor-wrapper
-          slot="description"
-          ?disabled=${disabled}
-          .updateActions=${updater.path('system', 'description')}
-        ></editor-wrapper>
+        ${this.renderDescriptionSlot()}
         ${this.renderDrawerContent()}
       </entity-form-layout>
     `;
@@ -292,9 +292,9 @@ export class FirearmAmmoForm extends ItemFormBase {
             icon="edit"
             ?disabled=${this.disabled}
             @click=${() => {
-              this.editingModeId = mode.id;
-              this.setDrawer(this.renderAmmoEdit);
-            }}
+        this.editingModeId = mode.id;
+        this.setDrawer(this.renderAmmoEdit);
+      }}
           ></mwc-icon-button>
         </sl-header>
         <div class="attack-details">${renderFirearmAmmoDetails(mode)}</div>
@@ -315,69 +315,69 @@ export class FirearmAmmoForm extends ItemFormBase {
       <h3>${localize('edit')} ${localize('ammo')}</h3>
       ${hasMultipleModes
         ? renderAutoForm({
-            classes: 'mode-select-form',
-            props: { mode: this.editingModeId },
-            update: ({ mode }) => {
-              if (mode) this.editingModeId = mode;
-            },
-            fields: ({ mode }) =>
-              renderSelectField(
-                { ...mode, label: `${localize('edit')} ${mode.label}` },
-                Object.keys(modeMap),
-                { altLabel: (id) => modeMap[id] || id },
-              ),
-          })
+          classes: 'mode-select-form',
+          props: { mode: this.editingModeId },
+          update: ({ mode }) => {
+            if (mode) this.editingModeId = mode;
+          },
+          fields: ({ mode }) =>
+            renderSelectField(
+              { ...mode, label: `${localize('edit')} ${mode.label}` },
+              Object.keys(modeMap),
+              { altLabel: (id) => modeMap[id] || id },
+            ),
+        })
         : ''}
       ${renderAutoForm({
-        classes: 'ammo-settings',
-        props: activeMode,
-        update: this.modeOps.update,
-        fields: ({
-          name,
-          damageModifierType,
-          damageFormula,
-          steady,
-          armorPiercing,
-        }) => [
-          hasMultipleModes
-            ? renderTextField(name, {
-                placeholder: String(
-                  this.item.modes.findIndex(matchID(activeMode.id)) + 1,
-                ),
-              })
-            : '',
-          renderSelectField(
-            {
-              ...damageModifierType,
-              label: `${localize('modifier')} ${localize('type')}`,
-            },
-            enumValues(FirearmAmmoModifierType),
-          ),
-          damageModifierType.value === FirearmAmmoModifierType.Formula
-            ? renderFormulaField(damageFormula)
-            : '',
-          damageModifierType.value !== FirearmAmmoModifierType.NoDamage
-            ? renderLabeledCheckbox(armorPiercing)
-            : '',
-          renderLabeledCheckbox(steady),
-        ],
-      })}
+          classes: 'ammo-settings',
+          props: activeMode,
+          update: this.modeOps.update,
+          fields: ({
+            name,
+            damageModifierType,
+            damageFormula,
+            steady,
+            armorPiercing,
+          }) => [
+              hasMultipleModes
+                ? renderTextField(name, {
+                  placeholder: String(
+                    this.item.modes.findIndex(matchID(activeMode.id)) + 1,
+                  ),
+                })
+                : '',
+              renderSelectField(
+                {
+                  ...damageModifierType,
+                  label: `${localize('modifier')} ${localize('type')}`,
+                },
+                enumValues(FirearmAmmoModifierType),
+              ),
+              damageModifierType.value === FirearmAmmoModifierType.Formula
+                ? renderFormulaField(damageFormula)
+                : '',
+              damageModifierType.value !== FirearmAmmoModifierType.NoDamage
+                ? renderLabeledCheckbox(armorPiercing)
+                : '',
+              renderLabeledCheckbox(steady),
+            ],
+        })}
       <p class="label">${localize('attackTraits')}</p>
 
       ${renderAutoForm({
-        props: pairedTraits,
-        update: (traits) =>
-          this.modeOps.update(
-            { attackTraits: change(traits) },
-            { id: activeMode.id },
-          ),
-        fields: (traits) => map(Object.values(traits), renderLabeledCheckbox),
-      })}
+          props: pairedTraits,
+          update: (traits) =>
+            this.modeOps.update(
+              { attackTraits: change(traits) },
+              { id: activeMode.id },
+            ),
+          fields: (traits) => map(Object.values(traits), renderLabeledCheckbox),
+        })}
       ${renderAutoForm({
-        props: activeMode,
-        update: this.modeOps.update,
-        fields: ({ notes }) => renderTextareaField(notes),
-      })}
+          props: activeMode,
+          update: this.modeOps.update,
+          fields: ({ notes }) => renderTextareaField(notes),
+        })}
     `;
   }
 }

@@ -95,6 +95,10 @@ export class SleightForm extends ItemFormBase {
     this.effectsOps[this.effectGroup].add({}, ev.effect);
   }
 
+  override get descriptionUpdateActions() {
+    return this.item.updater.path('system', 'description')
+  }
+
   render() {
     const {
       updater,
@@ -123,80 +127,80 @@ export class SleightForm extends ItemFormBase {
         </entity-form-header>
 
         ${renderUpdaterForm(updater.path('system'), {
-          disabled,
-          slot: 'sidebar',
-          fields: ({
-            sleightType,
-            duration,
-            action,
-            infectionMod,
-            timeframe,
-          }) => [
-            renderSelectField(sleightType, enumValues(SleightType)),
-            sleightType.value === SleightType.Chi
-              ? ''
-              : [
-                  renderSelectField(action, enumValues(ActionType)),
-                  action.value === ActionType.Task
-                    ? renderTimeField(timeframe, { min: 0 })
-                    : '',
-                  renderSelectField(duration, enumValues(SleightDuration), {
-                    helpPersistent: !hasStaticDuration,
-                    helpText: hasStaticDuration
-                      ? undefined
-                      : `${localize(AptitudeType.Willpower)}  ÷ 5`,
-                  }),
+      disabled,
+      slot: 'sidebar',
+      fields: ({
+        sleightType,
+        duration,
+        action,
+        infectionMod,
+        timeframe,
+      }) => [
+          renderSelectField(sleightType, enumValues(SleightType)),
+          sleightType.value === SleightType.Chi
+            ? ''
+            : [
+              renderSelectField(action, enumValues(ActionType)),
+              action.value === ActionType.Task
+                ? renderTimeField(timeframe, { min: 0 })
+                : '',
+              renderSelectField(duration, enumValues(SleightDuration), {
+                helpPersistent: !hasStaticDuration,
+                helpText: hasStaticDuration
+                  ? undefined
+                  : `${localize(AptitudeType.Willpower)}  ÷ 5`,
+              }),
 
-                  sleightType.value === SleightType.Epsilon
-                    ? ''
-                    : renderNumberField(infectionMod, { min: 0, max: 100 }),
-                ],
-          ],
-        })}
+              sleightType.value === SleightType.Epsilon
+                ? ''
+                : renderNumberField(infectionMod, { min: 0, max: 100 }),
+            ],
+        ],
+    })}
         ${isChi
-          ? ''
-          : html`
+        ? ''
+        : html`
               <entity-form-sidebar-divider
                 slot="sidebar"
               ></entity-form-sidebar-divider>
               ${renderAutoForm({
-                slot: 'sidebar',
-                props: {
-                  skill: this.skillOption,
-                },
-                update: ({ skill }) => {
-                  this.skillOption = skill || WeaponSkillOption.None;
-                  if (this.skillOption === WeaponSkillOption.None) {
-                    this.item.updater
-                      .path('flags', EP.Name, 'exoticSkill')
-                      .commit('');
-                  } else if (!this.item.exoticSkillName) {
-                    this.item.updater
-                      .path('flags', EP.Name, 'exoticSkill')
-                      .commit(this.item.name);
-                  }
-                },
-                fields: ({ skill }) =>
-                  renderSelectField(skill, enumValues(WeaponSkillOption), {
-                    altLabel: (value) =>
-                      value === WeaponSkillOption.Exotic
-                        ? localize(FieldSkillType.Exotic)
-                        : localize(SkillType.Psi),
-                  }),
-              })}
+          slot: 'sidebar',
+          props: {
+            skill: this.skillOption,
+          },
+          update: ({ skill }) => {
+            this.skillOption = skill || WeaponSkillOption.None;
+            if (this.skillOption === WeaponSkillOption.None) {
+              this.item.updater
+                .path('flags', EP.Name, 'exoticSkill')
+                .commit('');
+            } else if (!this.item.exoticSkillName) {
+              this.item.updater
+                .path('flags', EP.Name, 'exoticSkill')
+                .commit(this.item.name);
+            }
+          },
+          fields: ({ skill }) =>
+            renderSelectField(skill, enumValues(WeaponSkillOption), {
+              altLabel: (value) =>
+                value === WeaponSkillOption.Exotic
+                  ? localize(FieldSkillType.Exotic)
+                  : localize(SkillType.Psi),
+            }),
+        })}
               ${this.skillOption === WeaponSkillOption.Exotic
-                ? renderAutoForm({
-                    slot: 'sidebar',
+            ? renderAutoForm({
+              slot: 'sidebar',
 
-                    props: { field: this.item.exoticSkillName || '' },
-                    update: ({ field }) =>
-                      this.item.updater
-                        .path('flags', EP.Name, 'exoticSkill')
-                        .commit(field),
-                    fields: ({ field }) =>
-                      renderTextField(field, { required: true }),
-                  })
-                : ''}
+              props: { field: this.item.exoticSkillName || '' },
+              update: ({ field }) =>
+                this.item.updater
+                  .path('flags', EP.Name, 'exoticSkill')
+                  .commit(field),
+              fields: ({ field }) =>
+                renderTextField(field, { required: true }),
+            })
+            : ''}
             `}
         <div slot="details">
           <section>
@@ -209,25 +213,25 @@ export class SleightForm extends ItemFormBase {
               ></mwc-icon-button
             ></sl-header>
             ${canHaveSelfEffects
-              ? html`<item-form-effects-list
+        ? html`<item-form-effects-list
                   .effects=${effectsToSelf}
                   .operations=${this.effectsOps.self}
                   label=${isChi
-                    ? ''
-                    : `${localize('to')} ${localize('self')} (${localize(
-                        'whileSustaining',
-                      )})`}
+            ? ''
+            : `${localize('to')} ${localize('self')} (${localize(
+              'whileSustaining',
+            )})`}
                   ?disabled=${disabled}
                 ></item-form-effects-list>`
-              : ''}
+        : ''}
             ${isChi
-              ? ''
-              : html` <item-form-effects-list
+        ? ''
+        : html` <item-form-effects-list
                   .effects=${effectsToTarget}
                   .operations=${this.effectsOps.target}
                   label=${canHaveSelfEffects
-                    ? `${localize('to')} ${localize('target')}`
-                    : ''}
+            ? `${localize('to')} ${localize('target')}`
+            : ''}
                   ?disabled=${disabled}
                 ></item-form-effects-list>`}
             ${renderUpdaterForm(updater.path('system', 'mentalArmor'), {
@@ -235,9 +239,8 @@ export class SleightForm extends ItemFormBase {
               fields: ({ apply, divisor, formula }) => [
                 renderLabeledCheckbox({
                   ...apply,
-                  label: `${localize('apply')} ${localize('mentalArmor')} ${
-                    isChi ? '' : localize('toTarget')
-                  }`,
+                  label: `${localize('apply')} ${localize('mentalArmor')} ${isChi ? '' : localize('toTarget')
+                    }`,
                 }),
                 apply.value
                   ? isChi
@@ -245,32 +248,28 @@ export class SleightForm extends ItemFormBase {
                         alignEnd
                         label="@${localize('wil')} / "
                         >${renderNumberInput(divisor, {
-                          min: 1,
-                        })}</mwc-formfield
+                      min: 1,
+                    })}</mwc-formfield
                       >`
                     : renderFormulaField(formula)
                   : '',
               ],
             })}
             ${isChi || (!effectsToTarget.length && !mentalArmor.apply)
-              ? ''
-              : renderUpdaterForm(updater.path('system'), {
-                  fields: ({ scaleEffectsOnSuperior }) => [
-                    renderLabeledCheckbox({
-                      ...scaleEffectsOnSuperior,
-                      label: `${localize('scaleToTargetEffectsOnSuperior')}`,
-                    }),
-                  ],
-                })}
+        ? ''
+        : renderUpdaterForm(updater.path('system'), {
+          fields: ({ scaleEffectsOnSuperior }) => [
+            renderLabeledCheckbox({
+              ...scaleEffectsOnSuperior,
+              label: `${localize('scaleToTargetEffectsOnSuperior')}`,
+            }),
+          ],
+        })}
           </section>
           ${isChi ? '' : [this.renderAttack(), this.renderHeal()]}
         </div>
 
-        <editor-wrapper
-          slot="description"
-          ?disabled=${disabled}
-          .updateActions=${updater.path('system', 'description')}
-        ></editor-wrapper>
+        ${this.renderDescriptionSlot()}
         ${this.renderDrawerContent()}
       </entity-form-layout>
     `;
@@ -284,10 +283,10 @@ export class SleightForm extends ItemFormBase {
         ? ''
         : html`
             ${renderAutoForm({
-              props: { group: this.effectGroup },
-              update: ({ group }) => group && (this.effectGroup = group),
-              fields: ({ group }) => renderRadioFields(group, effectGroups),
-            })}
+          props: { group: this.effectGroup },
+          update: ({ group }) => group && (this.effectGroup = group),
+          fields: ({ group }) => renderRadioFields(group, effectGroups),
+        })}
           `}
 
       <effect-creator
@@ -312,27 +311,27 @@ export class SleightForm extends ItemFormBase {
         <div class="attack-details">
           <sl-group label=${formatDamageType(attack.damageType)}>
             ${notEmpty(attack.rollFormulas)
-              ? [
-                  formatLabeledFormulas(attack.rollFormulas),
-                  formatArmorUsed(attack),
-                ].join('; ')
-              : '-'}
+        ? [
+          formatLabeledFormulas(attack.rollFormulas),
+          formatArmorUsed(attack),
+        ].join('; ')
+        : '-'}
           </sl-group>
 
           ${notEmpty(attack.attackTraits)
-            ? html`
+        ? html`
                 <sl-group class="attack-traits" label=${localize('traits')}>
                   ${map(attack.attackTraits, localize).join(', ')}</sl-group
                 >
               `
-            : ''}
+        : ''}
           ${attack.notes
-            ? html`
+        ? html`
                 <sl-group class="attack-notes" label=${localize('notes')}>
                   ${attack.notes}</sl-group
                 >
               `
-            : ''}
+        : ''}
         </div>
       </section>
     `;
@@ -350,48 +349,48 @@ export class SleightForm extends ItemFormBase {
     return html`
       <h3>${localize('attack')}</h3>
       ${renderUpdaterForm(updater, {
-        disabled,
-        fields: ({ damageFormula, useMentalArmor, damageType }) => [
-          renderFormulaField(damageFormula),
-          renderSelectField(damageType, enumValues(HealthType)),
-          // renderLabeledCheckbox(useMentalArmor, {
-          //   disabled: !damageFormula.value,
-          //   indeterminate: !damageFormula.value,
-          // }),
-        ],
-      })}
+      disabled,
+      fields: ({ damageFormula, useMentalArmor, damageType }) => [
+        renderFormulaField(damageFormula),
+        renderSelectField(damageType, enumValues(HealthType)),
+        // renderLabeledCheckbox(useMentalArmor, {
+        //   disabled: !damageFormula.value,
+        //   indeterminate: !damageFormula.value,
+        // }),
+      ],
+    })}
       ${this.item.epData.attack.damageFormula
         ? renderAutoForm({
-            props: armorUsedProps,
-            update: ({ armorUsed }) => {
-              this.item.updater
-                .path('flags', EP.Name, 'attackArmorUsed')
-                .store(armorUsed)
-                .path('system', 'attack', 'useMentalArmor')
-                .commit(false);
-            },
-            fields: ({ armorUsed }) =>
-              renderSelectField(armorUsed, enumValues(ArmorType), {
-                ...emptyTextDash,
-              }),
-          })
+          props: armorUsedProps,
+          update: ({ armorUsed }) => {
+            this.item.updater
+              .path('flags', EP.Name, 'attackArmorUsed')
+              .store(armorUsed)
+              .path('system', 'attack', 'useMentalArmor')
+              .commit(false);
+          },
+          fields: ({ armorUsed }) =>
+            renderSelectField(armorUsed, enumValues(ArmorType), {
+              ...emptyTextDash,
+            }),
+        })
         : ''}
       <p class="label">${localize('attackTraits')}</p>
       ${renderAutoForm({
-        props: attackTraitsObj,
-        update: (traits) =>
-          updater.commit({
-            attackTraits: enumValues(AttackTrait).flatMap((trait) => {
-              const active = traits[trait] ?? attackTraitsObj[trait];
-              return active ? trait : [];
+          props: attackTraitsObj,
+          update: (traits) =>
+            updater.commit({
+              attackTraits: enumValues(AttackTrait).flatMap((trait) => {
+                const active = traits[trait] ?? attackTraitsObj[trait];
+                return active ? trait : [];
+              }),
             }),
-          }),
-        fields: (traits) => map(Object.values(traits), renderLabeledCheckbox),
-      })}
+          fields: (traits) => map(Object.values(traits), renderLabeledCheckbox),
+        })}
       <!-- ${renderUpdaterForm(updater, {
-        disabled,
-        fields: ({ notes }) => [renderTextareaField(notes)],
-      })} -->
+          disabled,
+          fields: ({ notes }) => [renderTextareaField(notes)],
+        })} -->
     `;
   }
 
@@ -423,12 +422,12 @@ export class SleightForm extends ItemFormBase {
     return html`
       <h3>${localize('attack')}</h3>
       ${renderUpdaterForm(updater, {
-        disabled,
-        fields: ({ formula, healthType }) => [
-          renderFormulaField(formula),
-          renderSelectField(healthType, enumValues(HealthType)),
-        ],
-      })}
+      disabled,
+      fields: ({ formula, healthType }) => [
+        renderFormulaField(formula),
+        renderSelectField(healthType, enumValues(HealthType)),
+      ],
+    })}
     `;
   }
 }

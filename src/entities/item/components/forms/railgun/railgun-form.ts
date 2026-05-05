@@ -38,6 +38,10 @@ import styles from './railgun-form.scss';
 
 class Base extends ItemFormBase {
   @property({ attribute: false }) item!: Railgun;
+
+  override get descriptionUpdateActions() {
+    return this.item.updater.path('system', 'description')
+  }
 }
 
 @customElement('railgun-form')
@@ -105,112 +109,112 @@ export class RailgunForm extends mix(Base).with(UseWorldTime) {
         </entity-form-header>
 
         ${renderUpdaterForm(updater.path('system'), {
-          disabled,
-          slot: 'sidebar',
-          fields: this.renderSidebarFields,
-        })}
+      disabled,
+      slot: 'sidebar',
+      fields: this.renderSidebarFields,
+    })}
 
         <div slot="details">
           ${shapeChanging && !nestedShape
-            ? html`
+        ? html`
                 <sl-dropzone ?disabled=${disabled} @drop=${this.addShape}>
                   <sl-header
                     heading=${localize('shapes')}
                     ?hideBorder=${this.item.shapes.size === 0}
                   >
                     ${renderAutoForm({
-                      props: { shapeName },
-                      slot: 'action',
-                      classes: 'shape-name-form',
-                      update: ({ shapeName }) => {
-                        this.item.updater
-                          .path('system', 'shapeName')
-                          .commit(shapeName || this.item.shapeName);
-                        this.requestUpdate();
-                      },
-                      disabled,
-                      fields: ({ shapeName }) =>
-                        html`<mwc-formfield alignEnd label=${shapeName.label}
+          props: { shapeName },
+          slot: 'action',
+          classes: 'shape-name-form',
+          update: ({ shapeName }) => {
+            this.item.updater
+              .path('system', 'shapeName')
+              .commit(shapeName || this.item.shapeName);
+            this.requestUpdate();
+          },
+          disabled,
+          fields: ({ shapeName }) =>
+            html`<mwc-formfield alignEnd label=${shapeName.label}
                           >${renderTextInput(shapeName)}</mwc-formfield
                         >`,
-                    })}
+        })}
                   </sl-header>
                   ${notEmpty(this.item.shapes)
-                    ? html`
+            ? html`
                         <sl-animated-list class="shapes">
                           ${repeat(
-                            this.item.shapes.values(),
-                            idProp,
-                            (shape) => {
-                              const { id, name } = shape;
-                              return html`
+              this.item.shapes.values(),
+              idProp,
+              (shape) => {
+                const { id, name } = shape;
+                return html`
                                 <wl-list-item
                                   class="shape"
                                   clickable
                                   ?disabled=${disabled}
                                   @click=${() => this.item.swapShape(id)}
                                   @contextmenu=${(ev: MouseEvent) =>
-                                    this.openShapeMenu(ev, shape)}
+                    this.openShapeMenu(ev, shape)}
                                   >${name}</wl-list-item
                                 >
                               `;
-                            },
-                          )}
+              },
+            )}
                         </sl-animated-list>
                       `
-                    : ''}
+            : ''}
                 </sl-dropzone>
               `
-            : ''}
+        : ''}
           ${renderUpdaterForm(updater.path('system'), {
-            disabled,
-            classes: complexityForm.cssClass,
-            fields: renderComplexityFields,
-          })}
+          disabled,
+          classes: complexityForm.cssClass,
+          fields: renderComplexityFields,
+        })}
           ${this.renderAttack()}
 
           <section>
             <sl-header heading=${localize('ammo')}></sl-header>
             ${renderUpdaterForm(updater.path('system', 'ammo'), {
-              disabled,
-              classes: 'ammo-form',
-              fields: ({ value, max, ammoClass }) => [
-                renderSelectField(
-                  { ...ammoClass, label: localize('class') },
-                  enumValues(KineticWeaponClass),
-                ),
+          disabled,
+          classes: 'ammo-form',
+          fields: ({ value, max, ammoClass }) => [
+            renderSelectField(
+              { ...ammoClass, label: localize('class') },
+              enumValues(KineticWeaponClass),
+            ),
 
-                renderNumberField(
-                  { ...max, label: `${localize('capacity')}` },
-                  { min: 1 },
-                ),
-                renderNumberField(
-                  {
-                    ...value,
-                    value: Math.min(max.value + 1, value.value),
-                    label: localize('loaded'),
-                  },
-                  { min: 0, max: max.value + 1 },
-                ),
-              ],
-            })}
+            renderNumberField(
+              { ...max, label: `${localize('capacity')}` },
+              { min: 1 },
+            ),
+            renderNumberField(
+              {
+                ...value,
+                value: Math.min(max.value + 1, value.value),
+                label: localize('loaded'),
+              },
+              { min: 0, max: max.value + 1 },
+            ),
+          ],
+        })}
           </section>
 
           <section>
             <sl-header heading=${localize('battery')}></sl-header>
             ${renderAutoForm({
-              props: this.item.battery,
-              update: (changed) => this.item.updateCharge(changed),
-              disabled,
-              classes: 'battery-form',
-              fields: ({ charge, max }) => [
-                renderNumberField(max, { min: 1 }),
-                renderNumberField(
-                  { ...charge, value: Math.min(max.value, charge.value) },
-                  { min: 0, max: max.value },
-                ),
-              ],
-            })}
+          props: this.item.battery,
+          update: (changed) => this.item.updateCharge(changed),
+          disabled,
+          classes: 'battery-form',
+          fields: ({ charge, max }) => [
+            renderNumberField(max, { min: 1 }),
+            renderNumberField(
+              { ...charge, value: Math.min(max.value, charge.value) },
+              { min: 0, max: max.value },
+            ),
+          ],
+        })}
           </section>
 
           <section>
@@ -225,19 +229,15 @@ export class RailgunForm extends mix(Base).with(UseWorldTime) {
 
             <sl-animated-list class="accessories-list">
               ${repeat(
-                accessories,
-                identity,
-                (accessory) => html` <li>${localize(accessory)}</li> `,
-              )}
+          accessories,
+          identity,
+          (accessory) => html` <li>${localize(accessory)}</li> `,
+        )}
             </sl-animated-list>
           </section>
         </div>
 
-        <editor-wrapper
-          slot="description"
-          ?disabled=${disabled}
-          .updateActions=${updater.path('system', 'description')}
-        ></editor-wrapper>
+        ${this.renderDescriptionSlot()}
         ${this.renderDrawerContent()}
       </entity-form-layout>
     `;
@@ -259,26 +259,26 @@ export class RailgunForm extends mix(Base).with(UseWorldTime) {
         <div class="attack-details">
           <sl-group label=${localize('SHORT', 'damageValue')}>
             ${notEmpty(attack.rollFormulas)
-              ? [
-                  formatLabeledFormulas(attack.rollFormulas),
-                  formatArmorUsed(attack),
-                ].join('; ')
-              : '-'}
+        ? [
+          formatLabeledFormulas(attack.rollFormulas),
+          formatArmorUsed(attack),
+        ].join('; ')
+        : '-'}
           </sl-group>
 
           <sl-group label=${localize('firingModes')} class="firing-modes"
             >${attack.firingModes
-              .map((mode) => localize('SHORT', mode))
-              .join('/')}</sl-group
+        .map((mode) => localize('SHORT', mode))
+        .join('/')}</sl-group
           >
 
           ${attack.notes
-            ? html`
+        ? html`
                 <sl-group class="attack-notes" label=${localize('notes')}>
                   ${attack.notes}</sl-group
                 >
               `
-            : ''}
+        : ''}
         </div>
       </section>
     `;

@@ -358,10 +358,10 @@ export const overridePrototypes = () => {
   //   close.call(this, []);
   // };
 
-  tinymce.FocusManager.isEditorUIElement = function (elm: Element) {
-    const className = elm.className?.toString() ?? '';
-    return className.indexOf('tox-') !== -1 || className.indexOf('mce-') !== -1;
-  };
+  // tinymce.FocusManager.isEditorUIElement = function (elm: Element) {
+  //   const className = elm.className?.toString() ?? '';
+  //   return className.indexOf('tox-') !== -1 || className.indexOf('mce-') !== -1;
+  // };
 
   const { _handleDragStart } = foundry.applications.ux.DragDrop.implementation.prototype;
   foundry.applications.ux.DragDrop.implementation.prototype._handleDragStart = function (ev: DragEvent) {

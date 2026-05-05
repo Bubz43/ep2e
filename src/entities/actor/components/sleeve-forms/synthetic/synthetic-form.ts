@@ -73,6 +73,10 @@ export class SyntheticForm extends SleeveFormBase {
     }
   }
 
+  override get descriptionUpdateActions() {
+    return this.sleeve.updater.path('system', 'description')
+  }
+
   render() {
     const {
       updater,
@@ -105,98 +109,98 @@ export class SyntheticForm extends SleeveFormBase {
         </entity-form-header>
 
         ${renderAutoForm({
-          props: originalValue(),
-          disabled,
-          slot: 'sidebar',
-          update: ({ shellType, ...props }) => {
-            commit(
-              shellType
-                ? {
-                    shellType,
-                    subtype:
-                      first(this.getShellTypeGroup(shellType) || []) || '',
-                    isSwarm:
-                      shellType === ShellType.Vehicle ? false : undefined,
-                  }
-                : props,
-            );
-          },
-          fields: ({
-            size,
-            subtype,
-            isSwarm,
-            reach,
-            unarmedDV,
-            prehensileLimbs,
-            brain,
-            passengers,
-            shellType,
-            firewallRating,
-            exoBonusMeleeDV,
-            exoMeleeArmorPiercing,
-          }) => {
-            const subtypes = this.getShellTypeGroup(shellType.value);
+      props: originalValue(),
+      disabled,
+      slot: 'sidebar',
+      update: ({ shellType, ...props }) => {
+        commit(
+          shellType
+            ? {
+              shellType,
+              subtype:
+                first(this.getShellTypeGroup(shellType) || []) || '',
+              isSwarm:
+                shellType === ShellType.Vehicle ? false : undefined,
+            }
+            : props,
+        );
+      },
+      fields: ({
+        size,
+        subtype,
+        isSwarm,
+        reach,
+        unarmedDV,
+        prehensileLimbs,
+        brain,
+        passengers,
+        shellType,
+        firewallRating,
+        exoBonusMeleeDV,
+        exoMeleeArmorPiercing,
+      }) => {
+        const subtypes = this.getShellTypeGroup(shellType.value);
 
-            return [
-              notEmpty(availableBrains)
-                ? renderSelectField(brain, [...availableBrains.keys()], {
-                    emptyText: localize('default'),
-                    altLabel: (key) => availableBrains.get(key)!.fullName,
-                  })
-                : '',
-              nonDefaultBrain
-                ? ''
-                : renderNumberField(firewallRating, { min: 1, max: 99 }),
-              html`
+        return [
+          notEmpty(availableBrains)
+            ? renderSelectField(brain, [...availableBrains.keys()], {
+              emptyText: localize('default'),
+              altLabel: (key) => availableBrains.get(key)!.fullName,
+            })
+            : '',
+          nonDefaultBrain
+            ? ''
+            : renderNumberField(firewallRating, { min: 1, max: 99 }),
+          html`
                 <entity-form-sidebar-divider></entity-form-sidebar-divider>
               `,
-              renderSelectField(shellType, enumValues(ShellType), {
-                disabled: exoskeleton,
-              }),
+          renderSelectField(shellType, enumValues(ShellType), {
+            disabled: exoskeleton,
+          }),
 
-              notEmpty(subtypes)
-                ? renderSelectField(subtype, subtypes, {
-                    disabled: exoskeleton,
-                  })
-                : '',
-              renderSelectField(size, enumValues(Size)),
-              shellType.value === ShellType.Vehicle
+          notEmpty(subtypes)
+            ? renderSelectField(subtype, subtypes, {
+              disabled: exoskeleton,
+            })
+            : '',
+          renderSelectField(size, enumValues(Size)),
+          shellType.value === ShellType.Vehicle
+            ? [
+              renderNumberField(passengers, { min: 1 }),
+              subtype.value === VehicleType.Hardsuit ||
+                subtype.value === VehicleType.Exoskeleton
                 ? [
-                    renderNumberField(passengers, { min: 1 }),
-                    subtype.value === VehicleType.Hardsuit ||
-                    subtype.value === VehicleType.Exoskeleton
-                      ? [
-                          html`<entity-form-sidebar-divider
+                  html`<entity-form-sidebar-divider
                             label=${localize('melee')}
                           ></entity-form-sidebar-divider>`,
-                          renderFormulaField({
-                            ...exoBonusMeleeDV,
-                            label: `${localize('bonus')} ${localize(
-                              'SHORT',
-                              'damageValue',
-                            )}`,
-                          }),
-                          renderLabeledCheckbox({
-                            ...exoMeleeArmorPiercing,
-                            label: `${localize('armorPiercing')}`,
-                          }),
-                        ]
-                      : '',
-                  ]
-                : renderLabeledCheckbox(isSwarm, {
-                    tooltipText: localize('DESCRIPTIONS', 'AppliesSwarmRules'),
+                  renderFormulaField({
+                    ...exoBonusMeleeDV,
+                    label: `${localize('bonus')} ${localize(
+                      'SHORT',
+                      'damageValue',
+                    )}`,
                   }),
-              html`<entity-form-sidebar-divider></entity-form-sidebar-divider>`,
-              isSwarm.value
-                ? ''
-                : [
-                    renderNumberField(prehensileLimbs, { min: 0 }),
-                    renderNumberField(reach, { min: 0, max: 30, step: 10 }),
-                  ],
-              renderFormulaField(unarmedDV),
-            ];
-          },
-        })}
+                  renderLabeledCheckbox({
+                    ...exoMeleeArmorPiercing,
+                    label: `${localize('armorPiercing')}`,
+                  }),
+                ]
+                : '',
+            ]
+            : renderLabeledCheckbox(isSwarm, {
+              tooltipText: localize('DESCRIPTIONS', 'AppliesSwarmRules'),
+            }),
+          html`<entity-form-sidebar-divider></entity-form-sidebar-divider>`,
+          isSwarm.value
+            ? ''
+            : [
+              renderNumberField(prehensileLimbs, { min: 0 }),
+              renderNumberField(reach, { min: 0, max: 30, step: 10 }),
+            ],
+          renderFormulaField(unarmedDV),
+        ];
+      },
+    })}
 
         <div slot="details">
           <sleeve-form-acquisition
@@ -219,9 +223,9 @@ export class SyntheticForm extends SleeveFormBase {
                 @focus=${tooltip.fromData}
                 icon="change_history"
                 @click=${this.setDrawerFromEvent(
-                  this.renderPhysicalHealthChangeHistory,
-                  false,
-                )}
+      this.renderPhysicalHealthChangeHistory,
+      false,
+    )}
               ></mwc-icon-button>
             </sl-header>
             <health-item
@@ -231,20 +235,20 @@ export class SyntheticForm extends SleeveFormBase {
               @click=${this.setDrawerFromEvent(this.renderPhysicalHealthEdit)}
             ></health-item>
             ${renderUpdaterForm(updater.path('system', 'inherentArmor'), {
-              disabled,
-              classes: 'inherent-armor',
-              fields: ({ energy, kinetic, source }) => [
-                renderTextField(
-                  {
-                    ...source,
-                    label: `${localize('armor')} ${localize('source')}`,
-                  },
-                  { listId: 'frames' },
-                ),
-                renderNumberField(energy, { min: 0 }),
-                renderNumberField(kinetic, { min: 0 }),
-              ],
-            })}
+      disabled,
+      classes: 'inherent-armor',
+      fields: ({ energy, kinetic, source }) => [
+        renderTextField(
+          {
+            ...source,
+            label: `${localize('armor')} ${localize('source')}`,
+          },
+          { listId: 'frames' },
+        ),
+        renderNumberField(energy, { min: 0 }),
+        renderNumberField(kinetic, { min: 0 }),
+      ],
+    })}
             ${this.frameList}
           </section>
 
@@ -257,9 +261,9 @@ export class SyntheticForm extends SleeveFormBase {
                 @focus=${tooltip.fromData}
                 icon="change_history"
                 @click=${this.setDrawerFromEvent(
-                  this.renderMeshHealthChangeHistory,
-                  false,
-                )}
+      this.renderMeshHealthChangeHistory,
+      false,
+    )}
               ></mwc-icon-button>
             </sl-header>
 
@@ -270,8 +274,8 @@ export class SyntheticForm extends SleeveFormBase {
               @click=${this.setDrawerFromEvent(this.renderMeshHealthEdit)}
             >
               ${nonDefaultBrain
-                ? html` <span slot="source">${nonDefaultBrain.fullName}</span> `
-                : ''}
+        ? html` <span slot="source">${nonDefaultBrain.fullName}</span> `
+        : ''}
             </health-item>
 
             <health-item
@@ -303,48 +307,44 @@ export class SyntheticForm extends SleeveFormBase {
           <sl-dropzone @drop=${this.handleItemDrop} ?disabled=${disabled}>
             <sl-header
               heading="${localize('traits')} & ${localize(
-                'installed',
-              )} ${localize('ware')}"
+          'installed',
+        )} ${localize('ware')}"
             >
               <mwc-icon
                 slot="info"
                 data-ep-tooltip=${localize(
-                  'DESCRIPTIONS',
-                  'OnlyPhysicalMorphItems',
-                )}
+          'DESCRIPTIONS',
+          'OnlyPhysicalMorphItems',
+        )}
                 @mouseover=${tooltip.fromData}
                 >info</mwc-icon
               >
               ${notEmpty(itemTrash) && !disabled
-                ? html`
+        ? html`
                     <mwc-icon-button
                       @click=${this.setDrawerFromEvent(this.renderItemTrash)}
                       icon="delete_outline"
                       slot="action"
                     ></mwc-icon-button>
                   `
-                : ''}
+        : ''}
             </sl-header>
 
             ${itemGroupKeys.map((key) => {
-              const group = itemGroups[key];
-              return notEmpty(group)
-                ? html`
+          const group = itemGroups[key];
+          return notEmpty(group)
+            ? html`
                     <form-items-list
                       .dragStartHandler=${this.itemDragStart}
                       .items=${group}
                       label=${localize(key)}
                     ></form-items-list>
                   `
-                : '';
-            })}
+            : '';
+        })}
           </sl-dropzone>
         </div>
-        <editor-wrapper
-          slot="description"
-          ?disabled=${disabled}
-          .updateActions=${updater.path('system', 'description')}
-        ></editor-wrapper>
+        ${this.renderDescriptionSlot()}
         ${this.renderDrawerContent()}
       </entity-form-layout>
     `;
@@ -352,10 +352,10 @@ export class SyntheticForm extends SleeveFormBase {
 
   private frameList = html` <datalist id="frames">
     ${frames.map(
-      (frameType) => html`
+    (frameType) => html`
         <option value="${localize(frameType)} ${localize('frame')}"></option>
       `,
-    )}
+  )}
   </datalist>`;
 
   private renderMovementCreator() {
@@ -363,12 +363,12 @@ export class SyntheticForm extends SleeveFormBase {
       <h3>${localize('add')} ${localize('movement')}</h3>
 
       ${renderSubmitForm({
-        props: defaultMovement,
-        update: this.movementOperations.add,
-        fields: renderMovementRateFields,
-        noDebounce: true,
-        submitEmpty: true,
-      })}
+      props: defaultMovement,
+      update: this.movementOperations.add,
+      fields: renderMovementRateFields,
+      noDebounce: true,
+      submitEmpty: true,
+    })}
     `;
   }
 
@@ -417,9 +417,9 @@ export class SyntheticForm extends SleeveFormBase {
     return html`
       <h3>${localize('physicalHealth')}</h3>
       ${renderUpdaterForm(updater.path('system', 'physicalHealth'), {
-        fields: ({ baseDurability }) =>
-          renderNumberField(baseDurability, { min: 1 }),
-      })}
+      fields: ({ baseDurability }) =>
+        renderNumberField(baseDurability, { min: 1 }),
+    })}
       <health-state-form .health=${physicalHealth}></health-state-form>
       <health-regen-settings-form
         .health=${physicalHealth}
@@ -437,9 +437,9 @@ export class SyntheticForm extends SleeveFormBase {
       return html`
         <h3>${nonDefaultBrain.name} ${localize('meshHealth')}</h3>
         ${renderUpdaterForm(updater.path('system', 'meshHealth'), {
-          fields: ({ baseDurability }) =>
-            renderNumberField(baseDurability, { min: 1 }),
-        })}
+        fields: ({ baseDurability }) =>
+          renderNumberField(baseDurability, { min: 1 }),
+      })}
         <health-state-form .health=${meshHealth}></health-state-form>
         <health-regen-settings-form
           .health=${meshHealth}
@@ -451,9 +451,9 @@ export class SyntheticForm extends SleeveFormBase {
     return html`
       <h3>${localize('meshHealth')}</h3>
       ${renderUpdaterForm(updater.path('system', 'meshHealth'), {
-        fields: ({ baseDurability }) =>
-          renderNumberField(baseDurability, { min: 1 }),
-      })}
+      fields: ({ baseDurability }) =>
+        renderNumberField(baseDurability, { min: 1 }),
+    })}
       <health-state-form .health=${meshHealth}></health-state-form>
       <health-regen-settings-form
         .health=${meshHealth}
@@ -471,9 +471,9 @@ export class SyntheticForm extends SleeveFormBase {
       return html`
         <h3>${nonDefaultBrain.name} ${localize('firewallHealth')}</h3>
         ${renderUpdaterForm(updater.path('system', 'firewallHealth'), {
-          fields: ({ baseDurability }) =>
-            renderNumberField(baseDurability, { min: 1 }),
-        })}
+        fields: ({ baseDurability }) =>
+          renderNumberField(baseDurability, { min: 1 }),
+      })}
         <health-state-form .health=${firewallHealth}></health-state-form>
       `;
     }
@@ -481,9 +481,9 @@ export class SyntheticForm extends SleeveFormBase {
     return html`
       <h3>${localize('firewallHealth')}</h3>
       ${renderUpdaterForm(updater.path('system', 'firewallHealth'), {
-        fields: ({ baseDurability }) =>
-          renderNumberField(baseDurability, { min: 1 }),
-      })}
+      fields: ({ baseDurability }) =>
+        renderNumberField(baseDurability, { min: 1 }),
+    })}
       <health-state-form .health=${firewallHealth}></health-state-form>
     `;
   }

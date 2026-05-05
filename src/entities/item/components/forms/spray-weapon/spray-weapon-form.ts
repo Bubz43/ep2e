@@ -152,6 +152,10 @@ export class SprayWeaponForm extends ItemFormBase {
     this.payloadSheet = null;
   }
 
+  override get descriptionUpdateActions() {
+    return this.item.updater.path('system', 'description')
+  }
+
   render() {
     const {
       updater,
@@ -177,144 +181,144 @@ export class SprayWeaponForm extends ItemFormBase {
         </entity-form-header>
 
         ${renderUpdaterForm(updater.path('system'), {
-          disabled,
-          slot: 'sidebar',
-          fields: ({ wareType, range, fixed, long, payloadUse, ...traits }) => [
-            renderSelectField(
-              wareType,
-              enumValues(PhysicalWare),
-              emptyTextDash,
-            ),
-            renderNumberField(
-              { ...range, label: `${range.label} (${localize('meters')})` },
-              { min: 1 },
-            ),
-            renderSelectField(
-              payloadUse,
-              enumValues(SprayPayload),
-              payload ? undefined : emptyTextDash,
-            ),
-            html`<entity-form-sidebar-divider
+      disabled,
+      slot: 'sidebar',
+      fields: ({ wareType, range, fixed, long, payloadUse, ...traits }) => [
+        renderSelectField(
+          wareType,
+          enumValues(PhysicalWare),
+          emptyTextDash,
+        ),
+        renderNumberField(
+          { ...range, label: `${range.label} (${localize('meters')})` },
+          { min: 1 },
+        ),
+        renderSelectField(
+          payloadUse,
+          enumValues(SprayPayload),
+          payload ? undefined : emptyTextDash,
+        ),
+        html`<entity-form-sidebar-divider
               label="${localize('weapon')} ${localize('traits')}"
             ></entity-form-sidebar-divider>`,
-            renderLabeledCheckbox(fixed),
-            renderLabeledCheckbox(long),
-            html`<entity-form-sidebar-divider
+        renderLabeledCheckbox(fixed),
+        renderLabeledCheckbox(long),
+        html`<entity-form-sidebar-divider
               label=${localize('gearTraits')}
             ></entity-form-sidebar-divider>`,
-            renderGearTraitCheckboxes(traits),
-          ],
-        })}
+        renderGearTraitCheckboxes(traits),
+      ],
+    })}
 
         <div slot="details">
           <div class="detail-forms">
             ${renderUpdaterForm(updater.path('system'), {
-              disabled,
-              classes: complexityForm.cssClass,
-              fields: renderComplexityFields,
-            })}
+      disabled,
+      classes: complexityForm.cssClass,
+      fields: renderComplexityFields,
+    })}
             ${renderAutoForm({
-              classes: 'skill-form',
-              disabled,
-              props: {
-                skillOption: this.skillOption,
-                exotic: exoticSkillName || '',
-              },
-              update: ({ skillOption, exotic }) => {
-                const exoticSkillSetter = this.item.updater.path(
-                  'flags',
-                  EP.Name,
-                  'exoticSkill',
-                ).commit;
-                if (exotic !== undefined) {
-                  exoticSkillSetter(exotic);
-                } else if (skillOption === WeaponSkillOption.None) {
-                  this.skillOption = skillOption;
-                  exoticSkillSetter('');
-                } else if (skillOption) {
-                  this.skillOption = skillOption;
-                  if (
-                    skillOption === WeaponSkillOption.Exotic &&
-                    !this.item.exoticSkillName
-                  ) {
-                    exoticSkillSetter(this.item.name);
-                  }
-                }
-              },
-              fields: ({ skillOption, exotic }) => html`
+      classes: 'skill-form',
+      disabled,
+      props: {
+        skillOption: this.skillOption,
+        exotic: exoticSkillName || '',
+      },
+      update: ({ skillOption, exotic }) => {
+        const exoticSkillSetter = this.item.updater.path(
+          'flags',
+          EP.Name,
+          'exoticSkill',
+        ).commit;
+        if (exotic !== undefined) {
+          exoticSkillSetter(exotic);
+        } else if (skillOption === WeaponSkillOption.None) {
+          this.skillOption = skillOption;
+          exoticSkillSetter('');
+        } else if (skillOption) {
+          this.skillOption = skillOption;
+          if (
+            skillOption === WeaponSkillOption.Exotic &&
+            !this.item.exoticSkillName
+          ) {
+            exoticSkillSetter(this.item.name);
+          }
+        }
+      },
+      fields: ({ skillOption, exotic }) => html`
                 <span class="radio-wrapper"
                   >${localize('skill')}
                   ${renderRadioFields(
-                    skillOption,
-                    enumValues(WeaponSkillOption),
-                    {
-                      altLabel: (option) =>
-                        option === WeaponSkillOption.None
-                          ? localize(SkillType.Guns)
-                          : localize(option),
-                    },
-                  )}
+        skillOption,
+        enumValues(WeaponSkillOption),
+        {
+          altLabel: (option) =>
+            option === WeaponSkillOption.None
+              ? localize(SkillType.Guns)
+              : localize(option),
+        },
+      )}
                 </span>
                 ${renderTextInput(exotic, {
-                  placeholder: `e.g. ${this.item.name}`,
-                  disabled: this.skillOption !== WeaponSkillOption.Exotic,
-                })}
+        placeholder: `e.g. ${this.item.name}`,
+        disabled: this.skillOption !== WeaponSkillOption.Exotic,
+      })}
               `,
-            })}
+    })}
           </div>
           ${this.renderAttack()}
 
           <sl-dropzone ?disabled=${!firePayload} @drop=${this.addDrop}>
             <sl-header heading=${localize('ammo')}
               >${firePayload
-                ? renderUpdaterForm(updater.path('system'), {
-                    disabled,
-                    classes: 'doses-form',
-                    slot: 'action',
-                    fields: ({ dosesPerShot }) => html`
+        ? renderUpdaterForm(updater.path('system'), {
+          disabled,
+          classes: 'doses-form',
+          slot: 'action',
+          fields: ({ dosesPerShot }) => html`
                       <mwc-formfield alignEnd label=${dosesPerShot.label}
                         >${renderNumberInput(dosesPerShot, {
-                          min: 1,
-                        })}</mwc-formfield
+            min: 1,
+          })}</mwc-formfield
                       >
                     `,
-                  })
-                : ''}</sl-header
+        })
+        : ''}</sl-header
             >
             ${firePayload && payload
-              ? html`
+        ? html`
                   ${this.renderPayload(payload)}
                   <hr />
                 `
-              : ''}
+        : ''}
             ${renderAutoForm({
-              props: {
-                max: ammoState.max,
-                value: firePayload ? payload?.quantity || 0 : ammoState.value,
-              },
-              update: ({ value, max }) => {
-                if (max !== undefined)
-                  this.item.updater.path('system', 'ammo', 'max').commit(max);
-                else if (value !== undefined) this.item.updateAmmoValue(value);
-              },
-              disabled,
-              classes: 'ammo-form',
-              fields: ({ value, max }) => [
-                renderNumberField(
-                  { ...max, label: localize('capacity') },
-                  { min: 1 },
-                ),
-                renderNumberField(value, {
-                  min: 0,
-                  max: max.value,
-                  disabled: firePayload && !payload,
-                }),
-              ],
-            })}
+          props: {
+            max: ammoState.max,
+            value: firePayload ? payload?.quantity || 0 : ammoState.value,
+          },
+          update: ({ value, max }) => {
+            if (max !== undefined)
+              this.item.updater.path('system', 'ammo', 'max').commit(max);
+            else if (value !== undefined) this.item.updateAmmoValue(value);
+          },
+          disabled,
+          classes: 'ammo-form',
+          fields: ({ value, max }) => [
+            renderNumberField(
+              { ...max, label: localize('capacity') },
+              { min: 1 },
+            ),
+            renderNumberField(value, {
+              min: 0,
+              max: max.value,
+              disabled: firePayload && !payload,
+            }),
+          ],
+        })}
           </sl-dropzone>
 
           ${payloadUse === SprayPayload.CoatAmmunition
-            ? html`
+        ? html`
                 <sl-dropzone ?disabled=${disabled} @drop=${this.addDrop}>
                   <sl-header
                     heading="${localize('ammo')} ${localize('coating')}"
@@ -322,30 +326,30 @@ export class SprayWeaponForm extends ItemFormBase {
                     ><mwc-icon
                       slot="info"
                       data-ep-tooltip="${localize('drop')} ${localize(
-                        'non-electronic',
-                      )} ${localize('substance')}"
+          'non-electronic',
+        )} ${localize('substance')}"
                       @mouseenter=${tooltip.fromData}
                       >info</mwc-icon
                     >
                     ${payload
-                      ? renderUpdaterForm(payload.updater.path('system'), {
-                          disabled,
-                          classes: 'payload-quantity-form',
-                          slot: 'action',
-                          fields: ({ quantity }) => html`
+            ? renderUpdaterForm(payload.updater.path('system'), {
+              disabled,
+              classes: 'payload-quantity-form',
+              slot: 'action',
+              fields: ({ quantity }) => html`
                             <mwc-formfield alignEnd label=${quantity.label}
                               >${renderNumberInput(quantity, {
-                                min: 0,
-                              })}</mwc-formfield
+                min: 0,
+              })}</mwc-formfield
                             >
                           `,
-                        })
-                      : ''}
+            })
+            : ''}
                   </sl-header>
                   ${payload ? this.renderPayload(payload) : ''}
                 </sl-dropzone>
               `
-            : ''}
+        : ''}
 
           <section>
             <sl-header heading=${localize('accessories')}>
@@ -359,19 +363,15 @@ export class SprayWeaponForm extends ItemFormBase {
 
             <sl-animated-list class="accessories-list">
               ${repeat(
-                accessories,
-                identity,
-                (accessory) => html` <li>${localize(accessory)}</li> `,
-              )}
+          accessories,
+          identity,
+          (accessory) => html` <li>${localize(accessory)}</li> `,
+        )}
             </sl-animated-list>
           </section>
         </div>
 
-        <editor-wrapper
-          slot="description"
-          ?disabled=${disabled}
-          .updateActions=${updater.path('system', 'description')}
-        ></editor-wrapper>
+        ${this.renderDescriptionSlot()}
         ${this.renderDrawerContent()}
       </entity-form-layout>
     `;
@@ -408,44 +408,44 @@ export class SprayWeaponForm extends ItemFormBase {
         <div class="attack-details">
           <sl-group label=${localize('SHORT', 'damageValue')}>
             ${notEmpty(attack.rollFormulas)
-              ? [
-                  formatLabeledFormulas(attack.rollFormulas),
-                  formatArmorUsed(attack),
-                ].join('; ')
-              : '-'}
+        ? [
+          formatLabeledFormulas(attack.rollFormulas),
+          formatArmorUsed(attack),
+        ].join('; ')
+        : '-'}
           </sl-group>
 
           ${notEmpty(attack.attackTraits)
-            ? html`
+        ? html`
                 <sl-group class="attack-traits" label=${localize('traits')}>
                   ${map(attack.attackTraits, localize).join(', ')}</sl-group
                 >
               `
-            : ''}
+        : ''}
 
           <sl-group label=${localize('firingModes')} class="firing-modes"
             >${attack.firingModes
-              .map((mode) => localize('SHORT', mode))
-              .join('/')}</sl-group
+        .map((mode) => localize('SHORT', mode))
+        .join('/')}</sl-group
           >
           ${attack.superiorSuccessDot
-            ? html`
+        ? html`
                 <sl-group
                   label="${localize('on')} ${localize('superiorSuccess')}"
                 >
                   ${format('DotPerTurnNoArmor', {
-                    formula: attack.superiorSuccessDot,
-                  })}
+          formula: attack.superiorSuccessDot,
+        })}
                 </sl-group>
               `
-            : ''}
+        : ''}
           ${attack.notes
-            ? html`
+        ? html`
                 <sl-group class="attack-notes" label=${localize('notes')}>
                   ${attack.notes}</sl-group
                 >
               `
-            : ''}
+        : ''}
         </div>
       </section>
     `;
@@ -461,13 +461,13 @@ export class SprayWeaponForm extends ItemFormBase {
       <h3>${localize('attack')}</h3>
 
       ${renderUpdaterForm(updater, {
-        classes: 'attack-edit',
-        fields: ({
-          damageFormula,
-          armorPiercing,
-          superiorSuccessDot,
-          armorUsed,
-        }) => [
+      classes: 'attack-edit',
+      fields: ({
+        damageFormula,
+        armorPiercing,
+        superiorSuccessDot,
+        armorUsed,
+      }) => [
           renderFormulaField(damageFormula),
           renderSelectField(armorUsed, [ArmorType.Energy, ArmorType.Kinetic], {
             emptyText: '-',
@@ -475,20 +475,20 @@ export class SprayWeaponForm extends ItemFormBase {
           armorUsed.value ? renderLabeledCheckbox(armorPiercing) : '',
           renderFormulaField(superiorSuccessDot),
         ],
-      })}
+    })}
 
       <p class="label">${localize('firingModes')}</p>
       ${renderFiringModeCheckboxes(updater)}
 
       <p class="label">${localize('attackTraits')}</p>
       ${renderAutoForm({
-        props: pairedTraits,
-        update: createPipe(changeTraits, objOf('attackTraits'), updater.commit),
-        fields: (traits) => map(Object.values(traits), renderLabeledCheckbox),
-      })}
+      props: pairedTraits,
+      update: createPipe(changeTraits, objOf('attackTraits'), updater.commit),
+      fields: (traits) => map(Object.values(traits), renderLabeledCheckbox),
+    })}
       ${renderUpdaterForm(updater, {
-        fields: ({ notes }) => renderTextareaField(notes),
-      })}
+      fields: ({ notes }) => renderTextareaField(notes),
+    })}
     `;
   }
 

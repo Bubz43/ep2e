@@ -96,13 +96,13 @@ export class TraitForm extends ItemFormBase {
         return existing
           ? updateFeature(accum, { id: existing.id, cost })
           : addFeature(accum, {
-              cost,
-              effects:
-                first(accum)?.effects.map((effect) => ({
-                  ...multiplyEffectModifier(effect, index + 1),
-                  id: effect.id,
-                })) || [],
-            });
+            cost,
+            effects:
+              first(accum)?.effects.map((effect) => ({
+                ...multiplyEffectModifier(effect, index + 1),
+                id: effect.id,
+              })) || [],
+          });
       }, take(levels, levelCount)),
     );
   }
@@ -144,6 +144,10 @@ export class TraitForm extends ItemFormBase {
     });
   }
 
+  override get descriptionUpdateActions() {
+    return this.item.updater.path('system', 'description')
+  }
+
   render() {
     const {
       updater,
@@ -172,18 +176,18 @@ export class TraitForm extends ItemFormBase {
         <div slot="details">
           <section>
             ${disabled
-              ? ''
-              : html`
+        ? ''
+        : html`
                   <sl-header heading=${localize('details')}>
                     ${!!triggers && embedded
-                      ? renderUpdaterForm(updater.path('system', 'state'), {
-                          slot: 'action',
-                          fields: ({ triggered }) =>
-                            renderLabeledSwitch(triggered, { alignEnd: true }),
-                        })
-                      : ''}
+            ? renderUpdaterForm(updater.path('system', 'state'), {
+              slot: 'action',
+              fields: ({ triggered }) =>
+                renderLabeledSwitch(triggered, { alignEnd: true }),
+            })
+            : ''}
                     ${embedded && hasMultipleLevels && !isPsiInfluence
-                      ? html`
+            ? html`
                           <mwc-button
                             class="level-selector"
                             slot="action"
@@ -192,7 +196,7 @@ export class TraitForm extends ItemFormBase {
                             @click=${this.openLevelSelector}
                           ></mwc-button>
                         `
-                      : ''}
+            : ''}
                     <mwc-icon-button
                       slot="action"
                       icon="settings"
@@ -213,17 +217,17 @@ export class TraitForm extends ItemFormBase {
               ],
             })}
             ${restrictions
-              ? html`
+        ? html`
                   <sl-group label=${localize('restrictions')}
                     >${restrictions}</sl-group
                   >
                 `
-              : ''}
+        : ''}
             ${triggers
-              ? html`
+        ? html`
                   <sl-group label=${localize('triggers')}>${triggers}</sl-group>
                 `
-              : ''}
+        : ''}
           </section>
         </div>
 
@@ -235,11 +239,7 @@ export class TraitForm extends ItemFormBase {
           ${repeat(levels, idProp, this.renderLevel)}
         </sl-animated-list>
 
-        <editor-wrapper
-          slot="description"
-          ?disabled=${disabled}
-          .updateActions=${updater.path('system', 'description')}
-        ></editor-wrapper>
+        ${this.renderDescriptionSlot()}
         ${this.renderDrawerContent()}
       </entity-form-layout>
     `;
@@ -252,45 +252,44 @@ export class TraitForm extends ItemFormBase {
 
       <div class="level-settings">
         ${renderAutoForm({
-          props: { levelCount },
-          update: this.updateLevelCount,
-          classes: 'level-count-form',
-          fields: ({ levelCount }) =>
-            renderNumberField(
-              { ...levelCount, label: localize('levels') },
-              { min: 1, max: 4 },
-            ),
-        })}
+      props: { levelCount },
+      update: this.updateLevelCount,
+      classes: 'level-count-form',
+      fields: ({ levelCount }) =>
+        renderNumberField(
+          { ...levelCount, label: localize('levels') },
+          { min: 1, max: 4 },
+        ),
+    })}
       </div>
       <div class="level-costs">
         ${take(levels, levelCount).map((cost, index, list) =>
-          renderAutoForm({
-            props: { cost },
-            update: ({ cost }) => {
-              list[index] = cost!;
-              this.setupLevels(list);
-              this.updateLevels();
+      renderAutoForm({
+        props: { cost },
+        update: ({ cost }) => {
+          list[index] = cost!;
+          this.setupLevels(list);
+          this.updateLevels();
+        },
+        fields: ({ cost }) =>
+          renderNumberField(
+            {
+              ...cost,
+              label: `${localize('level')} ${index + 1} ${this.item.costInfo
+                }`,
             },
-            fields: ({ cost }) =>
-              renderNumberField(
-                {
-                  ...cost,
-                  label: `${localize('level')} ${index + 1} ${
-                    this.item.costInfo
-                  }`,
-                },
-                { min: list[index - 1]! + 1 || 1 },
-              ),
-          }),
-        )}
+            { min: list[index - 1]! + 1 || 1 },
+          ),
+      }),
+    )}
       </div>
       ${renderUpdaterForm(this.item.updater.path('system'), {
-        classes: 'text-areas',
-        fields: ({ restrictions, triggers }) => [
-          renderTextareaField(restrictions),
-          renderTextareaField(triggers),
-        ],
-      })}
+      classes: 'text-areas',
+      fields: ({ restrictions, triggers }) => [
+        renderTextareaField(restrictions),
+        renderTextareaField(triggers),
+      ],
+    })}
     `;
   }
 
@@ -320,17 +319,17 @@ export class TraitForm extends ItemFormBase {
       ${this.item.hasMultipleLevels
         ? html`
             ${renderAutoForm({
-              props: { level: this.addEffectLevel + 1 },
-              update: ({ level }) => {
-                if (level !== undefined) this.addEffectLevel = level - 1;
-              },
-              classes: 'add-effect-level-selector',
-              fields: ({ level }) =>
-                renderNumberField(level, {
-                  min: 1,
-                  max: this.item.levels.length,
-                }),
-            })}
+          props: { level: this.addEffectLevel + 1 },
+          update: ({ level }) => {
+            if (level !== undefined) this.addEffectLevel = level - 1;
+          },
+          classes: 'add-effect-level-selector',
+          fields: ({ level }) =>
+            renderNumberField(level, {
+              min: 1,
+              max: this.item.levels.length,
+            }),
+        })}
           `
         : ''}
       <effect-creator @effect-created=${this.addCreatedEffect}></effect-creator>

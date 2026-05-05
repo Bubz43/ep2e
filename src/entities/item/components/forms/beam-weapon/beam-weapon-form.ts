@@ -45,6 +45,10 @@ import styles from './beam-weapon-form.scss';
 
 class Base extends ItemFormBase {
   @property({ attribute: false }) item!: BeamWeapon;
+
+  override get descriptionUpdateActions() {
+    return this.item.updater.path('system', 'description')
+  }
 }
 
 @customElement('beam-weapon-form')
@@ -75,59 +79,59 @@ export class BeamWeaponForm extends mix(Base).with(UseWorldTime) {
         </entity-form-header>
 
         ${renderUpdaterForm(updater.path('system'), {
-          disabled,
-          slot: 'sidebar',
-          fields: ({ wareType, range, hasSecondaryAttack, ...traits }) => [
-            renderSelectField(
-              wareType,
-              enumValues(PhysicalWare),
-              emptyTextDash,
-            ),
-            renderNumberField(
-              { ...range, label: `${range.label} (${localize('meters')})` },
-              { min: 1 },
-            ),
-            renderLabeledCheckbox({
-              ...hasSecondaryAttack,
-              label: localize('secondaryAttack'),
-            }),
-            html`<entity-form-sidebar-divider
+      disabled,
+      slot: 'sidebar',
+      fields: ({ wareType, range, hasSecondaryAttack, ...traits }) => [
+        renderSelectField(
+          wareType,
+          enumValues(PhysicalWare),
+          emptyTextDash,
+        ),
+        renderNumberField(
+          { ...range, label: `${range.label} (${localize('meters')})` },
+          { min: 1 },
+        ),
+        renderLabeledCheckbox({
+          ...hasSecondaryAttack,
+          label: localize('secondaryAttack'),
+        }),
+        html`<entity-form-sidebar-divider
               label="${localize('weapon')} ${localize('traits')}"
             ></entity-form-sidebar-divider>`,
-            renderWeaponTraitCheckboxes(traits),
-            html`<entity-form-sidebar-divider
+        renderWeaponTraitCheckboxes(traits),
+        html`<entity-form-sidebar-divider
               label=${localize('gearTraits')}
             ></entity-form-sidebar-divider>`,
-            renderGearTraitCheckboxes(traits),
-          ],
-        })}
+        renderGearTraitCheckboxes(traits),
+      ],
+    })}
 
         <div slot="details">
           ${renderUpdaterForm(updater.path('system'), {
-            disabled,
-            classes: complexityForm.cssClass,
-            fields: renderComplexityFields,
-          })}
+      disabled,
+      classes: complexityForm.cssClass,
+      fields: renderComplexityFields,
+    })}
           ${this.renderAttack(attacks.primary, WeaponAttackType.Primary)}
           ${attacks.secondary
-            ? this.renderAttack(attacks.secondary, WeaponAttackType.Secondary)
-            : ''}
+        ? this.renderAttack(attacks.secondary, WeaponAttackType.Secondary)
+        : ''}
 
           <section>
             <sl-header heading=${localize('battery')}></sl-header>
             ${renderAutoForm({
-              props: this.item.battery,
-              update: (changed) => this.item.updateCharge(changed),
-              disabled,
-              classes: 'battery-form',
-              fields: ({ charge, max }) => [
-                renderNumberField(max, { min: 1 }),
-                renderNumberField(
-                  { ...charge, value: Math.min(max.value, charge.value) },
-                  { min: 0, max: max.value },
-                ),
-              ],
-            })}
+          props: this.item.battery,
+          update: (changed) => this.item.updateCharge(changed),
+          disabled,
+          classes: 'battery-form',
+          fields: ({ charge, max }) => [
+            renderNumberField(max, { min: 1 }),
+            renderNumberField(
+              { ...charge, value: Math.min(max.value, charge.value) },
+              { min: 0, max: max.value },
+            ),
+          ],
+        })}
           </section>
 
           <section>
@@ -142,19 +146,15 @@ export class BeamWeaponForm extends mix(Base).with(UseWorldTime) {
 
             <sl-animated-list class="accessories-list">
               ${repeat(
-                accessories,
-                identity,
-                (accessory) => html` <li>${localize(accessory)}</li> `,
-              )}
+          accessories,
+          identity,
+          (accessory) => html` <li>${localize(accessory)}</li> `,
+        )}
             </sl-animated-list>
           </section>
         </div>
 
-        <editor-wrapper
-          slot="description"
-          ?disabled=${disabled}
-          .updateActions=${updater.path('system', 'description')}
-        ></editor-wrapper>
+        ${this.renderDescriptionSlot()}
         ${this.renderDrawerContent()}
       </entity-form-layout>
     `;
@@ -169,50 +169,50 @@ export class BeamWeaponForm extends mix(Base).with(UseWorldTime) {
             slot="action"
             ?disabled=${this.disabled}
             @click=${this.setDrawerFromEvent(
-              type === WeaponAttackType.Primary
-                ? this.renderPrimaryAttackEdit
-                : this.renderSecondaryAttackEdit,
-            )}
+      type === WeaponAttackType.Primary
+        ? this.renderPrimaryAttackEdit
+        : this.renderSecondaryAttackEdit,
+    )}
           ></mwc-icon-button>
         </sl-header>
 
         <div class="attack-details">
           <sl-group label=${localize('SHORT', 'damageValue')}>
             ${notEmpty(attack.rollFormulas)
-              ? [
-                  formatLabeledFormulas(attack.rollFormulas),
-                  formatArmorUsed(attack),
-                ].join('; ')
-              : '-'}
+        ? [
+          formatLabeledFormulas(attack.rollFormulas),
+          formatArmorUsed(attack),
+        ].join('; ')
+        : '-'}
           </sl-group>
 
           ${attack.areaEffect
-            ? html`
+        ? html`
                 <sl-group class="attack-area" label=${localize('areaEffect')}>
                   ${formatAreaEffect(attack)}
                 </sl-group>
               `
-            : ''}
+        : ''}
           ${notEmpty(attack.attackTraits)
-            ? html`
+        ? html`
                 <sl-group class="attack-traits" label=${localize('traits')}>
                   ${map(attack.attackTraits, localize).join(', ')}</sl-group
                 >
               `
-            : ''}
+        : ''}
 
           <sl-group label=${localize('firingModes')} class="firing-modes"
             >${attack.firingModes
-              .map((mode) => localize('SHORT', mode))
-              .join('/')}</sl-group
+        .map((mode) => localize('SHORT', mode))
+        .join('/')}</sl-group
           >
           ${attack.notes
-            ? html`
+        ? html`
                 <sl-group class="attack-notes" label=${localize('notes')}>
                   ${attack.notes}</sl-group
                 >
               `
-            : ''}
+        : ''}
         </div>
       </section>
     `;
@@ -236,14 +236,14 @@ export class BeamWeaponForm extends mix(Base).with(UseWorldTime) {
     return html`
       <h3>${localize(hasSecondaryAttack ? type : 'attack')}</h3>
       ${renderUpdaterForm(updater, {
-        classes: 'drawer-attack',
-        fields: ({
-          label,
-          damageFormula,
-          armorPiercing,
-          areaEffect,
-          areaEffectRadius,
-        }) => [
+      classes: 'drawer-attack',
+      fields: ({
+        label,
+        damageFormula,
+        armorPiercing,
+        areaEffect,
+        areaEffectRadius,
+      }) => [
           renderTextField(label, { placeholder: localize(type) }),
           html`<div class="area-effect-fields">
             ${[
@@ -252,34 +252,33 @@ export class BeamWeaponForm extends mix(Base).with(UseWorldTime) {
               }),
               areaEffect.value === AreaEffectType.Uniform
                 ? renderNumberField(
-                    {
-                      ...areaEffectRadius,
-                      label: `${localize('radius')} (${
-                        localize('meters').toLocaleLowerCase()[0]
+                  {
+                    ...areaEffectRadius,
+                    label: `${localize('radius')} (${localize('meters').toLocaleLowerCase()[0]
                       })`,
-                    },
-                    { min: 1 },
-                  )
+                  },
+                  { min: 1 },
+                )
                 : '',
             ]}
           </div>`,
           renderFormulaField(damageFormula),
           renderLabeledCheckbox(armorPiercing),
         ],
-      })}
+    })}
 
       <p class="label">${localize('firingModes')}</p>
       ${renderFiringModeCheckboxes(updater)}
 
       <p class="label">${localize('attackTraits')}</p>
       ${renderAutoForm({
-        props: pairedTraits,
-        update: createPipe(changeTraits, objOf('attackTraits'), updater.commit),
-        fields: (traits) => map(Object.values(traits), renderLabeledCheckbox),
-      })}
+      props: pairedTraits,
+      update: createPipe(changeTraits, objOf('attackTraits'), updater.commit),
+      fields: (traits) => map(Object.values(traits), renderLabeledCheckbox),
+    })}
       ${renderUpdaterForm(updater, {
-        fields: ({ notes }) => renderTextareaField(notes),
-      })}
+      fields: ({ notes }) => renderTextareaField(notes),
+    })}
     `;
   }
 
