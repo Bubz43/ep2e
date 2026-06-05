@@ -79,7 +79,7 @@ export const placeMeasuredTemplate = (
     const moveTemplate = throttleFn(
       (ev: typeof PIXI['InteractionEvent']) => {
         const center = ev.data.getLocalPosition(template.layer);
-        const { x, y } = grid.getSnappedPosition(center.x, center.y, 2);
+        const { x, y } = originalLayer.getSnappedPoint(center);
         template.document.x = x;
         template.document.y = y;
         template.refresh();
@@ -123,15 +123,14 @@ export const placeMeasuredTemplate = (
     async function createTemplate(ev?: import('pixi.js').InteractionEvent) {
       ev?.stopPropagation();
       cleanup();
+
       const [savedTemplateData] = await scene.createEmbeddedDocuments(
         MeasuredTemplate.embeddedName,
         [
           {
             ...template.document.toJSON(),
-            ...grid.getSnappedPosition(
-              template.document.x,
-              template.document.y,
-              2,
+            ...originalLayer.getSnappedPoint(
+              template.document
             ),
           },
         ],

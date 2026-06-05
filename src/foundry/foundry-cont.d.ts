@@ -285,12 +285,16 @@ declare global {
 
   const tinymce: TinyMCE;
 
-  interface GridLayer {
-    getSnappedPosition(
-      x: number,
-      y: number,
-      interval: number,
-    ): { x: number; y: number };
+  interface CanvasLayer {
+    getSnappedPoint(point: { x: number, y: number }): { x: number, y: number }
+  }
+
+  interface GridLayer extends CanvasLayer {
+    // getSnappedPosition(
+    //   x: number,
+    //   y: number,
+    //   interval: number,
+    // ): { x: number; y: number };
     readonly type: ValuesType<CONST['GRID_TYPES']>;
     highlightLayers: Record<string, GridHighlight>;
   }
